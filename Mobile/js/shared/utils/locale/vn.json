@@ -1,5 +1,5 @@
 {
-  "appName": "Mobile",
+  "appName": "RealEstate",
   "motto": {
     "first": "Welcome to Stay Alone",
     "firstMotto": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
@@ -16,6 +16,7 @@
     "name": "Đăng nhập",
     "welcomeBack": "Xin chào!",
     "email": "Email",
+    "emailOrPhone":"Email hoặc điện thoại",
     "password": "Mật khẩu",
     "forget": "Quên mật khẩu?",
     "social": " ⏤ OR ⏤",

@@ -25,6 +25,32 @@ target 'Mobile' do
   pod 'Permission-PhotoLibrary', :path => "#{permissions_path}/PhotoLibrary.podspec"
   pod 'Permission-Reminders', :path => "#{permissions_path}/Reminders.podspec"
 
+  pod 'Firebase/Core'
+  pod 'Firebase/Messaging'
+  pod 'Firebase/Database'
+  pod 'Firebase/Auth'
+  pod 'Firebase/Analytics'
+  pod 'Firebase/Storage'
+  pod 'FBSDKCoreKit', '~> 5.8.0'
+  pod 'FBSDKLoginKit', '~> 5.8.0'
+  pod 'FBSDKShareKit', '~> 5.8.0'
+  pod 'GoogleSignIn', '~> 5.0.0'
+  pod 'TesseractOCRiOS', '4.0.0'
+  pod 'GPUImage', '0.1.7'
+
+  pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
+
+  pod 'RNSound', :path => '../node_modules/react-native-sound'
+
+  pod 'RNFBApp', :path => '../node_modules/@react-native-firebase/app'
+
+  pod 'RNFBMessaging', :path => '../node_modules/@react-native-firebase/messaging'
+
+  pod 'RNFBAuth', :path => '../node_modules/@react-native-firebase/auth'
+
+  pod 'RNFBStorage', :path => '../node_modules/@react-native-firebase/storage'
+
+  pod 'RNFBDatabase', :path => '../node_modules/@react-native-firebase/database'
 
   target 'MobileTests' do
     inherit! :complete

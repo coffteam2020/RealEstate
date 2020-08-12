@@ -6,7 +6,9 @@ import React from 'react';
 import SplashScreen from '../containers/SplashScreen/index';
 import createAnimatedSwitchNavigator from 'react-navigation-animated-switch';
 import {Transition} from 'react-native-reanimated';
-
+import WelcomeScreen from '../containers/WelcomeScreen/index';
+import LoginScreen from '../containers/Authentication/LoginScreen/index';
+import RegisterScreen from '../containers/Authentication/RegisterScreen/index';
 // ScreenNavigator for separately each screen into stack one
 // const MainScreenNavigator = createStackNavigator(
 //   {
@@ -79,6 +81,9 @@ import {Transition} from 'react-native-reanimated';
 const AppBottombarSwitchNavigator = createAnimatedSwitchNavigator(
   {
     SplashScreen: {screen: SplashScreen},
+	  WelcomeScreen: {screen: WelcomeScreen},
+    LoginScreen: {screen: LoginScreen},
+    RegisterScreen: {screen: RegisterScreen},
   },
   {
     mode: 'modal',
