@@ -36,7 +36,7 @@ import appleAuth, {AppleButton,
 	AppleAuthRequestOperation,
 	AppleAuthRequestScope,
 	AppleAuthCredentialState,} from '@invertase/react-native-apple-authentication';
-
+import {ScreenHeight, ScreenWidth} from '../../../shared/utils/dimension/Divices';
 
 const LoginScreen = (props) => {
 	const {userStore} = useStores();
@@ -84,47 +84,7 @@ const LoginScreen = (props) => {
 		}
 
 	};
-	const onAppleButtonPress = async () => {
-		// performs login request
-		const appleAuthRequestResponse = await appleAuth.performRequest({
-			requestedOperation: AppleAuthRequestOperation.LOGIN,
-			requestedScopes: [AppleAuthRequestScope.EMAIL, AppleAuthRequestScope.FULL_NAME],
-		});
-
-		// get current authentication state for user
-		// /!\ This method must be tested on a real device. On the iOS simulator it always throws an error.
-		const credentialState = await appleAuth.getCredentialStateForUser(appleAuthRequestResponse.user);
-
-		// use credentialState response to ensure the user is authenticated
-		if (credentialState === AppleAuthCredentialState.AUTHORIZED) {
-			// user is authenticated
-			const {user,
-				email,
-				nonce,
-				identityToken,
-				realUserStatus /* etc */,} = appleAuthRequestResponse;
-			console.log(LogManager.parseJsonObjectToJsonString(appleAuthRequestResponse));
-			if (email != null) {
-				await IALocalStorage.setDetailUserInfoApple(email);
-				if (identityToken) {
-					onFireBaseCheckEmail(identityToken, email);
-				} else {
-					onFireBaseCheckEmail('identityToken', email);
-				}
-			} else {
-				let email = await IALocalStorage.getDetailUserInfoApple();
-				if (!email) {
-					email = `guest_${new Date().getTime()}@applemail.com`;
-					await IALocalStorage.setDetailUserInfoApple(email);
-				}
-				if (identityToken) {
-					onFireBaseCheckEmail(identityToken, email);
-				} else {
-					onFireBaseCheckEmail('identityToken', email);
-				}
-			}
-		}
-	};
+	
 	const onFireBaseCheckEmail = async (token, email, socialID) => {
 		setIsLoading(true);
 		AxiosFetcher({
@@ -179,16 +139,13 @@ const LoginScreen = (props) => {
 		// });
 		// userStore.setUserRegisterBeing({});
 	});
-	const onPhoneChange = text => {
-		setPhone(text);
-	};
 
 	return (
 		<View style={[containerStyle.default]}>
 			<StatusBar barStyle={colorsApp.statusBar}/>
 			<ImageBackground source={images.bg_main} style={{width: '100%', height: '100%'}}>
 				<SafeAreaView >
-					<KeyboardAwareScrollView showsVerticalScrollIndicator={false} >
+					<KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
 						<Animatable.View animation="bounceIn" style={styles.content}>
 							<TextNormal
 								props={props}

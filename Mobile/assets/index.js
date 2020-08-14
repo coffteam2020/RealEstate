@@ -8,7 +8,7 @@ export const images = {
 		fourth: require('./imgs/welcome4.png'),
 	},
   bg: require('./imgs/bg.png'),
-  bg_main: require('./imgs/bg-main.png'),
+  bg_main: require('./imgs/bg-main1.png'),
   bgNormal: require('./imgs/bg_normal.png'),
   careTeam: require('./imgs/care_team.png'),
   ic_menu: require('./imgs/ic_menu.png'),

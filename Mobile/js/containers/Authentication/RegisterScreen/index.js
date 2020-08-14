@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {StatusBar, View, SafeAreaView, TouchableOpacity, Keyboard, CheckBox} from 'react-native';
+import {StatusBar, View, SafeAreaView, TouchableOpacity, Keyboard} from 'react-native';
 import {styles} from './style';
 import {withTheme} from 'react-native-paper';
 import TextNormal from '../../../shared/components/Text/TextNormal';
@@ -25,7 +25,7 @@ import {ImageBackground} from 'react-native';
 import {images} from '../../../../assets';
 import AxiosFetcher from '../../../api/AxiosFetch';
 import * as Animatable from 'react-native-animatable';
-import CheckDone from '../../../shared/components/CheckDone';
+import CheckBox from '@react-native-community/checkbox';
 
 const RegisterScreen = (props) => {
 	const {colorsApp} = props.theme;
@@ -37,6 +37,7 @@ const RegisterScreen = (props) => {
 	const [showConfirmPassword, setShowConfirmPassword] = useState(true);
 	const [isLoading, setIsLoading] = useState(false);
 	const [email, setEmail] = useState('');
+	const [isAccept, setIsAccept] = useState(false);
 	
 	const onPhoneChange = text => {
 		setPhone(text);
@@ -95,9 +96,15 @@ const RegisterScreen = (props) => {
 						</Animatable.View>
 						<View style={styles.fieldContainer}>
 							<TextInputFlat value={email} onChangeText={(text) => onEmailChange(text)} props={props}	placeholder={t('login.emailOrPhone')} textInputStyle={styles.fieldEmailPhone} />
-							<TextInputFlat value={password} onChangeText={(text) => onPassChange(text)} placeholder={t('reset.password')} onPressIco={() => { setShowPassword(!showPassword); }} secureText={showPassword} props={props} hasRightIco ico={<Eye isOff={!showPassword} color={colors.white} />} style={styles.fieldItemTop} textInputStyle={styles.fieldPassword}/>
+							<TextInputFlat v alue={password} onChangeText={(text) => onPassChange(text)} placeholder={t('reset.password')} onPressIco={() => { setShowPassword(!showPassword); }} secureText={showPassword} props={props} hasRightIco ico={<Eye isOff={!showPassword} color={colors.white} />} style={styles.fieldItemTop} textInputStyle={styles.fieldPassword}/>
 							<TextInputFlat value={confirmPass} onChangeText={(text) => setConfirmPass(text)} placeholder={t('reset.confirmPassword')} onPressIco={() => { setShowConfirmPassword(!showConfirmPassword); }} secureText={showConfirmPassword} props={props} hasRightIco ico={<Eye isOff={!showConfirmPassword} color={colors.white} />} style={styles.fieldItemTop} textInputStyle={styles.fieldPassword}/>
-							<GradientButton onPress={() => onConfirm()} text={t('register.motto')} style={styles.button} />
+							<View style={styles.termWrap}>
+								<CheckBox disabled={false} value={isAccept} onValueChange={(newValue) => setIsAccept(newValue)}/>
+								<TextNormal props={props} text={t('signUp.agreement')} style={styles.signUpMotto}/>
+								<TextNormal props={props} text={t('signUp.term')} style={styles.termCondition}/>
+							</View>
+							<GradientButton onPress={() => onConfirm()} text={t('signUp.name')} style={styles.button} />
+
 						</View>
 						<View style={styles.footerContainer}>
 							<TouchableOpacity onPress={() => NavigationService.navigate(ScreenNames.LoginScreen)} style={[containerStyle.horContainerNearlyDefaultCenter, containerStyle.defaultMarginTop]}>

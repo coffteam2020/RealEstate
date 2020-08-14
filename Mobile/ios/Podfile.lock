@@ -198,6 +198,8 @@ PODS:
     - FBSDKShareKit/Share (= 5.8.0)
   - FBSDKShareKit/Share (5.8.0):
     - FBSDKCoreKit (~> 5.0)
+  - Firebase/Analytics (6.13.0):
+    - Firebase/Core
   - Firebase/Auth (6.13.0):
     - Firebase/CoreOnly
     - FirebaseAuth (~> 6.4.0)
@@ -370,6 +372,7 @@ PODS:
     - GoogleUtilities/Logger
   - GoogleUtilities/UserDefaults (6.6.0):
     - GoogleUtilities/Logger
+  - GPUImage (0.1.7)
   - "gRPC-C++ (0.0.9)":
     - "gRPC-C++/Implementation (= 0.0.9)"
     - "gRPC-C++/Interface (= 0.0.9)"
@@ -715,6 +718,8 @@ PODS:
     - React
   - RNCAsyncStorage (1.11.0):
     - React
+  - RNCCheckbox (0.4.2):
+    - React
   - RNCMaskedView (0.1.10):
     - React
   - RNCPushNotificationIOS (1.4.0):
@@ -806,6 +811,15 @@ DEPENDENCIES:
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/Libraries/FBReactNativeSpec`)
+  - FBSDKCoreKit (~> 5.8.0)
+  - FBSDKLoginKit (~> 5.8.0)
+  - FBSDKShareKit (~> 5.8.0)
+  - Firebase/Analytics
+  - Firebase/Auth
+  - Firebase/Core
+  - Firebase/Database
+  - Firebase/Messaging
+  - Firebase/Storage
   - Flipper (~> 0.41.1)
   - Flipper-DoubleConversion (= 1.1.7)
   - Flipper-Folly (~> 2.2)
@@ -827,6 +841,8 @@ DEPENDENCIES:
   - FlipperKit/SKIOSNetworkPlugin (~> 0.41.1)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
+  - GoogleSignIn (~> 5.0.0)
+  - GPUImage (= 0.1.7)
   - lottie-ios (from `../node_modules/lottie-ios`)
   - lottie-react-native (from `../node_modules/lottie-react-native`)
   - Permission-BluetoothPeripheral (from `../node_modules/react-native-permissions/ios/BluetoothPeripheral.podspec`)
@@ -878,6 +894,7 @@ DEPENDENCIES:
   - "RNAppleAuthentication (from `../node_modules/@invertase/react-native-apple-authentication`)"
   - RNAudioRecord (from `../node_modules/react-native-audio-record`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
+  - "RNCCheckbox (from `../node_modules/@react-native-community/checkbox`)"
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - "RNCPushNotificationIOS (from `../node_modules/@react-native-community/push-notification-ios`)"
   - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
@@ -903,6 +920,7 @@ DEPENDENCIES:
   - RNSVG (from `../node_modules/react-native-svg`)
   - RNTextDetector (from `../node_modules/react-native-text-detector/ios`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
+  - TesseractOCRiOS (= 4.0.0)
   - "toolbar-android (from `../node_modules/@react-native-community/toolbar-android`)"
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -943,6 +961,7 @@ SPEC REPOS:
     - GoogleDataTransportCCTSupport
     - GoogleSignIn
     - GoogleUtilities
+    - GPUImage
     - "gRPC-C++"
     - gRPC-Core
     - GTMAppAuth
@@ -1069,6 +1088,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-audio-record"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-community/async-storage"
+  RNCCheckbox:
+    :path: "../node_modules/@react-native-community/checkbox"
   RNCMaskedView:
     :path: "../node_modules/@react-native-community/masked-view"
   RNCPushNotificationIOS:
@@ -1166,6 +1187,7 @@ SPEC CHECKSUMS:
   GoogleDataTransportCCTSupport: 0f39025e8cf51f168711bd3fb773938d7e62ddb5
   GoogleSignIn: 7137d297ddc022a7e0aa4619c86d72c909fa7213
   GoogleUtilities: 39530bc0ad980530298e9c4af8549e991fd033b1
+  GPUImage: 733a5f0fab92df9de1c37ba9df520a833ccb406d
   "gRPC-C++": 9dfe7b44821e7b3e44aacad2af29d2c21f7cde83
   gRPC-Core: c9aef9a261a1247e881b18059b84d597293c9947
   GTMAppAuth: 4deac854479704f348309e7b66189e604cf5e01e
@@ -1225,6 +1247,7 @@ SPEC CHECKSUMS:
   RNAppleAuthentication: 473b2c076f1a48a537610580a168c1fb6d0a90c6
   RNAudioRecord: f38c2caac4bbbc34f24563869745110970f1dfe3
   RNCAsyncStorage: db711e29e5e0500d9bd21aa0c2e397efa45302b1
+  RNCCheckbox: 2e90172b1ba7a5c7d88f50f6243fe16566bf03aa
   RNCMaskedView: f5c7d14d6847b7b44853f7acb6284c1da30a3459
   RNCPushNotificationIOS: f4a1a20fe1d70bbb1fab6abf86ffec2996012b12
   RNDateTimePicker: f13c2d8c4cd1ea6d1a1f9ea7ddcdd24e82060770
@@ -1257,6 +1280,6 @@ SPEC CHECKSUMS:
   Yoga: 7740b94929bbacbddda59bf115b5317e9a161598
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 3aed82552bbc537ba906ebc31cdc457edae71d03
+PODFILE CHECKSUM: c6002a3062d432778460272ec116c62603f2b1fa
 
 COCOAPODS: 1.9.2

@@ -57,7 +57,7 @@ export const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 		width: ScreenWidth,
-		height: ScreenHeight / 3 ,
+		height: ScreenHeight - (ScreenHeight / 5 + ScreenHeight / 2 + SPACINGS.xxLarge) ,
 		backgroundColor: colors.whiteBackground
 	},
 	socialContainer: {

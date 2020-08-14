@@ -57,7 +57,7 @@ export const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 		width: ScreenWidth,
-		height: ScreenHeight / 3 ,
+		height: ScreenHeight - (ScreenHeight / 5 + ScreenHeight / 2 + SPACINGS.xxLarge) ,
 		backgroundColor: colors.whiteBackground
 	},
 	socialContainer: {
@@ -87,7 +87,6 @@ export const styles = StyleSheet.create({
 		color: colors.purpleMain,
 		fontFamily: fonts.family.nunito.bold,
 	},
-
 	button: {
 		marginTop: SPACINGS.large,
 		borderRadius: RADIUS.input
@@ -107,7 +106,22 @@ export const styles = StyleSheet.create({
 	fieldEmailPhone: {
 		borderRadius: RADIUS.input,
 		paddingLeft: SPACINGS.xLarge
-	}
+	},
+	termWrap: {
+		marginTop: SPACINGS.xLarge,
+		paddingLeft: SPACINGS.xLarge,
+		display: 'flex',
+		flexDirection: 'row',
+		flexWrap: 'wrap',
+		justifyContent: "space-evenly"
+
+	},
+	termCondition: {
+		color: colors.purpleMain,
+		fontFamily: fonts.family.nunito.bold,
+		fontSize: FONTSIZES.default,
+		marginTop: SPACINGS.avg,
+	},
 });
 
 export default {
