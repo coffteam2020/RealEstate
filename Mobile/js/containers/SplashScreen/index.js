@@ -36,7 +36,7 @@ const SplashScreen = (props) => {
 		loadLocalLanguage();
 		let timeOut = setTimeout(async () => {
 			let isNotFirstTime = await IALocalStorage.getTokenFirstTime();
-			if (isNotFirstTime) {
+			// if (isNotFirstTime) {
 				let isLoggedIn = await IALocalStorage.getUserInfo();
 				console.log(isLoggedIn);
 				if (isLoggedIn) {
@@ -45,9 +45,9 @@ const SplashScreen = (props) => {
 				} else {
 					NavigationService.navigate(ScreenNames.LoginScreen);
 				}
-			} else {
-				NavigationService.navigate(ScreenNames.WelcomeScreen);
-			}
+			// } else {
+			// 	NavigationService.navigate(ScreenNames.WelcomeScreen);
+			// }
 		}, Constant.SPLASH_TIME_OUT);
 		return () => {
 			this.clearTimeout(timeOut);

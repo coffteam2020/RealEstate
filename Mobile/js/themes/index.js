@@ -155,4 +155,5 @@ export const RADIUS = {
 	gender: 20,
 	backIco: 12,
 	health: 8,
+	input:40
 };

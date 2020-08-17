@@ -1,5 +1,5 @@
 {
-  "appName": "StayAlone",
+  "appName": "RealEstate",
   "motto": {
     "first": "Welcome to Stay Alone",
     "firstMotto": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
@@ -13,9 +13,10 @@
     "getHere": "Get here!"
   },
   "login": {
-    "name": "Login",
+    "name": "Sign in",
     "welcomeBack": "Welcome back!",
     "email": "Email",
+    "emailOrPhone":"Email or phone number",
     "password": "Password",
     "forget": "Forget password?",
     "social": " ⏤ OR ⏤",
@@ -25,7 +26,9 @@
     "name": "Sign Up",
     "success": "Success\nLet us know something about you",
     "signUpSuccess": "Please verify your phone number",
-    "signUpDone": "Welcome to Stay Alone! \nLogin and be healthy"
+    "signUpDone": "Welcome to Stay Alone! \nLogin and be healthy",
+    "agreement": "By creating an account your aggree to out",
+    "term": "Term and Condtions"
   },
   "forget": {
     "name": "Forget Password",

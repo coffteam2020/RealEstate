@@ -7,7 +7,8 @@ import fonts from '../shared/utils/fonts/fonts';
 
 export const containerStyle = StyleSheet.create({
 	default: {
-    flex: 1,
+	flex: 1,
+	
 	},
 	defaultFull: {
 		width: ScreenWidth,
@@ -286,6 +287,7 @@ export const containerStyle = StyleSheet.create({
 	textHeaderWithMargin: {
 		fontSize: FONTSIZES.xxLarge,
 		fontFamily: fonts.family.nunito.extraBold,
+		color: 'white'
 	},
 	textHeaderSmall: {
 		fontSize: FONTSIZES.xAvg,

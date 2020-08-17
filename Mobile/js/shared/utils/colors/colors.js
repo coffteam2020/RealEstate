@@ -21,6 +21,7 @@ export const colors = {
 	orange: "#FF874D",
 	orange_heavy: "#F5874D",
 	gray_less: "#f7f7f7",
+	gray_new: "#989898",
 	red: "#d84742",
 	red_cinnabar: "#EA4335",
 	blue_clear: "#2574FF",
@@ -55,10 +56,11 @@ export const colors = {
 	black_clear_all: "#393939",
 	gray_bg: "#eeeeee",
 	yellow_fresh: "#c5a542",
-  yellow_default_opacity: "#f1f1f1",
-  borderColor: "#dcdcdc",
-  textBlue: "#00011A",
-  textPuple: "#665AAA",
+	yellow_default_opacity: "#f1f1f1",
+	borderColor: "#dcdcdc",
+	textBlue: "#00011A",
+	textPuple: "#665AAA",
+	purpleMain: "#574EAE"
 };
 
 export default {colors};
