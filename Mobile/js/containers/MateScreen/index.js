@@ -24,44 +24,12 @@ const MateScreen = (props) => {
   const {colorsApp} = props.theme;
   const {t} = useTranslation();
   const {userStore} = useStores();
-  const loadLocalLanguage = async () => {
-    const preferredLang = await AsyncStorage.getItem('lang');
-    if (preferredLang) {
-      i18n.changeLanguage(preferredLang);
-    } else {
-      i18n.changeLanguage('vn');
-    }
-  };
-  useEffect(() => {
-    loadLocalLanguage();
-    let timeOut = setTimeout(async () => {
-      let isNotFirstTime = await IALocalStorage.getTokenFirstTime();
-      // if (isNotFirstTime) {
-      let isLoggedIn = await IALocalStorage.getUserInfo();
-      console.log(isLoggedIn);
-      if (isLoggedIn) {
-        userStore.setUserInfo({});
-        NavigationService.navigate(ScreenNames.HomeScreen);
-      } else {
-        NavigationService.navigate(ScreenNames.LoginScreen);
-      }
-      // } else {
-      // 	NavigationService.navigate(ScreenNames.WelcomeScreen);
-      // }
-    }, Constant.SPLASH_TIME_OUT);
-    return () => {
-      this.clearTimeout(timeOut);
-    };
-  }, []);
 
   return (
     <View style={[containerStyle.center, containerStyle.defaultBackground]}>
       <StatusBar barStyle={colorsApp.statusBar} />
       <View style={styles.content}>
-        <TextNormal
-          
-          text={t('appName')}
-        />
+        
       </View>
     </View>
   );

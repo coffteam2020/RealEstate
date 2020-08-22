@@ -63,6 +63,7 @@
     "react-native-file-picker": "^0.0.19",
     "react-native-fs": "^2.16.6",
     "react-native-gesture-handler": "^1.6.1",
+    "react-native-get-location": "^1.4.3",
     "react-native-gifted-chat": "file:custom_node_modules/react-native-gifted-chat",
     "react-native-google-places-autocomplete": "^1.4.1",
     "react-native-i18n": "^2.0.15",

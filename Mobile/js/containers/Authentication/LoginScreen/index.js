@@ -1,13 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useEffect, useState} from 'react';
-import {
-  StatusBar,
-  View,
-  SafeAreaView,
-  TouchableOpacity,
-  ImageBackground,
-  Platform,
-} from 'react-native';
+import React, {useState} from 'react';
+import {StatusBar, View, TouchableOpacity, ImageBackground} from 'react-native';
 import {styles} from './style';
 import {images} from '../../../../assets/index';
 import {withTheme} from 'react-native-paper';
@@ -16,141 +9,73 @@ import {containerStyle} from '../../../themes/styles';
 import {useTranslation} from 'react-i18next';
 import TextInputFlat from '../../../shared/components/TextInput/TextInputFlat';
 import Eye from '../../../shared/components/Icons/Eye';
-import TrackPlayer from 'react-native-track-player';
 import {colors} from '../../../shared/utils/colors/colors';
 import GradientButton from '../../../shared/components/Buttons/GradientButton';
-import {
-  AccessToken,
-  GraphRequest,
-  GraphRequestManager,
-  LoginManager,
-} from 'react-native-fbsdk';
 import * as Animatable from 'react-native-animatable';
-import {GoogleSignin, statusCodes} from '@react-native-community/google-signin';
 import Route, {ScreenNames} from '../../../route/ScreenNames';
-import IALocalStorage from '../../../shared/utils/storage/IALocalStorage';
 import {NavigationService} from '../../../navigation';
 import {ToastHelper} from '../../../shared/components/ToastHelper';
 import Validator from '../../../shared/utils/validator/Validator';
 import Loading from '../../../shared/components/Loading';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import LogManager from '../../../shared/utils/logging/LogManager';
 import {useStores} from '../../../store/useStore';
 import AxiosFetcher from '../../../api/AxiosFetch';
-import appleAuth, {
-  AppleButton,
-  AppleAuthRequestOperation,
-  AppleAuthRequestScope,
-  AppleAuthCredentialState,
-} from '@invertase/react-native-apple-authentication';
-import {
-  ScreenHeight,
-  ScreenWidth,
-} from '../../../shared/utils/dimension/Divices';
+import IALocalStorage from '../../../shared/utils/storage/IALocalStorage';
 
 const LoginScreen = (props) => {
-  const {userStore} = useStores();
   const {colorsApp} = props.theme;
   const {t} = useTranslation();
-  const [password, setPassword] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
+  const [password] = useState('');
+  const [email] = useState('');
+  const [showPassword, setShowPassword] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const [validEmail, setValidEmail] = useState(false);
-  const [notEmptyPass, setNotEmptyPass] = useState(false);
+  const [notEmptyPass] = useState(false);
   const [showPass, setShowPass] = useState(true);
+  const [userInfo, setUserInfo] = useState({});
 
   const onLogin = async () => {
-    setIsLoading(true);
-    if (Validator.checkEmptyField(password)) {
-      setIsLoading(false);
+    if (Validator.checkEmptyField(userInfo?.phone || '')) {
       ToastHelper.showError(t('error.empty'));
-    } else {
-      setIsLoading(true);
-      AxiosFetcher({
-        method: 'POST',
-        url: '/api/auth/login',
-        data: {
-          phoneNumber: email,
-          password: password,
-          loginMethod: 'NORMAL',
-        },
-      })
-        .then(async (val) => {
-          console.log(
-            ' LOGIN INFO' + LogManager.parseJsonObjectToJsonString(val),
-          );
-          setIsLoading(false);
-          if (val && val?.accessToken != '' && !val?.message) {
-            await IALocalStorage.setTokenUserInfo(val?.accessToken);
-            await IALocalStorage.setUserInfo(val);
-            userStore.setUserInfo(val);
-            NavigationService.navigate(ScreenNames.HomeScreen);
-          } else {
-            ToastHelper.showError(t('error.auth/user-not-found'));
-          }
-        })
-        .catch((val) => {
-          setIsLoading(false);
-          ToastHelper.showError(t('error.auth/user-not-found'));
-        });
+      return;
     }
-  };
-
-  const onFireBaseCheckEmail = async (token, email, socialID) => {
+    if (Validator.checkEmptyField(userInfo?.password || '')) {
+      ToastHelper.showError(t('error.empty'));
+      return;
+    }
+    if (!userInfo?.password || !userInfo?.phone) {
+      ToastHelper.showError(t('error.empty'));
+      return;
+    }
+    // Login flow
     setIsLoading(true);
     AxiosFetcher({
       method: 'POST',
-      url: '/api/auth/login',
+      url: 'auth/login',
       data: {
-        email: email,
-        loginMethod: 'SOCIAL',
-        token: token,
-        socialId: socialID,
+        loginMethod: 'NORMAL',
+        password: userInfo?.password,
+        phoneNumber: userInfo?.phone,
       },
     })
-      .then(async (val) => {
-        setIsLoading(false);
-        if (val && val?.accessToken != '') {
-          await IALocalStorage.setTokenUserInfo(val?.accessToken);
-          await IALocalStorage.setUserInfo(val);
-          userStore.setUserInfo(val);
-          NavigationService.navigate(ScreenNames.HomeScreen);
+      .then(async (data) => {
+        if (data?.accessToken) {
+          ToastHelper.showSuccess(t('login.signInSuccess'));
+          await IALocalStorage.setTokenUserInfo(data?.accessToken);
+          await IALocalStorage.setDetailUserInfo(data);
+          setTimeout(() => {
+            NavigationService.navigate(ScreenNames.TabsScreen);
+          }, 1000);
         } else {
-          ToastHelper.showError(t('error.auth/user-not-found'));
+          ToastHelper.showError(t('login.error'));
         }
       })
-      .catch((val) => {
+      .catch(() => {
+        ToastHelper.showError(t('login.error'));
+      })
+      .finally(() => {
         setIsLoading(false);
-        ToastHelper.showError(t('error.auth/user-not-found'));
       });
   };
-
-  const onPasswordChange = (text) => {
-    setPassword(text);
-    if (Validator.checkEmptyField(password)) {
-      setNotEmptyPass(false);
-    } else {
-      setNotEmptyPass(true);
-    }
-  };
-
-  const onEmailChange = (text) => {
-    setEmail(text);
-    if (Validator.checkEmail(email)) {
-      setValidEmail(true);
-    } else {
-      setValidEmail(false);
-    }
-  };
-
-  useEffect(() => {
-    // IALocalStorage.setUserInfo(null);
-    // GoogleSignin.configure({
-    // 	webClientId: Constant.WEB_CLIENT_ID,
-    // });
-    // userStore.setUserRegisterBeing({});
-  });
 
   return (
     <View style={[containerStyle.default]}>
@@ -171,24 +96,25 @@ const LoginScreen = (props) => {
             <View style={styles.fieldContainer}>
               <TextInputFlat
                 value={email}
-                onChangeText={(text) => onEmailChange(text)}
+                keyboardType="number-pad"
+                onChangeText={(text) => setUserInfo({...userInfo, phone: text})}
                 props={props}
                 placeholder={t('login.emailOrPhone')}
                 textInputStyle={styles.fieldEmailPhone}
               />
               <TextInputFlat
                 value={password}
-                onChangeText={(text) => onPasswordChange(text)}
+                onChangeText={(text) =>
+                  setUserInfo({...userInfo, password: text})
+                }
                 props={props}
-                hasRightIco={notEmptyPass}
-                secureText={showPass}
+                hasRightIco
+                secureText={showPassword}
                 onPressIco={() => {
-                  if (notEmptyPass) {
-                    setShowPass(!showPass);
-                  }
+                  setShowPassword(!showPassword);
                 }}
+                ico={<Eye isOff={!showPassword} color={colors.white} />}
                 placeholder={t('login.password')}
-                ico={<Eye color={colors.iconGreen} isOff={!showPass} />}
                 textInputStyle={styles.fieldPassword}
               />
               <TextNormal

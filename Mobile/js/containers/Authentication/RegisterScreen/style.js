@@ -60,7 +60,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     position: 'absolute',
-    bottom: 50,
+    bottom: 25,
     width: ScreenWidth,
     left: 0,
     backgroundColor: colors.whiteBackground,

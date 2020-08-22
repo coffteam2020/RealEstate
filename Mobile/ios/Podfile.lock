@@ -712,6 +712,8 @@ PODS:
     - React-jsi (= 0.63.2)
   - ReactNativeDarkMode (0.2.2):
     - React
+  - ReactNativeGetLocation (1.4.3):
+    - React
   - RNAppleAuthentication (1.1.2):
     - React
   - RNAudioRecord (0.2.2):
@@ -891,6 +893,7 @@ DEPENDENCIES:
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - ReactNativeDarkMode (from `../node_modules/react-native-dark-mode`)
+  - ReactNativeGetLocation (from `../node_modules/react-native-get-location`)
   - "RNAppleAuthentication (from `../node_modules/@invertase/react-native-apple-authentication`)"
   - RNAudioRecord (from `../node_modules/react-native-audio-record`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
@@ -1082,6 +1085,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   ReactNativeDarkMode:
     :path: "../node_modules/react-native-dark-mode"
+  ReactNativeGetLocation:
+    :path: "../node_modules/react-native-get-location"
   RNAppleAuthentication:
     :path: "../node_modules/@invertase/react-native-apple-authentication"
   RNAudioRecord:
@@ -1244,6 +1249,7 @@ SPEC CHECKSUMS:
   React-RCTVibration: 4d2e726957f4087449739b595f107c0d4b6c2d2d
   ReactCommon: a0a1edbebcac5e91338371b72ffc66aa822792ce
   ReactNativeDarkMode: 0178ffca3b10f6a7c9f49d6f9810232b328fa949
+  ReactNativeGetLocation: 1e71f6f2024a4215874998bee0e5f31d90a6dbe7
   RNAppleAuthentication: 473b2c076f1a48a537610580a168c1fb6d0a90c6
   RNAudioRecord: 162fee3b8fb628773ec704bf0333823125be2ed7
   RNCAsyncStorage: d059c3ee71738c39834a627476322a5a8cd5bf36

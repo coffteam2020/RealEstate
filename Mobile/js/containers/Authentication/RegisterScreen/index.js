@@ -1,18 +1,11 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useEffect, useState} from 'react';
-import {
-  StatusBar,
-  View,
-  SafeAreaView,
-  TouchableOpacity,
-  Keyboard,
-} from 'react-native';
+import React, {useState} from 'react';
+import {StatusBar, View, TouchableOpacity, Keyboard} from 'react-native';
 import {styles} from './style';
 import {withTheme} from 'react-native-paper';
 import TextNormal from '../../../shared/components/Text/TextNormal';
 import {containerStyle} from '../../../themes/styles';
 import {useTranslation} from 'react-i18next';
-import {textStyleDefaultHeader} from '../../../themes/text';
 import TextInputFlat from '../../../shared/components/TextInput/TextInputFlat';
 import {colors} from '../../../shared/utils/colors/colors';
 ('');
@@ -22,86 +15,81 @@ import {ToastHelper} from '../../../shared/components/ToastHelper';
 import Loading from '../../../shared/components/Loading';
 import Eye from '../../../shared/components/Icons/Eye';
 import {NavigationService} from '../../../navigation';
-import {GoogleSignin} from '@react-native-community/google-signin';
 import {ScreenNames} from '../../../route/ScreenNames';
-import {firebase} from '@react-native-firebase/auth';
-import TextPhoneInput from '../../../shared/components/TextInput/TextPhoneInput';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import Constant from '../../../shared/utils/constant/Constant';
-import {useStores} from '../../../store/useStore';
 import {ImageBackground} from 'react-native';
 import {images} from '../../../../assets';
-import AxiosFetcher from '../../../api/AxiosFetch';
 import * as Animatable from 'react-native-animatable';
 import CheckBox from '@react-native-community/checkbox';
+import AxiosFetcher from '../../../api/AxiosFetch';
+import IALocalStorage from '../../../shared/utils/storage/IALocalStorage';
 
 const RegisterScreen = (props) => {
   const {colorsApp} = props.theme;
   const {t} = useTranslation();
-  const [phone, setPhone] = useState('');
+  const [] = useState('');
   const [showPassword, setShowPassword] = useState(true);
-  const [password, setPassword] = useState('');
-  const [confirmPass, setConfirmPass] = useState('');
+  const [password] = useState('');
+  const [confirmPass] = useState('');
   const [showConfirmPassword, setShowConfirmPassword] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const [email, setEmail] = useState('');
   const [isAccept, setIsAccept] = useState(false);
+  const [userInfo, setUserInfo] = useState({});
 
-  const onPhoneChange = (text) => {
-    setPhone(text);
-  };
-  const onPassChange = (text) => {
-    setPassword(text);
-  };
-
-  const showErrToast = () => {
-    setIsLoading(false);
-    ToastHelper.showError(t('error.empty'));
-  };
-  const processSignUp = async () => {
-    setIsLoading(true);
-    verifyPhone();
-  };
-  const verifyPhone = () => {
-    firebase
-      .auth()
-      .signInWithPhoneNumber(phone)
-      .then((confirmResult) => {
-        setIsLoading(false);
-        NavigationService.navigate(ScreenNames.OTPVerifyScreen, {
-          phoneNumber: phone,
-          confirmResult: confirmResult,
-          data: {
-            password: password,
-            phoneNumber: phone.replace(/ /g, ''),
-          },
-        });
-      })
-      .catch((error) => {
-        setIsLoading(false);
-        console.log(error.message);
-        ToastHelper.showError(error?.message);
-      });
-  };
   const onConfirm = async () => {
     Keyboard.dismiss();
-    if (
-      Validator.checkEmptyField(phone) ||
-      Validator.checkEmptyField(password) ||
-      Validator.checkEmptyField(confirmPass)
-    ) {
-      showErrToast();
-    } else if (password != confirmPass) {
-      ToastHelper.showError(t('reset.notMatch'));
-    } else {
-      processSignUp();
+    if (Validator.checkEmptyField(userInfo?.phone || '')) {
+      ToastHelper.showError(t('error.empty'));
+      return;
     }
+    if (Validator.checkEmptyField(userInfo?.password || '')) {
+      ToastHelper.showError(t('error.empty'));
+      return;
+    }
+    if (
+      Validator.checkConfirmPassword(
+        userInfo?.password || '',
+        userInfo?.passwordConfirm || '',
+      )
+    ) {
+      ToastHelper.showError(t('reset.notMatch'));
+      return;
+    }
+    if (!userInfo?.password || !userInfo?.phone) {
+      ToastHelper.showError(t('error.empty'));
+      return;
+    }
+    if (!isAccept) {
+      ToastHelper.showError(t('error.accept'));
+      return;
+    }
+    // Register flow
+    setIsLoading(true);
+    AxiosFetcher({
+      method: 'POST',
+      url: 'auth/signup',
+      data: {
+        password: userInfo?.password,
+        phoneNumber: userInfo?.phone,
+      },
+    })
+      .then(async (data) => {
+        if (data?.accessToken) {
+          ToastHelper.showSuccess(t('signUp.signUpDone'));
+          setTimeout(() => {
+            NavigationService.navigate(ScreenNames.LoginScreen);
+          }, 1000);
+        } else {
+          ToastHelper.showError(t('signUp.error'));
+        }
+      })
+      .catch((error) => {
+        ToastHelper.showError(t('signUp.error'));
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
-  useEffect(() => {
-    // GoogleSignin.configure({
-    // 	webClientId: Constant.WEB_CLIENT_ID
-    // });
-  }, []);
 
   return (
     <View style={[containerStyle.center]}>
@@ -119,15 +107,16 @@ const RegisterScreen = (props) => {
 
             <View style={styles.fieldContainer}>
               <TextInputFlat
-                value={email}
-                onChangeText={(text) => onEmailChange(text)}
+                onChangeText={(text) => setUserInfo({...userInfo, phone: text})}
                 props={props}
+                keyboardType="number-pad"
                 placeholder={t('login.emailOrPhone')}
                 textInputStyle={styles.fieldEmailPhone}
               />
               <TextInputFlat
-                alue={password}
-                onChangeText={(text) => onPassChange(text)}
+                onChangeText={(text) =>
+                  setUserInfo({...userInfo, password: text})
+                }
                 placeholder={t('reset.password')}
                 onPressIco={() => {
                   setShowPassword(!showPassword);
@@ -140,8 +129,9 @@ const RegisterScreen = (props) => {
                 textInputStyle={styles.fieldPassword}
               />
               <TextInputFlat
-                value={confirmPass}
-                onChangeText={(text) => setConfirmPass(text)}
+                onChangeText={(text) =>
+                  setUserInfo({...userInfo, passwordConfirm: text})
+                }
                 placeholder={t('reset.confirmPassword')}
                 onPressIco={() => {
                   setShowConfirmPassword(!showConfirmPassword);
