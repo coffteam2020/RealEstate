@@ -19,6 +19,7 @@ import fonts from '../../shared/utils/fonts/fonts';
 import {PERMISSIONS, request} from 'react-native-permissions';
 import {ToastHelper} from '../../shared/components/ToastHelper';
 import {Linking} from 'react-native';
+import GetLocation from 'react-native-get-location';
 
 const SplashScreen = (props) => {
   const {colorsApp} = props.theme;
@@ -47,36 +48,49 @@ const SplashScreen = (props) => {
         }),
       ).then((res) => {
         if (res === 'granted') {
-          let timeOut = setTimeout(async () => {
-            let userInfo = await IALocalStorage.getDetailUserInfo();
-            if (userInfo?.accessToken) {
-              NavigationService.navigate(ScreenNames.TabsScreen);
-            } else {
-              NavigationService.navigate(ScreenNames.LoginScreen);
-            }
-          }, Constant.SPLASH_TIME_OUT);
-          return () => {
-            this.clearTimeout(timeOut);
-          };
+          navigate();
         } else {
-          ToastHelper.showError(t('login.location'));
-          Alert.alert(
-            t('login.locationError'),
-            t('login.locationErrorMessages'),
-            [
-              {
-                title: 'OK',
-                onPress: () => {
-                  openSetting();
-                },
-              },
-            ],
-          );
+          GetLocation.getCurrentPosition({
+            enableHighAccuracy: true,
+            timeout: 15000,
+          })
+            .then((location) => {
+              navigate();
+            })
+            .catch((error) => {
+              const {code, message} = error;
+              console.warn(code, message);
+              Alert.alert(
+                t('login.locationError'),
+                `${t('login.location')}. \n${t('login.locationErrorMessages')}`,
+                [
+                  {
+                    title: 'OK',
+                    onPress: () => {
+                      openSetting();
+                    },
+                  },
+                ],
+              );
+            });
         }
       });
     } catch (error) {
       console.log('location set error:', error);
     }
+  };
+  const navigate = async () => {
+    let timeOut = setTimeout(async () => {
+      let userInfo = await IALocalStorage.getDetailUserInfo();
+      if (userInfo?.accessToken) {
+        NavigationService.navigate(ScreenNames.TabsScreen);
+      } else {
+        NavigationService.navigate(ScreenNames.LoginScreen);
+      }
+    }, Constant.SPLASH_TIME_OUT);
+    return () => {
+      this.clearTimeout(timeOut);
+    };
   };
   const openSetting = () => {
     Linking.canOpenURL('app-settings:')
