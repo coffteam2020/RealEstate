@@ -108,7 +108,7 @@
     "react-navigation-fluid-transitions": "^0.3.2",
     "react-navigation-hooks": "^1.1.0",
     "react-navigation-stack": "^2.2.3",
-    "react-navigation-tabs": "^2.8.2",
+    "react-navigation-tabs": "^2.9.0",
     "rxjs": "^6.5.2",
     "uuid": "3.3.3",
     "validate.js": "^0.13.1",

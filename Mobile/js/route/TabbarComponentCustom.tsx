@@ -78,7 +78,7 @@ class TabbarComponentCustom extends React.Component<Props, State> {
     this.data = [
       { x: 0, y: platformZeroPoint },
       { x: 10, y: platformZeroPoint },
-      { x: screenWidth / (routes.length * 2), y: 20 },
+      { x: screenWidth / (routes.length * 2), y: 35 },
       { x: screenWidth / routes.length - 10, y: platformZeroPoint },
       { x: screenWidth / routes.length, y: platformZeroPoint },
     ];
@@ -125,17 +125,15 @@ class TabbarComponentCustom extends React.Component<Props, State> {
   };
 
   renderLabel = ({ focused, route, index }: { index: number; focused: boolean; route: any }) => {
-    if (focused) {
-      return null;
-    }
-
     const { getLabelText, activeTintColor, inactiveTintColor, allowFontScaling, labelStyle } = this.props;
     const color = focused ? activeTintColor : inactiveTintColor;
-
+    if (!focused) {
+      return null;
+    }
     return (
       <Animated.Text
         allowFontScaling={allowFontScaling}
-        style={[styles.text, labelStyle, { color, opacity: this.itemsAnimation[index] }]}
+        style={[styles.text, labelStyle, { color, marginLeft: index <= 2 ? (10 - index * 10) : -5 }]}
       >
         {getLabelText({ route })}
       </Animated.Text>
@@ -168,8 +166,7 @@ class TabbarComponentCustom extends React.Component<Props, State> {
         style={[
           {
             position: 'absolute',
-            left: index == 0 ? 10 : 0,
-            right: index == 2 ? -10 : 0,
+            left: index <= 2 ? (5 - index * 5) : (index === 3 ? - 5 : -5),
             top: 0,
             bottom: 0,
             width: screenWidth / routes.length,
@@ -183,9 +180,9 @@ class TabbarComponentCustom extends React.Component<Props, State> {
       >
         <Svg
           width={screenWidth / routes.length}
-          height={height}
+          height={height + 80}
           style={{
-            top: -(height - platformZeroPoint),
+            top: -(height - platformZeroPoint + 80),
             transform: [
               {
                 rotate: '180deg',
@@ -230,7 +227,7 @@ class TabbarComponentCustom extends React.Component<Props, State> {
         style={[
           styles.activeItem,
           {
-            marginLeft: (index == 0 ?  (fixedNum + 10) :  ((index == 1) ? fixedNum : (fixedNum - 10))),
+            marginLeft: (index == 0 ?  (fixedNum + 5) :  ((index == 1) ? fixedNum : (fixedNum - 5))),
             width: height,
             height: height,
             borderRadius: 50,
@@ -296,9 +293,8 @@ class TabbarComponentCustom extends React.Component<Props, State> {
     const { routes } = state;
 
     return (
-      <ImageBackground style={[styles.container, style]}
-        source={state.index == 0 ? images.home_bg : (state.index == 1 ? images.trophy_bg :  images.setting_bg)}>
-        {/* {this.renderAnimatedBackground()} */}
+      <View style={[styles.container, style]}>
+        {this.renderAnimatedBackground()}
         {routes.map((route, index) => {
           const focused = state.index === index;
 
@@ -306,13 +302,13 @@ class TabbarComponentCustom extends React.Component<Props, State> {
             <TouchableWithoutFeedback onPress={() => onTabPress({ route })} key={index.toString()}>
               <View style={styles.item}>
                 {this.renderIcon({ index, route, focused })}
-                {/* {this.renderLabel({ index, route, focused })} */}
+                {this.renderLabel({ index, route, focused })}
               </View>
             </TouchableWithoutFeedback>
           );
         })}
         {this.renderActiveItem()}
-      </ImageBackground>
+      </View>
     );
   }
 }
@@ -323,11 +319,14 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     position: 'relative',
-    height: 60,
-    backgroundColor: colors.white,
+    height: 80,
+    backgroundColor: colors.whiteBackground,
   },
   text: {
-
+    textAlign: 'center',
+    color: colors.blackBackground,
+    marginTop: 10,
+    fontSize: 12,
   },
   item: {
     flex: 1,
@@ -342,16 +341,17 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 50,
     borderTopLeftRadius: 50,
     position: 'absolute',
-    top: -20,
   },
   activeItemIcon: {
     position: 'absolute',
+    top: -22,
+    padding: 5,
+    borderRadius: 20,
   },
   activeItem: {
     position: 'absolute',
     top: 5,
     left: 0,
-    // backgroundColor: 'rgb(184, 148, 56)',
     justifyContent: 'center',
     alignItems: 'center',
   },

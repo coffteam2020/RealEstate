@@ -1,91 +1,138 @@
 /* eslint-disable react/display-name */
 import 'react-native-gesture-handler';
 import {createAppContainer} from 'react-navigation';
-import {createStackNavigator, TransitionPresets} from 'react-navigation-stack';
+import {createStackNavigator} from 'react-navigation-stack';
+import {createBottomTabNavigator} from 'react-navigation-tabs';
 import React from 'react';
 import SplashScreen from '../containers/SplashScreen/index';
-import createAnimatedSwitchNavigator from 'react-navigation-animated-switch';
-import {Transition} from 'react-native-reanimated';
-import WelcomeScreen from '../containers/WelcomeScreen/index';
 import LoginScreen from '../containers/Authentication/LoginScreen/index';
 import RegisterScreen from '../containers/Authentication/RegisterScreen/index';
+import createAnimatedSwitchNavigator from 'react-navigation-animated-switch';
+import {Transition} from 'react-native-reanimated';
+import ExploreScreen from '../containers/ExploreScreen';
+import MateScreen from '../containers/MateScreen';
+import MessageScreen from '../containers/MessageScreen';
+import LocationScreen from '../containers/LocationScreen';
+import ProfileScreen from '../containers/ProfileScreen';
+import {colors} from '../shared/utils/colors/colors';
+import TabbarComponentCustom from './TabbarComponentCustom';
+import {Image, View} from 'react-native';
+import {images} from '../../assets';
+import styles from './styles';
+
 // ScreenNavigator for separately each screen into stack one
 // const MainScreenNavigator = createStackNavigator(
 //   {
-    // HomeScreen: {screen: HomeScreen},
-    // MedicalScreen: {screen: MedicalScreen},
-    // EditProfileScreen: {screen: EditProfileScreen},
-    // StoreScreen: {screen: StoreScreen},
-    // ItemsScreen: {screen: ItemsScreen},
-    // MessageScreen: {screen: MessageScreen},
-    // ChatRoomScreen: {screen: ChatRoomScreen},
-    // AddFriendScreen: {screen: AddFriendScreen},
-    // PinMessageScreen: {screen: PinMessageScreen},
-    // PinNewMessageScreen: {screen: PinNewMessageScreen},
-    // AboutScreen: {screen: AboutScreen},
-    // ResetScreen: {screen: ResetScreen},
-    // ResetPassScreen: {screen: ResetPassScreen},
-    // ChangePassDoneScreen: {screen: ChangePassDoneScreen},
-    // SettingsScreen: {screen: SettingsScreen},
-    // NotificationScreen: {screen: NotificationScreen},
-    // PigeonMessageScreen: {screen: PigeonMessageScreen},
-    // Create: {screen: Create},
-    // Livestream: {screen: Livestream},
-    // BlockFriendScreen: {screen: BlockFriendScreen},
-    // VideoCallScreen: {screen: VideoCallScreen},
-    // InformationRoom: {
-    //   screen: InformationRoom,
-    //   navigationOptions: {
-    //     gestureEnabled: true,
-    //     cardOverlayEnabled: true,
-    //     ...TransitionPresets.ModalPresentationIOS,
-    //     headerShown: false,
-    //   },
-    // },
-    // SpotifyScreen: {screen: SpotifyScreen},
-    // TranslateScreen: {
-    //   screen: TranslateScreen,
-    //   navigationOptions: {
-    //     gestureEnabled: true,
-    //     cardOverlayEnabled: true,
-    //     ...TransitionPresets.ModalPresentationIOS,
-    //     headerShown: false,
-    //   },
-    // },
-    // PlayList: {screen: PlayList},
-    // Recording: {screen: Recording},
-    // TermScreen: {screen: TermScreen},
-    // RankScreen: {screen: RankScreen},
-  // },
-  // {
-  //   mode: 'modal',
-  //   headerMode: 'none',
-    // initialRouteName: 'HomeScreen'
-  // },
+// HomeScreen: {screen: HomeScreen},
+// },
+// {
+//   mode: 'modal',
+//   headerMode: 'none',
+// initialRouteName: 'HomeScreen'
+// },
 // );
-// const AuthenticationStack = createStackNavigator(
-//   {
-//     RegisterScreen: {screen: RegisterScreen},
-//     OTPVerifyScreen: {screen: OTPVerifyScreen},
-//     ResetScreen: {screen: ResetScreen},
-//     ForgetPassScreen: {screen: ForgetPassScreen},
-//     ResetPassScreen: {screen: ResetPassScreen},
-//     ChangePassDoneScreen: {screen: ChangePassDoneScreen},
-//   },
-//   {
-//     mode: 'modal',
-//     headerMode: 'none',
-//   },
-// );
+const Tabs = createBottomTabNavigator(
+  {
+    ExploreScreen: {
+      screen: ExploreScreen,
+      navigationOptions: {
+        tabBarIcon: ({focused}) => {
+          return (
+            <View>
+              <Image
+                source={focused ? images.explorer : images.explorer_ico}
+                style={focused ? styles.icon : styles.iconInactive}
+              />
+            </View>
+          );
+        },
+        title: 'Explorer',
+      },
+    },
+    MateScreen: {
+      screen: MateScreen,
+      navigationOptions: {
+        tabBarIcon: ({focused}) => {
+          return (
+            <View>
+              <Image
+                source={focused ? images.mate : images.mate_ico}
+                style={focused ? styles.icon : styles.iconInactive}
+              />
+            </View>
+          );
+        },
+        title: 'Follow',
+      },
+    },
+    LocationScreen: {
+      screen: LocationScreen,
+      navigationOptions: {
+        tabBarIcon: ({focused}) => {
+          return (
+            <View>
+              <Image
+                source={focused ? images.location : images.location_ico}
+                style={focused ? styles.icon : styles.iconInactive}
+              />
+            </View>
+          );
+        },
+        title: 'Location',
+      },
+    },
+    MessageScreen: {
+      screen: MessageScreen,
+      navigationOptions: {
+        tabBarIcon: ({focused}) => {
+          return (
+            <View>
+              <Image
+                source={focused ? images.message : images.message_ico}
+                style={focused ? styles.icon : styles.iconInactive}
+              />
+            </View>
+          );
+        },
+        title: 'Message',
+      },
+    },
+    ProfileScreen: {
+      screen: ProfileScreen,
+      navigationOptions: {
+        tabBarIcon: ({focused}) => {
+          return (
+            <View>
+              <Image
+                source={focused ? images.profile : images.profile_ico}
+                style={focused ? styles.icon : styles.iconInactive}
+              />
+            </View>
+          );
+        },
+        title: 'Me',
+      },
+    },
+  },
+  {
+    tabBarOptions: {
+      showLabel: false,
+      activeTintColor: colors.blackBackground,
+      inactiveTintColor: colors.black_seventy,
+    },
+    tabBarComponent: (props) => <TabbarComponentCustom {...props} />,
+  },
+);
 // SwitchNavigator for using the multiple stack in the same route
 const AppBottombarSwitchNavigator = createAnimatedSwitchNavigator(
   {
     SplashScreen: {screen: SplashScreen},
-	  WelcomeScreen: {screen: WelcomeScreen},
     LoginScreen: {screen: LoginScreen},
     RegisterScreen: {screen: RegisterScreen},
+    TabsScreen: {screen: Tabs},
   },
   {
+    initialRouteName: 'SplashScreen',
     mode: 'modal',
     headerMode: 'none',
     transition: (
