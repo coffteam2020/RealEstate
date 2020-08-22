@@ -125,21 +125,6 @@ export async function AxiosFetcher({
         '_' +
         LogManager.parseJsonObjectToJsonString(error ? error : error?.message),
     );
-    if (error?.response?.data?.error.includes('Unauthorized')) {
-      Alert.alert(
-        'Session expired',
-        'You term has been closed. Please try to login again',
-        [
-          {
-            text: 'OK',
-            onPress: () => {
-              NavigationService.navigate(ScreenNames.LoginScreen);
-            },
-          },
-        ],
-      );
-      return;
-    }
     return error?.response ? error?.response : error;
   }
 }

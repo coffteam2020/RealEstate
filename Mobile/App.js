@@ -48,7 +48,7 @@ const App = () => {
   const {homeStore, userStore} = useStores();
   const colorScheme = Appearance.getColorScheme();
   const [isVisible, setIsVisible] = useState(false);
-  userStore?.setCurrentChatRoom('');
+  // userStore?.setCurrentChatRoom('');
   const setThemeChange = () => {};
   const disableConsole = () => {
     console.log('App started in', initialMode, 'mode', colorScheme);

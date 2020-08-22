@@ -98,14 +98,6 @@
     "privacyPolicy": "Privacy policy",
     "hadAccount": "Already have an account? "
   },
-  "verify": {
-    "name": "Verification",
-    "motto": "Please check you message for a six-digit security code and enter it below.",
-    "resend": "Didn'nt get a code? ",
-    "resendMotto": "Send again",
-    "verify": "Verify",
-    "invalid": "Code invalid, please fill all the rest of code"
-  },
   "introduce": {
     "step": "Step {{0}} of 3",
     "yourProfile": "Your Profile",
@@ -289,86 +281,6 @@
   "attachments": {
     "name": "You files"
   },
-  "myPlus": {
-    "name": "My doctify",
-    "consultHistory": "Consult history",
-    "askFor": "Ask for {{0}}",
-    "myQuestion": "My questions",
-    "posted": "Posted at: {{0}}",
-    "healthGuide": "Health guide",
-    "careTeam": "Care team",
-    "familyRecord": "Family records",
-    "img": "Images: {{0}}",
-    "medicationReminder": "Medication reminder",
-    "haveQuestion": "Do you have a health question? ",
-    "askAFreeNow": "Ask a question for now",
-    "deleteQuestion": "Delete this question",
-    "myCareTeam": "My care team",
-    "doYouWantConsult": "Do you want to have a consult?",
-    "findDoctor": "Find doctor for now",
-    "findHealthyGuide": "Find health guide",
-    "basicInformation": "Basic information",
-    "healthMetrics": "Health metrics",
-    "symptomAndCondition": "Conditions and symptoms",
-    "clinialVital": "Clinical vital",
-    "allergies": "Allergies",
-    "immunization": "Immunizations",
-    "medication": "Medications",
-    "procedure": "Procedures",
-    "completePercennt": "Complete {{0}}% basic profile",
-    "notCommentYet": "This question has not been answered"
-  },
-  "doctorSearch": {
-    "weFound": "We found {{0}} doctors for you",
-    "reviews": "reviews"
-  },
-  "doctorProfile": {
-    "patient": "Patient",
-    "helped": "Helped",
-    "thankFor": "Thanks for",
-    "primaryCareService": "Primary care service",
-    "availableVisitHour": "Available visit hour",
-    "sendMess": "Send message",
-    "videoChat": "Video call",
-    "appointment": "Book apointment",
-    "about": "About",
-    "insight": "Insights",
-    "inNetwork": "Network",
-    "reviews": "Reviews",
-    "basicInformation": "Basic information",
-    "aboutMe": "About me",
-    "myWorkExp": "Experiences",
-    "specialities": "Specialities",
-    "language": "Language",
-    "yOE": "Year of experience",
-    "education&Cert": "Educations and certifications",
-    "education": "Education",
-    "cert": "Certifications/Awards",
-    "medicalSchool": "Medical school",
-    "additional": "Additional information",
-    "link": "Link",
-    "sendMessMotto": "Send multiple messages/attachments. \nGet first response within several hours.",
-    "videoMotto": "30 minutes call durations. \nGet first response within several mins.",
-    "appointmentMotto": "Check available time and schedule an online appointment with doctor and consult via call. ",
-    "fromPatient": "From patients",
-    "startingWith": "Starting from {{0}} credits per visit",
-    "fromColleagues": "From colleagues",
-    "recommend": "Recommend",
-    "startOnTime": "Start on time",
-    "rating": "Rating",
-    "writeReview": "Write a review"
-
-  },
-  "medical": {
-    "rank": "Rank",
-    "myProfile": "My Profile",
-    "store": "Store",
-    "itemBag": "Item bag",
-    "notifications": "Notifications",
-    "settings": "Settings",
-    "about": "About",
-    "logOut": "Log Out"
-  },
   "message": {
     "title": "Messages",
     "search": "Search Friend",
@@ -386,5 +298,12 @@
     "permission" : {
       "record" : "Please grant microphone permissions to use this feature",
     }
+  },
+  "explorer": {
+    "search": "Find district, name, ...",
+    "hurry": "In a hurry",
+    "nearby": "Near by",
+    "ownerOnsite": "No owner on site",
+    "yourPlaces": "Your searchs"
   }
 }

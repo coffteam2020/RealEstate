@@ -9,6 +9,13 @@ export const containerStyle = StyleSheet.create({
   default: {
     flex: 1,
   },
+  paginationStyle: {
+    bottom: undefined,
+    right: undefined,
+    top: ScreenHeight * 0.17,
+    width: '30%',
+    left: '35%',
+  },
   defaultFull: {
     width: ScreenWidth,
     height: ScreenHeight,
@@ -57,7 +64,7 @@ export const containerStyle = StyleSheet.create({
     flex: 1,
   },
   defaultBackground: {
-    backgroundColor: '#665AAA',
+    backgroundColor: colors.whiteBackground,
   },
   defaultBackgroundSecond: {
     backgroundColor: '#FFF1E8',

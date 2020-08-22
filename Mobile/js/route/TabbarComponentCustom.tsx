@@ -320,6 +320,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     position: 'relative',
     height: 80,
+    borderColor: colors.white,
+    borderWidth: 0.5,
     backgroundColor: colors.whiteBackground,
   },
   text: {
