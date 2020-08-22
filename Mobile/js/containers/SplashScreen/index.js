@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect} from 'react';
-import {StatusBar, View} from 'react-native';
+import {StatusBar, View, Platform, Alert} from 'react-native';
 import {styles} from './style';
 import {withTheme} from 'react-native-paper';
 import TextNormal from '../../shared/components/Text/TextNormal';
@@ -16,6 +16,9 @@ import IALocalStorage from '../../shared/utils/storage/IALocalStorage';
 import {useStores} from '../../store/useStore';
 import {colors} from '../../shared/utils/colors/colors';
 import fonts from '../../shared/utils/fonts/fonts';
+import {PERMISSIONS, request} from 'react-native-permissions';
+import {ToastHelper} from '../../shared/components/ToastHelper';
+import {Linking} from 'react-native';
 
 const SplashScreen = (props) => {
   const {colorsApp} = props.theme;
@@ -30,18 +33,62 @@ const SplashScreen = (props) => {
   };
   useEffect(() => {
     loadLocalLanguage();
-    let timeOut = setTimeout(async () => {
-      let userInfo = await IALocalStorage.getDetailUserInfo();
-      if (userInfo?.accessToken) {
-        NavigationService.navigate(ScreenNames.TabsScreen);
-      } else {
-        NavigationService.navigate(ScreenNames.LoginScreen);
-      }
-    }, Constant.SPLASH_TIME_OUT);
-    return () => {
-      this.clearTimeout(timeOut);
-    };
+    props?.navigation.addListener('willFocus', () => {
+      checkLocation();
+    });
   }, []);
+
+  const checkLocation = async () => {
+    try {
+      request(
+        Platform.select({
+          android: PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+          ios: PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
+        }),
+      ).then((res) => {
+        if (res === 'granted') {
+          let timeOut = setTimeout(async () => {
+            let userInfo = await IALocalStorage.getDetailUserInfo();
+            if (userInfo?.accessToken) {
+              NavigationService.navigate(ScreenNames.TabsScreen);
+            } else {
+              NavigationService.navigate(ScreenNames.LoginScreen);
+            }
+          }, Constant.SPLASH_TIME_OUT);
+          return () => {
+            this.clearTimeout(timeOut);
+          };
+        } else {
+          ToastHelper.showError(t('login.location'));
+          Alert.alert(
+            t('login.locationError'),
+            t('login.locationErrorMessages'),
+            [
+              {
+                title: 'OK',
+                onPress: () => {
+                  openSetting();
+                },
+              },
+            ],
+          );
+        }
+      });
+    } catch (error) {
+      console.log('location set error:', error);
+    }
+  };
+  const openSetting = () => {
+    Linking.canOpenURL('app-settings:')
+      .then((supported) => {
+        if (!supported) {
+          Alert.alert("Can't handle settings url");
+        } else {
+          return Linking.openURL('app-settings:');
+        }
+      })
+      .catch((err) => console.error('An error occurred', err));
+  };
 
   return (
     <View style={[containerStyle.center, containerStyle.defaultBackground]}>
