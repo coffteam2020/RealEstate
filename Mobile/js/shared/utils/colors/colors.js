@@ -14,7 +14,7 @@ export const colors = {
 	black_twenty: "#00000033",
 	black_five: "#0000000D",
 	black_seventy: "#000000B3",
-	black_lessy: "#9B9B9B",
+	black_lessy: "#409B9B9B",
 	black_lightly: "#efefef",
 	pink: "#FA4169",
 	gray: "#ececec",

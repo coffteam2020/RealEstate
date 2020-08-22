@@ -304,6 +304,10 @@ export const containerStyle = StyleSheet.create({
     fontFamily: fonts.family.nunito.bold,
     textAlign: 'center',
   },
+  textHeaderSmallNormal: {
+    fontSize: FONTSIZES.avg,
+    fontFamily: fonts.family.nunito.bold,
+  },
   textDefault: {
     fontSize: FONTSIZES.avg,
     fontFamily: fonts.family.nunito.bold,

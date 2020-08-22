@@ -304,6 +304,24 @@
     "hurry": "In a hurry",
     "nearby": "Near by",
     "ownerOnsite": "No owner on site",
-    "yourPlaces": "Your searchs"
+    "yourPlaces": "Your searchs",
+    "trend": "Search trends"
+  }, 
+  "location":{
+    "near": "Find near you",
+    "from": "Enter your near work, school, ...",
+    "to": "Add location",
+    "motto": "Real Estate finds the accommodation that is most convenient for you by entering your work and your another address",
+    "currentLocation": "Use current location",
+    "submit": "Submit"
+  },
+  "mate": {
+    "title": "Your mates",
+    "male": "Male",
+    "female": "Female",
+    "detail": "Mate detail",
+    "looking": "Looking for",
+    "searchLocation": "Searching location",
+    "chat": "Chat"
   }
 }

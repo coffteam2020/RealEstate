@@ -9,44 +9,38 @@ import icons from '../../utils/icons/icons';
 import {ScreenWidth, ScreenHeight} from '../../utils/dimension/Divices';
 import Back from '../Icons/Back';
 import * as devices from '../../utils/device/device';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import TextNormal from '../Text/TextNormal';
 import {containerStyle} from '../../../themes/styles';
 
-const HeaderWithBackBtn = ({
-  props,
-  title,
-  hasButton = false,
-  rightTitleChildren,
-  onPressRight,
-}) => {
+const HeaderFull = ({title, hasButton = false}) => {
   return (
-    <View style={[styles.container]}>
-      <Back props={props} />
-      <View style={styles.text}>
-        <TextNormal
-          numberOfLines={2}
-          props={props}
-          style={[containerStyle.textHeader]}
-          text={title}
-        />
-      </View>
-      <View style={{width: SIZES.back.width, height: SIZES.back.height}}>
-        {hasButton && hasButton ? (
-          <TouchableOpacity style={styles.text} onPress={onPressRight}>
-            <TextNormal
-              numberOfLines={2}
-              props={props}
-              style={[containerStyle.textDefaultNormal]}
-              text={rightTitleChildren}
-            />
-          </TouchableOpacity>
-        ) : null}
-      </View>
+    <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+      <TouchableOpacity
+        style={{width: ScreenWidth / 4}}
+        onPress={() => {
+          hasButton ? NavigationService.goBack() : {};
+        }}>
+        {hasButton && <Ionicons name="md-chevron-back-outline" size={30} />}
+      </TouchableOpacity>
+      <TextNormal
+        text={title}
+        style={[
+          containerStyle.textHeader,
+          containerStyle.defaultMarginBottom,
+          {
+            width: ScreenWidth / 2,
+            alignSelf: 'center',
+            textAlign: 'center',
+          },
+        ]}
+      />
+      <View style={{width: ScreenWidth / 4}} />
     </View>
   );
 };
 
-export default HeaderWithBackBtn;
+export default HeaderFull;
 
 const styles = StyleSheet.create({
   container: {

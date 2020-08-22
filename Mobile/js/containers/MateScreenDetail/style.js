@@ -8,7 +8,7 @@ export const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
-    alignItems: 'center',
+    // alignItems: 'center',
   },
   location: {
     height: ScreenHeight / 2,
@@ -28,10 +28,8 @@ export const styles = StyleSheet.create({
     // justifyContent: 'center',
   },
   avatar: {
-    width: ScreenWidth * 0.25,
-    height: ScreenWidth * 0.25,
-    borderRadius: ScreenWidth * 0.5,
-    marginRight: 20,
+    width: ScreenWidth,
+    height: ScreenHeight * 0.3,
   },
   item: {
     marginStart: 20,

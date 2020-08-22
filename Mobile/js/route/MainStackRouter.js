@@ -11,6 +11,7 @@ import createAnimatedSwitchNavigator from 'react-navigation-animated-switch';
 import {Transition} from 'react-native-reanimated';
 import ExploreScreen from '../containers/ExploreScreen';
 import MateScreen from '../containers/MateScreen';
+import MateScreenDetail from '../containers/MateScreenDetail';
 import MessageScreen from '../containers/MessageScreen';
 import LocationScreen from '../containers/LocationScreen';
 import ProfileScreen from '../containers/ProfileScreen';
@@ -21,16 +22,17 @@ import {images} from '../../assets';
 import styles from './styles';
 
 // ScreenNavigator for separately each screen into stack one
-// const MainScreenNavigator = createStackNavigator(
-//   {
-// HomeScreen: {screen: HomeScreen},
-// },
-// {
-//   mode: 'modal',
-//   headerMode: 'none',
-// initialRouteName: 'HomeScreen'
-// },
-// );
+const MateScreenNavigator = createStackNavigator(
+  {
+    MateScreen: {screen: MateScreen},
+    MateScreenDetail: {screen: MateScreenDetail},
+  },
+  {
+    mode: 'modal',
+    headerMode: 'none',
+    initialRouteName: 'MateScreen',
+  },
+);
 const Tabs = createBottomTabNavigator(
   {
     ExploreScreen: {
@@ -49,8 +51,8 @@ const Tabs = createBottomTabNavigator(
         title: 'Explorer',
       },
     },
-    MateScreen: {
-      screen: MateScreen,
+    MateScreenNavigator: {
+      screen: MateScreenNavigator,
       navigationOptions: {
         tabBarIcon: ({focused}) => {
           return (

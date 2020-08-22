@@ -7,7 +7,8 @@ export const ScreenNames = {
   LocationScreen: 'LocationScreen',
   MessageScreen: 'MessageScreen',
   ProfileScreen: 'ProfileScreen',
-  TabsScreen: 'TabsScreen'
+  TabsScreen: 'TabsScreen',
+  MateScreenDetail: 'MateScreenDetail'
 };
 
 export default {

@@ -19,4 +19,5 @@ export const images = {
   nearby: require('./imgs/home/button_explorer/nearby.png'),
   noowner: require('./imgs/home/button_explorer/noowner.png'),
   space: require('./imgs/home/button_explorer/spaces.png'),
+  locationbg: require('./imgs/locationbg.png'),
 }

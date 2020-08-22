@@ -39,7 +39,7 @@ const TextInputFlatLeftIconTouchable = ({
   const [focusing, setIsFocus] = useState(false);
   const {colorsApp} = props.theme;
   return (
-    <Animatable.View animation="flipInX" style={[styles.container, style]}>
+    <Animatable.View animation="fadeIn" style={[styles.container, style]}>
       {hideText && hideText ? null : <TextNormal props={props} text={text} />}
       <TouchableOpacity onPress={onPress} style={[styles.containerInput]}>
         <TextInput
@@ -54,7 +54,7 @@ const TextInputFlatLeftIconTouchable = ({
             },
           ]}
           placeholder={placeHolder}
-          placeholderTextColor={colors.black_lessy}
+          placeholderTextColor={colors.black_twenty}
           onFocus={onPress}
           maxLength={maxLength ? maxLength : 50}
           value={value}

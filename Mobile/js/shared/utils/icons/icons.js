@@ -402,8 +402,21 @@ const IC_LOCATION = (
     </G>
   </Svg>
 );
+const IC_LOCATION_ACTIVE = (
+  <Svg width={10} height={12} viewBox="0 0 10 12">
+    <G fill="none" fillRule="evenodd">
+      <Path
+        d="M5 .5C2.8.5.5 2.2.5 5c0 2.65 4 6.7 4.15 6.85.1.1.2.15.35.15.15 0 .25-.05.35-.15C5.5 11.7 9.5 7.65 9.5 5 9.5 2.2 7.2.5 5 .5zm0 6c-.85 0-1.5-.65-1.5-1.5S4.15 3.5 5 3.5s1.5.65 1.5 1.5S5.85 6.5 5 6.5z"
+        fill="#FF874D"
+        fillRule="nonzero"
+      />
+      <Path d="M-1 0h12v12H-1z" />
+    </G>
+  </Svg>
+);
 const icons = {
   IC_SEARCH,
+  IC_LOCATION_ACTIVE,
   IC_LOCATION,
   IC_LOCATION_SEARCH,
   IC_RATE,

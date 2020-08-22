@@ -1,5 +1,12 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
-import {StatusBar, View, ScrollView, TouchableOpacity} from 'react-native';
+import {
+  StatusBar,
+  View,
+  ScrollView,
+  TouchableOpacity,
+  ImageBackground,
+} from 'react-native';
 import {styles} from './style';
 import {withTheme} from 'react-native-paper';
 import {containerStyle} from '../../themes/styles';
@@ -38,7 +45,7 @@ const ExploreScreen = (props) => {
   ];
   const MOCK = [
     {
-      address: 'string',
+      address: 'Go Vap',
       amenities: 'string',
       areaUnit: 'string',
       availability: 0,
@@ -53,7 +60,71 @@ const ExploreScreen = (props) => {
       leaseDurationMonth: 0,
       modifiedOn: 0,
       phoneContact: 0,
-      photo: ['string'],
+      photo: [
+        'https://media1.reatimes.vn/media/uploaded/37/2017/12/10/dichvuchuyenphatnhanhtuquan1.jpg',
+      ],
+      priceOrMonthlyRent: 0,
+      projectName: 'string',
+      propertyArea: 0,
+      propertyFor: 'string',
+      propertyOnFloor: 0,
+      propertyType: 'string',
+      rating: 0,
+      reservedParking: 0,
+      totalFloor: 0,
+      videos: ['string'],
+      youAre: 'string',
+    },
+    {
+      address: 'Binh Thanh',
+      amenities: 'string',
+      areaUnit: 'string',
+      availability: 0,
+      availabilityDate: '2020-08-22T13:29:39.522Z',
+      bathRoom: 0,
+      bedRoom: 0,
+      bookingAmount: 0,
+      createdOn: 0,
+      description: 'string',
+      id: 0,
+      leaseDuration: true,
+      leaseDurationMonth: 0,
+      modifiedOn: 0,
+      phoneContact: 0,
+      photo: [
+        'https://media1.reatimes.vn/media/uploaded/37/2017/12/10/dichvuchuyenphatnhanhtuquan1.jpg',
+      ],
+      priceOrMonthlyRent: 0,
+      projectName: 'string',
+      propertyArea: 0,
+      propertyFor: 'string',
+      propertyOnFloor: 0,
+      propertyType: 'string',
+      rating: 0,
+      reservedParking: 0,
+      totalFloor: 0,
+      videos: ['string'],
+      youAre: 'string',
+    },
+    {
+      address: 'Quan 1',
+      amenities: 'string',
+      areaUnit: 'string',
+      availability: 0,
+      availabilityDate: '2020-08-22T13:29:39.522Z',
+      bathRoom: 0,
+      bedRoom: 0,
+      bookingAmount: 0,
+      createdOn: 0,
+      description: 'string',
+      id: 0,
+      leaseDuration: true,
+      leaseDurationMonth: 0,
+      modifiedOn: 0,
+      phoneContact: 0,
+      photo: [
+        'https://media1.reatimes.vn/media/uploaded/37/2017/12/10/dichvuchuyenphatnhanhtuquan1.jpg',
+      ],
       priceOrMonthlyRent: 0,
       projectName: 'string',
       propertyArea: 0,
@@ -68,6 +139,7 @@ const ExploreScreen = (props) => {
     },
   ];
   useEffect(() => {
+    getSearchTrend();
     props?.navigation.addListener('willFocus', () => {
       getSearchTrend();
     });
@@ -150,16 +222,66 @@ const ExploreScreen = (props) => {
     );
   };
   const renderSearchTrend = () => {
-    return <View />;
+    return (
+      <View style={styles.trendContainer}>
+        <ImageBackground
+          source={{uri: MOCK[0].photo[0]}}
+          imageStyle={{borderRadius: 20}}
+          style={styles.img1}>
+          <View style={styles.shadownImg1}>
+            <TextNormal
+              text={MOCK[0].address}
+              style={[containerStyle.textWhite, containerStyle.textHeaderSmall]}
+            />
+          </View>
+        </ImageBackground>
+        <View style={{flex: 2, marginLeft: 10}}>
+          <ImageBackground
+            source={{uri: MOCK[1].photo[0]}}
+            imageStyle={{borderRadius: 20}}
+            style={styles.img2}>
+            <View style={styles.shadowImg2}>
+              <TextNormal
+                text={MOCK[1].address}
+                style={[
+                  containerStyle.textWhite,
+                  containerStyle.textHeaderSmall,
+                ]}
+              />
+            </View>
+          </ImageBackground>
+          <ImageBackground
+            imageStyle={{borderRadius: 20}}
+            source={{uri: MOCK[2].photo[0]}}
+            style={styles.img3}>
+            <View style={styles.shadowImg3}>
+              <TextNormal
+                text={MOCK[2].address}
+                style={[
+                  containerStyle.textWhite,
+                  containerStyle.textHeaderSmall,
+                ]}
+              />
+            </View>
+          </ImageBackground>
+        </View>
+      </View>
+    );
   };
   return (
-    <View style={[containerStyle.default, containerStyle.defaultBackground]}>
+    <View style={[containerStyle.defaultBackground]}>
       <StatusBar barStyle={colorsApp.statusBar} />
-      <ScrollView contentContainerStyle={styles.mainContainer}>
+      <ScrollView contentContainerStyle={[styles.mainContainer]} style={{}}>
         {renderBanner()}
         {renderSearch()}
         {renderBtns()}
-        {renderSearchTrend()}
+        <View style={{width: '100%', marginLeft: 35, marginTop: 20}}>
+          <TextNormal
+            text={t('explorer.trend')}
+            style={containerStyle.textHeaderSmall}
+          />
+          {renderSearchTrend()}
+        </View>
       </ScrollView>
     </View>
   );
