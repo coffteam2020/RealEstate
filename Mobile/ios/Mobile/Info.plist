@@ -21,7 +21,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -37,8 +37,30 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>Our app need to clarify</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Our app need to clarify</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>Our app need to clarify</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>Our app need to clarify</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Our app need to clarify</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Our app need to clarify</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Our app need to clarify</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>Our app need to clarify</string>
+	<key>NSMotionUsageDescription</key>
+	<string>Our app need to clarify</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Our app need to clarify</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Our app need to clarify</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Our app need to clarify</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>

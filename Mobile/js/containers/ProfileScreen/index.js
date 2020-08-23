@@ -117,13 +117,17 @@ const ProfileScreen = (props) => {
       <View>
         <TouchableOpacity
           style={styles.itemContainer}
-          onPress={() => {
-            NavigationService.navigate(ScreenNames.Update, {
-              key: title,
-              value: title?.toLowerCase(),
-              item: hasMoreDesc ? desc : rightTitle,
-            });
-          }}>
+          onPress={
+            onPress
+              ? onPress
+              : () => {
+                  NavigationService.navigate(ScreenNames.Update, {
+                    key: title,
+                    value: title?.toLowerCase(),
+                    item: hasMoreDesc ? desc : rightTitle,
+                  });
+                }
+          }>
           <View style={styles.nestedContainer}>
             {ico}
             <View>
@@ -170,9 +174,11 @@ const ProfileScreen = (props) => {
         avatar: url || '',
         id: user?.id,
       },
+      hasToken: true,
     })
       .then((val) => {
         //
+        console.log(JSON.stringify(val));
         if (val?.avatar) {
         } else {
           ToastHelper.showError(t('error.common'));
@@ -247,7 +253,7 @@ const ProfileScreen = (props) => {
               color={colors.black_clear_all}
             />,
             t('account.name'),
-            '',
+            userStore?.userInfo?.name || '',
             () => {},
           )}
           {renderItem(
@@ -327,7 +333,7 @@ const ProfileScreen = (props) => {
               color={colors.black_clear_all}
             />,
             t('account.about'),
-            userStore?.userInfo?.aboutMe,
+            '',
             () => {},
             true,
             userStore?.userInfo?.aboutMe,
@@ -350,7 +356,10 @@ const ProfileScreen = (props) => {
             />,
             t('account.logout'),
             '',
-            () => {},
+            async () => {
+              await IALocalStorage.resetLocalStorage();
+              NavigationService.navigate(ScreenNames.LoginScreen);
+            },
           )}
         </View>
       </View>

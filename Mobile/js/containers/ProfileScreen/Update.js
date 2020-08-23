@@ -1,90 +1,59 @@
+/* eslint-disable no-shadow */
 /* eslint-disable react-native/no-inline-styles */
-import React, {useEffect, useState} from 'react';
-import {StatusBar, View, SafeAreaView, TouchableOpacity} from 'react-native';
+import React, {useState} from 'react';
+import {StatusBar, View, SafeAreaView} from 'react-native';
 import {styles} from './style';
-import {images} from '../../../assets/index';
 import {withTheme} from 'react-native-paper';
-import TextNormal from '../../shared/components/Text/TextNormal';
 import {containerStyle} from '../../themes/styles';
 import {useTranslation} from 'react-i18next';
 import {useStores} from '../../store/useStore';
 import {colors} from '../../shared/utils/colors/colors';
 import {ScrollView} from 'react-native-gesture-handler';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import Fontisto from 'react-native-vector-icons/Fontisto';
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import FastImage from 'react-native-fast-image';
 import GradientButton from '../../shared/components/Buttons/GradientButton';
-import {ScreenWidth, ScreenHeight} from '../../shared/utils/dimension/Divices';
 import {NavigationService} from '../../navigation';
-import {ScreenNames} from '../../route/ScreenNames';
 import AxiosFetcher from '../../api/AxiosFetch';
 import HeaderFull from '../../shared/components/Header/HeaderFull';
 import IALocalStorage from '../../shared/utils/storage/IALocalStorage';
 import {ToastHelper} from '../../shared/components/ToastHelper';
-import Constant from '../../shared/utils/constant/Constant';
 import {useObserver} from 'mobx-react';
-import TextInputFlatLeftIconTouchable from '../../shared/components/TextInput/TextInputFlatLeftIconTouchable';
 import TextInputFlat from '../../shared/components/TextInput/TextInputFlat';
+import Loading from '../../shared/components/Loading';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
-const MOCK = [
-  {
-    id: 0,
-    firstName: 'Mayuko',
-    lastName: 'Nashel',
-    avatar: 'https://i1.sndcdn.com/avatars-000143568666-ksxxz6-t500x500.jpg',
-    gender: 0,
-    searchLocation: 'Binh Thanh, Ho Chi Minh',
-    genderLookingFor: 'Female',
-    note:
-      'I want to make a openable chances for everyone wanna deal with my property. Home is da best',
-  },
-  {
-    id: 1,
-    firstName: 'Tech',
-    lastName: 'Lead',
-    searchLocation: 'Phuong 10, Go Vap, Ho Chi Minh',
-    avatar:
-      'https://image.cnbcfm.com/api/v1/image/106139275-1568921126945facebookyt.jpg?v=1568922003&w=1600&h=900',
-    gender: 1,
-    genderLookingFor: 'Male',
-    note:
-      'Ex-Google tech lead Patrick Shyu explains how to learn to buy property quickly and easily, with this one weird trick! It`s so simple with this 1-step! Are you looking ? ...',
-  },
-  {
-    id: 2,
-    firstName: 'Ura',
-    lastName: 'Mickey',
-    genderLookingFor: 'Male',
-    searchLocation: 'Phuong 13, Nhat Chi Mai, Tan Binh, Ho Chi Minh',
-    avatar:
-      'https://i1.wp.com/innovation-village.com/wp-content/uploads/2020/05/Twitter-CEO-Jack-Dorsey-pledges-over-a-quarter-of-his-780x470-1.jpg?fit=780%2C470&ssl=1',
-    gender: 1,
-    note:
-      'Jack Patrick Dorsey is an American technology entrepreneur and philanthropist who is the co-founder and CEO of Twitter, and the founder and CEO of Square, a financial payments company.',
-  },
-];
 const Update = (props) => {
   const {colorsApp} = props.theme;
   const {t} = useTranslation();
   const {userStore} = useStores();
-  const [text, setText] = useState('');
-  useEffect(() => {
-    getProfile();
-  }, []);
-  const getProfile = async () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [user, setUser] = useState({});
+
+  const updateProfile = async () => {
+    console.log(JSON.stringify(user));
+    setIsLoading(true);
     let userInfo = await IALocalStorage.getDetailUserInfo();
     AxiosFetcher({
-      method: 'GET',
-      url: 'user/' + userInfo?.id,
+      method: 'POST',
+      url: `user/${userInfo?.id}/update`,
+      data: {
+        ...user,
+        id: userStore?.userInfo?.id,
+      },
       hasToken: true,
     })
       .then((val) => {
-        userStore.userInfo = val;
+        setIsLoading(false);
+        if (val?.avatar) {
+          ToastHelper.showSuccess(t('account.success'));
+          setTimeout(() => {
+            NavigationService.goBack();
+          }, 1000);
+        } else {
+          ToastHelper.showError(t('account.fail'));
+        }
       })
       .catch(() => {
-        ToastHelper.showError(t('account.getInfoErr'));
+        setIsLoading(false);
+        ToastHelper.showError(t('account.fail'));
       });
   };
 
@@ -95,8 +64,7 @@ const Update = (props) => {
           keyboardType="default"
           props={props}
           onChangeText={(text) => {
-            // setTo(text || '');
-            // setEnableTo(text !== '');
+            setUser({...user, name: text});
           }}
           text={t('account.name')}
           placeholder={userStore?.userInfo?.name || ''}
@@ -105,12 +73,11 @@ const Update = (props) => {
             containerStyle.defaultMarginBottom,
           ]}
         />
-         <TextInputFlat
+        <TextInputFlat
           keyboardType="default"
           props={props}
           onChangeText={(text) => {
-            // setTo(text || '');
-            // setEnableTo(text !== '');
+            setUser({...user, dateOfBirth: text});
           }}
           text={t('account.dob')}
           placeholder={userStore?.userInfo?.dateOfBirth || ''}
@@ -119,85 +86,94 @@ const Update = (props) => {
             containerStyle.defaultMarginBottom,
           ]}
         />
-         <TextInputFlat
-          keyboardType="default"
+        <TextInputFlat
+          keyboardType="number-pad"
           props={props}
           onChangeText={(text) => {
-            // setTo(text || '');
-            // setEnableTo(text !== '');
+            setUser({...user, phoneNumber: text});
           }}
           text={t('account.phone')}
+          disabled
           placeholder={`${userStore?.userInfo?.phoneNumber}` || ''}
           textInputStyle={[
             styles.fieldEmailPhone,
             containerStyle.defaultMarginBottom,
           ]}
         />
-         <TextInputFlat
+        <TextInputFlat
           keyboardType="default"
           props={props}
           onChangeText={(text) => {
-            // setTo(text || '');
-            // setEnableTo(text !== '');
+            setUser({...user, language: text});
+          }}
+          text={t('account.language')}
+          disabled
+          placeholder={`${userStore?.userInfo?.language}` || ''}
+          textInputStyle={[
+            styles.fieldEmailPhone,
+            containerStyle.defaultMarginBottom,
+          ]}
+        />
+        <TextInputFlat
+          keyboardType="default"
+          props={props}
+          onChangeText={(text) => {
+            setUser({...user, email: text});
           }}
           text={t('account.email')}
-          placeholder={userStore?.userInfo?.name || ''}
+          placeholder={userStore?.userInfo?.email || ''}
           textInputStyle={[
             styles.fieldEmailPhone,
             containerStyle.defaultMarginBottom,
           ]}
         />
-         <TextInputFlat
+        <TextInputFlat
           keyboardType="default"
           props={props}
           onChangeText={(text) => {
-            // setTo(text || '');
-            // setEnableTo(text !== '');
+            setUser({...user, gender: text});
           }}
           text={t('account.sex')}
-          placeholder={userStore?.userInfo?.name || ''}
+          placeholder={userStore?.userInfo?.gender || ''}
           textInputStyle={[
             styles.fieldEmailPhone,
             containerStyle.defaultMarginBottom,
           ]}
         />
-         <TextInputFlat
+        <TextInputFlat
           keyboardType="default"
           props={props}
           onChangeText={(text) => {
-            // setTo(text || '');
-            // setEnableTo(text !== '');
+            setUser({...user, address: text});
           }}
           text={t('account.address')}
-          placeholder={userStore?.userInfo?.name || ''}
+          placeholder={userStore?.userInfo?.address || ''}
           textInputStyle={[
             styles.fieldEmailPhone,
             containerStyle.defaultMarginBottom,
           ]}
         />
-         <TextInputFlat
+        <TextInputFlat
           keyboardType="default"
           props={props}
           onChangeText={(text) => {
-            // setTo(text || '');
-            // setEnableTo(text !== '');
+            setUser({...user, currency: text});
           }}
           text={t('account.currentcy')}
-          placeholder={userStore?.userInfo?.name || ''}
+          placeholder={userStore?.userInfo?.currency || ''}
           textInputStyle={[
             styles.fieldEmailPhone,
             containerStyle.defaultMarginBottom,
           ]}
         />
-         <TextInputFlat
+        <TextInputFlat
           keyboardType="default"
           props={props}
           onChangeText={(text) => {
-            // setTo(text || '');
-            // setEnableTo(text !== '');
+            setUser({...user, aboutMe: text});
           }}
           text={t('account.about')}
-          placeholder={userStore?.userInfo?.name || ''}
+          placeholder={userStore?.userInfo?.aboutMe || ''}
           textInputStyle={[
             styles.fieldEmailPhone,
             containerStyle.defaultMarginBottom,
@@ -209,9 +185,7 @@ const Update = (props) => {
           text={t('location.submit')}
           style={[containerStyle.defaultMarginTop]}
           onPress={() => {
-            ToastHelper.showWarning(
-              'This feature is in progress working. Wait for next version',
-            );
+            updateProfile();
           }}
         />
         <GradientButton
@@ -236,10 +210,13 @@ const Update = (props) => {
       <StatusBar barStyle={colorsApp.statusBar} />
       <SafeAreaView>
         <HeaderFull title={t('account.update')} />
-        <ScrollView nestedScrollEnabled contentContainerStyle={styles.content}>
+        <KeyboardAwareScrollView
+          nestedScrollEnabled
+          contentContainerStyle={styles.content}>
           {renderMe()}
-        </ScrollView>
+        </KeyboardAwareScrollView>
       </SafeAreaView>
+      {isLoading && <Loading />}
     </View>
   ));
 };

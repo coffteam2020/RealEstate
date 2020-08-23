@@ -130,7 +130,8 @@ class IALocalStorage {
   	await IAStorageManager.removeItem(Constant.USER.TOKEN_INFO);
   	await IAStorageManager.removeItem(Constant.USER.USER_INFO);
   	await IAStorageManager.removeItem(Constant.USER.TOKEN_FIRST_TIME);
-  	await IAStorageManager.removeItem(Constant.USER.SEARCH);
+    await IAStorageManager.removeItem(Constant.USER.SEARCH);
+    await IAStorageManager.removeItem(Constant.USER.USER_DETAIL_INFO);
   }
 
 }

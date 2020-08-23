@@ -342,6 +342,8 @@
     "notification": "Notification",
     "on": "On",
     "off": "Off",
-    "update": "Update information"
+    "update": "Update information",
+    "success": "Update information successfully",
+    "fail": "Opps, we tried to update information but failed. Check again please!"
   }
 }
