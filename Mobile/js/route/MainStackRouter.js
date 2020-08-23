@@ -1,7 +1,7 @@
 /* eslint-disable react/display-name */
 import 'react-native-gesture-handler';
 import {createAppContainer} from 'react-navigation';
-import {createStackNavigator} from 'react-navigation-stack';
+import {createStackNavigator, TransitionPresets} from 'react-navigation-stack';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
 import React from 'react';
 import SplashScreen from '../containers/SplashScreen/index';
@@ -15,6 +15,7 @@ import MateScreenDetail from '../containers/MateScreenDetail';
 import MessageScreen from '../containers/MessageScreen';
 import LocationScreen from '../containers/LocationScreen';
 import ProfileScreen from '../containers/ProfileScreen';
+import Update from '../containers/ProfileScreen/Update';
 import {colors} from '../shared/utils/colors/colors';
 import TabbarComponentCustom from './TabbarComponentCustom';
 import {Image, View} from 'react-native';
@@ -31,6 +32,25 @@ const MateScreenNavigator = createStackNavigator(
     mode: 'modal',
     headerMode: 'none',
     initialRouteName: 'MateScreen',
+  },
+);
+const ProfileNavigator = createStackNavigator(
+  {
+    ProfileScreen: {screen: ProfileScreen},
+    Update: {
+      screen: Update,
+      navigationOptions: {
+        gestureEnabled: true,
+        cardOverlayEnabled: true,
+        ...TransitionPresets.ModalPresentationIOS,
+        headerShown: false,
+      },
+    },
+  },
+  {
+    mode: 'modal',
+    headerMode: 'none',
+    initialRouteName: 'ProfileScreen',
   },
 );
 const Tabs = createBottomTabNavigator(
@@ -99,8 +119,8 @@ const Tabs = createBottomTabNavigator(
         title: 'Message',
       },
     },
-    ProfileScreen: {
-      screen: ProfileScreen,
+    ProfileNavigator: {
+      screen: ProfileNavigator,
       navigationOptions: {
         tabBarIcon: ({focused}) => {
           return (

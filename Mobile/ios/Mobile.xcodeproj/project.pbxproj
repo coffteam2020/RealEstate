@@ -60,6 +60,7 @@
 		E3A87B700E2841B89E3679C1 /* Nunito-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AE893D98A3EE4E018D5A5711 /* Nunito-SemiBoldItalic.ttf */; };
 		EBC6C953B2AA450D9AE779E7 /* Nunito-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F9F47D3EB57546D58BE29C9B /* Nunito-Black.ttf */; };
 		FB97C6DE2818C4B0F4BA01E8 /* libPods-Mobile-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 85A2058A2825E31FA88D8FB3 /* libPods-Mobile-tvOS.a */; };
+		FD6B1C0724F2951E00DFCEE8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FD6B1C0624F2951E00DFCEE8 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -163,6 +164,7 @@
 		F91571D6A7BC4296A408B35F /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 		F9F47D3EB57546D58BE29C9B /* Nunito-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Nunito-Black.ttf"; path = "../assets/fonts/Nunito-Black.ttf"; sourceTree = "<group>"; };
 		FB6B4416FF6E403EB1CF8FC0 /* PlayfairDisplay-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "PlayfairDisplay-Medium.ttf"; path = "../assets/fonts/PlayfairDisplay-Medium.ttf"; sourceTree = "<group>"; };
+		FD6B1C0624F2951E00DFCEE8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -221,6 +223,7 @@
 		13B07FAE1A68108700A75B9A /* Mobile */ = {
 			isa = PBXGroup;
 			children = (
+				FD6B1C0624F2951E00DFCEE8 /* GoogleService-Info.plist */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -514,6 +517,7 @@
 				1CFEDADA05094B9FB719AF92 /* Nunito-ExtraBoldItalic.ttf in Resources */,
 				6FEA05F8E1E64974A47FC080 /* Nunito-ExtraLight.ttf in Resources */,
 				173C004DE47F4987B2A593E1 /* Nunito-ExtraLightItalic.ttf in Resources */,
+				FD6B1C0724F2951E00DFCEE8 /* GoogleService-Info.plist in Resources */,
 				8A641181C9F3410D885D1CAB /* Nunito-Italic.ttf in Resources */,
 				C225CA3B1D9849A0858B2E80 /* Nunito-Light.ttf in Resources */,
 				7CD4737E46BB4AACA7E67F9A /* Nunito-LightItalic.ttf in Resources */,
@@ -1021,7 +1025,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.app.dtechno.dapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dtechno.dapp.premium;
 				PRODUCT_NAME = "Real Estate";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -1044,7 +1048,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.app.dtechno.dapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dtechno.dapp.premium;
 				PRODUCT_NAME = "Real Estate";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";

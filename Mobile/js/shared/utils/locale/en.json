@@ -283,7 +283,7 @@
   },
   "message": {
     "title": "Messages",
-    "search": "Search Friend",
+    "search": "Search your messages",
     "deleteMessage": "Delete message?",
     "confirmDeleteMessage": "Do you really want to delete this message?",
     "friend": "Friends",
@@ -323,5 +323,25 @@
     "looking": "Looking for",
     "searchLocation": "Searching location",
     "chat": "Chat"
+  },
+  "account": {
+    "title": "Account",
+    "address": "Address",
+    "language": "Language",
+    "currentcy": "Currency",
+    "about": "About me",
+    "logout": "Logout",
+    "confirmation": "Confirmation",
+    "logoutAsk": "Do you want to logout?",
+    "getInfoErr": "Could not get your information data, try again later!",
+    "name": "Name" ,
+    "sex": "Gender",
+    "dob": "Birth day",
+    "phone": "Phone",
+    "email": "Email",
+    "notification": "Notification",
+    "on": "On",
+    "off": "Off",
+    "update": "Update information"
   }
 }

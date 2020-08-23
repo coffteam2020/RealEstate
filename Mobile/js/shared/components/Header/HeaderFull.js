@@ -13,11 +13,11 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import TextNormal from '../Text/TextNormal';
 import {containerStyle} from '../../../themes/styles';
 
-const HeaderFull = ({title, hasButton = false}) => {
+const HeaderFull = ({title, hasButton = false, rightIco, onPress}) => {
   return (
     <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
       <TouchableOpacity
-        style={{width: ScreenWidth / 4}}
+        style={{width: ScreenWidth / 6}}
         onPress={() => {
           hasButton ? NavigationService.goBack() : {};
         }}>
@@ -29,13 +29,23 @@ const HeaderFull = ({title, hasButton = false}) => {
           containerStyle.textHeader,
           containerStyle.defaultMarginBottom,
           {
-            width: ScreenWidth / 2,
             alignSelf: 'center',
             textAlign: 'center',
           },
         ]}
       />
-      <View style={{width: ScreenWidth / 4}} />
+      <View
+        style={{
+          width: ScreenWidth / 6,
+          justifyContent: 'center',
+          alignContent: 'center',
+          alignItems: 'center',
+          marginBottom: 10,
+        }}>
+        {rightIco && (
+          <TouchableOpacity onPress={onPress}>{rightIco}</TouchableOpacity>
+        )}
+      </View>
     </View>
   );
 };

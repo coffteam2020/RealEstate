@@ -1,28 +1,50 @@
-import { StyleSheet } from "react-native";
-import { colors } from "../../shared/utils/colors/colors";
-import { ScreenHeight, ScreenWidth } from "../../shared/utils/dimension/Divices";
-import { SPACINGS } from "../../themes";
-
+import {StyleSheet} from 'react-native';
+import {colors} from '../../shared/utils/colors/colors';
+import {SPACINGS, RADIUS} from '../../themes';
+import {safeTopHeight, ScreenWidth} from '../../shared/utils/dimension/Divices';
 
 export const styles = StyleSheet.create({
-	mainContainer: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center'
-	},
-	content: {
-		justifyContent: 'center',
-		alignItems: 'center',
-		width: ScreenWidth,
-		height: ScreenHeight
-	},
-	img: {
-		marginLeft: SPACINGS.avg, 
-		width: ScreenWidth / 3, 
-		height: ScreenWidth / 3
-	}
+  mainContainer: {
+    flex: 1,
+    backgroundColor: colors.white,
+  },
+  content: {
+    paddingVertical: SPACINGS.xLarge,
+    flex: 1,
+  },
+  topView: {
+    position: 'absolute',
+    height: 150,
+    width: '100%',
+    backgroundColor: colors.gray_bg,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: safeTopHeight,
+    marginBottom: SPACINGS.xxLarge,
+    paddingHorizontal: SPACINGS.xxLarge,
+  },
+  listMessages: {
+    marginTop: SPACINGS.xLarge,
+    height: '100%',
+  },
+  textInputHeader: {
+    paddingHorizontal: SPACINGS.xxLarge,
+    width: ScreenWidth - SPACINGS.xxLarge * 2,
+    height: 48,
+    borderRadius: 2 * RADIUS.backIco,
+    borderWidth: 0,
+  },
+  separatorView: {
+    marginLeft: SPACINGS.xxLarge,
+    width: ScreenWidth - SPACINGS.xxLarge * 2,
+    height: 1,
+    backgroundColor: colors.borderColor,
+  },
 });
 
 export default {
-	styles
+  styles,
 };
