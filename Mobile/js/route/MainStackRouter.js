@@ -11,6 +11,7 @@ import createAnimatedSwitchNavigator from 'react-navigation-animated-switch';
 import {Transition} from 'react-native-reanimated';
 import ExploreScreen from '../containers/ExploreScreen';
 import MateScreen from '../containers/MateScreen';
+import List from '../containers/MateScreen/List';
 import MateScreenDetail from '../containers/MateScreenDetail';
 import MessageScreen from '../containers/MessageScreen';
 import ChatRoomScreen from '../containers/ChatRoomScreen';
@@ -32,6 +33,7 @@ const MateScreenNavigator = createStackNavigator(
   {
     MateScreen: {screen: MateScreen},
     MateScreenDetail: {screen: MateScreenDetail},
+    List: {screen: List}
   },
   {
     mode: 'modal',

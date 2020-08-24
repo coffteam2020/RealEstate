@@ -13,5 +13,6 @@ export class UserStore {
   @observable userId = undefined;
   @observable userRegisterBeing = {};
   @observable messages = [];
-
+  @observable follows = []
+  @observable users = []
 }

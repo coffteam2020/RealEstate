@@ -42,7 +42,7 @@ const MateScreenDetail = (props) => {
           ]}>
           <View>
             <TextNormal
-              text={item?.firstName + ' ' + item?.lastName || ''}
+              text={item?.name || ''}
               style={[
                 containerStyle.textHeader,
                 containerStyle.defaultMarginBottom,
@@ -62,7 +62,9 @@ const MateScreenDetail = (props) => {
               <Ionicons name="md-search-circle-outline" size={25} />
               <TextNormal
                 numberOfLines={3}
-                text={`${t('mate.searchLocation')}: ${item?.searchLocation}`}
+                text={`${t('mate.searchLocation')}: ${
+                  item?.searchLocation || '🏙'
+                }`}
                 style={[
                   containerStyle.textInputHeaderDefault,
                   containerStyle.defaultTextMarginLeft,
@@ -73,7 +75,9 @@ const MateScreenDetail = (props) => {
               <Ionicons name="md-transgender-sharp" size={25} />
               <TextNormal
                 numberOfLines={3}
-                text={`${t('mate.looking')}: ${item?.genderLookingFor}`}
+                text={`${t('mate.looking')}: ${
+                  item?.genderLookingFor || 'Male'
+                }`}
                 style={[
                   containerStyle.textInputHeaderDefault,
                   containerStyle.defaultTextMarginLeft,
@@ -84,7 +88,7 @@ const MateScreenDetail = (props) => {
               <Ionicons name="ios-newspaper-outline" size={20} />
               <TextNormal
                 numberOfLines={300}
-                text={item?.note}
+                text={item?.aboutMe || '✌️'}
                 style={[
                   containerStyle.textInputHeaderDefault,
                   containerStyle.defaultTextMarginLeft,
@@ -100,8 +104,7 @@ const MateScreenDetail = (props) => {
                 NavigationService.navigate(ScreenNames.ChatRoomScreen, {
                   toUserData: {
                     id: item?.id,
-                    name:
-                      (item?.firstName || '') + ' ' + (item?.lastName || ''),
+                    name: item?.name || 'No name',
                     avatar: item?.avatar,
                   },
                 });

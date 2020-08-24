@@ -320,13 +320,18 @@
     "submit": "Submit"
   },
   "mate": {
-    "title": "Your mates",
+    "title": "Your followers",
     "male": "Male",
+    "follow": "Who you can follow",
+    "followAct": "Follow",
+    "followAsk": "Great, move on",
+    "followAskContent": "You want to see detail or follow her/him?",
     "female": "Female",
     "detail": "Mate detail",
     "looking": "Looking for",
     "searchLocation": "Searching location",
-    "chat": "Chat"
+    "chat": "Chat",
+    "err": "Opps, we tried to get your followers but failed. Try again later!"
   },
   "account": {
     "title": "Account",

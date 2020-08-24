@@ -14,7 +14,8 @@ export const ScreenNames = {
   ChatRoomScreen: 'ChatRoomScreen',
   LiveStream: 'Livestream',
   InformationRoom: 'InformationRoom',
-  VideoCallScreen: 'VideoCallScreen'
+  VideoCallScreen: 'VideoCallScreen',
+  List: 'List'
 };
 
 export default {

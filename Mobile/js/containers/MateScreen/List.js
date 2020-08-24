@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useEffect} from 'react';
-import {StatusBar, View, SafeAreaView, FlatList} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {StatusBar, View, SafeAreaView, FlatList, Alert} from 'react-native';
 import {styles} from './style';
 import {withTheme} from 'react-native-paper';
 import TextNormal from '../../shared/components/Text/TextNormal';
@@ -17,62 +17,30 @@ import HeaderFull from '../../shared/components/Header/HeaderFull';
 import AxiosFetcher from '../../api/AxiosFetch';
 import {ToastHelper} from '../../shared/components/ToastHelper';
 import Empty from '../../shared/components/Empty';
-import {colors} from '../../shared/utils/colors/colors';
+import Constant from '../../shared/utils/constant/Constant';
+import Loading from '../../shared/components/Loading';
 
-const MOCK = [
-  {
-    id: 0,
-    firstName: 'Mayuko',
-    lastName: 'Nashel',
-    avatar: 'https://i1.sndcdn.com/avatars-000143568666-ksxxz6-t500x500.jpg',
-    gender: 0,
-    searchLocation: 'Binh Thanh, Ho Chi Minh',
-    genderLookingFor: 'Female',
-    note:
-      'I want to make a openable chances for everyone wanna deal with my property. Home is da best',
-  },
-  {
-    id: 1,
-    firstName: 'Tech',
-    lastName: 'Lead',
-    searchLocation: 'Phuong 10, Go Vap, Ho Chi Minh',
-    avatar:
-      'https://image.cnbcfm.com/api/v1/image/106139275-1568921126945facebookyt.jpg?v=1568922003&w=1600&h=900',
-    gender: 1,
-    genderLookingFor: 'Male',
-    note:
-      'Ex-Google tech lead Patrick Shyu explains how to learn to buy property quickly and easily, with this one weird trick! It`s so simple with this 1-step! Are you looking ? ...',
-  },
-  {
-    id: 2,
-    firstName: 'Ura',
-    lastName: 'Mickey',
-    genderLookingFor: 'Male',
-    searchLocation: 'Phuong 13, Nhat Chi Mai, Tan Binh, Ho Chi Minh',
-    avatar:
-      'https://i1.wp.com/innovation-village.com/wp-content/uploads/2020/05/Twitter-CEO-Jack-Dorsey-pledges-over-a-quarter-of-his-780x470-1.jpg?fit=780%2C470&ssl=1',
-    gender: 1,
-    note:
-      'Jack Patrick Dorsey is an American technology entrepreneur and philanthropist who is the co-founder and CEO of Twitter, and the founder and CEO of Square, a financial payments company.',
-  },
-];
-const MateScreen = (props) => {
+const List = (props) => {
   const {colorsApp} = props.theme;
   const {t} = useTranslation();
+  const [isLoading, setIsLoading] = useState(false);
+  const [followed, setIsFollowed] = useState(false);
   const {userStore} = useStores();
   useEffect(() => {
     props.navigation.addListener('willFocus', () => {
       getUsers();
-    })
+    });
     getUsers();
   }, []);
   const getUsers = async () => {
+    setIsLoading(true);
     AxiosFetcher({
       method: 'GET',
       url: 'user/findAllWithPagination?limit=100000&offset=0&sortBy=name',
       hasToken: true,
     })
       .then((data) => {
+        setIsLoading(false);
         userStore.users = data?.content || [];
         let arr = [];
         let users = userStore?.users;
@@ -89,31 +57,68 @@ const MateScreen = (props) => {
         userStore.follows = arr;
       })
       .catch(() => {
+        setIsLoading(false);
+        ToastHelper.showError(t('mate.err'));
+      });
+  };
+  const follow = async (item) => {
+    setIsLoading(true);
+    AxiosFetcher({
+      method: 'GET',
+      url: `user/${userStore?.userInfo?.id}/followup/${item.id}`,
+      hasToken: true,
+    })
+      .then((data) => {
+        userStore.follows = [...userStore?.follows, item];
+        console.log(JSON.stringify(userStore.follows));
+        setIsLoading(false);
+      })
+      .catch(() => {
+        setIsLoading(false);
         ToastHelper.showError(t('mate.err'));
       });
   };
   const filterFollowing = async () => {};
   const renderMates = () => {
-    if (userStore?.follows?.slice().length === 0) {
-      return <Empty />;
-    }
     return (
       <FlatList
-        data={userStore?.follows?.slice()}
+        data={userStore?.users?.slice()}
         scrollEnabled
         style={{
           width: ScreenWidth,
-          height: ScreenHeight,
+          //   height: ScreenHeight,
           marginTop: 10,
         }}
         keyExtractor={(item) => item.id}
         renderItem={({item}) => {
+          if (item?.id === userStore?.userInfo?.id) {
+            return null;
+          }
           return (
             <TouchableOpacity
               onPress={() => {
-                NavigationService.navigate(ScreenNames.MateScreenDetail, {
-                  data: item,
-                });
+                Alert.alert(t('mate.followAsk'), t('mate.followAskContent'), [
+                  {
+                    text: `${t('mate.followAct')}`,
+                    onPress: () => {
+                      follow(item);
+                    },
+                  },
+                  {
+                    text: t('mate.detail'),
+                    onPress: () => {
+                      NavigationService.navigate(ScreenNames.MateScreenDetail, {
+                        data: item,
+                      });
+                    },
+                  },
+                  {
+                    text: t('common.cancel'),
+                    onPress: () => {
+                      //
+                    },
+                  },
+                ]);
               }}
               style={[
                 containerStyle.defaultMarginBottom,
@@ -121,13 +126,15 @@ const MateScreen = (props) => {
               ]}>
               <View style={[styles.item, containerStyle.shadow]}>
                 <FastImage
-                  source={{uri: item?.avatar}}
+                  source={{
+                    uri: item?.avatar || Constant.MOCKING_DATA.PLACE_HOLDER,
+                  }}
                   resizeMode="cover"
                   style={styles.avatar}
                 />
                 <View>
                   <TextNormal
-                    text={item?.name || 'No name ❗️'}
+                    text={item?.name || 'No name ❌'}
                     style={containerStyle.textHeaderSmallNormal}
                   />
                   <View style={styles.gender}>
@@ -146,12 +153,40 @@ const MateScreen = (props) => {
                     <Ionicons name="ios-newspaper-outline" size={20} />
                     <TextNormal
                       numberOfLines={3}
-                      text={item?.note}
+                      text={item?.aboutMe || '😊'}
                       style={[
                         containerStyle.textInputHeaderDefault,
                         containerStyle.defaultTextMarginLeft,
                         {width: ScreenWidth * 0.5},
                       ]}
+                    />
+                  </View>
+                  <View
+                    style={[
+                      {
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        width: '65%',
+                        justifyContent: 'space-between',
+                      },
+                      containerStyle.defaultMarginTopSmall,
+                    ]}>
+                    <TextNormal
+                      clickable
+                      onPress={() => {}}
+                      text={`${t('mate.followAct')}`}
+                      style={[containerStyle.textLink]}
+                    />
+                    <Ionicons
+                      name="heart"
+                      size={25}
+                      color={
+                        userStore?.follows.findIndex(
+                          (item) => item?.id === userStore?.userInfo?.id,
+                        ) >= 0
+                          ? 'red'
+                          : 'black'
+                      }
                     />
                   </View>
                 </View>
@@ -173,19 +208,14 @@ const MateScreen = (props) => {
     <View style={[containerStyle.default, containerStyle.defaultBackground]}>
       <StatusBar barStyle={colorsApp.statusBar} />
       <SafeAreaView>
-        <HeaderFull
-          title={t('mate.title')}
-          onPress={() => {
-            NavigationService.navigate(ScreenNames.List);
-          }}
-          rightIco={<Ionicons name="add" size={20} color={colors.blackInput} />}
-        />
+        <HeaderFull title={t('mate.follow')} hasButton />
         <ScrollView nestedScrollEnabled contentContainerStyle={styles.content}>
           {renderMates()}
         </ScrollView>
       </SafeAreaView>
+      {isLoading && <Loading />}
     </View>
   );
 };
 
-export default withTheme(MateScreen);
+export default withTheme(List);
