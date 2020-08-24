@@ -324,6 +324,8 @@
     "male": "Male",
     "follow": "Who you can follow",
     "followAct": "Follow",
+    "unfollowAct": "Unfollow",
+    "unfollowActSuccess": "Unfollow success",
     "followAsk": "Great, move on",
     "followAskContent": "You want to see detail or follow her/him?",
     "female": "Female",

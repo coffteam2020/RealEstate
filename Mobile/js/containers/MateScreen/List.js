@@ -19,6 +19,8 @@ import {ToastHelper} from '../../shared/components/ToastHelper';
 import Empty from '../../shared/components/Empty';
 import Constant from '../../shared/utils/constant/Constant';
 import Loading from '../../shared/components/Loading';
+import IALocalStorage from '../../shared/utils/storage/IALocalStorage';
+import {useObserver} from 'mobx-react';
 
 const List = (props) => {
   const {colorsApp} = props.theme;
@@ -42,19 +44,6 @@ const List = (props) => {
       .then((data) => {
         setIsLoading(false);
         userStore.users = data?.content || [];
-        let arr = [];
-        let users = userStore?.users;
-        for (let i = 0; i < users.length; i++) {
-          if (users[i].followers?.length > 0) {
-            for (let j = 0; j < users[i]?.followers?.length; j++) {
-              if (users[i]?.followers[j].id === userStore?.userInfo?.id) {
-                arr.push(users[i]);
-                break;
-              }
-            }
-          }
-        }
-        userStore.follows = arr;
       })
       .catch(() => {
         setIsLoading(false);
@@ -69,13 +58,34 @@ const List = (props) => {
       hasToken: true,
     })
       .then((data) => {
-        userStore.follows = [...userStore?.follows, item];
-        console.log(JSON.stringify(userStore.follows));
+        getUsers();
+        AxiosFetcher({
+          method: 'GET',
+          url: 'user/' + userStore?.userInfo?.id,
+          hasToken: true,
+        })
+          .then(async (val) => {
+            if (val?.data !== '') {
+              await IALocalStorage.setDetailUserInfo(val);
+              userStore.userInfo = val;
+              userStore.follows = val?.followers || [];
+            } else {
+              ToastHelper.showError(t('account.getInfoErr'));
+            }
+          })
+          .catch(() => {
+            ToastHelper.showError(t('account.getInfoErr'));
+          });
         setIsLoading(false);
       })
       .catch(() => {
         setIsLoading(false);
         ToastHelper.showError(t('mate.err'));
+      })
+      .finally(() => {
+        setTimeout(() => {
+          NavigationService.goBack();
+        }, 1000);
       });
   };
   const filterFollowing = async () => {};
@@ -86,14 +96,21 @@ const List = (props) => {
         scrollEnabled
         style={{
           width: ScreenWidth,
-          //   height: ScreenHeight,
+          height: '100%',
+          paddingBottom: 100,
           marginTop: 10,
         }}
         keyExtractor={(item) => item.id}
         renderItem={({item}) => {
-          if (item?.id === userStore?.userInfo?.id) {
+          if (
+            item?.id === userStore?.userInfo?.id ||
+            userStore?.follows?.slice().findIndex((a) => a.id === item?.id) >= 0
+          ) {
             return null;
           }
+          console.log(
+            userStore?.follows?.slice().findIndex((a) => a.id === item?.id),
+          );
           return (
             <TouchableOpacity
               onPress={() => {
@@ -174,16 +191,22 @@ const List = (props) => {
                     <TextNormal
                       clickable
                       onPress={() => {}}
-                      text={`${t('mate.followAct')}`}
+                      text={`${t('mate.followAct')}${
+                        userStore?.follows
+                          .slice()
+                          .findIndex((a) => a?.id === item?.id) >= 0
+                          ? 'ed'
+                          : ''
+                      }`}
                       style={[containerStyle.textLink]}
                     />
                     <Ionicons
                       name="heart"
                       size={25}
                       color={
-                        userStore?.follows.findIndex(
-                          (item) => item?.id === userStore?.userInfo?.id,
-                        ) >= 0
+                        userStore?.follows
+                          .slice()
+                          .findIndex((a) => a?.id === item?.id) >= 0
                           ? 'red'
                           : 'black'
                       }
@@ -204,7 +227,7 @@ const List = (props) => {
       />
     );
   };
-  return (
+  return useObserver(() => (
     <View style={[containerStyle.default, containerStyle.defaultBackground]}>
       <StatusBar barStyle={colorsApp.statusBar} />
       <SafeAreaView>
@@ -215,7 +238,7 @@ const List = (props) => {
       </SafeAreaView>
       {isLoading && <Loading />}
     </View>
-  );
+  ));
 };
 
 export default withTheme(List);

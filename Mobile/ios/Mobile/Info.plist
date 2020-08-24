@@ -50,10 +50,10 @@
 	<key>NSContactsUsageDescription</key>
 	<string>Our app need to clarify</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-  <string>Our app need to clarify</string>
-  <key>NSMicrophoneUsageDescription</key>
 	<string>Our app need to clarify</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Our app need to clarify</string>
+	<key>NSMicrophoneUsageDescription</key>
 	<string>Our app need to clarify</string>
 	<key>NSMotionUsageDescription</key>
 	<string>Our app need to clarify</string>
