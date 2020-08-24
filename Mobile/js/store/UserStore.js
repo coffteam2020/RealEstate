@@ -12,5 +12,6 @@ export class UserStore {
   @observable userKey = undefined;
   @observable userId = undefined;
   @observable userRegisterBeing = {};
+  @observable messages = [];
 
 }

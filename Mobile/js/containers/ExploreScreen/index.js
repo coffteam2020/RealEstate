@@ -15,13 +15,21 @@ import {useStores} from '../../store/useStore';
 import Swiper from 'react-native-swiper';
 import GetLocation from 'react-native-get-location';
 import {images} from '../../../assets';
+import {Linking} from 'react-native';
+import InAppBrowser from 'react-native-inappbrowser-reborn';
 import FastImage from 'react-native-fast-image';
 import TextInputFlatLeftIconTouchable from '../../shared/components/TextInput/TextInputFlatLeftIconTouchable';
 import {ScreenHeight, ScreenWidth} from '../../shared/utils/dimension/Divices';
 import TextNormal from '../../shared/components/Text/TextNormal';
 import icons from '../../shared/utils/icons/icons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import Feather from 'react-native-vector-icons/Feather';
 import {colors} from '../../shared/utils/colors/colors';
 import AxiosFetcher from '../../api/AxiosFetch';
+import {NavigationService} from '../../navigation';
+import {ScreenNames} from '../../route/ScreenNames';
+import IALocalStorage from '../../shared/utils/storage/IALocalStorage';
+import { ToastHelper } from '../../shared/components/ToastHelper';
 
 const HOME_BANNERS = [
   {imgUrl: images.home1},
@@ -38,10 +46,51 @@ const ExploreScreen = (props) => {
   const [trends, setTrends] = useState([]);
 
   const BTNS = [
-    {title: t('explorer.hurry'), icon: images.hurry},
+    {
+      title: t('explorer.hurry'),
+      icon: images.hurry,
+      onPress: () =>
+        NavigationService.navigate(ScreenNames.ListProductScreen, {
+          key: t('explorer.hurry'),
+        }),
+    },
     {title: t('explorer.nearby'), icon: images.nearby},
     {title: t('explorer.ownerOnsite'), icon: images.noowner},
     {title: t('explorer.yourPlaces'), icon: images.space},
+  ];
+  const BTNS2 = [
+    {
+      title: t('explorer.facebook'),
+      icon: images.hurry,
+      link: 'https://www.facebook.com/dappdtechnology/',
+      color: colors.white,
+      iconName: 'facebook',
+      iconColor: colors.blue,
+    },
+    {
+      title: t('explorer.dMark'),
+      icon: images.nearby,
+      link: 'https://dmark.shop',
+      color: 'green',
+      iconName: 'cloud-drizzle',
+      iconColor: colors.whiteBackground,
+    },
+    {
+      title: t('explorer.dShare'),
+      icon: images.noowner,
+      link: 'https://dtechno.tech',
+      color: colors.blue_dodger,
+      iconName: 'chrome',
+      iconColor: colors.whiteBackground,
+    },
+    {
+      title: t('explorer.dCar'),
+      icon: images.space,
+      link: 'http://cardtechno.store',
+      color: colors.red_cinnabar,
+      iconName: 'crosshair',
+      iconColor: colors.whiteBackground,
+    },
   ];
   const MOCK = [
     {
@@ -140,10 +189,63 @@ const ExploreScreen = (props) => {
   ];
   useEffect(() => {
     getSearchTrend();
+    getProfile();
     props?.navigation.addListener('willFocus', () => {
       getSearchTrend();
+      getProfile();
     });
   }, []);
+  const getProfile = async () => {
+    let userInfo = await IALocalStorage.getDetailUserInfo();
+    AxiosFetcher({
+      method: 'GET',
+      url: 'user/' + userInfo?.id,
+      hasToken: true,
+    })
+      .then(async (val) => {
+        if (val?.data !== '') {
+          await IALocalStorage.setDetailUserInfo(val);
+          userStore.userInfo = val;
+        } else {
+          ToastHelper.showError(t('account.getInfoErr'));
+        }
+      })
+      .catch(() => {
+        ToastHelper.showError(t('account.getInfoErr'));
+      });
+  };
+  const tryOpenIAP = async (url) => {
+    try {
+      if (await InAppBrowser.isAvailable()) {
+        const result = await InAppBrowser.open(url, {
+          // iOS Properties
+          dismissButtonStyle: 'cancel',
+          preferredBarTintColor: '#453AA4',
+          preferredControlTintColor: 'white',
+          readerMode: false,
+          // animated: true,
+          modalPresentationStyle: 'fullScreen',
+          enableBarCollapsing: false,
+          // Android Properties
+          showTitle: true,
+          toolbarColor: '#6200EE',
+          secondaryToolbarColor: 'black',
+          enableUrlBarHiding: true,
+          enableDefaultShare: true,
+          forceCloseOnRedirection: false,
+          // Specify full animation resource identifier(package:anim/name)
+          // or only resource name(in case of animation bundled with app).
+          animations: {},
+          headers: {},
+        });
+        // Alert.alert(JSON.stringify(result));
+      } else {
+        Linking.openURL(url);
+      }
+    } catch (error) {
+      // Alert.alert(error.message);
+    }
+  };
   const getSearchTrend = async () => {
     GetLocation.getCurrentPosition({
       enableHighAccuracy: true,
@@ -205,22 +307,54 @@ const ExploreScreen = (props) => {
   };
   const renderBtns = () => {
     return (
-      <View style={[styles.banner, containerStyle.shadow]}>
-        {BTNS?.map((item) => {
-          return (
-            <TouchableOpacity style={styles.button}>
-              <FastImage source={item?.icon} style={{width: 40, height: 40}} />
-              <TextNormal
-                text={item?.title}
-                numberOfLines={5}
-                style={styles.buttonText}
-              />
-            </TouchableOpacity>
-          );
-        })}
+      <View style={[containerStyle.shadow, {borderRadius: 20}]}>
+        <View style={[styles.banner, {paddingTop: 20}]}>
+          {BTNS?.map((item) => {
+            return (
+              <TouchableOpacity style={styles.button} onPress={item?.onPress}>
+                <FastImage
+                  source={item?.icon}
+                  style={{width: 40, height: 40}}
+                />
+                <TextNormal
+                  text={item?.title}
+                  numberOfLines={1}
+                  style={styles.buttonText}
+                />
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+        <View
+          style={[
+            styles.banner,
+            {borderBottomLeftRadius: 20, borderBottomRightRadius: 20},
+          ]}>
+          {BTNS2?.map((item) => {
+            return (
+              <TouchableOpacity
+                style={[styles.button]}
+                onPress={() => tryOpenIAP(item?.link)}>
+                <View style={[styles.btn2, {backgroundColor: item?.color}]}>
+                  <Feather
+                    name={item?.iconName}
+                    color={item?.iconColor}
+                    size={20}
+                  />
+                </View>
+                <TextNormal
+                  text={item?.title}
+                  numberOfLines={5}
+                  style={styles.buttonText}
+                />
+              </TouchableOpacity>
+            );
+          })}
+        </View>
       </View>
     );
   };
+
   const renderSearchTrend = () => {
     return (
       <View style={styles.trendContainer}>

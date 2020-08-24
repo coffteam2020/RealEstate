@@ -773,6 +773,8 @@ PODS:
     - React
   - RNIap (4.5.2):
     - React
+  - RNInAppBrowser (3.4.0):
+    - React
   - RNNotifee (0.7.2):
     - React
   - RNPermissions (2.1.5):
@@ -914,6 +916,7 @@ DEPENDENCIES:
   - "RNGoogleSignin (from `../node_modules/@react-native-community/google-signin`)"
   - RNI18n (from `../node_modules/react-native-i18n`)
   - RNIap (from `../node_modules/react-native-iap`)
+  - RNInAppBrowser (from `../node_modules/react-native-inappbrowser-reborn`)
   - "RNNotifee (from `../node_modules/@notifee/react-native`)"
   - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
@@ -1127,6 +1130,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-i18n"
   RNIap:
     :path: "../node_modules/react-native-iap"
+  RNInAppBrowser:
+    :path: "../node_modules/react-native-inappbrowser-reborn"
   RNNotifee:
     :path: "../node_modules/@notifee/react-native"
   RNPermissions:
@@ -1270,6 +1275,7 @@ SPEC CHECKSUMS:
   RNGoogleSignin: ccf71ee4b6cfd324fd788a41e457e2043838c0d9
   RNI18n: e2f7e76389fcc6e84f2c8733ea89b92502351fd8
   RNIap: e7fe0e9b31260fbefb7def5bb6a7911345a6a04e
+  RNInAppBrowser: c1a0dad2734458d79bcb6c8f4297ba8658a1da9f
   RNNotifee: e4070fe88281d2fc5403946b480a84aa7cd91066
   RNPermissions: ad71dd4f767ec254f2cd57592fbee02afee75467
   RNReanimated: 7de2dca51deacff78bb880f63c1389a24311b376

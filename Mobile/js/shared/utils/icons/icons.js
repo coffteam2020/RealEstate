@@ -414,8 +414,37 @@ const IC_LOCATION_ACTIVE = (
     </G>
   </Svg>
 );
+const IC_SEND_MSG = (
+  <Svg width={29} height={27} viewBox="0 0 29 27">
+      <Path
+          d="M27.752 12.364L2.037.618A1.255 1.255 0 00.372 2.284l4.84 10.365 13.844.781-1.184.142-12.642.746L.382 24.705a1.256 1.256 0 00.24 1.423c.377.372.946.468 1.424.24l25.706-11.726a1.255 1.255 0 000-2.284v.006z"
+          fill="#665AAA"
+          fillRule="nonzero"
+      />
+  </Svg>
+);
+const IC_SEND = (
+  <Svg width={56} height={56} viewBox="0 0 56 56">
+    <Defs></Defs>
+    <G
+      filter="url(#prefix__a)"
+      transform="translate(4 2)"
+      fill="none"
+      fillRule="evenodd"
+    >
+      <Circle fill="#665AAA" cx={24} cy={24} r={24} />
+      <Path
+        d="M36.768 23.599l-20.393-9.316a.995.995 0 00-1.321 1.321l3.838 8.221 10.98.62-.939.112-10.027.592-3.844 8.238a.996.996 0 00.19 1.129.996.996 0 001.129.19l20.388-9.3a.995.995 0 000-1.812v.005z"
+        fill="#FFF"
+        fillRule="nonzero"
+      />
+    </G>
+  </Svg>
+)
 const icons = {
   IC_SEARCH,
+  IC_SEND,
+  IC_SEND_MSG,
   IC_LOCATION_ACTIVE,
   IC_LOCATION,
   IC_LOCATION_SEARCH,

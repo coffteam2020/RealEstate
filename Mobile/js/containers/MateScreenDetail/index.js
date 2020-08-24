@@ -14,6 +14,8 @@ import HeaderFull from '../../shared/components/Header/HeaderFull';
 import GradientButton from '../../shared/components/Buttons/GradientButton';
 import {colors} from '../../shared/utils/colors/colors';
 import {ToastHelper} from '../../shared/components/ToastHelper';
+import {NavigationService} from '../../navigation';
+import {ScreenNames} from '../../route/ScreenNames';
 
 const MateScreenDetail = (props) => {
   const {colorsApp} = props.theme;
@@ -95,9 +97,14 @@ const MateScreenDetail = (props) => {
               toColor={colors.purpleMain}
               text={t('mate.chat')}
               onPress={() => {
-                ToastHelper.showWarning(
-                  'This feature is in progress working. Wait for next version',
-                );
+                NavigationService.navigate(ScreenNames.ChatRoomScreen, {
+                  toUserData: {
+                    id: item?.id,
+                    name:
+                      (item?.firstName || '') + ' ' + (item?.lastName || ''),
+                    avatar: item?.avatar,
+                  },
+                });
               }}
             />
           </View>

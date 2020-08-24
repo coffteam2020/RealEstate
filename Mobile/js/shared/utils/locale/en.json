@@ -301,11 +301,15 @@
   },
   "explorer": {
     "search": "Find district, name, ...",
-    "hurry": "In a hurry",
+    "hurry": "All",
     "nearby": "Near by",
-    "ownerOnsite": "No owner on site",
-    "yourPlaces": "Your searchs",
-    "trend": "Search trends"
+    "ownerOnsite": "Verified",
+    "yourPlaces": "Yours",
+    "trend": "Search trends",
+    "facebook": "DFace",
+    "dMark": "DMark",
+    "dCar": "DCar",
+    "dShare": "DShare"
   }, 
   "location":{
     "near": "Find near you",

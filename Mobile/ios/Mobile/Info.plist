@@ -50,6 +50,8 @@
 	<key>NSContactsUsageDescription</key>
 	<string>Our app need to clarify</string>
 	<key>NSLocationAlwaysUsageDescription</key>
+  <string>Our app need to clarify</string>
+  <key>NSMicrophoneUsageDescription</key>
 	<string>Our app need to clarify</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Our app need to clarify</string>
@@ -129,8 +131,6 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
