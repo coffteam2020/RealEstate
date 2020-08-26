@@ -345,5 +345,14 @@
     "update": "Update information",
     "success": "Update information successfully",
     "fail": "Opps, we tried to update information but failed. Check again please!"
+  },
+  "social" : {
+    "title" : "Social",
+    "placeholder": "What's on your mind?",
+    "createpost": "Create Post",
+    "post": "Post",
+    "likePrefix": "Bạn và",
+    "like": "Like",
+    "comment": "Comment"
   }
 }

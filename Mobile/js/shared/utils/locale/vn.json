@@ -380,6 +380,13 @@
     "deleteUser": "Xoá bạn",
     "dismiss": "Huỷ",
   },
+  "social" : {
+    "title" : "Social",
+    "placeholder": "Bạn đang nghĩ gì?",
+    "createpost": "Tạo bài viết",
+    "post": "Post",
+    "likePrefix": "You and"
+  },
   "setting" : {
     "permission" : {
       "record" : "Cấp quyền ghi âm để sử dụng chức năng này!",

@@ -58,6 +58,7 @@
     "react-native-device-info": "^5.5.3",
     "react-native-dialog-input": "^1.0.8",
     "react-native-document-picker": "^3.5.4",
+    "react-native-elements": "^2.2.1",
     "react-native-fast-image": "^8.1.5",
     "react-native-fbsdk": "^1.1.2",
     "react-native-file-picker": "^0.0.19",

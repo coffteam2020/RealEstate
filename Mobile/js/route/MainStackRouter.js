@@ -21,6 +21,9 @@ import TabbarComponentCustom from './TabbarComponentCustom';
 import {Image, View} from 'react-native';
 import {images} from '../../assets';
 import styles from './styles';
+import SocialScreen from '../containers/SocialScreen';
+import NewPostScreen from '../containers/NewPostScreen';
+import PostDetailScreen from '../containers/PostDetailScreen';
 
 // ScreenNavigator for separately each screen into stack one
 const MateScreenNavigator = createStackNavigator(
@@ -32,6 +35,18 @@ const MateScreenNavigator = createStackNavigator(
     mode: 'modal',
     headerMode: 'none',
     initialRouteName: 'MateScreen',
+  },
+);
+const SocialcreenNavigator = createStackNavigator(
+  {
+    SocialScreen: {screen: SocialScreen},
+    NewPostScreen: {screen: NewPostScreen},
+    PostDetailScreen: {screen: PostDetailScreen},
+  },
+  {
+    mode: 'modal',
+    headerMode: 'none',
+    initialRouteName: 'SocialScreen',
   },
 );
 const ProfileNavigator = createStackNavigator(
@@ -104,7 +119,7 @@ const Tabs = createBottomTabNavigator(
       },
     },
     MessageScreen: {
-      screen: MessageScreen,
+      screen: SocialcreenNavigator,
       navigationOptions: {
         tabBarIcon: ({focused}) => {
           return (

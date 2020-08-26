@@ -9,7 +9,9 @@ export const ScreenNames = {
   ProfileScreen: 'ProfileScreen',
   TabsScreen: 'TabsScreen',
   MateScreenDetail: 'MateScreenDetail',
-  Update: 'Update'
+  Update: 'Update',
+  NewPostScreen: 'NewPostScreen',
+  PostDetailScreen: 'PostDetailScreen'
 };
 
 export default {
