@@ -10,8 +10,15 @@ export const ScreenNames = {
   TabsScreen: 'TabsScreen',
   MateScreenDetail: 'MateScreenDetail',
   Update: 'Update',
+  ListProductScreen: 'ListProductScreen',
+  ChatRoomScreen: 'ChatRoomScreen',
+  LiveStream: 'Livestream',
+  InformationRoom: 'InformationRoom',
+  VideoCallScreen: 'VideoCallScreen',
+  List: 'List',
   NewPostScreen: 'NewPostScreen',
-  PostDetailScreen: 'PostDetailScreen'
+  PostDetailScreen: 'PostDetailScreen',
+  SocialScreen : 'SocialScreen'
 };
 
 export default {

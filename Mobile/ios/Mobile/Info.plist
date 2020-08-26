@@ -53,6 +53,8 @@
 	<string>Our app need to clarify</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Our app need to clarify</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Our app need to clarify</string>
 	<key>NSMotionUsageDescription</key>
 	<string>Our app need to clarify</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
@@ -129,8 +131,6 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>

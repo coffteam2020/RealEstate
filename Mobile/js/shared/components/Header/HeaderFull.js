@@ -40,7 +40,7 @@ const HeaderFull = ({title, hasButton = false, rightIco, onPress}) => {
           justifyContent: 'center',
           alignContent: 'center',
           alignItems: 'center',
-          marginBottom: 10,
+          marginBottom: 20,
         }}>
         {rightIco && (
           <TouchableOpacity onPress={onPress}>{rightIco}</TouchableOpacity>

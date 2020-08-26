@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import React, {useState} from 'react';
 import {StatusBar, View, SafeAreaView} from 'react-native';
 import {styles} from './style';
 import {withTheme} from 'react-native-paper';
@@ -14,11 +14,59 @@ import HeaderFull from '../../shared/components/Header/HeaderFull';
 import GradientButton from '../../shared/components/Buttons/GradientButton';
 import {colors} from '../../shared/utils/colors/colors';
 import {ToastHelper} from '../../shared/components/ToastHelper';
+import {NavigationService} from '../../navigation';
+import {ScreenNames} from '../../route/ScreenNames';
+import {useStores} from '../../store/useStore';
+import AxiosFetcher from '../../api/AxiosFetch';
+import IALocalStorage from '../../shared/utils/storage/IALocalStorage';
+import Loading from '../../shared/components/Loading';
+import {useObserver} from 'mobx-react';
 
 const MateScreenDetail = (props) => {
   const {colorsApp} = props.theme;
   const {t} = useTranslation();
-  let item = props.navigation.state.params.data || {};
+  const [isLoading, setIsLoading] = useState(false);
+  const {userStore} = useStores();
+
+  const item = props.navigation.state.params.data || {};
+  const unfollow = async () => {
+    setIsLoading(true);
+    AxiosFetcher({
+      method: 'GET',
+      url: `user/${userStore?.userInfo?.id}/un-followup/${item.id}`,
+      hasToken: true,
+    })
+      .then((data) => {
+        ToastHelper.showSuccess(t('mate.unfollowActSuccess'));
+        AxiosFetcher({
+          method: 'GET',
+          url: 'user/' + userStore?.userInfo?.id,
+          hasToken: true,
+        })
+          .then(async (val) => {
+            if (val?.data !== '') {
+              await IALocalStorage.setDetailUserInfo(val);
+              userStore.userInfo = val;
+              userStore.follows = val?.followers || [];
+            } else {
+              ToastHelper.showError(t('account.getInfoErr'));
+            }
+          })
+          .catch(() => {
+            ToastHelper.showError(t('account.getInfoErr'));
+          })
+          .finally(() => {
+            setTimeout(() => {
+              NavigationService.goBack();
+            }, 1000);
+          });
+        setIsLoading(false);
+      })
+      .catch(() => {
+        setIsLoading(false);
+        ToastHelper.showError(t('mate.err'));
+      });
+  };
   const renderMates = () => {
     return (
       <View
@@ -40,7 +88,7 @@ const MateScreenDetail = (props) => {
           ]}>
           <View>
             <TextNormal
-              text={item?.firstName + ' ' + item?.lastName || ''}
+              text={item?.name || ''}
               style={[
                 containerStyle.textHeader,
                 containerStyle.defaultMarginBottom,
@@ -60,7 +108,9 @@ const MateScreenDetail = (props) => {
               <Ionicons name="md-search-circle-outline" size={25} />
               <TextNormal
                 numberOfLines={3}
-                text={`${t('mate.searchLocation')}: ${item?.searchLocation}`}
+                text={`${t('mate.searchLocation')}: ${
+                  item?.searchLocation || '🏙'
+                }`}
                 style={[
                   containerStyle.textInputHeaderDefault,
                   containerStyle.defaultTextMarginLeft,
@@ -71,7 +121,9 @@ const MateScreenDetail = (props) => {
               <Ionicons name="md-transgender-sharp" size={25} />
               <TextNormal
                 numberOfLines={3}
-                text={`${t('mate.looking')}: ${item?.genderLookingFor}`}
+                text={`${t('mate.looking')}: ${
+                  item?.genderLookingFor || 'Male'
+                }`}
                 style={[
                   containerStyle.textInputHeaderDefault,
                   containerStyle.defaultTextMarginLeft,
@@ -82,7 +134,7 @@ const MateScreenDetail = (props) => {
               <Ionicons name="ios-newspaper-outline" size={20} />
               <TextNormal
                 numberOfLines={300}
-                text={item?.note}
+                text={item?.aboutMe || '✌️'}
                 style={[
                   containerStyle.textInputHeaderDefault,
                   containerStyle.defaultTextMarginLeft,
@@ -95,17 +147,32 @@ const MateScreenDetail = (props) => {
               toColor={colors.purpleMain}
               text={t('mate.chat')}
               onPress={() => {
-                ToastHelper.showWarning(
-                  'This feature is in progress working. Wait for next version',
-                );
+                NavigationService.navigate(ScreenNames.ChatRoomScreen, {
+                  toUserData: {
+                    id: item?.id,
+                    name: item?.name || 'No name',
+                    avatar: item?.avatar,
+                  },
+                });
               }}
             />
+            {props.navigation.state.params.followed && (
+              <GradientButton
+                fromColor={colors.red}
+                toColor={colors.red}
+                text={t('mate.unfollowAct')}
+                style={containerStyle.defaultMarginTop}
+                onPress={() => {
+                  unfollow();
+                }}
+              />
+            )}
           </View>
         </View>
       </View>
     );
   };
-  return (
+  return useObserver(() => (
     <View style={[containerStyle.default, containerStyle.defaultBackground]}>
       <StatusBar barStyle={colorsApp.statusBar} />
       <SafeAreaView>
@@ -114,8 +181,9 @@ const MateScreenDetail = (props) => {
           {renderMates()}
         </ScrollView>
       </SafeAreaView>
+      {isLoading && <Loading />}
     </View>
-  );
+  ));
 };
 
 export default withTheme(MateScreenDetail);

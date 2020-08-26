@@ -11,10 +11,16 @@ import createAnimatedSwitchNavigator from 'react-navigation-animated-switch';
 import {Transition} from 'react-native-reanimated';
 import ExploreScreen from '../containers/ExploreScreen';
 import MateScreen from '../containers/MateScreen';
+import List from '../containers/MateScreen/List';
 import MateScreenDetail from '../containers/MateScreenDetail';
 import MessageScreen from '../containers/MessageScreen';
+import ChatRoomScreen from '../containers/ChatRoomScreen';
+import VideoCallScreen from '../containers/VideoCallScreen';
+import Livestream from '../containers/Livestream';
+import InformationRoom from '../containers/Livestream/InformationRoom';
 import LocationScreen from '../containers/LocationScreen';
 import ProfileScreen from '../containers/ProfileScreen';
+import ListProductScreen from '../containers/ListProductScreen';
 import Update from '../containers/ProfileScreen/Update';
 import {colors} from '../shared/utils/colors/colors';
 import TabbarComponentCustom from './TabbarComponentCustom';
@@ -30,6 +36,7 @@ const MateScreenNavigator = createStackNavigator(
   {
     MateScreen: {screen: MateScreen},
     MateScreenDetail: {screen: MateScreenDetail},
+    List: {screen: List}
   },
   {
     mode: 'modal',
@@ -68,10 +75,21 @@ const ProfileNavigator = createStackNavigator(
     initialRouteName: 'ProfileScreen',
   },
 );
+const ExplorerNavigator = createStackNavigator(
+  {
+    ExploreScreen: {screen: ExploreScreen},
+    ListProductScreen: {screen: ListProductScreen},
+  },
+  {
+    mode: 'modal',
+    headerMode: 'none',
+    initialRouteName: 'ExploreScreen',
+  },
+);
 const Tabs = createBottomTabNavigator(
   {
-    ExploreScreen: {
-      screen: ExploreScreen,
+    ExplorerNavigator: {
+      screen: ExplorerNavigator,
       navigationOptions: {
         tabBarIcon: ({focused}) => {
           return (
@@ -119,7 +137,7 @@ const Tabs = createBottomTabNavigator(
       },
     },
     MessageScreen: {
-      screen: SocialcreenNavigator,
+      screen: MessageScreen,
       navigationOptions: {
         tabBarIcon: ({focused}) => {
           return (
@@ -160,13 +178,27 @@ const Tabs = createBottomTabNavigator(
     tabBarComponent: (props) => <TabbarComponentCustom {...props} />,
   },
 );
+const TabNavigator = createStackNavigator(
+  {
+    Tabs: {screen: Tabs},
+    ChatRoomScreen: {screen: ChatRoomScreen},
+    Livestream: {screen: Livestream},
+    InformationRoom: {screen: InformationRoom},
+    VideoCallScreen: {screen: VideoCallScreen}
+  },
+  {
+    mode: 'modal',
+    headerMode: 'none',
+    initialRouteName: 'Tabs',
+  },
+);
 // SwitchNavigator for using the multiple stack in the same route
 const AppBottombarSwitchNavigator = createAnimatedSwitchNavigator(
   {
     SplashScreen: {screen: SplashScreen},
     LoginScreen: {screen: LoginScreen},
     RegisterScreen: {screen: RegisterScreen},
-    TabsScreen: {screen: Tabs},
+    TabsScreen: {screen: TabNavigator},
   },
   {
     initialRouteName: 'SplashScreen',

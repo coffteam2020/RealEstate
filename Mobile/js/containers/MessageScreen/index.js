@@ -21,7 +21,7 @@ import Constant from '../../shared/utils/constant/Constant';
 import icons from '../../shared/utils/icons/icons';
 import {useStores} from '../../store/useStore';
 import {containerStyle} from '../../themes/styles';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Empty from '../../shared/components/Empty';
 import {styles} from './style';
 import {RefreshControl} from 'react-native';
@@ -47,8 +47,8 @@ const MessageScreen = (props) => {
     // getUserInfo();
     IALocalStorage.getDetailUserInfo().then(async (val) => {
       let res = val;
-      // setCurrentUser(res);
-      // getMessages(res);
+      setCurrentUser(res);
+      getMessages(res);
     });
   }, []);
   const getUserInfo = async () => {
@@ -73,7 +73,7 @@ const MessageScreen = (props) => {
   };
 
   const getMessages = async () => {
-    let user = await IALocalStorage.getUserInfo();
+    let user = await IALocalStorage.getDetailUserInfo();
     setIsLoading(true);
     await firebase
       .database()
@@ -138,6 +138,7 @@ const MessageScreen = (props) => {
   };
 
   const renderMessageItem = (item, index) => {
+    console.log(JSON.stringify(item));
     return (
       <Swipeout
         autoClose={true}
@@ -180,24 +181,18 @@ const MessageScreen = (props) => {
             }
             // Check if name is exist
             let userInfo = await IALocalStorage.getDetailUserInfo();
-            if (!userInfo?.name || userInfo?.name == '') {
-              alert(
-                'You have not modified your profile, especially your name. Please edit your name in Profile',
-              );
-              return;
-            }
             NavigationService.navigate(ScreenNames.ChatRoomScreen, {
               toUserData: {
                 id:
-                  userInfo?.userId === item?.toUserDetail?.id
+                  userInfo?.id === item?.toUserDetail?.id
                     ? item?.user?._id
                     : item?.toUserDetail?.id,
                 avatar:
-                  userInfo?.userId === item?.toUserDetail?.id
+                  userInfo?.id === item?.toUserDetail?.id
                     ? item?.user?.avatar
                     : item?.toUserDetail?.avatar,
                 name:
-                  userInfo?.userId === item?.toUserDetail?.id
+                  userInfo?.id === item?.toUserDetail?.id
                     ? item?.user?.name
                     : item?.toUserDetail?.name,
               },
@@ -223,11 +218,15 @@ const MessageScreen = (props) => {
         <HeaderFull
           title={t('message.title')}
           onPress={() => {
-            ToastHelper.showWarning(
-              'This feature is in progress working. Wait for next version',
-            );
+            NavigationService.navigate(ScreenNames.LiveStream);
           }}
-          rightIco={<Ionicons name="add" size={20} color={colors.blackInput} />}
+          rightIco={
+            <MaterialCommunityIcons
+              name="microphone-plus"
+              size={20}
+              color={colors.blackInput}
+            />
+          }
         />
         <TextInputFlatLeftIconTouchable
           hideText

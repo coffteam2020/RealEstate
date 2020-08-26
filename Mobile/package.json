@@ -71,6 +71,7 @@
     "react-native-iap": "^4.4.9",
     "react-native-image-pan-zoom": "^2.1.11",
     "react-native-image-picker": "^2.3.1",
+    "react-native-inappbrowser-reborn": "^3.4.0",
     "react-native-indicators": "^0.13.0",
     "react-native-iphone-x-helper": "^1.2.1",
     "react-native-katex": "^0.4.3",

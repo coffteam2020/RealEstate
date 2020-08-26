@@ -301,11 +301,15 @@
   },
   "explorer": {
     "search": "Find district, name, ...",
-    "hurry": "In a hurry",
+    "hurry": "All",
     "nearby": "Near by",
-    "ownerOnsite": "No owner on site",
-    "yourPlaces": "Your searchs",
-    "trend": "Search trends"
+    "ownerOnsite": "Verified",
+    "yourPlaces": "Yours",
+    "trend": "Search trends",
+    "facebook": "DFace",
+    "dMark": "DMark",
+    "dCar": "DCar",
+    "dShare": "DShare"
   }, 
   "location":{
     "near": "Find near you",
@@ -316,13 +320,20 @@
     "submit": "Submit"
   },
   "mate": {
-    "title": "Your mates",
+    "title": "Your followers",
     "male": "Male",
+    "follow": "Who you can follow",
+    "followAct": "Follow",
+    "unfollowAct": "Unfollow",
+    "unfollowActSuccess": "Unfollow success",
+    "followAsk": "Great, move on",
+    "followAskContent": "You want to see detail or follow her/him?",
     "female": "Female",
     "detail": "Mate detail",
     "looking": "Looking for",
     "searchLocation": "Searching location",
-    "chat": "Chat"
+    "chat": "Chat",
+    "err": "Opps, we tried to get your followers but failed. Try again later!"
   },
   "account": {
     "title": "Account",

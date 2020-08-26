@@ -30,11 +30,8 @@ export const styles = StyleSheet.create({
   banner: {
     backgroundColor: colors.whiteBackground,
     flexDirection: 'row',
-    borderRadius: 20,
-    marginTop: 10,
     width: '90%',
     justifyContent: 'space-between',
-    paddingTop: 20,
     alignContent: 'center',
     alignItems: 'center',
     paddingEnd: 10,
@@ -45,7 +42,14 @@ export const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     alignContent: 'center',
-    height: 80,
+    height: 70,
+  },
+  btn2: {
+    width: 40,
+    height: 40,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   buttonText: {
     width: ScreenWidth / 4 - 40,
