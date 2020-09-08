@@ -385,7 +385,15 @@
     "placeholder": "Bạn đang nghĩ gì?",
     "createpost": "Tạo bài viết",
     "post": "Post",
-    "likePrefix": "You and"
+    "likePrefix": "Bạn và ",
+    "likeOnlyYou": "Bạn",
+    "othersLike": "người khác",
+    "like": "Like",
+    "comment": "Comment",
+    "commentInput":{
+      "placeholder" : "viết nhận xét..."
+    },
+    "nodata": "Chưa có bài viết"
   },
   "setting" : {
     "permission" : {

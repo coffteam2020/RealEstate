@@ -2,14 +2,17 @@ import {useObserver} from 'mobx-react';
 import React, {useState, useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
 import {
+  Platform,
   TextInput,
   ScrollView,
   StatusBar,
   TouchableOpacity,
   SafeAreaView,
   View,
+  Image,
   RefreshControl,
   Dimensions,
+  KeyboardAvoidingView
 } from 'react-native';
 import {List, ListItem} from 'react-native-elements';
 import {withTheme} from 'react-native-paper';
@@ -36,69 +39,169 @@ import FastImage from 'react-native-fast-image';
 import {ScreenWidth, ScreenHeight} from '../../shared/utils/dimension/Divices';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import moment from 'moment'
-import {SPACINGS, FONTSIZES} from '../../themes';
+import {SPACINGS, FONTSIZES, RADIUS} from '../../themes';
+import ImagePicker from 'react-native-image-picker';
+import {uploadFileToFireBase} from '../../shared/utils/firebaseStorageUtils';
+import {FirebaseService} from '../../api/FirebaseService';
+import GridList from 'react-native-grid-list';
 
-const MOCK = [
-  {
-	id: 0,
-	createdAt: 1598281346356,
-    firstName: 'Mayuko',
-    lastName: 'Nashel',
-    avatar: 'https://i1.sndcdn.com/avatars-000143568666-ksxxz6-t500x500.jpg',
-    content:
-      'I want to make a openable chances for everyone wanna deal with my property. Home is da best',
-    images: [
-      'https://scontent-hkt1-1.xx.fbcdn.net/v/t1.0-9/118463986_10223180469921675_7101042475717980321_o.jpg?_nc_cat=100&_nc_sid=8024bb&_nc_ohc=O0s6CLHuetQAX9UVwKr&_nc_ht=scontent-hkt1-1.xx&oh=35e4ab9112f4b31cbb7d285c85bc0c17&oe=5F6783EE',
-      'https://scontent-hkt1-1.xx.fbcdn.net/v/t1.0-9/117954125_10223180469641668_1258233496962219199_o.jpg?_nc_cat=108&_nc_sid=8024bb&_nc_ohc=JaO5bHQyd7EAX-c2Nb9&_nc_ht=scontent-hkt1-1.xx&oh=3106da91704148d077ab7e4b03cf6def&oe=5F69DC2F',
-      'https://scontent.fsgn5-7.fna.fbcdn.net/v/t1.0-9/117906997_10223180470001677_3550485438271917420_o.jpg?_nc_cat=103&_nc_sid=8024bb&_nc_ohc=vpDDAXY9ZH0AX-cPDY_&_nc_ht=scontent.fsgn5-7.fna&oh=a489b1a814b6f0d367473c9a146af2cb&oe=5F6B3B65',
-    ],
-    likes : [
-      1,2,3,4,5
-    ],
-    comments: [
-      {id: "1", name: "aa", comment: "aaa hay quá"},
-      {id: "2", name: "bb", comment: "aaa hay quá"},
-      {id: "3", name: "cc", comment: "aaa hay quá"},
-      {id: "4", name: "dd", comment: "aaa hay quá"}
-    ]
-  },
-  {
-	id: 1,
-	createdAt:  1598281346356,
-    firstName: 'Lê ',
-    lastName: 'Thuận',
-    avatar: 'https://i1.sndcdn.com/avatars-000143568666-ksxxz6-t500x500.jpg',
-    content:
-      'Một người bạn Ý từng nói với mình, "tôi sợ là sau này chết đi mà được biết ít quá về thế giới". Là một người có máu xê dịch, mình hiểu những gì anh ấy nói. Và vì thế giới rất rộng mà ta chỉ được sống có một lần, những người ham đi luôn có một khát vọng cháy bỏng la lên đường. Và nỗi đau khổ lớn nhất đối với họ chính là nhìn cuộc đời này trôi qua mà ta cứ dính chặt ở một chỗ, hoặc có quá ít cơ hội để nhìn thế giới bằng chính mắt mình.',
-    images: [
-      'https://scontent-hkt1-1.xx.fbcdn.net/v/t1.0-9/118463986_10223180469921675_7101042475717980321_o.jpg?_nc_cat=100&_nc_sid=8024bb&_nc_ohc=O0s6CLHuetQAX9UVwKr&_nc_ht=scontent-hkt1-1.xx&oh=35e4ab9112f4b31cbb7d285c85bc0c17&oe=5F6783EE',
-      'https://scontent-hkt1-1.xx.fbcdn.net/v/t1.0-9/117954125_10223180469641668_1258233496962219199_o.jpg?_nc_cat=108&_nc_sid=8024bb&_nc_ohc=JaO5bHQyd7EAX-c2Nb9&_nc_ht=scontent-hkt1-1.xx&oh=3106da91704148d077ab7e4b03cf6def&oe=5F69DC2F',
-      'https://scontent.fsgn5-7.fna.fbcdn.net/v/t1.0-9/117906997_10223180470001677_3550485438271917420_o.jpg?_nc_cat=103&_nc_sid=8024bb&_nc_ohc=vpDDAXY9ZH0AX-cPDY_&_nc_ht=scontent.fsgn5-7.fna&oh=a489b1a814b6f0d367473c9a146af2cb&oe=5F6B3B65',
-    ],
-    likes : [
-      1,2,3,4,5
-    ],
-    comments: [
-      {id: "1", name: "aa", comment: "aaa hay quá"},
-      {id: "2", name: "bb", comment: "aaa hay quá"},
-      {id: "3", name: "cc", comment: "aaa hay quá"},
-      {id: "4", name: "dd", comment: "aaa hay quá"}
-    ]
-  },
-];
-
+var uuid = require('uuid');
+let childTemp = '';
 const NewPostScreen = (props) => {
   const {colorsApp} = props.theme;
   const {t} = useTranslation();
   const {userStore} = useStores();
-  const [userInfo, setUserInfo] = useState({});
+  const [userDetail, setUserDetail] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [avt, setAvt] = useState('');
   const [content, setContent] = useState('');
+  const [selectedImages, setSelectedImages] = useState([]);
+  const [images, setImages] = useState([]);
+
+  const [newPost, setNewPost] = useState({});
+
+  const IMAGE_CONFIG = {
+    title: t('imagePicker.name'),
+    cancelButtonTitle: t('common.cancel'),
+    takePhotoButtonTitle: t('imagePicker.camera'),
+    chooseFromLibraryButtonTitle: t('imagePicker.name'),
+    storageOptions: {
+      skipBackup: true,
+      path: 'images',
+    },
+  };
+
+  useEffect(() => {
+    props?.navigation.addListener('willFocus', () => {
+      getProfile();
+    });
+    getProfile();
+  }, []);
+  const getProfile = async () => {
+    let userInfo = await IALocalStorage.getDetailUserInfo();
+    setIsLoading(true);
+    AxiosFetcher({
+      method: 'GET',
+      url: 'user/' + userInfo?.id,
+      hasToken: true,
+    })
+      .then((val) => {
+        console.log(val)
+        if (val?.data !== '') {
+          setIsLoading(false);
+          userStore.userInfo = val;
+          setUserDetail(val);
+        } else {
+          setIsLoading(false);
+          ToastHelper.showError(t('account.getInfoErr'));
+        }
+      })
+      .catch(() => {
+        setIsLoading(false);
+        ToastHelper.showError(t('account.getInfoErr'));
+      });
+  };
+
+  const openImagePicker = () => {
+    ImagePicker.launchImageLibrary(IMAGE_CONFIG, (response) => {
+      // console.log('Response = ', response);
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      } else {
+        setIsLoading(true);
+        setSelectedImages([{ uri: response.uri}]);
+        Promise.resolve(uploadFileToFireBase(response, userDetail?.id))
+          .then((val) => {
+            console.log('@@@@openImagePicker@@@@@');
+            console.log(val);
+            setImages([...images, val])
+            setIsLoading(false);
+          })
+          .catch((error) => {
+            console.log(error.message);
+            ToastHelper.showError(t('error.common'));
+            setIsLoading(false);
+          });
+      }
+    });
+  };
+
+
+  const openCamera = () => {
+    ImagePicker.launchCamera(IMAGE_CONFIG, (response) => {
+      // console.log('Response = ', response);
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      } else {
+        setIsLoading(true);
+        setSelectedImages([{ uri: response.uri}]);
+        Promise.resolve(uploadFileToFireBase(response, userDetail?.id))
+          .then((val) => {
+            console.log('@@@@openCamera@@@@@');
+            console.log(val);
+            setImages([...images, val])
+            setIsLoading(false);
+          })
+          .catch((error) => {
+            console.log(error.message);
+            ToastHelper.showError(t('error.common'));
+            setIsLoading(false);
+          });
+      }
+    });
+  };
 
 
   const createNewPost = () =>{
+    let currentTime = new Date().getTime();
+    let post = {
+      _id: uuid.v4(),
+      userId: userDetail?.id,
+      name: userDetail?.name,
+      avatar: userDetail?.avatar || Constant.MOCKING_DATA.ANY_AVATAR,
+      timeInMillosecond: currentTime,
+      createdAt: moment().utc().format('YYYY-MM-DDTHH:mm:ssZ'),
+      createdOn: moment().format("YYYY-MM-DD'T'HH:mm:ssZ"),
+      modifiedOn: moment().format("YYYY-MM-DD'T'HH:mm:ssZ"),
+      content: content,
+    };
+    console.log(images)
+    if(images.length > 0){
+      post.images = images;
+    }
     console.log('createNewPost');
+    if (
+      post?.content  &&
+      post?.content.replace(' ', '') === ''
+    ) {
+      return;
+    }
+    console.log(post);
+    childTemp = userDetail?.id +'_'+currentTime;
+    try {
+      setIsLoading(true);
+      FirebaseService.pushNewItemWithChildKey(
+        Constant.SCHEMA.SOCIAL,
+        childTemp,
+        post,
+        false
+      ).then(val =>{
+        setIsLoading(false);
+        console.log(val);
+        NavigationService.goBack();
+      });
+      return;
+    } catch (err) {
+      console.log('err' + err?.message);
+    }
   }
 
   const renderPostInput = () => {
@@ -107,7 +210,7 @@ const NewPostScreen = (props) => {
         <TextInput
           value={content || ''}
           returnKeyType="done"
-          maxLength={1000}
+          maxLength={3000}
           onChangeText={(text) => setContent(text)}
           multiline
           numberOfLines={100}
@@ -116,9 +219,10 @@ const NewPostScreen = (props) => {
             containerStyle.textDefaultNormal,
             containerStyle.paddingDefault,
             {
-              height: ScreenHeight / 2 - 30,
+              height: ScreenHeight * 0.5,
               width: ScreenWidth * 0.9,
-              backgroundColor: colors.red
+              backgroundColor: colors.gray_bg,
+              borderRadius: RADIUS.default
             },
           ]}
         />
@@ -128,22 +232,47 @@ const NewPostScreen = (props) => {
 
   const renderImagePicker = () => {
     return (
-      <TouchableOpacity style={styles.toolbar} onPress={() => {console.log('1231321321')}}>
-        <MaterialIcons name="photo-library" size={40}></MaterialIcons>
-      </TouchableOpacity>
+      <View style={{display: "flex", flexDirection: "row", 
+      width: ScreenWidth * 0.9}}>
+        <TouchableOpacity
+          onPress={() => {
+            openImagePicker();
+          }}>
+          <MaterialIcons name="photo-library" size={40}></MaterialIcons>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            openCamera();
+          }}>
+          <MaterialIcons name="camera-alt" size={40}></MaterialIcons>
+        </TouchableOpacity>
+      </View>
     );
   };
 
-  const rightIco = (<TextNormal text={t('social.post')}></TextNormal>)
+  const renderItems = ({item, index}) => (
+    <Image style={styles.image} source={{uri: item.uri}} resizeMode="cover" />
+  );
+
+  const renderImageSelected = () => {
+    return (
+      <FastImage style={styles.image} source={{uri: selectedImages[0].uri}} resizeMode="cover" />
+    );
+  };
+
+  
+  const rightIco = isLoading ? null : (<TextNormal text={t('social.post')}></TextNormal>);
+  
   return (
     <View style={[containerStyle.default]}>
       <StatusBar barStyle={colorsApp.statusBar} />
       <SafeAreaView>
         <HeaderFull title={t('social.createpost')} hasButton rightIco={rightIco} onPress={() => createNewPost()}/>
-        <View style={styles.content}>
+        <ScrollView contentContainerStyle={styles.content}>
           {renderPostInput()}
           {renderImagePicker()}
-        </View>
+          {selectedImages.length > 0 && renderImageSelected()}
+        </ScrollView>
       </SafeAreaView>
       {isLoading && <Loading />}
     </View>

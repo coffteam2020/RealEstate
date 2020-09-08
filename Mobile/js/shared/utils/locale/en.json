@@ -362,8 +362,14 @@
     "placeholder": "What's on your mind?",
     "createpost": "Create Post",
     "post": "Post",
-    "likePrefix": "Bạn và",
+    "likePrefix": "You and",
+    "likeOnlyYou": "You",
+    "othersLike": "others",
     "like": "Like",
-    "comment": "Comment"
+    "comment": "Comment",
+    "commentInput":{
+      "placeholder" : "write comments.."
+    },
+    "nodata":"NO POST YET"
   }
 }

@@ -1,5 +1,5 @@
 import {useObserver} from 'mobx-react';
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
 import {
   FlatList,
@@ -11,6 +11,7 @@ import {
   View,
   RefreshControl,
   Dimensions,
+  KeyboardAvoidingView
 } from 'react-native';
 import {List, ListItem} from 'react-native-elements';
 import {withTheme} from 'react-native-paper';
@@ -37,83 +38,76 @@ import FastImage from 'react-native-fast-image';
 import {ScreenWidth, ScreenHeight} from '../../shared/utils/dimension/Divices';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+
 import moment from 'moment'
 import {SPACINGS, FONTSIZES} from '../../themes';
+import { FirebaseService } from '../../api/FirebaseService';
+import { TextInput } from 'react-native-gesture-handler';
 
-const MOCK = [
-  {
-	id: 0,
-	createdAt: 1598281346356,
-    firstName: 'Mayuko',
-    lastName: 'Nashel',
-    avatar: 'https://i1.sndcdn.com/avatars-000143568666-ksxxz6-t500x500.jpg',
-    content:
-      'I want to make a openable chances for everyone wanna deal with my property. Home is da best',
-    images: [
-      'https://scontent-hkt1-1.xx.fbcdn.net/v/t1.0-9/118463986_10223180469921675_7101042475717980321_o.jpg?_nc_cat=100&_nc_sid=8024bb&_nc_ohc=O0s6CLHuetQAX9UVwKr&_nc_ht=scontent-hkt1-1.xx&oh=35e4ab9112f4b31cbb7d285c85bc0c17&oe=5F6783EE',
-      'https://scontent-hkt1-1.xx.fbcdn.net/v/t1.0-9/117954125_10223180469641668_1258233496962219199_o.jpg?_nc_cat=108&_nc_sid=8024bb&_nc_ohc=JaO5bHQyd7EAX-c2Nb9&_nc_ht=scontent-hkt1-1.xx&oh=3106da91704148d077ab7e4b03cf6def&oe=5F69DC2F',
-      'https://scontent.fsgn5-7.fna.fbcdn.net/v/t1.0-9/117906997_10223180470001677_3550485438271917420_o.jpg?_nc_cat=103&_nc_sid=8024bb&_nc_ohc=vpDDAXY9ZH0AX-cPDY_&_nc_ht=scontent.fsgn5-7.fna&oh=a489b1a814b6f0d367473c9a146af2cb&oe=5F6B3B65',
-    ],
-    likes : [
-      1,2,3,4,5
-    ],
-    comments: [
-      {id: "1", name: "aa", comment: "aaa hay quá"},
-      {id: "2", name: "bb", comment: "aaa hay quá"},
-      {id: "3", name: "cc", comment: "aaa hay quá"},
-      {id: "4", name: "dd", comment: "aaa hay quá"}
-    ]
-  },
-  {
-	id: 1,
-	createdAt:  1598281346356,
-    firstName: 'Lê ',
-    lastName: 'Thuận',
-    avatar: 'https://i1.sndcdn.com/avatars-000143568666-ksxxz6-t500x500.jpg',
-    content:
-      'Một người bạn Ý từng nói với mình, "tôi sợ là sau này chết đi mà được biết ít quá về thế giới". Là một người có máu xê dịch, mình hiểu những gì anh ấy nói. Và vì thế giới rất rộng mà ta chỉ được sống có một lần, những người ham đi luôn có một khát vọng cháy bỏng la lên đường. Và nỗi đau khổ lớn nhất đối với họ chính là nhìn cuộc đời này trôi qua mà ta cứ dính chặt ở một chỗ, hoặc có quá ít cơ hội để nhìn thế giới bằng chính mắt mình.',
-    images: [
-      'https://scontent-hkt1-1.xx.fbcdn.net/v/t1.0-9/118463986_10223180469921675_7101042475717980321_o.jpg?_nc_cat=100&_nc_sid=8024bb&_nc_ohc=O0s6CLHuetQAX9UVwKr&_nc_ht=scontent-hkt1-1.xx&oh=35e4ab9112f4b31cbb7d285c85bc0c17&oe=5F6783EE',
-      'https://scontent-hkt1-1.xx.fbcdn.net/v/t1.0-9/117954125_10223180469641668_1258233496962219199_o.jpg?_nc_cat=108&_nc_sid=8024bb&_nc_ohc=JaO5bHQyd7EAX-c2Nb9&_nc_ht=scontent-hkt1-1.xx&oh=3106da91704148d077ab7e4b03cf6def&oe=5F69DC2F',
-      'https://scontent.fsgn5-7.fna.fbcdn.net/v/t1.0-9/117906997_10223180470001677_3550485438271917420_o.jpg?_nc_cat=103&_nc_sid=8024bb&_nc_ohc=vpDDAXY9ZH0AX-cPDY_&_nc_ht=scontent.fsgn5-7.fna&oh=a489b1a814b6f0d367473c9a146af2cb&oe=5F6B3B65',
-    ],
-    likes : [
-      1,2,3,4,5
-    ],
-    comments: [
-      {id: "1", name: "aa", comment: "aaa hay quá"},
-      {id: "2", name: "bb", comment: "aaa hay quá"},
-      {id: "3", name: "cc", comment: "aaa hay quá"},
-      {id: "4", name: "dd", comment: "aaa hay quá"}
-    ]
-  },
-];
 
 const PostDetailScreen = (props) => {
   const {colorsApp} = props.theme;
   const {t} = useTranslation();
   const {userStore} = useStores();
-  const [index, setIndex] = React.useState(0);
-  const [modelSelect, setModalSelect] = useState('');
-  const [showModal, setShowModal] = useState(false);
-  const [userInfo, setUserInfo] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [avt, setAvt] = useState('');
+  const [post, setPost] = useState({});
+  const [newComment, setNewComment] = useState('');
+  const [userDetail, setUserDetail] = useState({});
+  const refInput = useRef();
+
   let data = props.navigation.state.params.data || {};
 
+  useEffect(() => {
+    props?.navigation.addListener('willFocus', () => {
+      getPostDetail();
+      getProfile();
+    });
+    getPostDetail();
+    getProfile();
+  }, []);
 
+  const getPostDetail = async () =>{
+    let postDetail = await FirebaseService.queryAllItemBySchemaWithSpecifiedChild(Constant.SCHEMA.SOCIAL, '_id', data._id, false, false);
+    setPost((postDetail && postDetail.length > 0 ) ? postDetail[0] : {});
+  }
 
+  const getProfile = async () => {
+    let userInfo = await IALocalStorage.getDetailUserInfo();
+    setIsLoading(true);
+    AxiosFetcher({
+      method: 'GET',
+      url: 'user/' + userInfo?.id,
+      hasToken: true,
+    })
+      .then((val) => {
+        console.log(val)
+        if (val?.data !== '') {
+          setIsLoading(false);
+          userStore.userInfo = val;
+          setUserDetail(val);
+        } else {
+          setIsLoading(false);
+          ToastHelper.showError(t('account.getInfoErr'));
+        }
+      })
+      .catch(() => {
+        setIsLoading(false);
+        ToastHelper.showError(t('account.getInfoErr'));
+      });
+  };
 
   const renderPostContent = (data) => {
     return (
       <View style={styles.postContent}>
         <TextNormal
           style={styles.contentTextStyle}
-          text={data.content}
+          text={post?.content}
           numberOfLines={100}></TextNormal>
         <View>
-          {data.images && data.images.map((item, index)=>{
+          {post.images && post.images.map((item, index)=>{
             return (<FastImage
+            key={index}
               source={{
                 uri: item || Constant.MOCKING_DATA.NO_IMG_PLACE_HOLDER,
               }}
@@ -127,12 +121,11 @@ const PostDetailScreen = (props) => {
     );
   };
 
-  const rennderButton = (data) => {
-    let isLike = data.likes.indexOf(userStore?.userInfo?.id) !== -1;
+  const rennderButton = () => {
+    let isLike = post?.likes && post?.likes?.indexOf(userStore?.userInfo?.id) !== -1;
     return (
       <View style={{width: ScreenWidth}}>
-        <View
-          style={styles.buttonContainer}>
+        <View style={styles.buttonContainer}>
           <TouchableOpacity
             onPress={() => {
               clickLike(isLike);
@@ -145,70 +138,173 @@ const PostDetailScreen = (props) => {
             />
             <TextNormal text={t('social.like')}></TextNormal>
           </TouchableOpacity>
-          <View
+          <TouchableOpacity 
+            onPress={() => {
+              refInput.current.focus();
+            }}
             style={{display: 'flex', flexDirection: 'row'}}>
             <EvilIcons name="comment" size={20} />
             <TextNormal text={t('social.comment')}></TextNormal>
+          </TouchableOpacity>
+        </View>
+        {post?.likes && (
+          <View style={styles.likeDetail}>
+            <AntDesign name={'like1'} size={20} color={colors.purpleMain} />
+            <TextNormal
+              style={{marginLeft: SPACINGS.small}}
+              text={
+                isLike
+                  ? post?.likes.length === 1
+                    ? t('social.likeOnlyYou')
+                    : t('social.likePrefix') +
+                      ` ${post?.likes?.length - 1} ` +
+                      t('social.othersLike')
+                  : post?.likes?.length > 0
+                  ? `${post?.likes?.length } `+ t('social.othersLike')
+                  : ''
+              }></TextNormal>
           </View>
-        </View>
-        <View style={styles.likeDetail}>
-          <AntDesign
-              name={'like1'}
-              size={20}
-              color={colors.purpleMain}
-          />
-          <TextNormal style={{marginLeft: SPACINGS.small}} text={(isLike ? t('social.likePrefix') : "")  + data.likes.length}></TextNormal>
-        </View>
-        </View>
-    );
-  };
-
-  const rennderComments = (data) => {
-    return (
-      <View style={{display: 'flex', flexDirection: 'column'}}>
-        {data.comments.map((comment, index) => {
-          return (
-            <View style={styles.commentContainer}>
-              <FastImage
-                source={{
-                  uri:
-                    comment.avatar || Constant.MOCKING_DATA.NO_IMG_PLACE_HOLDER,
-                }}
-                resizeMode="cover"
-                style={styles.avatarComment}
-              />
-              <View style={styles.commentOwner}>
-                <TextNormal
-                  style={styles.commentTitle}
-                  text={comment.name}
-                  numberOfLines={100}
-                />
-                <TextNormal
-                  style={styles.commentContentTextStyle}
-                  text={comment.commentContent}
-                  numberOfLines={100}
-                />
-              </View>
-            </View>
-          );
-        })}
+        )}
       </View>
     );
   };
 
-  const clickLike = (isLike) =>{
+  const rennderComments = () => {
+    return (
+      <View style={{display: 'flex', flexDirection: 'column'}}>
+        {post?.comments &&
+          post?.comments?.map((comment, index) => {
+            return (
+              <View key={'comment' + index} style={styles.commentContainer}>
+                <FastImage
+                  source={{
+                    uri:
+                      comment.avatar ||
+                      Constant.MOCKING_DATA.NO_IMG_PLACE_HOLDER,
+                  }}
+                  resizeMode="cover"
+                  style={styles.avatarComment}
+                />
+                <View style={styles.commentOwner}>
+                  <TextNormal
+                    style={styles.commentTitle}
+                    text={comment.name}
+                    numberOfLines={100}
+                  />
+                  <TextNormal
+                    style={styles.commentContentTextStyle}
+                    text={comment.content}
+                    numberOfLines={100}
+                  />
+                </View>
+              </View>
+            );
+          })}
+        <View style={styles.newCommentContainer}>
+          <FastImage
+            source={{
+              uri:
+                userDetail?.avatar || Constant.MOCKING_DATA.NO_IMG_PLACE_HOLDER,
+            }}
+            resizeMode="cover"
+            style={styles.avatarComment}
+          />
+          <View style={styles.newComment}>
+            <TextInput ref={refInput}
+              numberOfLines={100}
+              style={[
+                containerStyle.defaultMarginTopSmall,
+                containerStyle.textDefaultNormal,
+                styles.commentInput,
+              ]}
+              value={newComment}
+              onChangeText={(text) => setNewComment(text)}
+              multiline
+              placeholder={t('social.commentInput.placeholder')}
+              numberOfLines={100}
+            />
+          </View>
+          <TouchableOpacity
+            onPress={() => { postComment(); }}>
+            <FontAwesome5 name={'paper-plane'} size={40} style={{margin: SPACINGS.small}} color={colors.purpleMain} />
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  };
 
+  const clickLike = () =>{
+    let userDetail = userStore?.userInfo;
+    FirebaseService.queryAllItemBySchemaWithSpecifiedChild(Constant.SCHEMA.SOCIAL, '_id', data._id, false, false).then((val)=>{
+      console.log(val);
+      if(val && val.length > 0){
+        let currentLike = val[0].likes ? [...val[0].likes] : [];
+        if(currentLike.indexOf(userDetail?.id) !== -1){
+          currentLike = currentLike.filter(item => item !== userDetail?.id);
+        }else{
+          currentLike.push(userDetail?.id);
+        }
+        const newData = {...val[0]};
+        newData.likes = currentLike;
+        FirebaseService.updateItem(Constant.SCHEMA.SOCIAL, data?.userId +'_'+data?.timeInMillosecond, newData).then(
+          val1 => {
+            setPost(newData);
+          }
+        )
+      }
+    }
+    )
   }
+
+  const postComment = () => {
+    setIsLoading(true);
+    FirebaseService.queryAllItemBySchemaWithSpecifiedChild(
+      Constant.SCHEMA.SOCIAL,
+      '_id',
+      data._id,
+      false,
+      false,
+    ).then((val) => {
+      console.log(val);
+      
+      if (val && val.length > 0) {
+        let currentComments = val[0].comments ? [...val[0].comments] : [];
+        let newCommentData = {
+          id: userDetail?.id,
+          name: userDetail?.name,
+          avatar: userDetail.avatar,
+          content: newComment,
+          time: new Date().getTime(),
+        };
+        currentComments.push(newCommentData);
+        currentComments.sort((a, b) => (a.time > b.time ? 1 : b.time > a.time ? -1 : 0));
+        
+
+        const newData = {...val[0]};
+        newData.comments = currentComments;
+
+        FirebaseService.updateItem(
+          Constant.SCHEMA.SOCIAL,
+          data?.userId + '_' + data?.timeInMillosecond,
+          newData,
+        ).then((val1) => {
+          setIsLoading(false);
+          setPost(newData);
+          setNewComment('');
+        });
+      }
+    });
+  };
   return (
     <View style={[containerStyle.default]}>
       <StatusBar barStyle={colorsApp.statusBar} />
       <SafeAreaView>
-        <HeaderFullPostDetail avatar={data.avatar} name={`${data.firstName} ${data.lastName}`} createdAt={data.createdAt} hasButton/>
-        <ScrollView contentContainerStyle={styles.content}>
-          {renderPostContent(data)}
-          {rennderButton(data)}
-          {rennderComments(data)}
-        </ScrollView>
+        <HeaderFullPostDetail avatar={data?.avatar} name={data?.name} createdAt={data?.timeInMillosecond} hasButton/>
+          <ScrollView contentContainerStyle={styles.content}>
+            {renderPostContent(post)}
+            {rennderButton(post)}
+            {rennderComments(post)}
+          </ScrollView>
       </SafeAreaView>
       {isLoading && <Loading />}
     </View>

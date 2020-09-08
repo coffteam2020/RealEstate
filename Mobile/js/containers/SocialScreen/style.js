@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
   },
   content: {
 	alignItems: 'center',
-	paddingBottom: 50
+	paddingBottom: 50,
   },
   avatar: {
     width: ScreenWidth * 0.1,
@@ -51,12 +51,12 @@ export const styles = StyleSheet.create({
   postContent:{
 	display: "flex",
 	flexDirection: "column",
-	alignItems: "center",
+	alignItems: "flex-start",
 	flexWrap: "nowrap",
 	justifyContent: "space-evenly",
   },
   contentTextStyle:{
-	marginHorizontal: SPACINGS.avg
+	marginHorizontal: SPACINGS.avg,
   },
   postImages:{
 	width: ScreenWidth,
@@ -67,6 +67,9 @@ export const styles = StyleSheet.create({
 	display: "flex",
 	flexDirection: "column",
 	justifyContent: "space-around"
+  },
+  noDataMessage:{
+	  textAlign: "center"
   }
 });
 
