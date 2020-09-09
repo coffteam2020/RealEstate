@@ -28,6 +28,7 @@ import {ToastHelper} from '../../shared/components/ToastHelper';
 import Constant from '../../shared/utils/constant/Constant';
 import {useObserver} from 'mobx-react';
 import Loading from '../../shared/components/Loading';
+import ModalAccount from '../../shared/components/Modal/ModalAccount';
 
 const MOCK = [
   {
@@ -72,6 +73,9 @@ const ProfileScreen = (props) => {
   const {userStore} = useStores();
   const [isLoading, setIsLoading] = useState(false);
   const [avt, setAvt] = useState('');
+  const [modelSelect, setModalSelect] = useState('');
+  const [showModal, setShowModal] = useState(false);
+  
   const IMAGE_CONFIG = {
     title: t('imagePicker.name'),
     cancelButtonTitle: t('common.cancel'),
@@ -221,6 +225,16 @@ const ProfileScreen = (props) => {
       }
     });
   };
+  const logout = async () =>{
+    await IALocalStorage.resetLocalStorage();
+    NavigationService.navigate(ScreenNames.LoginScreen);
+  }
+  const closeDialog = () =>{
+    setModalSelect(null);
+    setShowModal(true);
+  }
+
+
   const renderMe = () => {
     return (
       <View style={[containerStyle.center, containerStyle.shadow]}>
@@ -357,8 +371,8 @@ const ProfileScreen = (props) => {
             t('account.logout'),
             '',
             async () => {
-              await IALocalStorage.resetLocalStorage();
-              NavigationService.navigate(ScreenNames.LoginScreen);
+              setModalSelect('LOGOUT');
+              setShowModal(true);
             },
           )}
         </View>
@@ -381,6 +395,16 @@ const ProfileScreen = (props) => {
         </ScrollView>
       </SafeAreaView>
       {isLoading && <Loading />}
+      {modelSelect ? (
+        <ModalAccount
+          isVisible={showModal}
+          title={modelSelect}
+          onPress={() => {
+            logout();
+          }}
+          onClose={() => closeDialog()}
+        />
+      ) : null}
     </View>
   ));
 };

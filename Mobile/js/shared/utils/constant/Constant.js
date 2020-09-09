@@ -97,6 +97,7 @@ export default {
     LIVESTREAM: 'Livestream',
     AUDIO: 'Audio',
     MESSAGESFLOATING: 'Floating',
+    SOCIAL: 'Social'
   },
   SECRET_ROOM: 'AIzaSyByxV0mwTmpcf',
   PAYMENT_ACCOUNT: {
