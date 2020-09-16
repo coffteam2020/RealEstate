@@ -193,7 +193,7 @@ const SocialScreen = (props) => {
         scrollEnabled
         style={{
           width: ScreenWidth,
-          height: ScreenHeight,
+          height: '100%',
           marginTop: 10,
         }}
         onRefresh={() => {
@@ -456,8 +456,9 @@ const SocialScreen = (props) => {
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
-                  console.log('comment');
-                  // navigate to Post Detail
+                  NavigationService.navigate(ScreenNames.PostDetailScreen, {
+                    data: {...item},
+                  });
                 }}
                 style={{display: 'flex', flexDirection: 'row'}}>
                 <EvilIcons name="comment" size={20} />
@@ -474,7 +475,7 @@ const SocialScreen = (props) => {
       <StatusBar barStyle={colorsApp.statusBar} />
       <SafeAreaView>
         <HeaderFull title={t('social.title')} />
-        <ScrollView contentContainerStyle={styles.content}>
+        <ScrollView nestedScrollEnabled contentContainerStyle={styles.content}>
           {renderAllPost()}
         </ScrollView>
       </SafeAreaView>
