@@ -42,6 +42,7 @@
     "cancel": "Huỷ",
     "confirm": "Xác nhận",
     "pickADate": "Chọn ngày",
+    "pickATime": "Chọn giờ",
     "continue": "Tiếp tục",
     "gotIt": "Tôi đã hiểu",
     "done": "Xong",
@@ -394,6 +395,27 @@
       "placeholder" : "viết nhận xét..."
     },
     "nodata": "Chưa có bài viết"
+  },
+  "property": {
+    "createTitle" : "List your space",
+    "numOfRoom": "Number of room",
+    "capacity": "Capacity",
+    "rentalPrice": "Rental Price",
+    "deposit": "Deposit",
+    "electricityCost": "Electricity Cost",
+    "waterCost": "Water Cost",
+    "internetCost": "Internet Cost",
+    "parkingAvailable": "Is there space for parking?",
+    "parkingCost": "Parking Cost",
+    "free": "Free",
+    "next": "Next",
+    "publishRoom": "Publish Room",
+    "takeAPicture":"Take a picture",
+    "phone": "Telephone Number",
+    "title": "Title of the post",
+    "description": "Room description",
+    "openTime": "Open time",
+    "closeTime": "Close time"
   },
   "setting" : {
     "permission" : {
