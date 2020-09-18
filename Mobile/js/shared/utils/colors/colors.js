@@ -55,6 +55,7 @@ export const colors = {
 	yellow_event_title: "#030303",
 	black_clear_all: "#393939",
 	gray_bg: "#eeeeee",
+	gray_bg_new: "#F2F2F2",
 	yellow_fresh: "#c5a542",
 	yellow_default_opacity: "#f1f1f1",
 	borderColor: "#dcdcdc",
