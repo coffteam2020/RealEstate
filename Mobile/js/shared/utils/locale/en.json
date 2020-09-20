@@ -356,7 +356,9 @@
     "off": "Off",
     "update": "Update information",
     "success": "Update information successfully",
-    "fail": "Opps, we tried to update information but failed. Check again please!"
+    "fail": "Opps, we tried to update information but failed. Check again please!",
+    "city": "City",
+    "district": "District"
   },
   "social" : {
     "title" : "Social",
@@ -392,6 +394,11 @@
     "title": "Title of the post",
     "description": "Room description",
     "openTime": "Open time",
-    "closeTime": "Close time"
+    "closeTime": "Close time",
+    "leaseDuration": "Lease Duration",
+    "leaseDurationMonth": "Lease Duration(Month) ",
+    "youAre": "You Are",
+    "propertyType": "Type",
+    "information":"Infomation",
   }
 }

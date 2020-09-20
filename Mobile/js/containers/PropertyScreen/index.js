@@ -49,8 +49,10 @@ import GridList from 'react-native-grid-list';
 import ImagePicker from 'react-native-image-picker';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import TextInputFlatNew from '../../shared/components/TextInput/TextInputFlatNew';
+import {uploadFileToFireBase} from '../../shared/utils/firebaseStorageUtils';
+import ModalConfirm from '../../shared/components/Modal/ModalConfirm';
 
-const labels = ['Infomation', 'Address', 'Utilities', 'Conformation'];
+  const labels = ['Infomation', 'Address', 'Utilities', 'Conformation'];
   const customStyles = {
     stepIndicatorSize: 30,
     currentStepIndicatorSize: 40,
@@ -75,7 +77,7 @@ const labels = ['Infomation', 'Address', 'Utilities', 'Conformation'];
     labelSize: 13,
     currentStepLabelColor: '#fe7013',
   };
-  const RoomTypes = [
+  const PropertyTypes = [
     {label: 'Domitory', value: 'DOMITIRY'},
     {label: 'Room for rent', value: 'ROOM_FOR_RENT'},
     {label: 'Room For Share', value: 'ROOM_FOR_SHARE'},
@@ -103,7 +105,11 @@ const labels = ['Infomation', 'Address', 'Utilities', 'Conformation'];
     {label: 'Heater Water', value: 'HeaterWater', icon: 'water-pump'},
   ];
 
-  
+  const Roles = [
+    {label: 'Owner', value: 'Owner'},
+    {label: 'Broker', value: 'Broker'},
+    {label: 'Builder', value: 'Builder'}
+  ];
 
 const PropertyScreen = (props) => {
   const {colorsApp} = props.theme;
@@ -112,17 +118,25 @@ const PropertyScreen = (props) => {
   const [userInfo, setUserInfo] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [avt, setAvt] = useState('');
-  const [roomType, setRoomType] = useState(RoomTypes[0].value);
+  const [propertyType, setPropertyType] = useState(PropertyTypes[0].value);
   const [gender, setGender] = useState(Genders[0].value);
-  const [currentPage, setCurrentPage] = useState(3);
+  const [currentPage, setCurrentPage] = useState(0);
   const [parkingAvailable, setParkingAvailable] = useState(false);
   const [property, setProperty] = useState({});
+  const [address, setAddress] = useState({});
   const [images, setImages] = useState([]);
+  const [localImages, setLocalImages] = useState([]);
+  const [firebaseImages, setFirebaseImages] = useState([]);
+  const [attachmentMedia, setAttachmentMedia] = useState([]);
   const [selectedUltilities, setSelectedUltilities] = useState([]);
   const [showOpenTime, setShowOpenTime] = useState(false);
   const [showCloseTime, setShowCloseTime] = useState(false);
-  const [openTime, setOpenTime] = useState(new Date());
+  const [availabilityDate, setAvailabilityDate] = useState(new Date());
   const [closeTime, setCloseTime] = useState(new Date());
+  const [reservedParking, setReservedParking] = useState(0);
+  const [leaseDuration, setLeaseDuration] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [role, setRole] = useState(Roles[0].value);
 
   const IMAGE_CONFIG = {
     title: t('imagePicker.name'),
@@ -150,10 +164,10 @@ const PropertyScreen = (props) => {
       hasToken: true,
     })
       .then((val) => {
-        console
         if (val?.data !== '') {
           setIsLoading(false);
           userStore.userInfo = val;
+          setUserInfo(val);
           setAvt(val?.avatar);
         } else {
           setIsLoading(false);
@@ -170,14 +184,30 @@ const PropertyScreen = (props) => {
     setCurrentPage(position);
   };
   const onNextStepPress = () => {
+    if (currentPage === 2) {
+      //TODO: step 2: upload images to firebase
+      let attachments = [];
+      localImages.forEach(async (item) => {
+        Promise.resolve(uploadFileToFireBase(item, userInfo?.id))
+          .then((val) => {
+            attachments.push({attactmentType: 'IMAGE', urlMedia: val});
+          })
+          .catch((error) => {
+            console.log(error.message);
+          });
+      });
+      setAttachmentMedia(attachments);
+    }else if(currentPage === 3){
+      setShowModal(true);
+    }
     setCurrentPage(currentPage + 1);
   };
 
-  const onRoomTypeChange = (evt, item) => {
+  const onTypeChange = (evt, item) => {
     if(!evt){
-      setRoomType(RoomTypes[0].value);
+      setPropertyType(PropertyTypes[0].value);
     }else{
-      setRoomType(item.value);
+      setPropertyType(item.value);
     }
     
   };
@@ -265,20 +295,8 @@ const PropertyScreen = (props) => {
       } else if (response.customButton) {
         console.log('User tapped custom button: ', response.customButton);
       } else {
-        setIsLoading(true);
-        setImages([...images, { uri: response.uri}]);
-        // Promise.resolve(uploadFileToFireBase(response, userDetail?.id))
-        //   .then((val) => {
-        //     console.log('@@@@openCamera@@@@@');
-        //     console.log(val);
-        //     setImages([...images, val])
-        //     setIsLoading(false);
-        //   })
-        //   .catch((error) => {
-        //     console.log(error.message);
-        //     ToastHelper.showError(t('error.common'));
-        //     setIsLoading(false);
-        //   });
+        setLocalImages([...localImages, response]);
+        setImages([...images, response.uri]);
       }
     });
   };
@@ -292,41 +310,45 @@ const openImagePicker = () => {
       } else if (response.customButton) {
         console.log('User tapped custom button: ', response.customButton);
       } else {
-        // setIsLoading(true);
-        setImages([...images, { uri: response.uri}]);
-        // Promise.resolve(uploadFileToFireBase(response, userDetail?.id))
-        //   .then((val) => {
-        //     console.log('@@@@openImagePicker@@@@@');
-        //     console.log(val);
-        //     setImages([...images, val])
-        //     setIsLoading(false);
-        //   })
-        //   .catch((error) => {
-        //     console.log(error.message);
-        //     ToastHelper.showError(t('error.common'));
-        //     setIsLoading(false);
-        //   });
+        setLocalImages([...localImages, response]);
+        setImages([...images, response.uri]);
       }
     });
   };
   const removeImages = (item) =>{
     let current = [...images];
-    console.log(current);
-    console.log(item);
-    current = current.filter(itm => itm.uri !== item.uri)
+    current = current.filter(itm => itm !== item)
     setImages(current);
   }
   
+  const handleInputField = (field, value) =>{
+    setProperty({...property, [field] : value});
+  }
+
+  const handleInputFieldAddress = (field, value) =>{
+    setAddress({...address, [field] : value});
+  }
+
   const renderTabInfomation = () => {
     return (
       <View
-        style={{
-          width: ScreenWidth * 0.9,
-          height: '100%',
-          paddingBottom: 50,
-        }}>
-        <View style={{marginBottom: SPACINGS.large}}>
-          {RoomTypes.map((item, index) => {
+        style={[
+          containerStyle.center,
+          containerStyle.shadow,
+          {
+            width: ScreenWidth * 0.9,
+            height: '100%',
+            paddingBottom: 50,
+          },
+        ]}>
+        <TextNormal
+          style={{fontSize: FONTSIZES.large}}
+          text={t('property.information')}></TextNormal>
+        <TextNormal
+          style={{width: ScreenWidth * 0.9}}
+          text={t('property.propertyType')}></TextNormal>
+        <View style={{marginBottom: SPACINGS.large, width: ScreenWidth * 0.7}}>
+          {PropertyTypes.map((item, index) => {
             return (
               <View
                 style={{
@@ -337,19 +359,19 @@ const openImagePicker = () => {
                   margin: SPACINGS.avg,
                 }}>
                 <TouchableOpacity
-                  onPress={() => setRoomType(item.value)}
+                  onPress={() => setPropertyType(item.value)}
                   style={{flex: 1, backgroundColor: colors.ređ}}>
                   <TextNormal text={item.label} />
                 </TouchableOpacity>
                 <CheckBox
-                  disabled={roomType === item.value}
+                  disabled={propertyType === item.value}
                   onCheckColor={colors.purpleMain}
                   onTintColor={colors.purpleMain}
                   key={index}
-                  value={roomType === item.value}
+                  value={propertyType === item.value}
                   style={{height: 20}}
                   onValueChange={(newValue) => {
-                    if (newValue) onRoomTypeChange(newValue, item);
+                    if (newValue) onTypeChange(newValue, item);
                   }}
                 />
               </View>
@@ -357,19 +379,15 @@ const openImagePicker = () => {
           })}
         </View>
 
-        <View
-          style={[
-            containerStyle.center,
-            containerStyle.shadow,
-            {marginBottom: SPACINGS.large},
-          ]}>
+        <View style={{marginBottom: SPACINGS.large}}>
           <TextInputFlat
             keyboardType="numeric"
             props={props}
             onChangeText={(text) => {
-              console.log(text);
+              handleInputField('bedRoom', text);
             }}
             text={t('property.numOfRoom')}
+            value={property?.bedRoom || ''}
             placeholder={'0'}
             textInputStyle={[styles.field, containerStyle.defaultMarginBottom]}
             style={{marginBottom: SPACINGS.avg}}
@@ -381,13 +399,17 @@ const openImagePicker = () => {
               console.log(text);
             }}
             text={t('property.capacity')}
+            value={property?.capacity || ''}
             placeholder={'0'}
             textInputStyle={[styles.field, containerStyle.defaultMarginBottom]}
             style={{marginBottom: SPACINGS.avg}}
           />
         </View>
 
-        <View style={{marginBottom: SPACINGS.large}}>
+        <TextNormal
+          style={{width: ScreenWidth * 0.9}}
+          text={t('property.youAre')}></TextNormal>
+        <View style={{marginBottom: SPACINGS.large, width: ScreenWidth * 0.7}}>
           {Genders.map((item, index) => {
             return (
               <View
@@ -419,14 +441,20 @@ const openImagePicker = () => {
           })}
         </View>
 
-        <View style={[containerStyle.center, containerStyle.shadow, {marginBottom: SPACINGS.large}]}>
+        <View
+          style={[
+            containerStyle.center,
+            containerStyle.shadow,
+            {marginBottom: SPACINGS.large},
+          ]}>
           <TextInputFlat
             keyboardType="numeric"
             props={props}
             onChangeText={(text) => {
-              console.log(text);
+              handleInputField('priceOrMonthlyRent', text);
             }}
             text={t('property.rentalPrice')}
+            value={property?.priceOrMonthlyRent || ''}
             placeholder={'0'}
             textInputStyle={[styles.field, containerStyle.defaultMarginBottom]}
           />
@@ -434,58 +462,66 @@ const openImagePicker = () => {
             keyboardType="numeric"
             props={props}
             onChangeText={(text) => {
-              console.log(text);
+              handleInputField('bookingAmount', text);
             }}
+            value={property?.bookingAmount || ''}
             text={t('property.deposit')}
             placeholder={'0'}
             textInputStyle={[styles.field, containerStyle.defaultMarginBottom]}
           />
         </View>
 
-        <View style={[containerStyle.center, containerStyle.shadow, {marginBottom: SPACINGS.large}]}>
+        <View
+          style={[
+            containerStyle.center,
+            containerStyle.shadow,
+            {marginBottom: SPACINGS.large},
+          ]}>
+          <TouchableOpacity
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              width: ScreenWidth * 0.9,
+            }}
+            onPress={() => {
+              setLeaseDuration(!leaseDuration);
+              handleInputField('leaseDuration', !leaseDuration);
+            }}>
+            <CheckBox
+              boxType="square"
+              disabled="true"
+              onCheckColor={colors.purpleMain}
+              onTintColor={colors.purpleMain}
+              style={{height: 20}}
+              value={leaseDuration}
+            />
+            <TextNormal text={t('property.leaseDuration')}></TextNormal>
+          </TouchableOpacity>
           <TextInputFlatWithRightCheckbox
+            disabled={!leaseDuration}
             keyboardType="numeric"
             props={props}
             onChangeText={(text) => {
-              console.log(text);
+              handleInputField('leaseDurationMonth', text);
             }}
+            value={property.leaseDurationMonth || ''}
             style={{flex: 1}}
-            text={t('property.electricityCost')}
+            // text={t('property.leaseDurationMonth')}
             placeholder={'0'}
             textInputStyle={[styles.field, containerStyle.defaultMarginBottom]}
-            hasCheckbox={true}
           />
-          <TextInputFlatWithRightCheckbox
-            keyboardType="numeric"
-            props={props}
-            onChangeText={(text) => {
-              console.log(text);
-            }}
-            style={{flex: 1}}
-            text={t('property.waterCost')}
-            placeholder={'0'}
-            textInputStyle={[styles.field, containerStyle.defaultMarginBottom]}
-            hasCheckbox={true}
-          />
-          <TextInputFlatWithRightCheckbox
-            keyboardType="numeric"
-            props={props}
-            onChangeText={(text) => {
-              console.log(text);
-            }}
-            style={{flex: 1}}
-            text={t('property.internetCost')}
-            placeholder={'0'}
-            textInputStyle={[styles.field, containerStyle.defaultMarginBottom]}
-            hasCheckbox={true}
-          />
-          <View style={{width: ScreenWidth * 0.9, marginBottom: SPACINGS.large}}>
+          <View
+            style={{width: ScreenWidth * 0.9, marginBottom: SPACINGS.large}}>
             <TouchableOpacity
               style={{display: 'flex', flexDirection: 'row'}}
               onPress={() => {
                 setParkingAvailable(!parkingAvailable);
-              }}
-              >
+                console.log(!parkingAvailable);
+                if (parkingAvailable) {
+                  setReservedParking(0);
+                  setProperty({...property, reservedParking: ''});
+                }
+              }}>
               <CheckBox
                 boxType="square"
                 disabled="true"
@@ -493,9 +529,6 @@ const openImagePicker = () => {
                 onTintColor={colors.purpleMain}
                 style={{height: 20}}
                 value={parkingAvailable}
-                onValueChange={(newvalue) => {
-                  setParkingAvailable(newvalue);
-                }}
               />
               <TextNormal text={t('property.parkingAvailable')}></TextNormal>
             </TouchableOpacity>
@@ -505,13 +538,23 @@ const openImagePicker = () => {
             keyboardType="numeric"
             props={props}
             onChangeText={(text) => {
-              console.log(text);
+              handleInputField('reservedParking', text);
+              setReservedParking(text);
             }}
+            value={reservedParking}
             style={{flex: 1}}
             text={t('property.parkingCost')}
             placeholder={'0'}
             textInputStyle={[styles.field, containerStyle.defaultMarginBottom]}
             hasCheckbox={true}
+            checkboxChange={(checked) => {
+              console.log(checked);
+              if (checked) {
+                setProperty({...property, reservedParking: 0});
+              } else {
+                setProperty({...property, reservedParking: reservedParking});
+              }
+            }}
           />
 
           <GradientButton
@@ -520,10 +563,10 @@ const openImagePicker = () => {
             text={t('property.next')}
           />
         </View>
-      
       </View>
     );
   };
+
   const renderTabAddress = () => {
     return (
       <View
@@ -536,9 +579,38 @@ const openImagePicker = () => {
           keyboardType="default"
           props={props}
           onChangeText={(text) => {
-            console.log(text)
+            handleInputFieldAddress("address", text);
           }}
           text={t('account.address')}
+          value={address?.address || ''}
+          placeholder={''}
+          textInputStyle={[
+            styles.field,
+            containerStyle.defaultMarginBottom,
+          ]}
+        />
+        <TextInputFlat
+          keyboardType="default"
+          props={props}
+          onChangeText={(text) => {
+            handleInputFieldAddress("district", text);
+          }}
+          value={address?.district || ''}
+          text={t('account.district')}
+          placeholder={''}
+          textInputStyle={[
+            styles.field,
+            containerStyle.defaultMarginBottom,
+          ]}
+        />
+        <TextInputFlat
+          keyboardType="default"
+          props={props}
+          onChangeText={(text) => {
+            handleInputFieldAddress("city", text);
+          }}
+          value={address?.city || ''}
+          text={t('account.city')}
           placeholder={''}
           textInputStyle={[
             styles.field,
@@ -596,6 +668,7 @@ const openImagePicker = () => {
                 marginBottom: 10,
               }}
               data={images}
+              keyExtractor={(item, index) => index}
               renderItem={({item}) => {
                 // console.log(item.uri);
                 return (
@@ -622,7 +695,7 @@ const openImagePicker = () => {
                           height: 100,
                           borderRadius: RADIUS.default,
                         }}
-                        source={{uri: item.uri}}
+                        source={{uri: item}}
                         resizeMode="cover"
                       />
                     </View>
@@ -698,6 +771,7 @@ const openImagePicker = () => {
               width: ScreenWidth * 0.9,
             }}
             data={ListUltilities}
+            keyExtractor={(item, index) => item.value}
             renderItem={({item}) => {
               isSelected = selectedUltilities.indexOf(item.value) !== -1;
               return (
@@ -743,7 +817,7 @@ const openImagePicker = () => {
           containerStyle.center,
           containerStyle.shadow,
           {
-            width: ScreenWidth * 0.9,
+            width: ScreenWidth * 0.7,
             height: '100%',
             paddingBottom: 50,
           },
@@ -751,6 +825,38 @@ const openImagePicker = () => {
         <TextNormal
           style={{fontSize: FONTSIZES.large}}
           text={'Confirmation'}></TextNormal>
+        <TextNormal
+          style={{width: ScreenWidth * 0.9}}
+          text={t('property.youAre')}></TextNormal>
+        {Roles.map((item, index) => {
+          return (
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                width: '100%',
+                justifyContent: 'space-between',
+                margin: SPACINGS.avg,
+              }}>
+              <TouchableOpacity
+                onPress={() => setRole(item.value)}
+                style={{flex: 1}}>
+                <TextNormal text={item.label} />
+              </TouchableOpacity>
+              <CheckBox
+                disabled={role === item.value}
+                onCheckColor={colors.purpleMain}
+                onTintColor={colors.purpleMain}
+                key={index}
+                value={role === item.value}
+                style={{height: 20}}
+                onValueChange={(newValue) => {
+                  if (newValue) setRole(item.value);
+                }}
+              />
+            </View>
+          );
+        })}
 
         <View
           style={[
@@ -762,7 +868,7 @@ const openImagePicker = () => {
             keyboardType="numeric"
             props={props}
             onChangeText={(text) => {
-              console.log(text);
+              handleInputField('phoneContact', text);
             }}
             text={t('property.phone')}
             placeholder={t('property.phone')}
@@ -772,7 +878,7 @@ const openImagePicker = () => {
             keyboardType="default"
             props={props}
             onChangeText={(text) => {
-              console.log(text);
+              handleInputField('projectName', text);
             }}
             text={t('property.title')}
             placeholder={t('property.title')}
@@ -782,7 +888,7 @@ const openImagePicker = () => {
             keyboardType="default"
             props={props}
             onChangeText={(text) => {
-              console.log(text);
+              handleInputField('description', text);
             }}
             text={t('property.description')}
             placeholder={t('property.description')}
@@ -807,7 +913,11 @@ const openImagePicker = () => {
                   backgroundColor: colors.gray_bg_new,
                 },
               ]}
-              value={openTime ? moment(openTime).format('HH:mm') : ''}
+              value={
+                availabilityDate
+                  ? moment(availabilityDate).format('DD/MM/yyyy')
+                  : ''
+              }
               style={{width: ScreenWidth * 0.4}}
               hasRightIco={true}
               ico={<Ionicons name={'time'} size={24}></Ionicons>}
@@ -815,22 +925,22 @@ const openImagePicker = () => {
             />
             <DateTimePickerModal
               isVisible={showOpenTime}
-              mode="time"
+              mode="date"
               isDarkModeEnabled={false}
               onConfirm={(date) => {
-                setOpenTime(moment(date).toDate());
+                setAvailabilityDate(moment(date).toDate());
                 setShowOpenTime(false);
               }}
-              date={openTime}
+              date={availabilityDate}
               onCancel={() => setShowOpenTime(false)}
               cancelTextIOS={t('common.cancel')}
               confirmTextIOS={t('common.confirm')}
               headerTextIOS={t('common.pickATime')}
             />
 
-              <TextInputFlatNew
+            {/* <TextInputFlatNew
               onPress={() => setShowCloseTime(true)}
-                value={openTime ? moment(closeTime).format('HH:mm') : ''}
+                value={openTime ? moment(closeTime).format('DD/MM/yyyy') : ''}
                 keyboardType="default"
                 props={props}
                 placeholder={'close time'}
@@ -849,7 +959,7 @@ const openImagePicker = () => {
               />
             <DateTimePickerModal
               isVisible={showCloseTime}
-              mode="time"
+              mode="date"
               isDarkModeEnabled={false}
               onConfirm={(date) => {
                 setCloseTime(moment(date).toDate());
@@ -860,7 +970,7 @@ const openImagePicker = () => {
               cancelTextIOS={t('common.cancel')}
               confirmTextIOS={t('common.confirm')}
               headerTextIOS={t('common.pickADate')}
-            />
+            /> */}
           </View>
         </View>
         <GradientButton
@@ -872,6 +982,28 @@ const openImagePicker = () => {
     );
   };
 
+  const renderConfirmationPopup = () => {
+    let title = "Confirmation";
+    let subTitle = "Do you want to publish?";
+    return (
+    <View>
+    {showModal ? (
+      <ModalConfirm
+        isVisible={showModal}
+        title={title}
+        subTitle={subTitle}
+        onPress={() => {
+          postNewProperty();
+        }}
+        onClose={() => {
+          setShowModal(false);
+          setCurrentPage(currentPage - 1);
+        }}
+      />
+    ) : null}
+    </View>)
+  }
+
   const renderForm = () =>{
     switch(currentPage) {
       case 0: 
@@ -882,16 +1014,64 @@ const openImagePicker = () => {
         return renderTabUtilties();
       case 3:
         return renderTabConfirmation();
+      case 4:
+        return renderConfirmationPopup();
       default:
         return;
     }
   }
+  const postNewProperty = () => {
+    let amenities = initAmenities();
+
+    let propertyDTO = {
+      ...property,
+      propertyType: propertyType,
+      propertyFor: gender,
+      amenities: amenities,
+      attachmentMedia: attachmentMedia,
+      address: address,
+      availabilityDate: moment(availabilityDate).valueOf()
+    };
+    console.log(propertyDTO);
+    setIsLoading(true);
+    AxiosFetcher({
+      method: 'POST',
+      url: '/property/create',
+      hasToken: true,
+      data: propertyDTO
+    })
+      .then((val) => {
+        if (val?.data !== '') {
+          setIsLoading(false);
+          console.log(val)
+        } else {
+          setIsLoading(false);
+          ToastHelper.showError(t('account.getInfoErr'));
+        }
+        console.log(val);
+        //TODO
+      })
+      .catch((error) => {
+        console.log(error);
+        setIsLoading(false);
+        ToastHelper.showError(t('account.getInfoErr'));
+      });
+  };
+
+  const initAmenities = () => {
+    let amenities = [];
+    selectedUltilities.forEach((item) => {
+      let amenitiy = {amenityType: item};
+      amenities.push(amenitiy);
+    });
+    return amenities;
+  };
 
   return useObserver(() =>(
     <View style={[containerStyle.default]}>
       <StatusBar barStyle={colorsApp.statusBar} />
       <SafeAreaView>
-        <HeaderFull title={t('property.createTitle')} hasButton rightIco={rightIco} onPress={() => console.log('@@@@@@')}/>
+        <HeaderFull title={t('property.createTitle')} hasButton/>
         <View style={styles.stepIndicator}>
           <StepIndicator
             customStyles={customStyles}
