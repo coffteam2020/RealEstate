@@ -415,11 +415,40 @@
     "title": "Title of the post",
     "description": "Room description",
     "openTime": "Open time",
-    "closeTime": "Close time"
+    "closeTime": "Close time",
+    "leaseDuration": "Lease Duration",
+    "leaseDurationMonth": "Lease Duration(Month) ",
+    "youAre": "Bạn là: ",
+    "propertyType": "Type",
+    "information":"Infomation",
   },
   "setting" : {
     "permission" : {
       "record" : "Cấp quyền ghi âm để sử dụng chức năng này!",
     }
-  }
+  },
+  "account": {
+    "title": "Account",
+    "address": "Address",
+    "language": "Language",
+    "currentcy": "Currency",
+    "about": "About me",
+    "logout": "Logout",
+    "confirmation": "Confirmation",
+    "logoutAsk": "Do you want to logout?",
+    "getInfoErr": "Could not get your information data, try again later!",
+    "name": "Name" ,
+    "sex": "Gender",
+    "dob": "Birth day",
+    "phone": "Phone",
+    "email": "Email",
+    "notification": "Notification",
+    "on": "On",
+    "off": "Off",
+    "update": "Update information",
+    "success": "Update information successfully",
+    "fail": "Opps, we tried to update information but failed. Check again please!",
+    "city": "City",
+    "district": "District"
+  },
 }

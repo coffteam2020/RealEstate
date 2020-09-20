@@ -35,6 +35,7 @@ const TextInputFlatWithRightCheckbox = ({
   onPressIco,
   keyboardType,
   hasCheckbox,
+  checkboxChange
 }) => {
   const [focusing, setIsFocus] = useState(false);
   const [checked, setChecked] = useState(false);
@@ -45,77 +46,12 @@ const TextInputFlatWithRightCheckbox = ({
     }
   }, [disabled])
   const {colorsApp} = props?.theme;
-  if (value) { 
     return (
       <Animatable.View animation="flipInX" style={[styles.container, style]}>
         {hideText && hideText ? null : <TextNormal props={props} text={text} />}
         <View style={styles.containerInput}>
           <TextInput
-            editable={!(disabled || !checked)}
-            placeholder={placeholder || ''}
-            placeholderTextColor={colorsApp.textColor || colors.white}
-            style={[
-              styles.default,
-              {
-                backgroundColor:
-                  disabled || !checked
-                    ? colorsApp.backgroundInput
-                    : colors.backgroundInput,
-                color: colorsApp.textColor || colors.black,
-                borderColor: focusing ? colorsApp.main : colorsApp.borderColor,
-                paddingEnd: SPACINGS.xxxLarge,
-                paddingTop: SPACINGS.sSmall,
-              },
-              textInputStyle,
-            ]}
-            returnKeyType={returnKeyType || 'done'}
             value={value}
-            numberOfLines={multiline && multiline ? 100 : 1}
-            multiline={(multiline && multiline) || false}
-            selectionColor={colorsApp.textColor}
-            onFocus={() => {
-              setIsFocus(true);
-            }}
-            onSubmitEditing={onBlur ? onBlur : () => {}}
-            onKeyPress={onBlur ? onBlur : () => {}}
-            keyboardType={(keyboardType && keyboardType) || 'default'}
-            onChangeText={onChangeText}
-            secureTextEntry={secureText}
-            onBlur={() => {
-              setIsFocus(false);
-            }}
-          />
-          {hasCheckbox && hasCheckbox ? (
-            <TouchableOpacity
-              onPress={() => {
-                if (!disabled) {
-                  setChecked(!checked);
-                }
-              }}
-              >
-              <CheckBox
-                boxType="square"
-                disabled={disabled}
-                onCheckColor={colors.purpleMain}
-                onTintColor={colors.purpleMain}
-                value={checked}
-                style={{height: 20}}
-                onValueChange={(newvalue) => {
-                  setChecked(newvalue);
-                }}
-              />
-              <TextNormal text={'Free'}></TextNormal>
-            </TouchableOpacity>
-          ) : null}
-        </View>
-      </Animatable.View>
-    );
-  } else {
-    return (
-      <Animatable.View animation="flipInX" style={[styles.container, style]}>
-        {hideText && hideText ? null : <TextNormal props={props} text={text} />}
-        <View style={styles.containerInput}>
-          <TextInput
             editable={!disabled && !checked}
             placeholder={placeholder || ''}
             placeholderTextColor={colorsApp.white || colors.white}
@@ -124,7 +60,7 @@ const TextInputFlatWithRightCheckbox = ({
               {
                 backgroundColor:
                   disabled || checked
-                    ? colors.backgroundInput
+                    ? colors.gray_bg_new
                     : colorsApp.backgroundInput,
                 color: colorsApp.textColor || colors.black,
                 borderColor: focusing ? colorsApp.main : colorsApp.borderColor,
@@ -172,6 +108,8 @@ const TextInputFlatWithRightCheckbox = ({
                 style={{height: 20}}
                 onValueChange={(newvalue) => {
                   setChecked(newvalue);
+                  if(checkboxChange)
+                    checkboxChange(newvalue);
                 }}
               />
               <TextNormal text={'Free'}></TextNormal>
@@ -180,7 +118,6 @@ const TextInputFlatWithRightCheckbox = ({
         </View>
       </Animatable.View>
     );
-  }
 };
 
 export default TextInputFlatWithRightCheckbox;
