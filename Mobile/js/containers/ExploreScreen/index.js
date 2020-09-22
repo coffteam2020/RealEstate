@@ -56,7 +56,14 @@ const ExploreScreen = (props) => {
     },
     {title: t('explorer.nearby'), icon: images.nearby},
     {title: t('explorer.ownerOnsite'), icon: images.noowner},
-    {title: t('explorer.yourPlaces'), icon: images.space},
+    {
+      title: t('explorer.yourPlaces'),
+      icon: images.space,
+      onPress: () =>
+        NavigationService.navigate(ScreenNames.PropertyListScreen, {
+          key: t('explorer.yourPlaces'),
+        }),
+    },
   ];
   const BTNS2 = [
     {

@@ -51,6 +51,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import TextInputFlatNew from '../../shared/components/TextInput/TextInputFlatNew';
 import {uploadFileToFireBase} from '../../shared/utils/firebaseStorageUtils';
 import ModalConfirm from '../../shared/components/Modal/ModalConfirm';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
   const labels = ['Infomation', 'Address', 'Utilities', 'Conformation'];
   const customStyles = {
@@ -138,6 +139,8 @@ const PropertyScreen = (props) => {
   const [showModal, setShowModal] = useState(false);
   const [role, setRole] = useState(Roles[0].value);
 
+  const propertyParam = props?.navigation?.state?.params?.data || null;
+
   const IMAGE_CONFIG = {
     title: t('imagePicker.name'),
     cancelButtonTitle: t('common.cancel'),
@@ -149,36 +152,58 @@ const PropertyScreen = (props) => {
     },
   };
 
+
   useEffect(() => {
     props?.navigation.addListener('willFocus', () => {
-      getProfile();
+      // getProfile();
+      initPropertFromParam();
     });
-    getProfile();
+    // getProfile();
+    initPropertFromParam();
   }, []);
-  const getProfile = async () => {
-    let userInfo = await IALocalStorage.getDetailUserInfo();
-    setIsLoading(true);
-    AxiosFetcher({
-      method: 'GET',
-      url: 'user/' + userInfo?.id,
-      hasToken: true,
-    })
-      .then((val) => {
-        if (val?.data !== '') {
-          setIsLoading(false);
-          userStore.userInfo = val;
-          setUserInfo(val);
-          setAvt(val?.avatar);
-        } else {
-          setIsLoading(false);
-          ToastHelper.showError(t('account.getInfoErr'));
-        }
-      })
-      .catch(() => {
-        setIsLoading(false);
-        ToastHelper.showError(t('account.getInfoErr'));
-      });
-  };
+
+  const initPropertFromParam = () =>{
+    if(null != propertyParam){
+      console.log(propertyParam)
+      setProperty(propertyParam);
+      if(propertyParam?.address){
+        setAddress({address:propertyParam?.address})
+        console.log({address: propertyParam?.address})
+      }
+      setSelectedUltilities(propertyParam?.amenities);
+      setImages(propertyParam.photos);
+      if(propertyParam?.youAre)
+        setRole(propertyParam?.youAre);
+      if(propertyParam?.propertyFor)
+        setGender(propertyParam?.propertyFor);
+      if(propertyParam?.propertyType)
+        setPropertyType(propertyParam?.propertyType);
+    }
+  }
+  // const getProfile = async () => {
+  //   let userInfo = await IALocalStorage.getDetailUserInfo();
+  //   setIsLoading(true);
+  //   AxiosFetcher({
+  //     method: 'GET',
+  //     url: 'user/' + userInfo?.id,
+  //     hasToken: true,
+  //   })
+  //     .then((val) => {
+  //       if (val?.data !== '') {
+  //         setIsLoading(false);
+  //         userStore.userInfo = val;
+  //         setUserInfo(val);
+  //         setAvt(val?.avatar);
+  //       } else {
+  //         setIsLoading(false);
+  //         ToastHelper.showError(t('account.getInfoErr'));
+  //       }
+  //     })
+  //     .catch(() => {
+  //       setIsLoading(false);
+  //       ToastHelper.showError(t('account.getInfoErr'));
+  //     });
+  // };
 
   const onStepPress = (position) => {
     setCurrentPage(position);
@@ -188,14 +213,20 @@ const PropertyScreen = (props) => {
       //TODO: step 2: upload images to firebase
       let attachments = [];
       localImages.forEach(async (item) => {
-        Promise.resolve(uploadFileToFireBase(item, userInfo?.id))
+        Promise.resolve(uploadFileToFireBase(item, userStore?.userInfo?.id))
           .then((val) => {
-            attachments.push({attactmentType: 'IMAGE', urlMedia: val});
+            attachments.push({attactmentType: 'PHOTO', urlMedia: val});
           })
           .catch((error) => {
             console.log(error.message);
           });
       });
+      //Edit case
+      if(images && images.length > 0){
+        images.forEach(item => {
+          attachments.push({attactmentType: 'PHOTO', urlMedia: item});
+        })
+      }
       setAttachmentMedia(attachments);
     }else if(currentPage === 3){
       setShowModal(true);
@@ -351,6 +382,7 @@ const openImagePicker = () => {
           {PropertyTypes.map((item, index) => {
             return (
               <View
+                key={"PropertyTypes-" + index}
                 style={{
                   display: 'flex',
                   flexDirection: 'row',
@@ -387,7 +419,7 @@ const openImagePicker = () => {
               handleInputField('bedRoom', text);
             }}
             text={t('property.numOfRoom')}
-            value={property?.bedRoom || ''}
+            value={property?.bedRoom ?  (property?.bedRoom  + '' ) : ''}
             placeholder={'0'}
             textInputStyle={[styles.field, containerStyle.defaultMarginBottom]}
             style={{marginBottom: SPACINGS.avg}}
@@ -396,10 +428,10 @@ const openImagePicker = () => {
             keyboardType="numeric"
             props={props}
             onChangeText={(text) => {
-              console.log(text);
+              handleInputField("areaUnit", text)
             }}
-            text={t('property.capacity')}
-            value={property?.capacity || ''}
+            text={t('property.areaUnit')}
+            value={property?.areaUnit || ''}
             placeholder={'0'}
             textInputStyle={[styles.field, containerStyle.defaultMarginBottom]}
             style={{marginBottom: SPACINGS.avg}}
@@ -454,7 +486,7 @@ const openImagePicker = () => {
               handleInputField('priceOrMonthlyRent', text);
             }}
             text={t('property.rentalPrice')}
-            value={property?.priceOrMonthlyRent || ''}
+            value={property?.priceOrMonthlyRent ?  (property?.priceOrMonthlyRent  + '' ) : ''}
             placeholder={'0'}
             textInputStyle={[styles.field, containerStyle.defaultMarginBottom]}
           />
@@ -464,7 +496,7 @@ const openImagePicker = () => {
             onChangeText={(text) => {
               handleInputField('bookingAmount', text);
             }}
-            value={property?.bookingAmount || ''}
+            value={property?.bookingAmount ?  (property?.bookingAmount  + '' ) : ''}
             text={t('property.deposit')}
             placeholder={'0'}
             textInputStyle={[styles.field, containerStyle.defaultMarginBottom]}
@@ -506,7 +538,6 @@ const openImagePicker = () => {
             }}
             value={property.leaseDurationMonth || ''}
             style={{flex: 1}}
-            // text={t('property.leaseDurationMonth')}
             placeholder={'0'}
             textInputStyle={[styles.field, containerStyle.defaultMarginBottom]}
           />
@@ -575,6 +606,38 @@ const openImagePicker = () => {
           height: '100%',
           paddingBottom: 50,
         }]}>
+            {/* <GooglePlacesAutocomplete
+            onPress={(data, details = null) => console.log(data)}
+            onFail={(error) => console.error(error)}
+              placeholder='Enter Location'
+              minLength={2}
+              autoFocus={true}
+              returnKeyType={'default'}
+              fetchDetails={true}
+              query={{
+                key: 'AIzaSyCT8yb4sYoFaNhAyaNJaj22fRRN8xny7tk',
+              }}
+              styles={{
+                textInputContainer: {
+                  backgroundColor: 'rgba(0,0,0,0)',
+                  borderTopWidth: 0,
+                  borderBottomWidth: 0,
+                  width: ScreenWidth * 0.9,
+                  borderRadius: RADIUS.default,
+                },
+                textInput: {
+                  marginLeft: 0,
+                  marginRight: 0,
+                  height: 38,
+                  color: '#5d5d5d',
+                  fontSize: 16,
+                  borderRadius: RADIUS.default,
+                },
+                predefinedPlacesDescription: {
+                  color: '#1faadb',
+                },
+              }}
+            /> */}
           <TextInputFlat
           keyboardType="default"
           props={props}
@@ -589,7 +652,7 @@ const openImagePicker = () => {
             containerStyle.defaultMarginBottom,
           ]}
         />
-        <TextInputFlat
+        {/* <TextInputFlat
           keyboardType="default"
           props={props}
           onChangeText={(text) => {
@@ -616,7 +679,7 @@ const openImagePicker = () => {
             styles.field,
             containerStyle.defaultMarginBottom,
           ]}
-        />
+        /> */}
           <GradientButton
             style={styles.nextButton}
             onPress={() => onNextStepPress()}
@@ -778,14 +841,16 @@ const openImagePicker = () => {
                 <TouchableOpacity onPress={() => doSelectUltilities(item)}>
                   <View
                     style={{
-                      width: ScreenWidth * 0.4,
+                      minWidth: ScreenWidth * 0.4,
                       backgroundColor: colors.gray_bg_new,
                       margin: SPACINGS.avg,
                       borderRadius: 40,
                       padding: SPACINGS.small,
                       display: 'flex',
                       flexDirection: 'row',
-                      justifyContent: 'space-around',
+                      justifyContent: 'center',
+                      alignContent: "center",
+                      alignItems: "center"
                     }}>
                     <MaterialCommunityIcons
                       color={isSelected ? colors.purpleMain : colors.gray_new}
@@ -870,6 +935,7 @@ const openImagePicker = () => {
             onChangeText={(text) => {
               handleInputField('phoneContact', text);
             }}
+            value={property?.phoneContact ?  (property?.phoneContact  + '' ) : ''}
             text={t('property.phone')}
             placeholder={t('property.phone')}
             textInputStyle={[styles.field, containerStyle.defaultMarginBottom]}
@@ -880,6 +946,7 @@ const openImagePicker = () => {
             onChangeText={(text) => {
               handleInputField('projectName', text);
             }}
+            value={property?.projectName ?  (property?.projectName  + '' ) : ''}
             text={t('property.title')}
             placeholder={t('property.title')}
             textInputStyle={[styles.field, containerStyle.defaultMarginBottom]}
@@ -887,6 +954,7 @@ const openImagePicker = () => {
           <TextInputFlat
             keyboardType="default"
             props={props}
+            value={property?.description ?  (property?.description  + '' ) : ''}
             onChangeText={(text) => {
               handleInputField('description', text);
             }}
@@ -1021,6 +1089,7 @@ const openImagePicker = () => {
     }
   }
   const postNewProperty = () => {
+    console.log(address)
     let amenities = initAmenities();
 
     let propertyDTO = {
@@ -1030,20 +1099,22 @@ const openImagePicker = () => {
       amenities: amenities,
       attachmentMedia: attachmentMedia,
       address: address,
-      availabilityDate: moment(availabilityDate).valueOf()
+      availabilityDate: moment(availabilityDate).valueOf(),
+      youAre: role
     };
+    console.log("propertyDTO @@@@@@@@@@@@@@@@@@@@@@@@@@@");
     console.log(propertyDTO);
     setIsLoading(true);
     AxiosFetcher({
       method: 'POST',
-      url: '/property/create',
+      url: property?.id ? '/property/update' : '/property/create',
       hasToken: true,
       data: propertyDTO
     })
       .then((val) => {
-        if (val?.data !== '') {
+        if (val !== '') {
           setIsLoading(false);
-          console.log(val)
+          NavigationService.navigate(ScreenNames.PropertyListScreen);
         } else {
           setIsLoading(false);
           ToastHelper.showError(t('account.getInfoErr'));
