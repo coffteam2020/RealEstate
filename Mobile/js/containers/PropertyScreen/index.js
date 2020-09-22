@@ -52,6 +52,7 @@ import TextInputFlatNew from '../../shared/components/TextInput/TextInputFlatNew
 import {uploadFileToFireBase} from '../../shared/utils/firebaseStorageUtils';
 import ModalConfirm from '../../shared/components/Modal/ModalConfirm';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import { TimeHelper } from '../../shared/utils/helper/timeHelper';
 
   const labels = ['Infomation', 'Address', 'Utilities', 'Conformation'];
   const customStyles = {
@@ -91,6 +92,11 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
     {label: 'Female', value: 'FEMALE'},
   ];
 
+  const PropertyFors = [
+    {label: 'Sale', value: 'Sale'},
+    {label: 'Rent', value: 'Rent'},
+  ];
+
   const ListUltilities = [
     {label: 'Internet', value: 'Internet', icon: 'wifi'},
     {label: 'Water', value: 'Water', icon: 'water'},
@@ -118,16 +124,15 @@ const PropertyScreen = (props) => {
   const {userStore} = useStores();
   const [userInfo, setUserInfo] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [avt, setAvt] = useState('');
   const [propertyType, setPropertyType] = useState(PropertyTypes[0].value);
-  const [gender, setGender] = useState(Genders[0].value);
+  const [propertyFor, setPropertyFor] = useState(PropertyFors[0].value);
   const [currentPage, setCurrentPage] = useState(0);
   const [parkingAvailable, setParkingAvailable] = useState(false);
   const [property, setProperty] = useState({});
   const [address, setAddress] = useState({});
   const [images, setImages] = useState([]);
-  const [localImages, setLocalImages] = useState([]);
   const [firebaseImages, setFirebaseImages] = useState([]);
+  const [localImages, setLocalImages] = useState([]);
   const [attachmentMedia, setAttachmentMedia] = useState([]);
   const [selectedUltilities, setSelectedUltilities] = useState([]);
   const [showOpenTime, setShowOpenTime] = useState(false);
@@ -164,20 +169,25 @@ const PropertyScreen = (props) => {
 
   const initPropertFromParam = () =>{
     if(null != propertyParam){
-      console.log(propertyParam)
       setProperty(propertyParam);
       if(propertyParam?.address){
         setAddress({address:propertyParam?.address})
-        console.log({address: propertyParam?.address})
       }
       setSelectedUltilities(propertyParam?.amenities);
-      setImages(propertyParam.photos);
+      setImages(propertyParam?.photos);
+      setFirebaseImages(propertyParam?.photos);
       if(propertyParam?.youAre)
         setRole(propertyParam?.youAre);
       if(propertyParam?.propertyFor)
-        setGender(propertyParam?.propertyFor);
+        setPropertyFor(propertyParam?.propertyFor);
       if(propertyParam?.propertyType)
         setPropertyType(propertyParam?.propertyType);
+      if(propertyParam?.leaseDuration){
+        setLeaseDuration(propertyParam?.leaseDuration);
+      }
+      if(propertyParam?.availabilityDate){
+        setAvailabilityDate(TimeHelper.getTimeDefaultFormat(propertyParam?.availabilityDate));
+      }
     }
   }
   // const getProfile = async () => {
@@ -224,7 +234,8 @@ const PropertyScreen = (props) => {
       //Edit case
       if(images && images.length > 0){
         images.forEach(item => {
-          attachments.push({attactmentType: 'PHOTO', urlMedia: item});
+          if(firebaseImages.indexOf(item) !== -1)
+            attachments.push({attactmentType: 'PHOTO', urlMedia: item});
         })
       }
       setAttachmentMedia(attachments);
@@ -242,12 +253,6 @@ const PropertyScreen = (props) => {
     }
     
   };
-
-  const rightIco = isLoading ? null : (
-    <TextNormal text={t('social.post')}></TextNormal>
-  );
-
-  
 
   const getStepIndicatorIconConfig = ({position, stepStatus}) => {
     const iconConfig = {
@@ -440,9 +445,9 @@ const openImagePicker = () => {
 
         <TextNormal
           style={{width: ScreenWidth * 0.9}}
-          text={t('property.youAre')}></TextNormal>
+          text={t('property.propertyFor')}></TextNormal>
         <View style={{marginBottom: SPACINGS.large, width: ScreenWidth * 0.7}}>
-          {Genders.map((item, index) => {
+          {PropertyFors.map((item, index) => {
             return (
               <View
                 style={{
@@ -458,14 +463,14 @@ const openImagePicker = () => {
                   <TextNormal text={item.label} />
                 </TouchableOpacity>
                 <CheckBox
-                  disabled={gender === item.value}
+                  disabled={propertyFor === item.value}
                   onCheckColor={colors.purpleMain}
                   onTintColor={colors.purpleMain}
                   key={index}
-                  value={gender === item.value}
+                  value={propertyFor === item.value}
                   style={{height: 20}}
                   onValueChange={(newValue) => {
-                    setGender(item.value);
+                    handleInputField("propertyFor", item.value);
                   }}
                 />
               </View>
@@ -536,7 +541,7 @@ const openImagePicker = () => {
             onChangeText={(text) => {
               handleInputField('leaseDurationMonth', text);
             }}
-            value={property.leaseDurationMonth || ''}
+            value={property?.leaseDurationMonth ? (property?.leaseDurationMonth + '') : ''}
             style={{flex: 1}}
             placeholder={'0'}
             textInputStyle={[styles.field, containerStyle.defaultMarginBottom]}
@@ -547,7 +552,6 @@ const openImagePicker = () => {
               style={{display: 'flex', flexDirection: 'row'}}
               onPress={() => {
                 setParkingAvailable(!parkingAvailable);
-                console.log(!parkingAvailable);
                 if (parkingAvailable) {
                   setReservedParking(0);
                   setProperty({...property, reservedParking: ''});
@@ -579,7 +583,6 @@ const openImagePicker = () => {
             textInputStyle={[styles.field, containerStyle.defaultMarginBottom]}
             hasCheckbox={true}
             checkboxChange={(checked) => {
-              console.log(checked);
               if (checked) {
                 setProperty({...property, reservedParking: 0});
               } else {
@@ -652,34 +655,6 @@ const openImagePicker = () => {
             containerStyle.defaultMarginBottom,
           ]}
         />
-        {/* <TextInputFlat
-          keyboardType="default"
-          props={props}
-          onChangeText={(text) => {
-            handleInputFieldAddress("district", text);
-          }}
-          value={address?.district || ''}
-          text={t('account.district')}
-          placeholder={''}
-          textInputStyle={[
-            styles.field,
-            containerStyle.defaultMarginBottom,
-          ]}
-        />
-        <TextInputFlat
-          keyboardType="default"
-          props={props}
-          onChangeText={(text) => {
-            handleInputFieldAddress("city", text);
-          }}
-          value={address?.city || ''}
-          text={t('account.city')}
-          placeholder={''}
-          textInputStyle={[
-            styles.field,
-            containerStyle.defaultMarginBottom,
-          ]}
-        /> */}
           <GradientButton
             style={styles.nextButton}
             onPress={() => onNextStepPress()}
@@ -733,7 +708,6 @@ const openImagePicker = () => {
               data={images}
               keyExtractor={(item, index) => index}
               renderItem={({item}) => {
-                // console.log(item.uri);
                 return (
                   <TouchableOpacity
                     style={{
@@ -977,7 +951,7 @@ const openImagePicker = () => {
                 styles.field,
                 containerStyle.defaultMarginBottom,
                 {
-                  width: ScreenWidth * 0.4,
+                  width: ScreenWidth * 0.9,
                   backgroundColor: colors.gray_bg_new,
                 },
               ]}
@@ -986,7 +960,7 @@ const openImagePicker = () => {
                   ? moment(availabilityDate).format('DD/MM/yyyy')
                   : ''
               }
-              style={{width: ScreenWidth * 0.4}}
+              style={{width: ScreenWidth * 0.9}}
               hasRightIco={true}
               ico={<Ionicons name={'time'} size={24}></Ionicons>}
               onPressIco={() => setShowOpenTime(true)}
@@ -1005,40 +979,6 @@ const openImagePicker = () => {
               confirmTextIOS={t('common.confirm')}
               headerTextIOS={t('common.pickATime')}
             />
-
-            {/* <TextInputFlatNew
-              onPress={() => setShowCloseTime(true)}
-                value={openTime ? moment(closeTime).format('DD/MM/yyyy') : ''}
-                keyboardType="default"
-                props={props}
-                placeholder={'close time'}
-                textInputStyle={[
-                  styles.field,
-                  containerStyle.defaultMarginBottom,
-                  {
-                    width: ScreenWidth * 0.4,
-                    backgroundColor: colors.gray_bg_new,
-                  },
-                ]}
-                style={{width: ScreenWidth * 0.4}}
-                hasRightIco={true}
-                ico={<Ionicons name={'time'} size={24}></Ionicons>}
-                onPressIco={() => setShowCloseTime(true)}
-              />
-            <DateTimePickerModal
-              isVisible={showCloseTime}
-              mode="date"
-              isDarkModeEnabled={false}
-              onConfirm={(date) => {
-                setCloseTime(moment(date).toDate());
-                setShowCloseTime(false);
-              }}
-              date={closeTime}
-              onCancel={() => setShowCloseTime(false)}
-              cancelTextIOS={t('common.cancel')}
-              confirmTextIOS={t('common.confirm')}
-              headerTextIOS={t('common.pickADate')}
-            /> */}
           </View>
         </View>
         <GradientButton
@@ -1089,21 +1029,17 @@ const openImagePicker = () => {
     }
   }
   const postNewProperty = () => {
-    console.log(address)
     let amenities = initAmenities();
-
     let propertyDTO = {
       ...property,
       propertyType: propertyType,
-      propertyFor: gender,
+      propertyFor: propertyFor,
       amenities: amenities,
       attachmentMedia: attachmentMedia,
       address: address,
       availabilityDate: moment(availabilityDate).valueOf(),
       youAre: role
     };
-    console.log("propertyDTO @@@@@@@@@@@@@@@@@@@@@@@@@@@");
-    console.log(propertyDTO);
     setIsLoading(true);
     AxiosFetcher({
       method: 'POST',
@@ -1119,11 +1055,9 @@ const openImagePicker = () => {
           setIsLoading(false);
           ToastHelper.showError(t('account.getInfoErr'));
         }
-        console.log(val);
         //TODO
       })
       .catch((error) => {
-        console.log(error);
         setIsLoading(false);
         ToastHelper.showError(t('account.getInfoErr'));
       });

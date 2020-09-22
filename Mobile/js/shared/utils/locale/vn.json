@@ -428,6 +428,8 @@
     "youAre": "Bạn là: ",
     "propertyType": "Type",
     "information":"Infomation",
+    "propertyFor": "Property For",
+    "postDate": "Ngày đăng"
   },
   "setting" : {
     "permission" : {

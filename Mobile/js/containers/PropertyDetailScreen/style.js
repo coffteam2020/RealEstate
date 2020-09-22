@@ -41,8 +41,7 @@ export const styles = StyleSheet.create({
   detailContent: {
     display: 'flex',
     flexDirection: 'row',
-    marginTop: SPACINGS.small,
-    marginBottom: SPACINGS.small,
+    margin: SPACINGS.avg
   },
   buttonEitWrapper: {
     display: 'flex',

@@ -407,5 +407,7 @@
     "youAre": "You Are",
     "propertyType": "Type",
     "information":"Infomation",
+    "propertyFor": "Property For",
+    "postDate": "Posting Date"
   }
 }

@@ -207,6 +207,54 @@ const PropertyDetailScreen = (props) => {
             )}
           </View>
         </View>
+      
+        <View
+          style={[
+            containerStyle.defaultMarginTop,
+            containerStyle.defaultMarginBottom,
+            styles.detailContentWrapper,
+          ]}>
+          <TextNormal
+            style={{fontSize: FONTSIZES.avg, margin: SPACINGS.avg}}
+            text={t('property.postDate')}></TextNormal>
+          <View style={styles.detailContent}>
+            <Ionicons
+              name="calendar"
+              size={16}
+              color={colors.gray_new}></Ionicons>
+            <TextNormal
+              style={{
+                fontSize: FONTSIZES.avg,
+                marginLeft: SPACINGS.small,
+                marginRight: SPACINGS.small,
+                color: colors.purpleMain,
+              }}
+              text={property?.availabilityDate ? (moment(property?.availabilityDate).format("DD / MMM / yyyy")) : 'N/A'}></TextNormal>
+          </View>
+        </View>
+
+        <View
+          style={[
+            containerStyle.defaultMarginTop,
+            containerStyle.defaultMarginBottom,
+            styles.detailContentWrapper,
+          ]}>
+          <TextNormal
+            style={{fontSize: FONTSIZES.avg, margin: SPACINGS.avg, }}
+            text={t('property.description')}></TextNormal>
+          <View style={styles.detailContent}>
+            <TextNormal
+              style={{
+                fontSize: FONTSIZES.avg,
+                marginLeft: SPACINGS.small,
+                marginRight: SPACINGS.small,
+                color: colors.purpleMain,
+              }}
+              numberOfLines={10}
+              text={property?.description}></TextNormal>
+          </View>
+        </View>
+                
       </View>
     );
   };
