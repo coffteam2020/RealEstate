@@ -50,7 +50,12 @@
     "gotIt": "Okay, I got it",
     "done": "Done",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "call": "Call",
+    "chat": "Chat",
+    "book": "Book",
+    "edit":"Edit",
+    "delete": "Delete"
   },
   "error": {
     "common": "Something wrong, please try again!",
@@ -379,6 +384,8 @@
     "createTitle" : "List your space",
     "numOfRoom": "Number of room",
     "capacity": "Capacity",
+    "areaUnit": "Area Unit",
+    "size": "Size",
     "rentalPrice": "Rental Price",
     "deposit": "Deposit",
     "electricityCost": "Electricity Cost",
@@ -400,5 +407,7 @@
     "youAre": "You Are",
     "propertyType": "Type",
     "information":"Infomation",
+    "propertyFor": "Property For",
+    "postDate": "Posting Date"
   }
 }

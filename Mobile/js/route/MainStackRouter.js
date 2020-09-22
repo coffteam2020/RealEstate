@@ -30,6 +30,9 @@ import styles from './styles';
 import SocialScreen from '../containers/SocialScreen';
 import NewPostScreen from '../containers/NewPostScreen';
 import PostDetailScreen from '../containers/PostDetailScreen';
+import PropertyScreen from '../containers/PropertyScreen';
+import PropertyListScreen from '../containers/PropertyListScreen';
+import PropertyDetailScreen from '../containers/PropertyDetailScreen';
 
 // ScreenNavigator for separately each screen into stack one
 const MateScreenNavigator = createStackNavigator(
@@ -44,7 +47,7 @@ const MateScreenNavigator = createStackNavigator(
     initialRouteName: 'MateScreen',
   },
 );
-const SocialcreenNavigator = createStackNavigator(
+const SocialScreenNavigator = createStackNavigator(
   {
     SocialScreen: {screen: SocialScreen},
     NewPostScreen: {screen: NewPostScreen},
@@ -54,6 +57,18 @@ const SocialcreenNavigator = createStackNavigator(
     mode: 'modal',
     headerMode: 'none',
     initialRouteName: 'SocialScreen',
+  },
+);
+const PropertyScreenNavigator = createStackNavigator(
+  {
+    PropertyListScreen: {screen: PropertyListScreen},
+    PropertyScreen: {screen: PropertyScreen},
+    PropertyDetailScreen: {screen: PropertyDetailScreen}
+  },
+  {
+    mode: 'modal',
+    headerMode: 'none',
+    initialRouteName: 'PropertyListScreen',
   },
 );
 const ProfileNavigator = createStackNavigator(
@@ -79,6 +94,9 @@ const ExplorerNavigator = createStackNavigator(
   {
     ExploreScreen: {screen: ExploreScreen},
     ListProductScreen: {screen: ListProductScreen},
+    PropertyListScreen: {screen: PropertyListScreen},
+    PropertyScreen: {screen: PropertyScreen},
+    PropertyDetailScreen: {screen: PropertyDetailScreen}
   },
   {
     mode: 'modal',

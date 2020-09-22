@@ -18,7 +18,10 @@ export const ScreenNames = {
   List: 'List',
   NewPostScreen: 'NewPostScreen',
   PostDetailScreen: 'PostDetailScreen',
-  SocialScreen : 'SocialScreen'
+  SocialScreen : 'SocialScreen',
+  PropertyScreen : 'PropertyScreen',
+  PropertyListScreen: 'PropertyListScreen',
+  PropertyDetailScreen: 'PropertyDetailScreen',
 };
 
 export default {

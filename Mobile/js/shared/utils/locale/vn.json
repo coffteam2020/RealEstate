@@ -47,7 +47,12 @@
     "gotIt": "Tôi đã hiểu",
     "done": "Xong",
     "yes": "Có",
-    "no": "Không"
+    "no": "Không",
+    "call": "Gọi",
+    "chat": "Nhắn tin",
+    "book": "Book",
+    "edit":"Chỉnh sửa",
+    "delete": "Xoá"
   },
   "error": {
     "common": "Có lỗi xảy ra, vui lòng thử lại!",
@@ -400,6 +405,8 @@
     "createTitle" : "List your space",
     "numOfRoom": "Number of room",
     "capacity": "Capacity",
+    "areaUnit": "Area Unit",
+    "size": "Size",
     "rentalPrice": "Rental Price",
     "deposit": "Deposit",
     "electricityCost": "Electricity Cost",
@@ -421,6 +428,8 @@
     "youAre": "Bạn là: ",
     "propertyType": "Type",
     "information":"Infomation",
+    "propertyFor": "Property For",
+    "postDate": "Ngày đăng"
   },
   "setting" : {
     "permission" : {
