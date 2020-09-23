@@ -13,7 +13,7 @@ import {NavigationService} from '../navigation';
 import {ScreenNames} from '../route/ScreenNames';
 
 export const APP_URL = 'http://128.199.127.184:8080/api/';
-
+// export const APP_URL = 'http://localhost:8080/api/';
 const AxiosInstance = Axios.create({
   timeout: 200000,
 });
