@@ -50,12 +50,12 @@ export const styles = StyleSheet.create({
   cardTitle:{
     color: colors.black,
     textAlign: "center",
-    fontSize: FONTSIZES.avg,
+    fontSize: 18,
     textAlign: "center"
   },
   cardContent:{
-    color: colors.black,
-    fontSize: FONTSIZES.avg
+    color: colors.gray_new,
+    fontSize: 15
   }
 });
 

@@ -431,6 +431,19 @@
     "propertyFor": "Property For",
     "postDate": "Ngày đăng"
   },
+  "explorer": {
+    "search": "Find district, name, ...",
+    "hurry": "All",
+    "nearby": "Near by",
+    "ownerOnsite": "Verified",
+    "yourPlaces": "Yours",
+    "properties": "Properties",
+    "trend": "Search trends",
+    "facebook": "DFace",
+    "dMark": "DMark",
+    "dCar": "DCar",
+    "dShare": "DShare"
+  }, 
   "setting" : {
     "permission" : {
       "record" : "Cấp quyền ghi âm để sử dụng chức năng này!",

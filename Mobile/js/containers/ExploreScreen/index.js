@@ -59,9 +59,13 @@ const ExploreScreen = (props) => {
     {
       title: t('explorer.yourPlaces'),
       icon: images.space,
+    },
+    {
+      title: t('explorer.properties'),
+      icon: images.space,
       onPress: () =>
         NavigationService.navigate(ScreenNames.PropertyListScreen, {
-          key: t('explorer.yourPlaces'),
+          key: t('explorer.properties'),
         }),
     },
   ];

@@ -56,30 +56,6 @@ const PropertyListScreen = (props) => {
     });
     getPropertyList();
   }, []);
-  // const getProfile = async () => {
-  //   let userInfo = await IALocalStorage.getDetailUserInfo();
-  //   setIsLoading(true);
-  //   AxiosFetcher({
-  //     method: 'GET',
-  //     url: 'user/' + userInfo?.id,
-  //     hasToken: true,
-  //   })
-  //     .then((val) => {
-  //       if (val?.data !== '') {
-  //         setIsLoading(false);
-  //         userStore.userInfo = val;
-  //         setUserInfo(val);
-  //         setAvt(val?.avatar);
-  //       } else {
-  //         setIsLoading(false);
-  //         ToastHelper.showError(t('account.getInfoErr'));
-  //       }
-  //     })
-  //     .catch(() => {
-  //       setIsLoading(false);
-  //       ToastHelper.showError(t('account.getInfoErr'));
-  //     });
-  // };
 
   const getPropertyList = async () => {
     setIsLoading(true);
@@ -88,7 +64,7 @@ const PropertyListScreen = (props) => {
       url: '/property/findAllWithPagination/?limit=1000&offset=0&sortBy=id',
       hasToken: true,
     })
-      .then(async (val) => {
+      .then((val) => {
         setIsLoading(false);
         if (val?.content !== '') {
           setProperties(val.content);
@@ -98,15 +74,13 @@ const PropertyListScreen = (props) => {
         }
       })
       .catch((error) => {
-        console.log("****************************")
-        console.log(error)
         setIsLoading(false);
         setProperties([]);
         // ToastHelper.showError(t('account.getInfoErr'));
       });
   };
 
-  const renderMates = () => {
+  const renderProperties = () => {
     if (properties && properties.length === 0) {
       return <Empty />;
     }
@@ -203,9 +177,10 @@ const PropertyListScreen = (props) => {
           rightIco={<Ionicons name="add" size={20} color={colors.blackInput} />}
         />
         <ScrollView nestedScrollEnabled contentContainerStyle={styles.content}>
-          {renderMates()}
+          {renderProperties()}
         </ScrollView>
       </SafeAreaView>
+      {isLoading && <Loading />}
     </View>
   ));
   };

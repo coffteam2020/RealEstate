@@ -248,7 +248,7 @@ const PropertyDetailScreen = (props) => {
                 fontSize: FONTSIZES.avg,
                 marginLeft: SPACINGS.small,
                 marginRight: SPACINGS.small,
-                color: colors.purpleMain,
+                color: colors.gray_new,
               }}
               numberOfLines={10}
               text={property?.description}></TextNormal>
