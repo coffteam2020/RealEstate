@@ -1,11 +1,10 @@
 import {StyleSheet} from 'react-native';
 import {colors} from '../../shared/utils/colors/colors';
 import {SPACINGS, RADIUS} from '../../themes';
-import {safeTopHeight, ScreenWidth} from '../../shared/utils/dimension/Divices';
+import {safeTopHeight, ScreenHeight, ScreenWidth} from '../../shared/utils/dimension/Divices';
 
 export const styles = StyleSheet.create({
   mainContainer: {
-    flex: 1,
     backgroundColor: colors.white,
   },
   content: {
@@ -28,7 +27,7 @@ export const styles = StyleSheet.create({
   },
   listMessages: {
     marginTop: SPACINGS.xLarge,
-    height: '100%',
+    height: '80%'
   },
   textInputHeader: {
     paddingHorizontal: SPACINGS.xxLarge,

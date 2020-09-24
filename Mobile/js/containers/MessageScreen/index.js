@@ -253,6 +253,7 @@ const MessageScreen = (props) => {
             renderItem={({item, index}) => renderMessageItem(item, index)}
             keyExtractor={(item, index) => index + ''}
             style={styles.listMessages}
+            // contentContainerStyle={styles.listMessages}
           />
         ) : (
           <Empty

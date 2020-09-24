@@ -16,7 +16,7 @@ import FastImage from 'react-native-fast-image';
 const MessageItem = ({item, onItemPress, index, currentUser}) => {
   return (
     <Animatable.View animation="slideInLeft" delay={index * 200}>
-      <View style={{backgroundColor: colors.whiteTransparent}}>
+      <View style={{backgroundColor: colors.whiteTransparent, height: 100}}>
         <TouchableOpacity
           onPress={() => onItemPress && onItemPress(item)}
           style={styles.container}

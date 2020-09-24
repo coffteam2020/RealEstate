@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StatusBar,
   View,
@@ -7,42 +7,42 @@ import {
   TouchableOpacity,
   ImageBackground,
 } from 'react-native';
-import {styles} from './style';
-import {withTheme} from 'react-native-paper';
-import {containerStyle} from '../../themes/styles';
-import {useTranslation} from 'react-i18next';
-import {useStores} from '../../store/useStore';
+import { styles } from './style';
+import { withTheme } from 'react-native-paper';
+import { containerStyle } from '../../themes/styles';
+import { useTranslation } from 'react-i18next';
+import { useStores } from '../../store/useStore';
 import Swiper from 'react-native-swiper';
 import GetLocation from 'react-native-get-location';
-import {images} from '../../../assets';
-import {Linking} from 'react-native';
+import { images } from '../../../assets';
+import { Linking } from 'react-native';
 import InAppBrowser from 'react-native-inappbrowser-reborn';
 import FastImage from 'react-native-fast-image';
 import TextInputFlatLeftIconTouchable from '../../shared/components/TextInput/TextInputFlatLeftIconTouchable';
-import {ScreenHeight, ScreenWidth} from '../../shared/utils/dimension/Divices';
+import { ScreenHeight, ScreenWidth } from '../../shared/utils/dimension/Divices';
 import TextNormal from '../../shared/components/Text/TextNormal';
 import icons from '../../shared/utils/icons/icons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
-import {colors} from '../../shared/utils/colors/colors';
+import { colors } from '../../shared/utils/colors/colors';
 import AxiosFetcher from '../../api/AxiosFetch';
-import {NavigationService} from '../../navigation';
-import {ScreenNames} from '../../route/ScreenNames';
+import { NavigationService } from '../../navigation';
+import { ScreenNames } from '../../route/ScreenNames';
 import IALocalStorage from '../../shared/utils/storage/IALocalStorage';
 import { ToastHelper } from '../../shared/components/ToastHelper';
 
 const HOME_BANNERS = [
-  {imgUrl: images.home1},
-  {imgUrl: images.home2},
-  {imgUrl: images.home3},
-  {imgUrl: images.home4},
-  {imgUrl: images.home5},
+  { imgUrl: images.home1 },
+  { imgUrl: images.home2 },
+  { imgUrl: images.home3 },
+  { imgUrl: images.home4 },
+  { imgUrl: images.home5 },
 ];
 
 const ExploreScreen = (props) => {
-  const {colorsApp} = props.theme;
-  const {t} = useTranslation();
-  const {userStore} = useStores();
+  const { colorsApp } = props.theme;
+  const { t } = useTranslation();
+  const { userStore } = useStores();
   const [trends, setTrends] = useState([]);
 
   const BTNS = [
@@ -54,18 +54,29 @@ const ExploreScreen = (props) => {
           key: t('explorer.hurry'),
         }),
     },
-    {title: t('explorer.nearby'), icon: images.nearby},
-    {title: t('explorer.ownerOnsite'), icon: images.noowner},
+    { title: t('explorer.nearby'), icon: images.nearby },
+    { title: t('explorer.ownerOnsite'), icon: images.noowner },
     {
       title: t('explorer.yourPlaces'),
       icon: images.space,
     },
+
+  ];
+  const BTNS3 = [
     {
       title: t('explorer.properties'),
       icon: images.space,
       onPress: () =>
         NavigationService.navigate(ScreenNames.PropertyListScreen, {
           key: t('explorer.properties'),
+        }),
+    },
+    {
+      title: t('explorer.social'),
+      icon: images.hurry,
+      onPress: () =>
+        NavigationService.navigate(ScreenNames.SocialScreen, {
+          key: t('explorer.social'),
         }),
     },
   ];
@@ -275,13 +286,13 @@ const ExploreScreen = (props) => {
         });
       })
       .catch((error) => {
-        const {code, message} = error;
+        const { code, message } = error;
         console.warn(code, message);
       });
   };
   const renderBanner = () => {
     return (
-      <View style={{height: ScreenHeight * 0.25}}>
+      <View style={{ height: ScreenHeight * 0.25 }}>
         <Swiper
           autoplay
           autoplayTimeout={5}
@@ -318,14 +329,14 @@ const ExploreScreen = (props) => {
   };
   const renderBtns = () => {
     return (
-      <View style={[containerStyle.shadow, {borderRadius: 20}]}>
-        <View style={[styles.banner, {paddingTop: 20}]}>
+      <View style={[containerStyle.shadow, { borderRadius: 20 }]}>
+        <View style={[styles.banner, { paddingTop: 20 }]}>
           {BTNS?.map((item) => {
             return (
               <TouchableOpacity style={styles.button} onPress={item?.onPress}>
                 <FastImage
                   source={item?.icon}
-                  style={{width: 40, height: 40}}
+                  style={{ width: 40, height: 40 }}
                 />
                 <TextNormal
                   text={item?.title}
@@ -339,18 +350,42 @@ const ExploreScreen = (props) => {
         <View
           style={[
             styles.banner,
-            {borderBottomLeftRadius: 20, borderBottomRightRadius: 20},
           ]}>
           {BTNS2?.map((item) => {
             return (
               <TouchableOpacity
                 style={[styles.button]}
                 onPress={() => tryOpenIAP(item?.link)}>
-                <View style={[styles.btn2, {backgroundColor: item?.color}]}>
+                <View style={[styles.btn2, { backgroundColor: item?.color }]}>
                   <Feather
                     name={item?.iconName}
                     color={item?.iconColor}
                     size={20}
+                  />
+                </View>
+                <TextNormal
+                  text={item?.title}
+                  numberOfLines={5}
+                  style={styles.buttonText}
+                />
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+        <View
+          style={[
+            styles.banner,
+            { borderBottomLeftRadius: 20, borderBottomRightRadius: 20 },
+          ]}>
+          {BTNS3?.map((item) => {
+            return (
+              <TouchableOpacity
+                style={[styles.button]}
+                onPress={() => item?.onPress()}>
+                <View style={[styles.btn2, { backgroundColor: item?.color }]}>
+                  <FastImage
+                    source={item?.icon}
+                    style={{ width: 40, height: 40 }}
                   />
                 </View>
                 <TextNormal
@@ -370,8 +405,8 @@ const ExploreScreen = (props) => {
     return (
       <View style={styles.trendContainer}>
         <ImageBackground
-          source={{uri: MOCK[0].photo[0]}}
-          imageStyle={{borderRadius: 20}}
+          source={{ uri: MOCK[0].photo[0] }}
+          imageStyle={{ borderRadius: 20 }}
           style={styles.img1}>
           <View style={styles.shadownImg1}>
             <TextNormal
@@ -380,10 +415,10 @@ const ExploreScreen = (props) => {
             />
           </View>
         </ImageBackground>
-        <View style={{flex: 2, marginLeft: 10}}>
+        <View style={{ flex: 2, marginLeft: 10 }}>
           <ImageBackground
-            source={{uri: MOCK[1].photo[0]}}
-            imageStyle={{borderRadius: 20}}
+            source={{ uri: MOCK[1].photo[0] }}
+            imageStyle={{ borderRadius: 20 }}
             style={styles.img2}>
             <View style={styles.shadowImg2}>
               <TextNormal
@@ -396,8 +431,8 @@ const ExploreScreen = (props) => {
             </View>
           </ImageBackground>
           <ImageBackground
-            imageStyle={{borderRadius: 20}}
-            source={{uri: MOCK[2].photo[0]}}
+            imageStyle={{ borderRadius: 20 }}
+            source={{ uri: MOCK[2].photo[0] }}
             style={styles.img3}>
             <View style={styles.shadowImg3}>
               <TextNormal
@@ -416,16 +451,16 @@ const ExploreScreen = (props) => {
   return (
     <View style={[containerStyle.defaultBackground]}>
       <StatusBar barStyle={colorsApp.statusBar} />
-      <ScrollView contentContainerStyle={[styles.mainContainer]} style={{}}>
+      <ScrollView contentContainerStyle={[styles.mainContainer]} style={{paddingBottom: ScreenHeight/2}}>
         {renderBanner()}
         {renderSearch()}
         {renderBtns()}
-        <View style={{width: '100%', marginLeft: 35, marginTop: 20}}>
-          <TextNormal
+        <View style={{ width: '100%', marginLeft: 35, marginTop: 20 }}>
+          {/* <TextNormal
             text={t('explorer.trend')}
             style={containerStyle.textHeaderSmall}
-          />
-          {renderSearchTrend()}
+          /> */}
+          {/* {renderSearchTrend()} */}
         </View>
       </ScrollView>
     </View>

@@ -316,7 +316,8 @@
     "facebook": "DFace",
     "dMark": "DMark",
     "dCar": "DCar",
-    "dShare": "DShare"
+    "dShare": "DShare",
+    "social": "Social",
   }, 
   "location":{
     "near": "Find near you",
@@ -336,7 +337,7 @@
     "followAsk": "Great, move on",
     "followAskContent": "You want to see detail or follow her/him?",
     "female": "Female",
-    "detail": "Mate detail",
+    "detail": "Friend detail",
     "looking": "Looking for",
     "searchLocation": "Searching location",
     "chat": "Chat",

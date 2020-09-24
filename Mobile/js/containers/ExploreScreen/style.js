@@ -4,7 +4,6 @@ import {colors} from '../../shared/utils/colors/colors';
 
 export const styles = StyleSheet.create({
   mainContainer: {
-    height: '100%',
     alignItems: 'center',
   },
   slide1: {
@@ -52,7 +51,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonText: {
-    width: ScreenWidth / 4 - 40,
+    width: ScreenWidth / 4 - 30,
     textAlign: 'center',
     fontSize: 12,
   },

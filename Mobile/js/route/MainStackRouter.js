@@ -202,7 +202,8 @@ const TabNavigator = createStackNavigator(
     ChatRoomScreen: {screen: ChatRoomScreen},
     Livestream: {screen: Livestream},
     InformationRoom: {screen: InformationRoom},
-    VideoCallScreen: {screen: VideoCallScreen}
+    VideoCallScreen: {screen: VideoCallScreen},
+    SocialScreen: {screen: SocialScreenNavigator},
   },
   {
     mode: 'modal',

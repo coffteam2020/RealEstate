@@ -474,7 +474,7 @@ const SocialScreen = (props) => {
     <View style={[containerStyle.default]}>
       <StatusBar barStyle={colorsApp.statusBar} />
       <SafeAreaView>
-        <HeaderFull title={t('social.title')} />
+        <HeaderFull title={t('social.title')} hasButton={true} />
         <ScrollView nestedScrollEnabled contentContainerStyle={styles.content}>
           {renderAllPost()}
         </ScrollView>

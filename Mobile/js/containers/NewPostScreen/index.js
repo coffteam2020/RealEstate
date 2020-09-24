@@ -196,6 +196,7 @@ const NewPostScreen = (props) => {
       ).then(val =>{
         setIsLoading(false);
         console.log(val);
+        ToastHelper.showSuccess('Success create new post, enjoy! 🚲')
         NavigationService.goBack();
       });
       return;

@@ -3,24 +3,24 @@
  * Email: nguyenngoctan44@gmail.com
  */
 import 'react-native-gesture-handler';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import AppContainer from './js/route/MainStackRouter';
-import {Provider as PaperProvider} from 'react-native-paper';
-import {ToastHelper} from './js/shared/components/ToastHelper';
+import { Provider as PaperProvider } from 'react-native-paper';
+import { ToastHelper } from './js/shared/components/ToastHelper';
 import DropdownAlert from './js/shared/components/DropDownAlert/DropdownAlert';
-import {Text, Platform} from 'react-native';
-import {initialMode} from 'react-native-dark-mode';
-import {Appearance} from 'react-native-appearance';
-import {CustomDarkTheme, CustomLightTheme} from './js/themes/index';
-import {NavigationService} from './js/navigation';
+import { Text, Platform } from 'react-native';
+import { initialMode } from 'react-native-dark-mode';
+import { Appearance } from 'react-native-appearance';
+import { CustomDarkTheme, CustomLightTheme } from './js/themes/index';
+import { NavigationService } from './js/navigation';
 import NetInfo from '@react-native-community/netinfo';
 import firebase from '@react-native-firebase/app';
 import ModalConnection from './js/shared/components/Modal/ModalConnection';
 import Constant from './js/shared/utils/constant/Constant';
-import {useObserver} from 'mobx-react';
-import {useStores} from './js/store/useStore';
+import { useObserver } from 'mobx-react';
+import { useStores } from './js/store/useStore';
 import ModalImage from './js/shared/components/Modal/ModalImage';
-import {notificationInitialize} from './js/shared/utils/notification/init';
+import { notificationInitialize } from './js/shared/utils/notification/init';
 import IALocalStorage from './js/shared/utils/storage/IALocalStorage';
 var PushNotification = require('react-native-push-notification');
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
@@ -40,16 +40,16 @@ function getActiveRouteName(navigationState) {
 const firebaseConfig = {
   ...Constant.FIREBASE,
   ...(Platform.OS === 'android'
-    ? {appId: Constant.FIREBASE_SPECIFIC.appIdAndroid}
-    : {appId: Constant.FIREBASE_SPECIFIC.appIdiOS}),
+    ? { appId: Constant.FIREBASE_SPECIFIC.appIdAndroid }
+    : { appId: Constant.FIREBASE_SPECIFIC.appIdiOS }),
 };
 const App = () => {
   const [currentScreen, setCurrentScreen] = useState('');
-  const {homeStore, userStore} = useStores();
+  const { homeStore, userStore } = useStores();
   const colorScheme = Appearance.getColorScheme();
   const [isVisible, setIsVisible] = useState(false);
   // userStore?.setCurrentChatRoom('');
-  const setThemeChange = () => {};
+  const setThemeChange = () => { };
   const disableConsole = () => {
     console.log('App started in', initialMode, 'mode', colorScheme);
     console.disableYellowBox = true;
@@ -69,10 +69,10 @@ const App = () => {
     // Clear room local
     IALocalStorage.setRoom('');
     if (!firebase.apps.length) {
-      firebase.initializeApp(firebaseConfig);
+    firebase.initializeApp(firebaseConfig);
     }
-    await firebase.messaging().registerDeviceForRemoteMessages();
-    await firebase.messaging().registerForRemoteNotifications();
+    // await firebase.messaging().registerDeviceForRemoteMessages();
+    // await firebase.messaging().registerForRemoteNotifications();
     notificationInitialize(userStore, currentScreen);
   };
   const configure = () => {
@@ -96,13 +96,14 @@ const App = () => {
     });
   };
   useEffect(() => {
+    connectFirebase();
     configure();
     console.disableYellowBox = true;
     disableConsole();
     setThemeChange();
     removeScalingText();
     netWorkChange();
-    connectFirebase();
+
   }, []);
 
   return useObserver(() => (

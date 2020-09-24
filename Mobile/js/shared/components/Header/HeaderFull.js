@@ -1,25 +1,26 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {colors} from '../../utils/colors/colors';
-import {SIZES, SPACINGS, RADIUS} from '../../../themes';
+import { colors } from '../../utils/colors/colors';
+import { SIZES, SPACINGS, RADIUS } from '../../../themes';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import {StyleSheet, View, TouchableOpacity, Platform} from 'react-native';
-import {NavigationService} from '../../../navigation';
+import { StyleSheet, View, TouchableOpacity, Platform } from 'react-native';
+import { NavigationService } from '../../../navigation';
 import icons from '../../utils/icons/icons';
-import {ScreenWidth, ScreenHeight} from '../../utils/dimension/Divices';
+import { ScreenWidth, ScreenHeight } from '../../utils/dimension/Divices';
 import Back from '../Icons/Back';
 import * as devices from '../../utils/device/device';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import TextNormal from '../Text/TextNormal';
-import {containerStyle} from '../../../themes/styles';
+import { containerStyle } from '../../../themes/styles';
+import { withNavigation } from 'react-navigation';
 
-const HeaderFull = ({title, hasButton = false, rightIco, onPress}) => {
+const HeaderFull = ({ title, hasButton = false, rightIco, onPress }) => {
   return (
-    <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
       <TouchableOpacity
-        style={{width: ScreenWidth / 6}}
+        style={{ width: ScreenWidth / 6 }}
         onPress={() => {
-          hasButton ? NavigationService.goBack() : {};
+          NavigationService.goBack();
         }}>
         {hasButton && <Ionicons name="md-chevron-back-outline" size={30} />}
       </TouchableOpacity>
@@ -50,7 +51,7 @@ const HeaderFull = ({title, hasButton = false, rightIco, onPress}) => {
   );
 };
 
-export default HeaderFull;
+export default withNavigation(HeaderFull);
 
 const styles = StyleSheet.create({
   container: {

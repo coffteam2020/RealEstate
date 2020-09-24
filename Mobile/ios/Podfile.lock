@@ -159,11 +159,11 @@ PODS:
     - abseil/base/config
     - abseil/meta/type_traits
   - AgoraRtcEngine_iOS (2.9.0)
-  - AppAuth (1.3.0):
-    - AppAuth/Core (= 1.3.0)
-    - AppAuth/ExternalUserAgent (= 1.3.0)
-  - AppAuth/Core (1.3.0)
-  - AppAuth/ExternalUserAgent (1.3.0)
+  - AppAuth (1.4.0):
+    - AppAuth/Core (= 1.4.0)
+    - AppAuth/ExternalUserAgent (= 1.4.0)
+  - AppAuth/Core (1.4.0)
+  - AppAuth/ExternalUserAgent (1.4.0)
   - boost-for-react-native (1.63.0)
   - BoringSSL-GRPC (0.0.3):
     - BoringSSL-GRPC/Implementation (= 0.0.3)
@@ -345,7 +345,7 @@ PODS:
     - GoogleUtilities/Network (~> 6.0)
     - "GoogleUtilities/NSData+zlib (~> 6.0)"
     - nanopb (= 0.3.9011)
-  - GoogleDataTransport (6.1.1)
+  - GoogleDataTransport (6.2.1)
   - GoogleDataTransportCCTSupport (3.0.0):
     - GoogleDataTransport (~> 6.0)
     - nanopb (~> 0.3.901)
@@ -353,24 +353,24 @@ PODS:
     - AppAuth (~> 1.2)
     - GTMAppAuth (~> 1.0)
     - GTMSessionFetcher/Core (~> 1.1)
-  - GoogleUtilities/AppDelegateSwizzler (6.6.0):
+  - GoogleUtilities/AppDelegateSwizzler (6.7.2):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
     - GoogleUtilities/Network
-  - GoogleUtilities/Environment (6.6.0):
+  - GoogleUtilities/Environment (6.7.2):
     - PromisesObjC (~> 1.2)
-  - GoogleUtilities/Logger (6.6.0):
+  - GoogleUtilities/Logger (6.7.2):
     - GoogleUtilities/Environment
-  - GoogleUtilities/MethodSwizzler (6.6.0):
+  - GoogleUtilities/MethodSwizzler (6.7.2):
     - GoogleUtilities/Logger
-  - GoogleUtilities/Network (6.6.0):
+  - GoogleUtilities/Network (6.7.2):
     - GoogleUtilities/Logger
     - "GoogleUtilities/NSData+zlib"
     - GoogleUtilities/Reachability
-  - "GoogleUtilities/NSData+zlib (6.6.0)"
-  - GoogleUtilities/Reachability (6.6.0):
+  - "GoogleUtilities/NSData+zlib (6.7.2)"
+  - GoogleUtilities/Reachability (6.7.2):
     - GoogleUtilities/Logger
-  - GoogleUtilities/UserDefaults (6.6.0):
+  - GoogleUtilities/UserDefaults (6.7.2):
     - GoogleUtilities/Logger
   - GPUImage (0.1.7)
   - "gRPC-C++ (0.0.9)":
@@ -419,34 +419,34 @@ PODS:
   - OpenSSL-Universal (1.0.2.19):
     - OpenSSL-Universal/Static (= 1.0.2.19)
   - OpenSSL-Universal/Static (1.0.2.19)
-  - Permission-BluetoothPeripheral (2.1.5):
+  - Permission-BluetoothPeripheral (2.2.1):
     - RNPermissions
-  - Permission-Calendars (2.1.5):
+  - Permission-Calendars (2.2.1):
     - RNPermissions
-  - Permission-Camera (2.1.5):
+  - Permission-Camera (2.2.1):
     - RNPermissions
-  - Permission-Contacts (2.1.5):
+  - Permission-Contacts (2.2.1):
     - RNPermissions
-  - Permission-FaceID (2.1.5):
+  - Permission-FaceID (2.2.1):
     - RNPermissions
-  - Permission-LocationAlways (2.1.5):
+  - Permission-LocationAlways (2.2.1):
     - RNPermissions
-  - Permission-LocationWhenInUse (2.1.5):
+  - Permission-LocationWhenInUse (2.2.1):
     - RNPermissions
-  - Permission-MediaLibrary (2.1.5):
+  - Permission-MediaLibrary (2.2.1):
     - RNPermissions
-  - Permission-Microphone (2.1.5):
+  - Permission-Microphone (2.2.1):
     - RNPermissions
-  - Permission-Motion (2.1.5):
+  - Permission-Motion (2.2.1):
     - RNPermissions
-  - Permission-Notifications (2.1.5):
+  - Permission-Notifications (2.2.1):
     - RNPermissions
-  - Permission-PhotoLibrary (2.1.5):
+  - Permission-PhotoLibrary (2.2.1):
     - RNPermissions
-  - Permission-Reminders (2.1.5):
+  - Permission-Reminders (2.2.1):
     - RNPermissions
-  - PromisesObjC (1.2.8)
-  - Protobuf (3.12.0)
+  - PromisesObjC (1.2.10)
+  - Protobuf (3.13.0)
   - RCTRequired (0.63.2)
   - RCTTypeSafety (0.63.2):
     - FBLazyVector (= 0.63.2)
@@ -624,25 +624,11 @@ PODS:
     - React
   - react-native-document-picker (3.5.4):
     - React
-  - react-native-fbsdk (1.1.2):
-    - React
-    - react-native-fbsdk/Core (= 1.1.2)
-    - react-native-fbsdk/Login (= 1.1.2)
-    - react-native-fbsdk/Share (= 1.1.2)
-  - react-native-fbsdk/Core (1.1.2):
-    - FBSDKCoreKit (= 5.8)
-    - React
-  - react-native-fbsdk/Login (1.1.2):
-    - FBSDKLoginKit (= 5.8)
-    - React
-  - react-native-fbsdk/Share (1.1.2):
-    - FBSDKShareKit (= 5.8)
-    - React
-  - react-native-image-picker (2.3.3):
-    - React
+  - react-native-image-picker (2.3.4):
+    - React-Core
   - react-native-netinfo (5.0.0):
     - React
-  - react-native-notifications (3.3.2):
+  - react-native-notifications (3.3.4):
     - React
   - react-native-safe-area-context (0.7.3):
     - React
@@ -718,17 +704,17 @@ PODS:
     - React
   - RNAudioRecord (0.2.2):
     - React
-  - RNCAsyncStorage (1.11.0):
+  - RNCAsyncStorage (1.12.0):
     - React
-  - RNCCheckbox (0.4.2):
+  - RNCCheckbox (0.5.3):
     - React
   - RNCMaskedView (0.1.10):
     - React
-  - RNCPushNotificationIOS (1.4.0):
+  - RNCPushNotificationIOS (1.5.0):
     - React
-  - RNDateTimePicker (2.6.1):
+  - RNDateTimePicker (2.6.2):
     - React
-  - RNDeviceInfo (5.6.3):
+  - RNDeviceInfo (5.6.5):
     - React
   - RNFastImage (8.3.2):
     - React
@@ -764,24 +750,24 @@ PODS:
     - RNFBApp
   - RNFS (2.16.6):
     - React
-  - RNGestureHandler (1.7.0):
+  - RNGestureHandler (1.8.0):
     - React
   - RNGoogleSignin (4.0.3):
     - GoogleSignIn (~> 5.0.0)
     - React
   - RNI18n (2.0.15):
     - React
-  - RNIap (4.5.2):
-    - React
+  - RNIap (4.6.1):
+    - React-Core
   - RNInAppBrowser (3.4.0):
     - React
   - RNNotifee (0.7.2):
     - React
-  - RNPermissions (2.1.5):
+  - RNPermissions (2.2.1):
+    - React-Core
+  - RNReanimated (1.13.0):
     - React
-  - RNReanimated (1.10.2):
-    - React
-  - RNScreens (2.10.1):
+  - RNScreens (2.11.0):
     - React
   - RNScreenshotDetector (1.1.0):
     - React
@@ -792,14 +778,11 @@ PODS:
     - React
   - RNSVG (9.13.6):
     - React
-  - RNTextDetector (0.0.6):
-    - React
-    - TesseractOCRiOS (~> 4.0.0)
   - RNVectorIcons (6.7.0):
     - React
-  - SDWebImage (5.8.0):
-    - SDWebImage/Core (= 5.8.0)
-  - SDWebImage/Core (5.8.0)
+  - SDWebImage (5.9.1):
+    - SDWebImage/Core (= 5.9.1)
+  - SDWebImage/Core (5.9.1)
   - SDWebImageWebPCoder (0.6.1):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.7)
@@ -877,7 +860,6 @@ DEPENDENCIES:
   - react-native-agora (from `../node_modules/react-native-agora`)
   - react-native-appearance (from `../node_modules/react-native-appearance`)
   - react-native-document-picker (from `../node_modules/react-native-document-picker`)
-  - react-native-fbsdk (from `../node_modules/react-native-fbsdk`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-notifications (from `../node_modules/react-native-notifications`)
@@ -924,7 +906,6 @@ DEPENDENCIES:
   - RNScreenshotDetector (from `../node_modules/react-native-screenshot-detect`)
   - RNSound (from `../node_modules/react-native-sound`)
   - RNSVG (from `../node_modules/react-native-svg`)
-  - RNTextDetector (from `../node_modules/react-native-text-detector/ios`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - TesseractOCRiOS (= 4.0.0)
   - "toolbar-android (from `../node_modules/@react-native-community/toolbar-android`)"
@@ -1052,8 +1033,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-appearance"
   react-native-document-picker:
     :path: "../node_modules/react-native-document-picker"
-  react-native-fbsdk:
-    :path: "../node_modules/react-native-fbsdk"
   react-native-image-picker:
     :path: "../node_modules/react-native-image-picker"
   react-native-netinfo:
@@ -1146,8 +1125,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-sound"
   RNSVG:
     :path: "../node_modules/react-native-svg"
-  RNTextDetector:
-    :path: "../node_modules/react-native-text-detector/ios"
   RNVectorIcons:
     :path: "../node_modules/react-native-vector-icons"
   toolbar-android:
@@ -1158,7 +1135,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   abseil: 18063d773f5366ff8736a050fe035a28f635fd27
   AgoraRtcEngine_iOS: b316f64bc07f7973f0239316b2b4f79ec369e25c
-  AppAuth: 73574f3013a1e65b9601a3ddc8b3158cce68c09d
+  AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   BoringSSL-GRPC: db8764df3204ccea016e1c8dd15d9a9ad63ff318
   BVLinearGradient: e3aad03778a456d77928f594a649e96995f1c872
@@ -1193,10 +1170,10 @@ SPEC CHECKSUMS:
   Folly: b73c3869541e86821df3c387eb0af5f65addfab4
   glog: 40a13f7840415b9a77023fbcae0f1e6f43192af3
   GoogleAppMeasurement: dfe55efa543e899d906309eaaac6ca26d249862f
-  GoogleDataTransport: ad884314b81cdb808fb1d23787b367ff8da4e28a
+  GoogleDataTransport: 9a8a16f79feffc7f42096743de2a7c4815e84020
   GoogleDataTransportCCTSupport: 0f39025e8cf51f168711bd3fb773938d7e62ddb5
   GoogleSignIn: 7137d297ddc022a7e0aa4619c86d72c909fa7213
-  GoogleUtilities: 39530bc0ad980530298e9c4af8549e991fd033b1
+  GoogleUtilities: 7f2f5a07f888cdb145101d6042bc4422f57e70b3
   GPUImage: 733a5f0fab92df9de1c37ba9df520a833ccb406d
   "gRPC-C++": 9dfe7b44821e7b3e44aacad2af29d2c21f7cde83
   gRPC-Core: c9aef9a261a1247e881b18059b84d597293c9947
@@ -1208,21 +1185,21 @@ SPEC CHECKSUMS:
   lottie-react-native: 1fb4ce21d6ad37dab8343eaff8719df76035bd93
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
   OpenSSL-Universal: 8b48cc0d10c1b2923617dfe5c178aa9ed2689355
-  Permission-BluetoothPeripheral: 4663a8373072abfe3099c44cb06bf10b0c16c110
-  Permission-Calendars: dc345e3388149514603309c621151ff3cfd5816a
-  Permission-Camera: afad27bf90337684d4a86f3825112d648c8c4d3b
-  Permission-Contacts: edde2d433382b3118f0d4c9ebc7708d5d87c4f17
-  Permission-FaceID: fbdeb41087f35887f0cade55396007fadee3a234
-  Permission-LocationAlways: 155e6251b757b380f6354737cae8e8d59c472495
-  Permission-LocationWhenInUse: 3624cf08c12c6019926aba3054efee7f4f8ee91e
-  Permission-MediaLibrary: dd1c48888cd95961fbfebdaebf8d4127c6e92e7d
-  Permission-Microphone: 0ffabc3fe1c75cfb260525ee3f529383c9f4368c
-  Permission-Motion: 099bc32191080089d1cb839cbae96d621a589c8f
-  Permission-Notifications: 231d0e1db2300b686548587d384ba414e6a93332
-  Permission-PhotoLibrary: 4d2eff62c8f4b8a27bcf045c0e36f5047efbbf20
-  Permission-Reminders: 330cfafecc259594cfd7845a035580b623f771ae
-  PromisesObjC: c119f3cd559f50b7ae681fa59dc1acd19173b7e6
-  Protobuf: 2793fcd0622a00b546c60e7cbbcc493e043e9bb9
+  Permission-BluetoothPeripheral: fcaed9570265193ef4e43c8a14b4f9ebf6e94ba6
+  Permission-Calendars: a0e108931f9d111ea291cf31d6b323aa55474ab3
+  Permission-Camera: 357e8024a3597a5c0df529a8f87120f1f7e36895
+  Permission-Contacts: 842e5c90da4f14f6ddce430f059ae93337e34a9f
+  Permission-FaceID: 65e9643924136d34007c339f64dd9389ba174312
+  Permission-LocationAlways: f67f696820b2ee8a420a049242c96eaaa2cfc0da
+  Permission-LocationWhenInUse: 3d1bd1eeedcf397090e31ffcb4e6b6ff128087ca
+  Permission-MediaLibrary: 67006580556e4fd8d886486348fcf309922cff13
+  Permission-Microphone: 0f6d419edccc94135333daf5cb873f9d161557e3
+  Permission-Motion: 584c71294bfc619f7ee6293f95e0904779cf0d6d
+  Permission-Notifications: 68ed977040885caa5c9ace4812ed448c70018e8d
+  Permission-PhotoLibrary: 6c7add434f810971ea2019117f5322cf54bcace0
+  Permission-Reminders: 7f664e6c5361fd123a174171eea40e178411c521
+  PromisesObjC: b14b1c6b68e306650688599de8a45e49fae81151
+  Protobuf: 3dac39b34a08151c6d949560efe3f86134a3f748
   RCTRequired: f13f25e7b12f925f1f6a6a8c69d929a03c0129fe
   RCTTypeSafety: 44982c5c8e43ff4141eb519a8ddc88059acd1f3a
   React: e1c65dd41cb9db13b99f24608e47dd595f28ca9a
@@ -1236,10 +1213,9 @@ SPEC CHECKSUMS:
   react-native-agora: d6405ca3db2abfd14dc7c7ca22febf11c8c3ff65
   react-native-appearance: 0f0e5fc2fcef70e03d48c8fe6b00b9158c2ba8aa
   react-native-document-picker: 4921045c5c6c78243010f784eae0a3f4b2af7799
-  react-native-fbsdk: c35d42169e64aaf66f01713c1e18d0674f7f6519
-  react-native-image-picker: 3d3f85baabca60a00b75fb8facc1376db7bbdafa
+  react-native-image-picker: c6d75c4ab2cf46f9289f341242b219cb3c1180d3
   react-native-netinfo: 841c2a83fe7df998fed56fd48b73229f17a5aa5b
-  react-native-notifications: 367bc1db867fbf7b8af9651c9d4f35dcb9df0a2b
+  react-native-notifications: 09086eb278cde6ccb463fe5f1dbd57e315c7f642
   react-native-safe-area-context: e200d4433aba6b7e60b52da5f37af11f7a0b0392
   react-native-track-player: 28b96dd6404dea3eee80e67b74507679235a8dfb
   react-native-webview: cf5527893252b3b036eea024a1da6996f7344c74
@@ -1257,12 +1233,12 @@ SPEC CHECKSUMS:
   ReactNativeGetLocation: 1e71f6f2024a4215874998bee0e5f31d90a6dbe7
   RNAppleAuthentication: 473b2c076f1a48a537610580a168c1fb6d0a90c6
   RNAudioRecord: 162fee3b8fb628773ec704bf0333823125be2ed7
-  RNCAsyncStorage: d059c3ee71738c39834a627476322a5a8cd5bf36
-  RNCCheckbox: 357578d3b42652c78ee9a1bb9bcfc3195af6e161
+  RNCAsyncStorage: 2a692bcb9b69b76a2f1a95f33db057129700af64
+  RNCCheckbox: 47d045535fbb16796df628022a7cd631c78a4d9b
   RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
-  RNCPushNotificationIOS: dc1c0c6aa18a128df123598149f42e848d26a4ac
-  RNDateTimePicker: 83540fb5d71f28bd34990d8fabccb8d91e5d957e
-  RNDeviceInfo: 5be12a5bfbb8da3528c43ee4373abd9c30d04616
+  RNCPushNotificationIOS: ef00b111c849a9bb5dbc86d40cf91acb8b262772
+  RNDateTimePicker: 968ccf716b3b6aee07849641966005924de5c0f9
+  RNDeviceInfo: c5f8f3a456adcbba405ace475254b08febc4c095
   RNFastImage: e19ba191922e7dab9d932a4d59d62d76660aa222
   RNFBApp: 7b539bb25520fa73d6a240f5c6ea569e27683645
   RNFBAuth: c292603069a09065a1b4d3336148beff83e4c897
@@ -1271,21 +1247,20 @@ SPEC CHECKSUMS:
   RNFBMessaging: c55142d3b2d34d706bf12bd5eef9ef35254c2df1
   RNFBStorage: 0087dec3c49fcd4c805e9455239d684d8f61a6b0
   RNFS: 2bd9eb49dc82fa9676382f0585b992c424cd59df
-  RNGestureHandler: b6b359bb800ae399a9c8b27032bdbf7c18f08a08
+  RNGestureHandler: 7a5833d0f788dbd107fbb913e09aa0c1ff333c39
   RNGoogleSignin: ccf71ee4b6cfd324fd788a41e457e2043838c0d9
   RNI18n: e2f7e76389fcc6e84f2c8733ea89b92502351fd8
-  RNIap: e7fe0e9b31260fbefb7def5bb6a7911345a6a04e
+  RNIap: f7595967b8467dacb95f94a9eb4bbdb59f3afc67
   RNInAppBrowser: c1a0dad2734458d79bcb6c8f4297ba8658a1da9f
   RNNotifee: e4070fe88281d2fc5403946b480a84aa7cd91066
-  RNPermissions: ad71dd4f767ec254f2cd57592fbee02afee75467
-  RNReanimated: 7de2dca51deacff78bb880f63c1389a24311b376
-  RNScreens: b748efec66e095134c7166ca333b628cd7e6f3e2
+  RNPermissions: 54f83272e3d1961fcbd6aff8fd826014c37fc578
+  RNReanimated: 89f5e0a04d1dd52fbf27e7e7030d8f80a646a3fc
+  RNScreens: 0e91da98ab26d5d04c7b59a9b6bd694124caf88c
   RNScreenshotDetector: 125913e785f51e330e8b07b08416f82a07f6d561
   RNSound: da030221e6ac7e8290c6b43f2b5f2133a8e225b0
   RNSVG: 8ba35cbeb385a52fd960fd28db9d7d18b4c2974f
-  RNTextDetector: bcbfed60c7d2a8f455314955a519fae6d5ab921a
   RNVectorIcons: 368d6d8b8301224e5ffb6254191f4f8876c2be0d
-  SDWebImage: 84000f962cbfa70c07f19d2234cbfcf5d779b5dc
+  SDWebImage: a990c053fff71e388a10f3357edb0be17929c9c5
   SDWebImageWebPCoder: d0dac55073088d24b2ac1b191a71a8f8d0adac21
   TesseractOCRiOS: 90638afbe43d082433f2e76b384c7901d23956df
   toolbar-android: 85f3ef4d691469f2d304e7dee4bca013aa1ba1ff
@@ -1294,4 +1269,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: c6002a3062d432778460272ec116c62603f2b1fa
 
-COCOAPODS: 1.9.3
+COCOAPODS: 1.8.4

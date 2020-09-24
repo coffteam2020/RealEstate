@@ -74,16 +74,16 @@ export default {
       'https://media.istockphoto.com/vectors/people-icon-vector-male-person-symbol-profile-circle-avatar-sign-in-vector-id959085942?k=6&m=959085942&s=170667a&w=0&h=f3Q3lGKve2kDDzr0DnscSQMZ01Dy19r6zbWIP9zuXRk=',
   },
   FIREBASE: {
-    apiKey: 'AIzaSyCEAdk015QJ6IhsvwkojnSpMgxJzxpTtQQ',
+    apiKey: 'AIzaSyC3Sq5NFFosEfTVBQxcNvf__rK2MxGfaeI',
     authDomain: 'dapppremium.firebaseio.com',
     databaseURL: 'https://dapppremium.firebaseio.com',
-    projectId: 'stayalone-prod',
-    messagingSenderId: '979858885873',
+    projectId: 'realestate-517ab',
+    messagingSenderId: '821862726561',
     storageBucket: '',
   },
   FIREBASE_SPECIFIC: {
-    appIdAndroid: '1:1009498688082:android:5c0578920909fa5ad30a59',
-    appIdiOS: '1:979858885873:ios:75c9f92bd919ae367ded50',
+    appIdAndroid: '1:821862726561:android:8300b8d635bdf573b6e9e0',
+    appIdiOS: '1:821862726561:ios:20b26a1b27eb2e1fb6e9e0',
   },
   SCHEMA: {
     USER: 'Users',
@@ -113,10 +113,7 @@ export default {
   SECRET: {
     CYPER: 'DOCTIFYYYY',
   },
-  WEB_CLIENT_ID:
-    Platform.OS === 'ios'
-      ? '1009498688082-pvid5ablpbptusuoom7avvcjeku3o5u7.apps.googleusercontent.com'
-      : '1009498688082-n5gsvugfto799qt8j222291ochbqfaml.apps.googleusercontent.com',
+  WEB_CLIENT_ID: '821862726561-vhnf7bu7ublln1svh8cn6e1tpss9l6fh.apps.googleusercontent.com',
   LOCATION_BACKGROUND_BTN: [0, 0.36, 1],
   COLOR_BACKGROUND_BTN: ['#665AAA', '#665AAA'],
   PROGRESS: ['#15B7B0', '#34EE99'],
