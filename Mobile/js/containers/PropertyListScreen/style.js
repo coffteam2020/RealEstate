@@ -37,9 +37,28 @@ export const styles = StyleSheet.create({
     borderRadius: 30,
     paddingLeft: SPACINGS.large
   },
-  nextButton: {
+  genderButton: {
     borderRadius: 40,
-    marginTop: 10,
+    width: ScreenWidth * 0.25,
+    borderWidth: 0,
+    backgroundColor: colors.gray_bg,
+    color: colors.black
+  },
+  selectedButton:{
+    borderRadius: 40,
+    width: ScreenWidth * 0.25,
+    borderWidth: 1,
+    borderColor: colors.purpleMain,
+    color: colors.black,
+  },
+  plusButton:{
+    borderRadius: 40,
+    width: 50,
+    color: colors.black,
+  },
+  applyButton:{
+    borderRadius: 40,
+    marginTop: SPACINGS.avg,
   },
   captureButton: {
     borderRadius: 40,

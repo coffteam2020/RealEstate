@@ -55,7 +55,8 @@
     "chat": "Chat",
     "book": "Book",
     "edit":"Edit",
-    "delete": "Delete"
+    "delete": "Delete",
+    "apply": "Apply"
   },
   "error": {
     "common": "Something wrong, please try again!",
@@ -410,6 +411,7 @@
     "propertyType": "Type",
     "information":"Infomation",
     "propertyFor": "Property For",
-    "postDate": "Posting Date"
+    "postDate": "Posting Date",
+    "gender": "Gender"
   }
 }
