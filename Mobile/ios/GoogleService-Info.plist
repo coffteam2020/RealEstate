@@ -3,21 +3,23 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>979858885873-rk9jfi91gta352lo4ca45l2dq0ldu9ho.apps.googleusercontent.com</string>
+	<string>821862726561-ubql2bvlfputh0uabatfn45r10p8cro1.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.979858885873-rk9jfi91gta352lo4ca45l2dq0ldu9ho</string>
+	<string>com.googleusercontent.apps.821862726561-ubql2bvlfputh0uabatfn45r10p8cro1</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>821862726561-90t28djfgrtr8855odmdpkv4bs9de3s8.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyAxuQecBxn0XKgZjhUYtKJ04rNAmyiGBto</string>
+	<string>AIzaSyCT8yb4sYoFaNhAyaNJaj22fRRN8xny7tk</string>
 	<key>GCM_SENDER_ID</key>
-	<string>979858885873</string>
+	<string>821862726561</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.dtechno.dapp.premium</string>
+	<string>com.app.dtechno.dapp</string>
 	<key>PROJECT_ID</key>
-	<string>dapppremium</string>
+	<string>realestate-517ab</string>
 	<key>STORAGE_BUCKET</key>
-	<string>dapppremium.appspot.com</string>
+	<string>realestate-517ab.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,8 +31,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:979858885873:ios:75c9f92bd919ae367ded50</string>
+	<string>1:821862726561:ios:20b26a1b27eb2e1fb6e9e0</string>
 	<key>DATABASE_URL</key>
-	<string>https://dapppremium.firebaseio.com</string>
+	<string>https://realestate-517ab.firebaseio.com</string>
 </dict>
 </plist>

@@ -341,7 +341,6 @@ const PropertyListScreen = (props) => {
               }}
               style={[
                 containerStyle.defaultMarginBottom,
-                containerStyle.shadow,
                 {borderRadius: 1000},
               ]}>
               <View
@@ -379,7 +378,6 @@ const PropertyListScreen = (props) => {
                       flexDirection: 'row',
                       justifyContent: 'flex-end',
                     }}>
-                    {/* <TextNormal text={item.projectName}></TextNormal> */}
                     <View style={{
                       display: 'flex',
                       flexDirection: 'row',
