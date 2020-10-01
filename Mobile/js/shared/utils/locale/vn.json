@@ -52,7 +52,8 @@
     "chat": "Nhắn tin",
     "book": "Book",
     "edit":"Chỉnh sửa",
-    "delete": "Xoá"
+    "delete": "Xoá",
+    "apply": "Áp dụng"
   },
   "error": {
     "common": "Có lỗi xảy ra, vui lòng thử lại!",
@@ -429,7 +430,8 @@
     "propertyType": "Type",
     "information":"Infomation",
     "propertyFor": "Property For",
-    "postDate": "Ngày đăng"
+    "postDate": "Ngày đăng",
+    "gender": "Giới tinh"
   },
   "explorer": {
     "search": "Find district, name, ...",
