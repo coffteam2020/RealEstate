@@ -201,6 +201,9 @@ const PostDetailScreen = (props) => {
             );
           })}
         <View style={styles.newCommentContainer}>
+          
+            <View style={styles.newCommentContainer}>
+
           <FastImage
             source={{
               uri:
@@ -211,24 +214,29 @@ const PostDetailScreen = (props) => {
           />
           <View style={styles.newComment}>
             <TextInput ref={refInput}
-              numberOfLines={100}
+              numberOfLines={10}
               style={[
                 containerStyle.defaultMarginTopSmall,
                 containerStyle.textDefaultNormal,
                 styles.commentInput,
+                {
+                  height: 100
+                }
               ]}
+              maxLength={1000}
               value={newComment}
               onChangeText={(text) => setNewComment(text)}
               multiline
               placeholder={t('social.commentInput.placeholder')}
-              numberOfLines={100}
             />
           </View>
           <TouchableOpacity
             onPress={() => { postComment(); }}>
-            <FontAwesome5 name={'paper-plane'} size={40} style={{margin: SPACINGS.small}} color={colors.purpleMain} />
+            <FontAwesome5 name={'paper-plane'} size={24} style={{margin: SPACINGS.small}} color={colors.purpleMain} />
           </TouchableOpacity>
         </View>
+          
+      </View>
       </View>
     );
   };

@@ -1055,7 +1055,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.dtechno.dapp.premium;
+				PRODUCT_BUNDLE_IDENTIFIER = com.app.dtechno.dapp;
 				PRODUCT_NAME = "Real Estate";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";

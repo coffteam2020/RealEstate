@@ -243,8 +243,6 @@ const SocialScreen = (props) => {
           });
         }}
         style={[
-          containerStyle.defaultMarginBottom,
-          containerStyle.shadow,
           {
             borderTopColor: colors.purpleMain,
             borderTopWidth: 3,
@@ -321,6 +319,7 @@ const SocialScreen = (props) => {
                 justifyContent: 'space-around',
                 borderTopWidth: 1,
                 paddingTop: SPACINGS.avg,
+                paddingBottom: SPACINGS.avg,
                 borderTopColor: colors.gray,
               }}>
               <TouchableOpacity
@@ -362,8 +361,6 @@ const SocialScreen = (props) => {
           });
         }}
         style={[
-          containerStyle.defaultMarginBottom,
-          containerStyle.shadow,
           {
             borderTopColor: colors.purpleMain,
             borderTopWidth: 3,
@@ -440,6 +437,7 @@ const SocialScreen = (props) => {
                 justifyContent: 'space-around',
                 borderTopWidth: 1,
                 paddingTop: SPACINGS.avg,
+                paddingBottom: SPACINGS.avg,
                 borderTopColor: colors.gray,
               }}>
               <TouchableOpacity
