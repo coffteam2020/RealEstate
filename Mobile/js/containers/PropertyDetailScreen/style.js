@@ -23,8 +23,7 @@ export const styles = StyleSheet.create({
   },
   nextButton: {
     borderRadius: 40,
-    marginTop: 10,
-    width: ScreenWidth / 4,
+    width: ScreenWidth * 0.25,
     display: 'flex',
     flexDirection: 'row-reverse',
   },
@@ -38,6 +37,10 @@ export const styles = StyleSheet.create({
     borderRadius: RADIUS.default,
     backgroundColor: colors.gray_bg_new,
   },
+  detailContentMarginTopBottom: {
+    marginTop: SPACINGS.avg,
+    marginBottom: SPACINGS.avg
+  },
   detailContent: {
     display: 'flex',
     flexDirection: 'row',
@@ -48,15 +51,20 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     width: '50%',
     justifyContent: 'center',
+    alignContent: "center",
+    alignItems: "center",
     borderRightColor: colors.gray_new,
     borderRightWidth: 1,
     margin: SPACINGS.avg,
+
   },
   buttonDeleteWrapper:{
     display: 'flex',
     flexDirection: 'row',
     width: '50%',
     justifyContent: 'center',
+    alignContent: "center",
+    alignItems: "center",
     borderLeftColor: colors.gray_new,
     borderLeftWidth: 1,
     margin: SPACINGS.avg,

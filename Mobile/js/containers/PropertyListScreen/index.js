@@ -1,5 +1,5 @@
 import {useObserver} from 'mobx-react';
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
 import {
   Button,
@@ -39,36 +39,41 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import moment from 'moment'
 import {SPACINGS, FONTSIZES, RADIUS} from '../../themes';
-import { FirebaseService } from '../../api/FirebaseService';
 import Empty from '../../shared/components/Empty';
-import Slider from '@react-native-community/slider';
-import FlatButton from '../../shared/components/Buttons/FlatButton';
 import GradientButton from '../../shared/components/Buttons/GradientButton';
 import CheckBox from '@react-native-community/checkbox';
 import RangeSlider from 'rn-range-slider';
 
 const filterParams = [
   {
-    id: 'Price',
+    id: 'PRICE',
     label: 'Price',
   },
   {
-    id: 'Amenities',
+    id: 'AMENITIES',
     label: 'Amenities',
   },
   {
-    id: 'RoomType',
+    id: 'ROOMTYPE',
     label: 'Room Type',
   },
   {
-    id: 'Capacity',
+    id: 'CAPACITY',
     label: 'Capacity',
   },
   {
-    id: 'SortBy',
+    id: 'SORTBY',
     label: 'Sort By',
   },
 ];
+const FilterType = {
+  PRICE : 'PRICE',
+  AMENITIES: 'AMENITIES',
+  ROOM_TYPE: 'ROOMTYPE',
+  CAPACITY: 'CAPACITY',
+  GENDER: 'GENDER',
+  SORTBY: 'SORTBY'
+}
 
 const PropertyTypes = [
   {label: 'All', value: 'ALL'},
@@ -79,10 +84,10 @@ const PropertyTypes = [
   {label: 'Apartment', value: 'APARTMENT'},
 ];
 const SortByList = [
-  {label: 'Relevance', value: 'Relevance'},
+  {label: 'Recently', value: 'Recently'},
   {label: 'Lastest', value: 'Lastest'},
-  {label: 'Lowest to Highest Price', value: 'PRICE_LOW_TO_HIGHT'},
-  {label: 'Highest to Highest Lowest Price', value: 'PRICE_HIGH_TO_LOW'},
+  {label: 'Lowest to Highest', value: 'PRICE_LOW_TO_HIGHT'},
+  {label: 'Highest to Lowest', value: 'PRICE_HIGH_TO_LOW'},
   {label: 'Nearest', value: 'Nearest'},
 ];
 const Genders = [
@@ -92,6 +97,7 @@ const Genders = [
 ];
 
 const PropertyFors = [
+  {label: 'All', value: 'All'},
   {label: 'Sale', value: 'Sale'},
   {label: 'Rent', value: 'Rent'},
 ];
@@ -111,6 +117,15 @@ const ListUltilities = [
   {label: 'Heater Water', value: 'HeaterWater', icon: 'water-pump'},
 ];
 
+
+const filterSkeleton = {
+  gender: [],
+  propertyType: [],
+  price: [],
+  amenities: []
+};
+
+
 const PropertyListScreen = (props) => {
   const {colorsApp} = props.theme;
   const {t} = useTranslation();
@@ -124,9 +139,13 @@ const PropertyListScreen = (props) => {
   const [capacity, setCapacity] = useState(0);
   const [filterValue, setFilterValue] = useState([]);
   const [sortBy, setSortBy] = useState(SortByList[0]);
+  const [sortByTmp, setSortByTmp] = useState(SortByList[0]);
+
   const [propertyType, setPropertyType] = useState(PropertyTypes[0]);
   const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(99999);
+  const [maxPrice, setMaxPrice] = useState(0);
+  const [maxPriceInit, setMaxPriceInit] = useState(999);
+  const flatListfilter = useRef(FlatList);
 
   useEffect(() => {
     props?.navigation.addListener('willFocus', () => {
@@ -134,11 +153,6 @@ const PropertyListScreen = (props) => {
     });
     getPropertyList();
   }, []);
-
-  useEffect(() => {
-    console.log(filterValue);
-  }, [filterValue]);
-
 
   const getPropertyList = async () => {
     setIsLoading(true);
@@ -151,6 +165,8 @@ const PropertyListScreen = (props) => {
         setIsLoading(false);
         if (val?.content !== '') {
           setProperties(val.content);
+          setMaxPriceInit(getMaxPrice(val.content));
+          setMaxPrice(getMaxPrice(val.content))
         } else {
           // ToastHelper.showError(t('account.getInfoErr'));
           setProperties([]);
@@ -163,13 +179,151 @@ const PropertyListScreen = (props) => {
       });
   };
 
+
+  function descendingComparator(a, b, orderBy) {
+    if (b[orderBy] < a[orderBy]) {
+      return -1;
+    }
+    if (b[orderBy] > a[orderBy]) {
+      return 1;
+    }
+    return 0;
+  }
+  
+  function getComparator() {
+    if (sortBy.value === 'Recently') {
+      return (a, b) => descendingComparator(a, b, 'createdOn');
+    } else if (sortBy.value === 'Lastest') {
+      return (a, b) => -descendingComparator(a, b, 'createdOn');
+    } else if (sortBy.value === 'PRICE_LOW_TO_HIGHT') {
+      return (a, b) => -descendingComparator(a, b, 'priceOrMonthlyRent');
+    } else if (sortBy.value === 'PRICE_HIGH_TO_LOW') {
+      return (a, b) => descendingComparator(a, b, 'priceOrMonthlyRent');
+    } else return (a, b) => descendingComparator(a, b, 'createdOn');
+  }
+  
+  function stableSort(array, comparator) {
+    const stabilizedThis = array.map((el, index) => [el, index]);
+    stabilizedThis.sort((a, b) => {
+      const order = comparator(a[0], b[0]);
+      if (order !== 0) return order;
+      return a[1] - b[1];
+    });
+    return stabilizedThis.map((el) => el[0]);
+  }
+
+  const getMaxPrice = (listItems) => {
+    let maxPrice = 0;
+    listItems.forEach(item =>{
+      if(item.priceOrMonthlyRent && item.priceOrMonthlyRent > maxPrice){
+        maxPrice = item.priceOrMonthlyRent;
+      }
+    })
+    return maxPrice;
+  }
+
+  const applyFilterObj = (item) => {
+    
+    let cond = true;
+    let filteredValue;
+    filterValue &&
+      filterValue.forEach(param =>{
+        switch(param.type){
+          case FilterType.PRICE:
+            filteredValue = !item["priceOrMonthlyRent"] ? false : (param.min <= item["priceOrMonthlyRent"] && item["priceOrMonthlyRent"] <= param.max);
+            cond = cond && filteredValue;
+            break;
+          case FilterType.AMENITIES:
+            filteredValue = false;
+            item["amenities"].forEach(itm =>{
+              if(param?.value.indexOf(itm) !== -1){
+                filteredValue = true;
+              }
+            });
+            cond = cond && filteredValue;
+            break;
+          case FilterType.ROOM_TYPE:
+            filteredValue = !item["propertyType"] ? true : item["propertyType"] === param.value;
+            cond = cond && filteredValue;
+            break;
+        }
+      })
+
+    return cond;
+  };
+
+  const getFilteredItemsList = () => {
+    return [...properties.filter(applyFilterObj)];
+  };
+
+
+  const doSelectUltilities = (ulti) => {
+    let current = [...selectedUltilities];
+    if(current.indexOf(ulti.value) !== -1){
+      //exist
+      current = current.filter(item => item !== ulti.value);
+    }else{
+      current.push(ulti.value);
+    }
+    setSelectedUltilities(current);
+  }
+
+  const removeFilterValueByType = (type) => {
+    let curFilter = [...filterValue];
+    curFilter = curFilter.filter((item) => item.type !== type);
+    if (type === FilterType.GENDER) {
+      setGender(Genders[0].value);
+    } else if (type === FilterType.CAPACITY) {
+      setCapacity(0);
+    } else if (type === FilterType.ROOM_TYPE) {
+      setPropertyType(PropertyTypes[0]);
+    } else if (type === FilterType.AMENITIES) {
+      setSelectedUltilities([]);
+    } else if (type === FilterType.PRICE) {
+      setMinPrice(0);
+      setMaxPrice(99999);
+    }else if (type === FilterType.SORTBY) {
+      setSortBy(SortByList[0]);
+      setSortByTmp(SortByList[0]);
+    }
+    setFilterValue(curFilter);
+  };
+
+  const resetAllFilterValue = () =>{
+    setFilterValue([]);
+    setGender(Genders[0].value);
+    setCapacity(0);
+    setSortBy(SortByList[0]);
+    setPropertyType(PropertyTypes[0])
+    setPropertyTypeTmp(PropertyTypes[0])
+    setSelectedUltilities([]);
+    setMinPrice(0);
+    setMaxPrice(99999);
+  }
+
+  const renderFilterSelection = (param) => {
+    switch (param) {
+      case FilterType.PRICE:
+        return renderPrice();
+      case FilterType.AMENITIES:
+        return renderAmenities();
+      case FilterType.ROOM_TYPE:
+        return renderRoomType();
+      case FilterType.CAPACITY:
+        return renderCapacity();
+      case FilterType.SORTBY:
+        return renderSortBy();
+      default:
+        return;
+    }
+  };
   const renderProperties = () => {
     if (properties && properties.length === 0) {
       return <Empty />;
     }
     return (
       <FlatList
-        data={properties}
+        data={stableSort(getFilteredItemsList(), getComparator())}
         scrollEnabled
         style={{
           width: ScreenWidth * 0.9,
@@ -246,56 +400,8 @@ const PropertyListScreen = (props) => {
     );
   };
 
-  const doSelectUltilities = (ulti) => {
-    let current = [...selectedUltilities];
-    if(current.indexOf(ulti.value) !== -1){
-      //exist
-      current = current.filter(item => item !== ulti.value);
-    }else{
-      current.push(ulti.value);
-    }
-    setSelectedUltilities(current);
-  }
 
-  const removeFilterValueByType = (type) => {
-    let curFilter = [...filterValue];
-    curFilter = curFilter.filter(item => item.type !== type);
-    if(type === 'GENDER'){
-      setGender(Genders[0].value);
-    }else if(type === 'CAPACITY'){
-      setCapacity(0)
-    }else if(type === 'ROOMTYPE'){
-      setPropertyType(PropertyTypes[0]);
-    }
-    setFilterValue(curFilter);
-  }
-  const resetAllFilterValue = () =>{
-    setFilterValue([]);
-    setGender(Genders[0].value);
-    setCapacity(0);
-    setSortBy(SortByList[0]);
-    setPropertyType(PropertyTypes[0])
-    setSelectedUltilities([]);
-    setMinPrice(0);
-    setMaxPrice(99999);
-  }
-
-  const renderFilterSelection = (param) => {
-    switch (param) {
-      case 'Price':
-        return renderPrice();
-      case 'Amenities':
-        return renderAmenities();
-      case 'RoomType':
-        return renderRoomType();
-      case 'Capacity':
-        return renderCapacity();
-      case 'SortBy':
-        return renderSortBy();
-      default:
-        return;
-    }
-  };
+  
 
   const renderCapacity = () => {
     return (
@@ -415,12 +521,12 @@ const PropertyListScreen = (props) => {
           style={styles.applyButton}
           onPress={() => {
             let newFilter = [...filterValue];
-            newFilter = newFilter.filter(item => ( item.type !== 'CAPACITY' || item.type !== 'GENDER'))
+            newFilter = newFilter.filter(item => ( item.type !== FilterType.CAPACITY || item.type !== FilterType.GENDER))
             if(capacity > 0){
-              let filter = { type : 'CAPACITY', value : capacity, label : "Capacity: " + capacity};
+              let filter = { type : FilterType.CAPACITY, value : capacity, label : "Capacity: " + capacity};
               newFilter.push(filter);
             }
-            let filter = { type : 'GENDER', value : gender, label : "GENDER: " + gender};
+            let filter = { type : FilterType.GENDER, value : gender, label : "GENDER: " + gender};
             newFilter.push(filter);
             setFilterValue(newFilter);
             setSelectedFilter('');
@@ -454,19 +560,19 @@ const PropertyListScreen = (props) => {
                   margin: SPACINGS.avg,
                 }}>
                 <TouchableOpacity
-                  onPress={() => setSortBy(item)}
+                  onPress={() => setSortByTmp(item)}
                   style={{flex: 1, backgroundColor: colors.ređ}}>
                   <TextNormal text={item.label} />
                 </TouchableOpacity>
                 <CheckBox
-                  disabled={sortBy.value === item.value}
+                  disabled={sortByTmp.value === item.value}
                   onCheckColor={colors.purpleMain}
                   onTintColor={colors.purpleMain}
                   key={index}
-                  value={sortBy.value  === item.value}
+                  value={sortByTmp.value  === item.value}
                   style={{height: 20}}
                   onValueChange={(newValue) => {
-                    if (newValue) setSortBy(item);
+                    if (newValue) setSortByTmp(item);
                   }}
                 />
               </View>
@@ -477,11 +583,12 @@ const PropertyListScreen = (props) => {
           style={styles.applyButton}
           onPress={() => {
             let newFilter = [...filterValue];
-            newFilter = newFilter.filter(item => item.type !== 'SORTBY')
-            let filter = { type : "SORTBY", value : sortBy.value, label: 'Sort by: ' + sortBy.label};
+            newFilter = newFilter.filter(item => item.type !== FilterType.SORTBY)
+            let filter = { type : FilterType.SORTBY, value : sortByTmp.value, label: 'Sort by: ' + sortByTmp.label};
             newFilter.push(filter);
             setFilterValue(newFilter);
             setSelectedFilter('');
+            setSortBy(sortByTmp);
           }}
           text={t('common.apply')}
         />
@@ -535,8 +642,8 @@ const PropertyListScreen = (props) => {
           style={styles.applyButton}
           onPress={() => {
             let newFilter = [...filterValue];
-            newFilter = newFilter.filter(item => item.type !== 'ROOMTYPE')
-            let filter = { type : "ROOMTYPE", value : sortBy.value, label: 'Room Type: ' + propertyType.label};
+            newFilter = newFilter.filter(item => item.type !== FilterType.ROOM_TYPE)
+            let filter = { type : FilterType.ROOM_TYPE, value : propertyType.value, label: 'Room Type: ' + propertyType.label};
             newFilter.push(filter);
             setFilterValue(newFilter);
             setSelectedFilter('');
@@ -570,7 +677,7 @@ const PropertyListScreen = (props) => {
           initialLowValue={minPrice}
           initialHighValue={maxPrice}
           min={0}
-          max={99999}
+          max={maxPriceInit}
           step={10}
           selectionColor={colors.purpleMain}
           labelBackgroundColor={colors.whiteBackground}
@@ -591,9 +698,9 @@ const PropertyListScreen = (props) => {
           ]}
           onPress={() => {
             let newFilter = [...filterValue];
-            newFilter = newFilter.filter((item) => item.type !== 'PRICE');
+            newFilter = newFilter.filter((item) => item.type !== FilterType.PRICE);
             let filter = {
-              type: 'PRICE',
+              type: FilterType.PRICE,
               min: minPrice,
               max: maxPrice,
               label: minPrice + ' - ' + maxPrice,
@@ -660,8 +767,8 @@ const PropertyListScreen = (props) => {
           style={styles.applyButton}
           onPress={() => {
             let newFilter = [...filterValue];
-            newFilter  = newFilter.filter(item => item.type !== 'Amennities');
-            let filter = {type : 'AMENNITIES', value : [...selectedUltilities], label: 'AMENNITIES:...'};
+            newFilter  = newFilter.filter(item => item.type !== FilterType.AMENITIES);
+            let filter = {type : FilterType.AMENITIES, value : [...selectedUltilities], label: 'AMENITIES:...'};
             newFilter.push(filter);
             setFilterValue(newFilter);
             setSelectedFilter('');
@@ -688,7 +795,7 @@ const PropertyListScreen = (props) => {
           <FlatList
             style={{width: ScreenWidth, height: 50}}
             horizontal={true}
-            pagingEnabled={true}
+            ref={flatListfilter}
             showsHorizontalScrollIndicator={false}
             legacyImplementation={false}
             keyExtractor={(item) => item.id}
@@ -798,6 +905,7 @@ const PropertyListScreen = (props) => {
             {
               width: ScreenWidth * 0.9,
               backgroundColor: colors.whiteBackground,
+              marginTop: SPACINGS.avg,
               marginBottom: SPACINGS.avg,
               display: "flex",
               flexDirection: "row",
@@ -807,7 +915,7 @@ const PropertyListScreen = (props) => {
               justifyContent: "space-between"
             }
           }>
-          <TextNormal style={{fontSize: FONTSIZES.avg}} text={properties.length + ' results'}></TextNormal>
+          <TextNormal style={{fontSize: FONTSIZES.avg}} text={getFilteredItemsList().length + ' results'}></TextNormal>
           <TextNormal style={{fontSize: FONTSIZES.avg}} text={'Sort by: '+ sortBy.label}></TextNormal>
         </View>
       </View>

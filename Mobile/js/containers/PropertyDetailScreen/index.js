@@ -95,9 +95,8 @@ const PropertyDetailScreen = (props) => {
         ]}>
         <View
           style={[
-            containerStyle.defaultMarginTop,
-            containerStyle.defaultMarginBottom,
             styles.detailContentWrapper,
+            styles.detailContentMarginTopBottom
           ]}>
           <TextNormal
             style={{fontSize: FONTSIZES.large, margin: SPACINGS.avg}}
@@ -133,14 +132,13 @@ const PropertyDetailScreen = (props) => {
 
         <View
           style={[
-            containerStyle.defaultMarginTop,
-            containerStyle.defaultMarginBottom,
+            styles.detailContentMarginTopBottom,
             styles.detailContentWrapper,
           ]}>
           <View
             style={[
-              containerStyle.defaultMarginTop,
-              containerStyle.defaultMarginBottom,
+              containerStyle.defaultMarginTopSmall,
+              // containerStyle.defaultMarginBottom,
               styles.detailContentWrapper,
               {
                 display: 'flex',
@@ -210,8 +208,7 @@ const PropertyDetailScreen = (props) => {
       
         <View
           style={[
-            containerStyle.defaultMarginTop,
-            containerStyle.defaultMarginBottom,
+            styles.detailContentMarginTopBottom,
             styles.detailContentWrapper,
           ]}>
           <TextNormal
@@ -235,8 +232,7 @@ const PropertyDetailScreen = (props) => {
 
         <View
           style={[
-            containerStyle.defaultMarginTop,
-            containerStyle.defaultMarginBottom,
+            styles.detailContentMarginTopBottom,
             styles.detailContentWrapper,
           ]}>
           <TextNormal
@@ -260,63 +256,36 @@ const PropertyDetailScreen = (props) => {
   };
 
   const renderContactButton = () => {
-    console.log(userStore?.userId === property?.userId);
     return (
       <View
         style={[
-          containerStyle.defaultFull,
           containerStyle.defaultMarginBottom,
-          containerStyle.shadow,
           {
             display: 'flex',
             flexDirection: 'row',
-            justifyContent: 'space-evenly',
+            justifyContent: "space-around",
+            alignItems: "center",
+            alignContent: "center",
+            alignSelf: "center",
+            width: ScreenWidth * 0.9
           },
         ]}>
         {userInfo?.userId === property?.userId ? (
           <>
-            {/* <GradientButton
-              hasIco
-              ico={
-                <MaterialCommunityIcons
-                  name="file-edit"
-                  size={24}
-                  color={colors.whiteBackground} />
-              }
-              style={styles.nextButton}
-              onPress={() => onNextStepPress()}
-              text={t('common.edit')}
-            />
-            <GradientButton
-              hasIco
-              fromColor={colors.whiteBackground}
-              toColor={colors.whiteBackground}
-              ico={
-                <MaterialCommunityIcons
-                  name="delete"
-                  size={24}
-                  color={colors.red} />
-              }
-              style={styles.nextButton}
-              textStyle={{color: colors.red}}
-              onPress={() => onNextStepPress()}
-              text={t('common.delete')}
-            /> */}
             <View
               style={{
                 display: 'flex',
                 flexDirection: 'row',
                 justifyContent: 'space-around',
                 alignContent: 'center',
-                backgroundColor: colors.gray_less,
                 width: ScreenWidth * 0.9,
+                backgroundColor: colors.gray,
                 height: 50,
-                borderRadius: 40,
+                borderRadius: 40
                 
               }}>
               <TouchableOpacity
                 onPress={()=>{
-                  console.log('@@edit@@');
                   console.log(property)
                   NavigationService.navigate(ScreenNames.PropertyScreen, {
                     data: property,
