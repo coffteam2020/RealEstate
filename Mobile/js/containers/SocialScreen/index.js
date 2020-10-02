@@ -40,6 +40,7 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import moment from 'moment'
 import {SPACINGS, FONTSIZES} from '../../themes';
 import { FirebaseService } from '../../api/FirebaseService';
+import { TimeHelper, ENUM_TIME_FORMAT } from '../../shared/utils/helper/timeHelper';
 
 const SocialScreen = (props) => {
   const {colorsApp} = props.theme;
@@ -54,10 +55,12 @@ const SocialScreen = (props) => {
   useEffect(() => {
     props?.navigation.addListener('willFocus', () => {
       getProfile();
-      getAllPost();
+      // getAllPost();
+
     });
     getProfile();
-    getAllPost();
+    // getAllPost();
+    getMessages();
   }, []);
   const getAllPost = async () => {
     try {
@@ -77,6 +80,27 @@ const SocialScreen = (props) => {
       setIsFetching(false);
     }
   };
+
+  const getMessages = async () => {
+    let user = await IALocalStorage.getDetailUserInfo();
+    setIsLoading(true);
+    await firebase
+      .database()
+      .ref(Constant.SCHEMA.SOCIAL)
+      .on('value', (snapshot) => {
+        const data = snapshot.val() ? Object.values(snapshot.val()) : [];
+        // console.log("21321321");
+        let arr = data.sort(function(x, y){
+          return y.timeInMillosecond - x.timeInMillosecond;
+        });
+        // console.log(arr);
+        setAllPost(arr)
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 500);
+      });
+  };
+
   const getProfile = async () => {
     let userInfo = await IALocalStorage.getDetailUserInfo();
     setIsLoading(true);
@@ -140,7 +164,7 @@ const SocialScreen = (props) => {
         <TouchableOpacity
           style={styles.postInput}
           onPress={() => {
-            console.log('open View Post');
+            // console.log('open View Post');
             NavigationService.navigate(ScreenNames.NewPostScreen);
           }}>
           <FastImage
@@ -163,7 +187,7 @@ const SocialScreen = (props) => {
         <TouchableOpacity
           style={styles.postInput}
           onPress={() => {
-            console.log('open View Post');
+            // console.log('open View Post');
             NavigationService.navigate(ScreenNames.NewPostScreen);
           }}>
           <FastImage
@@ -204,7 +228,7 @@ const SocialScreen = (props) => {
         refreshing={isFetching}
         keyExtractor={(item) => item._id}
         renderItem={({item, index}) => {
-          console.log(item)
+          // console.log(item)
           if(0 === index){
             return renderFirstPost(item);
           }else{
@@ -218,141 +242,138 @@ const SocialScreen = (props) => {
   const renderFirstPost = (item) =>{
     let isLike =
             item.likes && item.likes.indexOf(userStore?.userInfo?.id) !== -1;
+    let isToDay = TimeHelper.isToday(moment(item?.timeInMillosecond));
     return (
       <>
-      <TouchableOpacity
+        <TouchableOpacity
           style={styles.postInput}
           onPress={() => {
             NavigationService.navigate(ScreenNames.NewPostScreen);
           }}>
           <FastImage
             source={{
-              uri:
-                avt ||
-                Constant.MOCKING_DATA.NO_IMG_PLACE_HOLDER,
+              uri: avt || Constant.MOCKING_DATA.NO_IMG_PLACE_HOLDER,
             }}
             resizeMode="cover"
             style={styles.avatar}
           />
           <TextNormal text={t('social.placeholder')}></TextNormal>
         </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => {
-          NavigationService.navigate(ScreenNames.PostDetailScreen, {
-            data: {...item},
-          });
-        }}
-        style={[
-          {
-            borderTopColor: colors.purpleMain,
-            borderTopWidth: 3,
-            paddingTop: SPACINGS.large,
-          },
-        ]}>
-        <View style={styles.postContainer}>
-          <View style={styles.postHeader}>
-            <FastImage
-              source={{
-                uri:
-                  item.avatar ||
-                  Constant.MOCKING_DATA.NO_IMG_PLACE_HOLDER,
-              }}
-              resizeMode="cover"
-              style={styles.avatar}
-            />
-            <View style={{display: 'flex', flexDirection: 'column'}}>
-              <TextNormal
-                style={styles.postOwner}
-                text={item.name}></TextNormal>
-              <TextNormal
-                style={styles.postTime}
-                text={moment(item.timeInMillosecond).format(
-                  'HH:mm',
-                )}></TextNormal>
+        <TouchableOpacity
+          onPress={() => {
+            NavigationService.navigate(ScreenNames.PostDetailScreen, {
+              data: {...item},
+            });
+          }}
+          style={[
+            {
+              borderTopColor: colors.purpleMain,
+              borderTopWidth: 3,
+              paddingTop: SPACINGS.large,
+            },
+          ]}>
+          <View style={styles.postContainer}>
+            <View style={styles.postHeader}>
+              <FastImage
+                source={{
+                  uri: item.avatar || Constant.MOCKING_DATA.NO_IMG_PLACE_HOLDER,
+                }}
+                resizeMode="cover"
+                style={styles.avatar}
+              />
+              <View style={{display: 'flex', flexDirection: 'column'}}>
+                <TextNormal
+                  style={styles.postOwner}
+                  text={item.name}></TextNormal>
+                <TextNormal
+                  style={styles.postTime}
+                  text={moment(item.timeInMillosecond).format(
+                    isToDay ? 'HH:mm' : ENUM_TIME_FORMAT.FULL,
+                  )}></TextNormal>
+              </View>
             </View>
-          </View>
-          <View style={styles.postContent}>
-            <TextNormal
-              style={styles.contentTextStyle}
-              text={item.content}
-              numberOfLines={100}
-            />
-            <View style={styles.contentImageStyle}>
-              {item?.images && (
-                <FastImage
-                  source={{
-                    uri:
-                      item?.images[0] ||
-                      Constant.MOCKING_DATA.NO_IMG_PLACE_HOLDER,
+            <View style={styles.postContent}>
+              <TextNormal
+                style={styles.contentTextStyle}
+                text={item.content}
+                numberOfLines={100}
+              />
+              <View style={styles.contentImageStyle}>
+                {item?.images && (
+                  <FastImage
+                    source={{
+                      uri:
+                        item?.images[0] ||
+                        Constant.MOCKING_DATA.NO_IMG_PLACE_HOLDER,
+                    }}
+                    resizeMode="cover"
+                    style={styles.postImages}
+                  />
+                )}
+              </View>
+            </View>
+            <View style={styles.postFooter}>
+              <View
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  marginTop: SPACINGS.small,
+                  marginBottom: SPACINGS.small,
+                  marginLeft: SPACINGS.large,
+                  marginRight: SPACINGS.large,
+                }}>
+                <TextNormal
+                  text={
+                    (item?.likes ? item?.likes?.length : '0') + ' Likes'
+                  }></TextNormal>
+                <TextNormal
+                  text={
+                    (item?.comments ? item?.comments.length : '0') + ' Comments'
+                  }></TextNormal>
+              </View>
+              <View
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'space-around',
+                  borderTopWidth: 1,
+                  paddingTop: SPACINGS.avg,
+                  paddingBottom: SPACINGS.avg,
+                  borderTopColor: colors.gray,
+                }}>
+                <TouchableOpacity
+                  onPress={() => {
+                    clickLike(item);
                   }}
-                  resizeMode="cover"
-                  style={styles.postImages}
-                />
-              )}
+                  style={{display: 'flex', flexDirection: 'row'}}>
+                  <AntDesign
+                    name={isLike ? 'like1' : 'like2'}
+                    size={20}
+                    color={isLike ? colors.purpleMain : colors.black}
+                  />
+                  <TextNormal text="Like"></TextNormal>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    // console.log('comment');
+                    // navigate to Post Detail
+                  }}
+                  style={{display: 'flex', flexDirection: 'row'}}>
+                  <EvilIcons name="comment" size={20} />
+                  <TextNormal text="Comment"></TextNormal>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
-          <View style={styles.postFooter}>
-            <View
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                marginTop: SPACINGS.small,
-                marginBottom: SPACINGS.small,
-                marginLeft: SPACINGS.large,
-                marginRight: SPACINGS.large,
-              }}>
-              <TextNormal
-                text={
-                  (item?.likes ? item?.likes?.length : '0') + ' Likes'
-                }></TextNormal>
-              <TextNormal
-                text={
-                  (item?.comments ? item?.comments.length : '0') +
-                  ' Comments'
-                }></TextNormal>
-            </View>
-            <View
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'space-around',
-                borderTopWidth: 1,
-                paddingTop: SPACINGS.avg,
-                paddingBottom: SPACINGS.avg,
-                borderTopColor: colors.gray,
-              }}>
-              <TouchableOpacity
-                onPress={() => {
-                  clickLike(item);
-                }}
-                style={{display: 'flex', flexDirection: 'row'}}>
-                <AntDesign
-                  name={isLike ? 'like1' : 'like2'}
-                  size={20}
-                  color={isLike ? colors.purpleMain : colors.black}
-                />
-                <TextNormal text="Like"></TextNormal>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => {
-                  console.log('comment');
-                  // navigate to Post Detail
-                }}
-                style={{display: 'flex', flexDirection: 'row'}}>
-                <EvilIcons name="comment" size={20} />
-                <TextNormal text="Comment"></TextNormal>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </TouchableOpacity>
-    </>
+        </TouchableOpacity>
+      </>
     );
   }
   const renderPost = (item) =>{
     let isLike =
             item.likes && item.likes.indexOf(userStore?.userInfo?.id) !== -1;
+    let isToDay = TimeHelper.isToday(moment(item?.timeInMillosecond));
     return (
       <TouchableOpacity
         onPress={() => {
@@ -383,10 +404,10 @@ const SocialScreen = (props) => {
                 style={styles.postOwner}
                 text={item.name}></TextNormal>
               <TextNormal
-                style={styles.postTime}
-                text={moment(item.timeInMillosecond).format(
-                  'HH:mm',
-                )}></TextNormal>
+                  style={styles.postTime}
+                  text={moment(item.timeInMillosecond).format(
+                    isToDay ? 'HH:mm' : ENUM_TIME_FORMAT.FULL,
+                  )}></TextNormal>
             </View>
           </View>
           <View style={styles.postContent}>

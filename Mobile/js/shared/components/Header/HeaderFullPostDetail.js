@@ -20,7 +20,7 @@ import fonts from '../../../shared/utils/fonts/fonts';
 
 const HeaderFullPostDetail = ({title, hasButton = false, rightIco, onPress, avatar, name, createdAt}) => {
   return (
-    <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
+    <View style={{flexDirection: 'row', justifyContent: 'flex-start', marginTop: SPACINGS.avg}}>
       <TouchableOpacity
         style={{width: ScreenWidth / 7}}
         onPress={() => {
@@ -50,7 +50,7 @@ const HeaderFullPostDetail = ({title, hasButton = false, rightIco, onPress, avat
         text={createdAt ? moment(createdAt).format("DD/MM/YYYY hh:mm"): ""}
         style={[
           {
-            fontSize: FONTSIZES.xSmall,
+            fontSize: 12,
             alignSelf: 'flex-start',
             color: colors.gray_new
           },

@@ -10,9 +10,8 @@ import TextNormal from '../Text/TextNormal';
 import {useTranslation} from 'react-i18next';
 import GradientButton from '../../../shared/components/Buttons/GradientButton';
 
-const ModalConfirm = ({isVisible, onPress, title, subTitle, style, onClose}) => {
+const ModalConfirm = ({isVisible, onPress, title, subTitle, style, onClose, secondSubTitle, hasIco = false, ico, icoPress}) => {
 	const {t} = useTranslation();
-
 	return (
     <Modal
       isVisible={isVisible}
@@ -31,7 +30,19 @@ const ModalConfirm = ({isVisible, onPress, title, subTitle, style, onClose}) => 
                 containerStyle.textDefault,
               ]}
             />
-            <Text>{subTitle}</Text>
+			<TextNormal
+              text={subTitle}
+              style={[
+				containerStyle.textCenter,
+				styles.textSubTitle
+              ]}
+            />
+			{(secondSubTitle || hasIco ) && <View style={styles.secondSub}>
+				{secondSubTitle && (<Text>{secondSubTitle}</Text>)}
+				{hasIco && (<TouchableOpacity onPress={() => icoPress()}>{ico}</TouchableOpacity>)}
+			</View>}
+            
+			
           </View>
         </View>
         <View
@@ -121,5 +132,15 @@ const styles = StyleSheet.create({
 		marginTop: 10,
 		width: ScreenWidth / 3
 	},
+	textSubTitle:{
+		fontSize: FONTSIZES.avg,
+		marginBottom: SPACINGS.large
+	},
+	secondSub:{
+		display: "flex",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "space-evenly"
+	}
 
 });

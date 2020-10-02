@@ -74,8 +74,8 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignContent: 'flex-start',
     width: ScreenWidth * 0.9,
-	marginTop: SPACINGS.small,
-	alignSelf: "center"
+    marginTop: SPACINGS.small,
+    alignSelf: 'center',
   },
   avatarComment: {
     width: ScreenWidth * 0.1,
@@ -107,24 +107,26 @@ export const styles = StyleSheet.create({
     width: ScreenWidth,
     height: ScreenWidth,
   },
-  newCommentContainer:{
-	display: 'flex',
+  newCommentContainer: {
+    display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    alignSelf: 'center',
     alignContent: 'flex-start',
     width: ScreenWidth * 0.9,
-	marginTop: SPACINGS.small,
-	alignSelf: "center"
+    marginTop: SPACINGS.small,
+    marginBottom: SPACINGS.xxxLarge,
   },
   newComment: {
     backgroundColor: colors.gray_bg,
     borderRadius: 20,
     padding: 10,
     flex: 1,
+    marginBottom: SPACINGS.avg
   },
   commentInput: {
-	padding: SPACINGS.avg
+    padding: SPACINGS.avg,
   },
 });
 

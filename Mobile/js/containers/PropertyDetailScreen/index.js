@@ -2,15 +2,13 @@ import {useObserver} from 'mobx-react';
 import React, {useState, useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
 import {
-  Button,
-  Text,
   ScrollView,
   StatusBar,
   TouchableOpacity,
   SafeAreaView,
   View,
   FlatList,
-  Dimensions,
+  Linking,
 } from 'react-native';
 import {List, ListItem} from 'react-native-elements';
 import {withTheme} from 'react-native-paper';
@@ -42,7 +40,10 @@ import { FirebaseService } from '../../api/FirebaseService';
 import Swiper from 'react-native-swiper';
 import GradientButton from '../../shared/components/Buttons/GradientButton';
 import { constants } from 'buffer';
-
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import ModalConfirm from '../../shared/components/Modal/ModalConfirm';
+import { TimeHelper, ENUM_TIME_FORMAT } from '../../shared/utils/helper/timeHelper';
+var momentTimezone = require('moment-timezone');
 
 const ListUltilities = [
   {label: 'Internet', value: 'Internet', icon: 'wifi'},
@@ -63,10 +64,12 @@ const ListUltilities = [
 const PropertyDetailScreen = (props) => {
   const {colorsApp} = props.theme;
   const {t} = useTranslation();
-  const {userStore} = useStores();
   const [userInfo, setUserInfo] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-
+  const [showOpenTime, setShowOpenTime] = useState(false);
+  const [bookingTime, setBookingTime] = useState(new Date());
+  const [showModal, setShowModal] = useState(false);
+  
   const property = props.navigation.state.params.data || {};
 
   useEffect(() => {
@@ -81,6 +84,16 @@ const PropertyDetailScreen = (props) => {
     setUserInfo(userInfo);
   };
 
+  const doBooking = () => {
+    const data = {
+      propertyId: property?.id,
+      bookedAt: moment(bookingTime).valueOf(),
+      userId: userInfo?.userId,
+      TimeZoneId: momentTimezone.tz.guess(),
+    };
+    ToastHelper.showSuccess('Success create new post, enjoy! :re')
+    NavigationService.goBack();
+  };
 
   const renderDetail = () => {
     return (
@@ -256,6 +269,7 @@ const PropertyDetailScreen = (props) => {
   };
 
   const renderContactButton = () => {
+    
     return (
       <View
         style={[
@@ -270,6 +284,7 @@ const PropertyDetailScreen = (props) => {
             width: ScreenWidth * 0.9
           },
         ]}>
+          
         {userInfo?.userId === property?.userId ? (
           <>
             <View
@@ -286,7 +301,6 @@ const PropertyDetailScreen = (props) => {
               }}>
               <TouchableOpacity
                 onPress={()=>{
-                  console.log(property)
                   NavigationService.navigate(ScreenNames.PropertyScreen, {
                     data: property,
                   });
@@ -330,19 +344,31 @@ const PropertyDetailScreen = (props) => {
               style={styles.nextButton}
               text={t('common.chat')}
               onPress={() => {
-                ToastHelper.showWarning(
-                  'This feature is in progress working. Wait for next version',
-                );
+                NavigationService.navigate(ScreenNames.ChatRoomScreen, {
+                  toUserData: {
+                    id: property?.userId,
+                    name: property?.userName || 'No name',
+                    avatar: property?.userAvatar,
+                  },
+                });
               }}
             />
             <GradientButton
+              hasIco
+              ico={
+                <Ionicons
+                  name="calendar"
+                  size={24}
+                  color={colors.whiteBackground}></Ionicons>
+              }
               style={styles.nextButton}
-              text={t('common.book')}
-              oonPress={() => {
+              onPress={() => {
+                // setShowOpenTime(true);
                 ToastHelper.showWarning(
                   'This feature is in progress working. Wait for next version',
                 );
               }}
+              text={t('common.book')}
             />
             <GradientButton
               hasIco
@@ -354,9 +380,14 @@ const PropertyDetailScreen = (props) => {
               }
               style={styles.nextButton}
               onPress={() => {
-                ToastHelper.showWarning(
-                  'This feature is in progress working. Wait for next version',
-                );
+                if(property?.phoneContact){
+                  // Linking.openURL(`tel:${property?.phoneContact}`);
+                  let phoneNumber = `tel:${property?.phoneContact}`;
+                  if (Platform.OS !== 'android') {
+                    phoneNumber = `telprompt:${property?.phoneContact}`;
+                  }
+                  Linking.openURL(phoneNumber);
+                }
               }}
               text={t('common.call')}
             />
@@ -366,39 +397,88 @@ const PropertyDetailScreen = (props) => {
     );
   }
 
-const renderBanner = () => {
-  return (
-    <View style={{height: ScreenHeight * 0.25}}>
-      <Swiper
-        autoplay
-        autoplayTimeout={5}
-        showsPagination
-        scrollEnabled
-        loop
-        paginationStyle={containerStyle.paginationStyle}>
-        {property?.photos && property?.photos.length > 0  ? 
-          (property?.photos.map((item, index) => {
-          return (
+  const renderBanner = () => {
+    return (
+      <View style={{height: ScreenHeight * 0.25}}>
+        <Swiper
+          autoplay
+          autoplayTimeout={5}
+          showsPagination
+          scrollEnabled
+          loop
+          paginationStyle={containerStyle.paginationStyle}>
+          {property?.photos && property?.photos.length > 0  ? 
+            (property?.photos.map((item, index) => {
+            return (
+              <FastImage
+                key={index}
+                source={{uri: item}}
+                style={styles.slide1}
+                resizeMode="cover"
+              />
+            );
+          })) :
+          (
             <FastImage
-              key={index}
-              source={{uri: item}}
+              source={{uri: Constant.MOCKING_DATA.NO_IMG_PLACE_HOLDER}}
               style={styles.slide1}
               resizeMode="cover"
             />
-          );
-        })) :
-        (
-          <FastImage
-            source={{uri: Constant.MOCKING_DATA.NO_IMG_PLACE_HOLDER}}
-            style={styles.slide1}
-            resizeMode="cover"
+          )
+        }
+        </Swiper>
+      </View>
+    );
+  };
+
+  const reSelectTimeBooking = () =>{
+    setShowOpenTime(true);
+    setShowModal(false);
+  }
+
+  const renderBooking = () => {
+    let title = "Confirmation";
+    let subTitle = "Do you want to booking at: "; 
+
+    return (
+      <>
+        {showOpenTime && (
+          <DateTimePickerModal
+            isVisible={showOpenTime}
+            mode="datetime"
+            onConfirm={(date) => {
+              setBookingTime(moment(date).toDate());
+              setShowOpenTime(false);
+              setShowModal(true);
+            }}
+            date={bookingTime}
+            onCancel={() => setShowOpenTime(false)}
+            cancelTextIOS={t('common.cancel')}
+            confirmTextIOS={t('common.confirm')}
+            headerTextIOS={t('common.pickATime')}
           />
-        )
-      }
-      </Swiper>
-    </View>
-  );
-};
+        )}
+        {showModal ? (
+          <ModalConfirm
+            isVisible={showModal}
+            title={title}
+            subTitle={subTitle}
+            secondSubTitle={moment(bookingTime).format(ENUM_TIME_FORMAT.FULL)}
+            onPress={() => {
+              doBooking();
+              setShowModal(false);
+            }}
+            hasIco
+            ico={<MaterialCommunityIcons name={'calendar-edit'} size={24}></MaterialCommunityIcons>}
+            icoPress={reSelectTimeBooking}
+            onClose={() => {
+              setShowModal(false);
+            }}
+          />
+        ) : null}
+      </>
+    );
+  };
 
   return useObserver(() => (
     <View style={[containerStyle.default, containerStyle.defaultBackground]}>
@@ -412,6 +492,7 @@ const renderBanner = () => {
           {renderBanner()}
           {renderDetail()}
           {renderContactButton()}
+          {renderBooking()}
         </ScrollView>
       </SafeAreaView>
     </View>

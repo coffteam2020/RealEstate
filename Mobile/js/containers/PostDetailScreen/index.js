@@ -54,23 +54,33 @@ const PostDetailScreen = (props) => {
   const [post, setPost] = useState({});
   const [newComment, setNewComment] = useState('');
   const [userDetail, setUserDetail] = useState({});
+  const [contentHeight, setContentHeight] = useState({});
   const refInput = useRef();
+  const refScrollView = useRef();
 
   let data = props.navigation.state.params.data || {};
 
   useEffect(() => {
-    props?.navigation.addListener('willFocus', () => {
-      getPostDetail();
-      getProfile();
-    });
     getPostDetail();
     getProfile();
   }, []);
 
-  const getPostDetail = async () =>{
-    let postDetail = await FirebaseService.queryAllItemBySchemaWithSpecifiedChild(Constant.SCHEMA.SOCIAL, '_id', data._id, false, false);
-    setPost((postDetail && postDetail.length > 0 ) ? postDetail[0] : {});
-  }
+  const getPostDetail = async () => {
+    console.log(Constant.SCHEMA.SOCIAL + '/'+ data?.userId + '_' + data?.timeInMillosecond);
+    let user = await IALocalStorage.getDetailUserInfo();
+    setIsLoading(true);
+    await firebase
+      .database()
+      .ref(Constant.SCHEMA.SOCIAL)
+      .child(data?.userId + '_' + data?.timeInMillosecond)
+      .on('value', (snapshot) => {
+        const data = snapshot.val() ? snapshot.val() : {};
+        setPost(data)
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 500);
+      });
+  };
 
   const getProfile = async () => {
     let userInfo = await IALocalStorage.getDetailUserInfo();
@@ -200,43 +210,50 @@ const PostDetailScreen = (props) => {
               </View>
             );
           })}
-        <View style={styles.newCommentContainer}>
-          
-            <View style={styles.newCommentContainer}>
-
-          <FastImage
-            source={{
-              uri:
-                userDetail?.avatar || Constant.MOCKING_DATA.NO_IMG_PLACE_HOLDER,
-            }}
-            resizeMode="cover"
-            style={styles.avatarComment}
-          />
-          <View style={styles.newComment}>
-            <TextInput ref={refInput}
-              numberOfLines={10}
-              style={[
-                containerStyle.defaultMarginTopSmall,
-                containerStyle.textDefaultNormal,
-                styles.commentInput,
-                {
-                  height: 100
-                }
-              ]}
-              maxLength={1000}
-              value={newComment}
-              onChangeText={(text) => setNewComment(text)}
-              multiline
-              placeholder={t('social.commentInput.placeholder')}
+          <View style={styles.newCommentContainer}>
+            <FastImage
+              source={{
+                uri:
+                  userDetail?.avatar ||
+                  Constant.MOCKING_DATA.NO_IMG_PLACE_HOLDER,
+              }}
+              resizeMode="cover"
+              style={styles.avatarComment}
             />
+            <View style={styles.newComment}>
+              <TextInput
+                ref={refInput}
+                numberOfLines={10}
+                onFocus={() =>{
+                  refScrollView.current.scrollToEnd({ animated: true });
+                }}
+                style={[
+                  containerStyle.defaultMarginTopSmall,
+                  containerStyle.textDefaultNormal,
+                  styles.commentInput,
+                  {
+                    height: 100,
+                  },
+                ]}
+                maxLength={1000}
+                value={newComment}
+                onChangeText={(text) => setNewComment(text)}
+                multiline
+                placeholder={t('social.commentInput.placeholder')}
+              />
+            </View>
+            <TouchableOpacity
+              onPress={() => {
+                postComment();
+              }}>
+              <FontAwesome5
+                name={'paper-plane'}
+                size={24}
+                style={{margin: SPACINGS.small}}
+                color={colors.purpleMain}
+              />
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity
-            onPress={() => { postComment(); }}>
-            <FontAwesome5 name={'paper-plane'} size={24} style={{margin: SPACINGS.small}} color={colors.purpleMain} />
-          </TouchableOpacity>
-        </View>
-          
-      </View>
       </View>
     );
   };
@@ -307,12 +324,28 @@ const PostDetailScreen = (props) => {
     <View style={[containerStyle.default]}>
       <StatusBar barStyle={colorsApp.statusBar} />
       <SafeAreaView>
-        <HeaderFullPostDetail avatar={data?.avatar} name={data?.name} createdAt={data?.timeInMillosecond} hasButton/>
-          <ScrollView contentContainerStyle={styles.content}>
+        <HeaderFullPostDetail
+          avatar={data?.avatar}
+          name={data?.name}
+          createdAt={data?.timeInMillosecond}
+          hasButton
+        />
+        <KeyboardAvoidingView
+          behavior= {"padding"}
+          keyboardVerticalOffset={(Platform.OS === 'ios' ? 0 : -230)}
+          style={{display: 'flex', flexGrow: 1}}>
+          <ScrollView
+            contentContainerStyle={styles.content}
+            ref={refScrollView}
+            onContentSizeChange={(contentWidth, contentHeight) => {
+              setContentHeight(contentHeight);
+              console.log(contentHeight);
+            }}>
             {renderPostContent(post)}
             {rennderButton(post)}
             {rennderComments(post)}
           </ScrollView>
+        </KeyboardAvoidingView>
       </SafeAreaView>
       {isLoading && <Loading />}
     </View>
