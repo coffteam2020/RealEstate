@@ -25,6 +25,7 @@ import {firebase} from '@react-native-firebase/messaging';
 import AxiosFetcher from '../../api/AxiosFetch';
 import IALocalStorage from '../../shared/utils/storage/IALocalStorage';
 import Loading from '../../shared/components/Loading';
+import Video from 'react-native-video';
 import {ToastHelper} from '../../shared/components/ToastHelper';
 import Constant from '../../shared/utils/constant/Constant';
 import HeaderFull from '../../shared/components/Header/HeaderFull';
@@ -101,7 +102,7 @@ const PropertyDetailScreen = (props) => {
         style={[
           containerStyle.center,
           containerStyle.defaultMarginBottom,
-          containerStyle.shadow,
+          // containerStyle.shadow,
           {
             width: ScreenWidth,
           },
@@ -109,10 +110,11 @@ const PropertyDetailScreen = (props) => {
         <View
           style={[
             styles.detailContentWrapper,
-            styles.detailContentMarginTopBottom
+            styles.detailContentMarginTopBottom,
+            {paddingLeft: 20}
           ]}>
           <TextNormal
-            style={{fontSize: FONTSIZES.large, margin: SPACINGS.avg}}
+            style={{fontSize: FONTSIZES.large}}
             text={property?.projectName}></TextNormal>
           <View style={styles.detailContent}>
             <Ionicons
@@ -150,20 +152,20 @@ const PropertyDetailScreen = (props) => {
           ]}>
           <View
             style={[
-              containerStyle.defaultMarginTopSmall,
+              // containerStyle.defaultMarginTopSmall,
               // containerStyle.defaultMarginBottom,
               styles.detailContentWrapper,
               {
-                display: 'flex',
+                // display: 'flex',
                 flexDirection: 'row',
-                justifyContent: 'space-around',
+                justifyContent: 'space-between',
               },
             ]}>
-            <View style={[containerStyle.centerFlexEnd]}>
+            <View style={{width: '50%', alignContent: 'center', marginLeft: 20 }}>
               <TextNormal style={styles.fieldHeader} text={t('property.size')}></TextNormal>
               <TextNormal style={styles.fieldValue} text={property?.areaUnit ? property?.areaUnit : 'N/A'}></TextNormal>
             </View>
-            <View style={[containerStyle.centerFlexEnd]}>
+            <View style={{width: '50%', alignContent: 'center', }}>
               <TextNormal style={styles.fieldHeader} text={t('property.deposit')}></TextNormal>
               <TextNormal style={styles.fieldValue} text={property?.bookingAmount || 0}></TextNormal>
             </View>
@@ -174,7 +176,7 @@ const PropertyDetailScreen = (props) => {
                 numColumns={2}
                 style={{}}
                 contentContainerStyle={{
-                  margin: SPACINGS.avg,
+                  // margin: SPACINGS.avg,
                   width: '100%',
                   display: 'flex',
                   justifyContent: 'center',
@@ -190,9 +192,12 @@ const PropertyDetailScreen = (props) => {
                     return (
                       <View
                         style={{
-                          backgroundColor: colors.gray_bg_new,
-                          margin: SPACINGS.avg,
+                          backgroundColor: colors.whiteBackground,
+                          // margin: SPACINGS.avg,
+                          // marginEnd: 20,
+                          marginBottom: 10,
                           borderRadius: 40,
+                          marginLeft: 20,
                           minWidth: ScreenWidth * 0.3,
                           padding: SPACINGS.small,
                           display: 'flex',
@@ -223,11 +228,12 @@ const PropertyDetailScreen = (props) => {
           style={[
             styles.detailContentMarginTopBottom,
             styles.detailContentWrapper,
+            {paddingLeft: 20}
           ]}>
           <TextNormal
-            style={{fontSize: FONTSIZES.avg, margin: SPACINGS.avg}}
+            style={{fontSize: FONTSIZES.avg}}
             text={t('property.postDate')}></TextNormal>
-          <View style={styles.detailContent}>
+          <View style={[styles.detailContent, {alignItems: 'center'}]}>
             <Ionicons
               name="calendar"
               size={16}
@@ -247,9 +253,10 @@ const PropertyDetailScreen = (props) => {
           style={[
             styles.detailContentMarginTopBottom,
             styles.detailContentWrapper,
+            {paddingLeft: 20}
           ]}>
           <TextNormal
-            style={{fontSize: FONTSIZES.avg, margin: SPACINGS.avg, }}
+            style={{fontSize: FONTSIZES.avg}}
             text={t('property.description')}></TextNormal>
           <View style={styles.detailContent}>
             <TextNormal

@@ -38,6 +38,13 @@ const HOME_BANNERS = [
   { imgUrl: images.home4 },
   { imgUrl: images.home5 },
 ];
+const HOME_BANNERS_CLIENTS = [
+  { imgUrl: images.home1, text: "Hưng Thịnh land, hãy là nhà đầu tư thông minh" },
+  { imgUrl: images.home2, text: "Căn hộ Đức khải. Nơi xứng đáng để bạn trải nghiệm" },
+  { imgUrl: images.home3, text: "Vinhomes, nơi ươm mầm tiêu chuẩn cuộc sống" },
+  { imgUrl: images.home4, text: "Phú Hoàng resident, tiêu chuẩn tương lai" },
+  { imgUrl: images.home5, text: "Phú Hoàng 2 resident, tiêu chuẩn tương lai" },
+];
 
 const ExploreScreen = (props) => {
   const { colorsApp } = props.theme;
@@ -54,12 +61,17 @@ const ExploreScreen = (props) => {
           key: t('explorer.hurry'),
         }),
     },
-    { title: t('explorer.nearby'), icon: images.nearby },
-    { title: t('explorer.ownerOnsite'), icon: images.noowner },
     {
-      title: t('explorer.yourPlaces'),
-      icon: images.space,
+      title: t('explorer.nearby'), icon: images.nearby, onPress: () =>
+        NavigationService.navigate(ScreenNames.LocationScreen, {
+          key: t('explorer.hurry'),
+        }),
     },
+    { title: t('explorer.ownerOnsite'), icon: images.noowner },
+    // {
+    //   title: t('explorer.yourPlaces'),
+    //   icon: images.space,
+    // },
 
   ];
   const BTNS3 = [
@@ -313,6 +325,38 @@ const ExploreScreen = (props) => {
       </View>
     );
   };
+  const renderBannerClient = () => {
+    return (
+      <View style={{ height: ScreenHeight * 0.1, width: '92%'  }}>
+        <ScrollView
+          // autoplay
+          // autoplayTimeout={5}
+          // showsPagination={false}
+          // scrollEnabled
+          // loop
+          // paginationStyle={containerStyle.paginationStyle}
+          horizontal
+        >
+          {HOME_BANNERS_CLIENTS.map((item, index) => {
+            return (
+              <View style={{ margin: 5, }}>
+
+                <FastImage
+                  source={HOME_BANNERS_CLIENTS[index].imgUrl}
+                  style={[styles.slide1, { height: ScreenHeight * 0.1, }]}
+                  resizeMode="cover"
+                >
+                  <View style={[{ backgroundColor: 'rgba(0,0,0,0.2)', borderRadius: 2, padding: 5 }, containerStyle.shadow]}>
+                    <TextNormal text={item?.text} style={{ color: 'white', zIndex: 100, marginTop: 20, alignSelf: 'center' }} />
+                  </View>
+                </FastImage>
+              </View>
+            );
+          })}
+        </ScrollView>
+      </View>
+    );
+  };
   const renderSearch = () => {
     return (
       <View style={styles.search}>
@@ -451,10 +495,17 @@ const ExploreScreen = (props) => {
   return (
     <View style={[containerStyle.defaultBackground]}>
       <StatusBar barStyle={colorsApp.statusBar} />
-      <ScrollView contentContainerStyle={[styles.mainContainer]} style={{paddingBottom: ScreenHeight/2}}>
+      <ScrollView contentContainerStyle={[styles.mainContainer]} style={{ paddingBottom: ScreenHeight / 2 }}>
         {renderBanner()}
         {renderSearch()}
         {renderBtns()}
+        {renderBannerClient()}
+        <FastImage
+          source={images.map}
+          style={[styles.slide1, { height: ScreenHeight * 0.3, width: '90%', margin: 20, borderRadius: 10 }]}
+          imageStyle={{borderRadius: 10 }}
+          resizeMode="cover"
+        ></FastImage>
         <View style={{ width: '100%', marginLeft: 35, marginTop: 20 }}>
           {/* <TextNormal
             text={t('explorer.trend')}

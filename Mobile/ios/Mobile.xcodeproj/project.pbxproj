@@ -816,10 +816,14 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Mobile/Pods-Mobile-frameworks.sh",
+				"${PODS_ROOT}/JitsiMeetSDK/Frameworks/JitsiMeet.framework",
+				"${PODS_ROOT}/JitsiMeetSDK/Frameworks/WebRTC.framework",
 				"${PODS_ROOT}/../../node_modules/@notifee/react-native/ios/NotifeeCore.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JitsiMeet.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/WebRTC.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NotifeeCore.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -904,10 +908,14 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Mobile-MobileTests/Pods-Mobile-MobileTests-frameworks.sh",
+				"${PODS_ROOT}/JitsiMeetSDK/Frameworks/JitsiMeet.framework",
+				"${PODS_ROOT}/JitsiMeetSDK/Frameworks/WebRTC.framework",
 				"${PODS_ROOT}/../../node_modules/@notifee/react-native/ios/NotifeeCore.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JitsiMeet.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/WebRTC.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NotifeeCore.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1018,7 +1026,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "Mobile/Real Estate.entitlements";
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = 5H3BC22TC5;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Mobile/Info.plist;
@@ -1044,7 +1052,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "Mobile/Real Estate.entitlements";
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = 5H3BC22TC5;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Mobile/Info.plist;
@@ -1055,7 +1063,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.app.dtechno.dapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dtechno.dapp.premium;
 				PRODUCT_NAME = "Real Estate";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";

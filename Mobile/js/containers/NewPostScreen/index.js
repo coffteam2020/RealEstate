@@ -1,6 +1,6 @@
-import {useObserver} from 'mobx-react';
-import React, {useState, useEffect} from 'react';
-import {useTranslation} from 'react-i18next';
+import { useObserver } from 'mobx-react';
+import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Platform,
   TextInput,
@@ -14,43 +14,45 @@ import {
   Dimensions,
   KeyboardAvoidingView
 } from 'react-native';
-import {List, ListItem} from 'react-native-elements';
-import {withTheme} from 'react-native-paper';
-import {images} from '../../../assets';
-import {NavigationService} from '../../navigation';
-import {ScreenNames} from '../../route/ScreenNames';
+import { List, ListItem } from 'react-native-elements';
+import { withTheme } from 'react-native-paper';
+import { images } from '../../../assets';
+import { NavigationService } from '../../navigation';
+import { ScreenNames } from '../../route/ScreenNames';
 import TextNormal from '../../shared/components/Text/TextNormal';
-import {useStores} from '../../store/useStore';
-import {containerStyle} from '../../themes/styles';
+import { useStores } from '../../store/useStore';
+import { containerStyle } from '../../themes/styles';
 import * as Animatable from 'react-native-animatable';
 import TrackPlayer from 'react-native-track-player';
-import {styles} from './style';
-import {firebase} from '@react-native-firebase/messaging';
+import GradientButton from '../../shared/components/Buttons/GradientButton'
+import { styles } from './style';
+import { firebase } from '@react-native-firebase/messaging';
 import AxiosFetcher from '../../api/AxiosFetch';
 import IALocalStorage from '../../shared/utils/storage/IALocalStorage';
 import Loading from '../../shared/components/Loading';
-import {ToastHelper} from '../../shared/components/ToastHelper';
+import { ToastHelper } from '../../shared/components/ToastHelper';
 import Constant from '../../shared/utils/constant/Constant';
 import Speaker from '../../shared/components/Speaker';
+import Video from 'react-native-video';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import HeaderFull from '../../shared/components/Header/HeaderFull';
-import {colors} from '../../shared/utils/colors/colors';
+import { colors } from '../../shared/utils/colors/colors';
 import FastImage from 'react-native-fast-image';
-import {ScreenWidth, ScreenHeight} from '../../shared/utils/dimension/Divices';
+import { ScreenWidth, ScreenHeight } from '../../shared/utils/dimension/Divices';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import moment from 'moment'
-import {SPACINGS, FONTSIZES, RADIUS} from '../../themes';
+import { SPACINGS, FONTSIZES, RADIUS } from '../../themes';
 import ImagePicker from 'react-native-image-picker';
-import {uploadFileToFireBase} from '../../shared/utils/firebaseStorageUtils';
-import {FirebaseService} from '../../api/FirebaseService';
+import { uploadFileToFireBase } from '../../shared/utils/firebaseStorageUtils';
+import { FirebaseService } from '../../api/FirebaseService';
 import GridList from 'react-native-grid-list';
 
 var uuid = require('uuid');
 let childTemp = '';
 const NewPostScreen = (props) => {
-  const {colorsApp} = props.theme;
-  const {t} = useTranslation();
-  const {userStore} = useStores();
+  const { colorsApp } = props.theme;
+  const { t } = useTranslation();
+  const { userStore } = useStores();
   const [userDetail, setUserDetail] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [avt, setAvt] = useState('');
@@ -113,7 +115,7 @@ const NewPostScreen = (props) => {
         console.log('User tapped custom button: ', response.customButton);
       } else {
         setIsLoading(true);
-        setSelectedImages([{ uri: response.uri}]);
+        setSelectedImages([{ uri: response.uri }]);
         Promise.resolve(uploadFileToFireBase(response, userDetail?.id))
           .then((val) => {
             console.log('@@@@openImagePicker@@@@@');
@@ -142,7 +144,7 @@ const NewPostScreen = (props) => {
         console.log('User tapped custom button: ', response.customButton);
       } else {
         setIsLoading(true);
-        setSelectedImages([{ uri: response.uri}]);
+        setSelectedImages([{ uri: response.uri }]);
         Promise.resolve(uploadFileToFireBase(response, userDetail?.id))
           .then((val) => {
             console.log('@@@@openCamera@@@@@');
@@ -160,7 +162,7 @@ const NewPostScreen = (props) => {
   };
 
 
-  const createNewPost = () =>{
+  const createNewPost = () => {
     let currentTime = new Date().getTime();
     let post = {
       _id: uuid.v4(),
@@ -174,18 +176,18 @@ const NewPostScreen = (props) => {
       content: content,
     };
     console.log(images)
-    if(images.length > 0){
+    if (images.length > 0) {
       post.images = images;
     }
     console.log('createNewPost');
     if (
-      post?.content  &&
+      post?.content &&
       post?.content.replace(' ', '') === ''
     ) {
       return;
     }
     console.log(post);
-    childTemp = userDetail?.id +'_'+currentTime;
+    childTemp = userDetail?.id + '_' + currentTime;
     try {
       setIsLoading(true);
       FirebaseService.pushNewItemWithChildKey(
@@ -193,7 +195,7 @@ const NewPostScreen = (props) => {
         childTemp,
         post,
         false
-      ).then(val =>{
+      ).then(val => {
         setIsLoading(false);
         console.log(val);
         ToastHelper.showSuccess('Success create new post, enjoy! 🚲')
@@ -212,6 +214,7 @@ const NewPostScreen = (props) => {
           value={content || ''}
           returnKeyType="done"
           maxLength={3000}
+          placeholder="Text your post here 😄"
           onChangeText={(text) => setContent(text)}
           multiline
           numberOfLines={100}
@@ -220,10 +223,13 @@ const NewPostScreen = (props) => {
             containerStyle.textDefaultNormal,
             containerStyle.paddingDefault,
             {
-              height: ScreenHeight * 0.5,
+              // height: ScreenHeight * 0.5,
+              minHeight: 100,
+              maxHeight: ScreenHeight * 0.8,
               width: ScreenWidth * 0.9,
               backgroundColor: colors.gray_bg,
-              borderRadius: RADIUS.default
+              borderRadius: RADIUS.default,
+              marginBottom: 20,
             },
           ]}
         />
@@ -233,50 +239,125 @@ const NewPostScreen = (props) => {
 
   const renderImagePicker = () => {
     return (
-      <View style={{display: "flex", flexDirection: "row", 
-      width: ScreenWidth * 0.9}}>
+      <View style={{
+        display: "flex", flexDirection: "row",
+        width: ScreenWidth * 0.9
+      }}>
         <TouchableOpacity
           onPress={() => {
             openImagePicker();
           }}>
-          <MaterialIcons name="photo-library" size={40}></MaterialIcons>
+          <MaterialIcons name="photo-library" size={40} color={'grey'}></MaterialIcons>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
             openCamera();
           }}>
-          <MaterialIcons name="camera-alt" size={40}></MaterialIcons>
+          <MaterialIcons name="camera-alt" size={40} color={'grey'}></MaterialIcons>
         </TouchableOpacity>
       </View>
     );
   };
 
-  const renderItems = ({item, index}) => (
-    <Image style={styles.image} source={{uri: item.uri}} resizeMode="cover" />
+  const renderItems = ({ item, index }) => (
+    <Image style={styles.image} source={{ uri: item.uri }} resizeMode="cover" />
   );
 
   const renderImageSelected = () => {
+    if (selectedImages[0].uri?.includes('PNG') || selectedImages[0].uri?.includes('JPG') || selectedImages[0].uri?.includes('JPEG')) {
+      return (
+        <TouchableOpacity onPress={() => { setSelectedImages([]) }}>
+          <FastImage style={styles.image} source={{ uri: selectedImages[0].uri }} resizeMode="cover" />
+        </TouchableOpacity>
+      );
+    }
     return (
-      <FastImage style={styles.image} source={{uri: selectedImages[0].uri}} resizeMode="cover" />
+      <TouchableOpacity style={{ marginBottom: 20 }} onPress={() => { setSelectedImages([]) }}>
+        <Video source={{ uri: selectedImages[0].uri }} style={{ width: ScreenWidth / 2, height: ScreenWidth / 2 }} />
+        {/* <FastImage style={styles.image} source={{ uri: selectedImages[0].uri }} resizeMode="cover" /> */}
+      </TouchableOpacity>
+    )
+
+  };
+  const renderVideo = () => {
+    return (
+      <TouchableOpacity onPress={() => { setSelectedImages([]) }}>
+        <FastImage style={styles.image} source={{ uri: selectedImages[0].uri }} resizeMode="cover" />
+      </TouchableOpacity>
     );
   };
+  const pickVideo = () => {
+    ImagePicker.showImagePicker({
+      title: 'Select video',
+      mediaType: 'video',
+      path: 'video',
+      quality: 1
+    }, (response) => {
+      console.log('Response = ', response);
 
-  
-  const rightIco = isLoading ? null : (<TextNormal text={t('social.post')}></TextNormal>);
-  
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      } else {
+        setIsLoading(true);
+        setSelectedImages([{ uri: response.uri }]);
+        if ((response.uri?.includes('PNG') || response.uri?.includes('JPG') || response.uri?.includes('JPEG') ||
+          response.uri?.includes('png') || response.uri?.includes('jpg') || response.uri?.includes('jpeg'))) {
+          Promise.resolve(uploadFileToFireBase(response, userDetail?.id))
+            .then((val) => {
+              console.log('@@@@openCamera@@@@@');
+              console.log(val);
+              setImages([...images, val])
+              setIsLoading(false);
+            })
+            .catch((error) => {
+              console.log(error.message);
+              ToastHelper.showError(t('error.common'));
+              setIsLoading(false);
+            });
+
+        } else {
+          Promise.resolve(uploadFileToFireBase(response, userDetail?.id, '.mov'))
+            .then((val) => {
+              console.log('@@@@openCamera@@@@@');
+              console.log(val);
+              setImages([...images, val])
+              setIsLoading(false);
+            })
+            .catch((error) => {
+              console.log(error.message);
+              ToastHelper.showError(t('error.common'));
+              setIsLoading(false);
+            });
+
+        }
+
+      }
+    });
+
+
+  }
+
+
+  const rightIco = isLoading ? null : (<TextNormal text={t('social.image')}></TextNormal>);
+
   return (
     <View style={[containerStyle.default]}>
       <StatusBar barStyle={colorsApp.statusBar} />
       <SafeAreaView>
-        <HeaderFull title={t('social.createpost')} hasButton rightIco={rightIco} onPress={() => createNewPost()}/>
+        <HeaderFull title={t('social.createpost')} hasButton rightIco={rightIco} onPress={() => pickVideo()} />
         <ScrollView contentContainerStyle={styles.content}>
           {renderPostInput()}
-          {renderImagePicker()}
+          {/* {renderImagePicker()} */}
           {selectedImages.length > 0 && renderImageSelected()}
+          <GradientButton text="Post" onPress={() => createNewPost()} />
         </ScrollView>
       </SafeAreaView>
       {isLoading && <Loading />}
     </View>
   );
-  };
+}
 export default withTheme(NewPostScreen);

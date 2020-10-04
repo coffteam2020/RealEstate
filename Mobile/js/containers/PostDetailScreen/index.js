@@ -23,6 +23,7 @@ import {useStores} from '../../store/useStore';
 import {containerStyle} from '../../themes/styles';
 import * as Animatable from 'react-native-animatable';
 import TrackPlayer from 'react-native-track-player';
+import Video from 'react-native-video';
 import {styles} from './style';
 import {firebase} from '@react-native-firebase/messaging';
 import AxiosFetcher from '../../api/AxiosFetch';
@@ -114,7 +115,7 @@ const PostDetailScreen = (props) => {
           style={styles.contentTextStyle}
           text={post?.content}
           numberOfLines={100}></TextNormal>
-        <View>
+        {/* <View>
           {post.images && post.images.map((item, index)=>{
             return (<FastImage
             key={index}
@@ -126,7 +127,22 @@ const PostDetailScreen = (props) => {
             />)
           })
           }
-        </View>
+        </View> */}
+        <View style={{alignSelf: 'center'}}>
+              {post?.images && (post?.images[0]?.includes('PNG') || post?.images[0]?.includes('JPG') || post?.images[0]?.includes('JPEG') ||
+              post?.images[0]?.includes('png') || post?.images[0]?.includes('jpg') || post?.images[0]?.includes('jpeg')) ?
+              post.images.map((item, index)=>{
+                return (<FastImage
+                key={index}
+                  source={{
+                    uri: item || Constant.MOCKING_DATA.NO_IMG_PLACE_HOLDER,
+                  }}
+                  resizeMode="cover"
+                  style={styles.postImages}
+                />)}) : 
+                <Video playWhenInactive={false} playInBackground={false} controls={true} source={{uri: post?.images?.[0]}} style={{width: ScreenWidth/2, height: ScreenWidth/2}}/>
+              }
+            </View>
       </View>
     );
   };

@@ -17,6 +17,8 @@ import icons from '../../shared/utils/icons/icons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import { ToastHelper } from '../../shared/components/ToastHelper';
+import { NavigationService } from '../../navigation';
+import { ScreenNames } from '../../route/ScreenNames';
 
 const LocationScreen = (props) => {
   const {colorsApp} = props.theme;
@@ -116,31 +118,38 @@ const LocationScreen = (props) => {
             style={styles.location}
             resizeMode="contain"
           />
+          <View style={{padding: 10, alignSelf: 'center', alignItems: 'center', alignContent: 'center'}}>
           <TextNormal
             text={t('location.motto')}
-            style={containerStyle.textContent}
+            style={[containerStyle.textContent, {textAlign: 'center'}]}
             numberOfLines={1000}
           />
           <TextNormal
             text={t('location.currentLocation')}
             clickable
-            onPress={() => {}}
+            onPress={() => {
+              // 
+              ToastHelper.showSuccess('Your current location got success')
+            }}
             style={[
               containerStyle.textLink,
               containerStyle.textDefaultNormal,
               containerStyle.defaultMarginTop,
               containerStyle.defaultMarginBottom,
+              {textAlign: 'center'}
             ]}
             numberOfLines={1000}
           />
+          </View>
           <GradientButton
             fromColor={colors.purpleMain}
             toColor={colors.purpleMain}
             text={t('location.submit')}
             onPress={() => {
-              ToastHelper.showWarning(
-                'This feature is in progress working. Wait for next version',
-              );
+              // ToastHelper.showWarning(
+              //   'This feature is in progress working. Wait for next version',
+              // );
+              NavigationService.navigate(ScreenNames.PropertyListScreen)
             }}
           />
         </ScrollView>

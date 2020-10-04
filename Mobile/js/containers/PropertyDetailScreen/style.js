@@ -33,7 +33,10 @@ export const styles = StyleSheet.create({
     borderRadius: 0,
   },
   detailContentWrapper: {
-    width: ScreenWidth * 0.8,
+    width: ScreenWidth * 0.9,
+    // padding: 20,
+    paddingTop: 10,
+    paddingBottom: 20,
     borderRadius: RADIUS.default,
     backgroundColor: colors.gray_bg_new,
   },
@@ -44,7 +47,7 @@ export const styles = StyleSheet.create({
   detailContent: {
     display: 'flex',
     flexDirection: 'row',
-    margin: SPACINGS.avg
+    // margin: SPACINGS.sSmall
   },
   buttonEitWrapper: {
     display: 'flex',

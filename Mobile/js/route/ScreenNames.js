@@ -15,6 +15,7 @@ export const ScreenNames = {
   LiveStream: 'Livestream',
   InformationRoom: 'InformationRoom',
   VideoCallScreen: 'VideoCallScreen',
+  VideoCall: 'VideoCall',
   List: 'List',
   NewPostScreen: 'NewPostScreen',
   PostDetailScreen: 'PostDetailScreen',

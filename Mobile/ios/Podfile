@@ -1,7 +1,7 @@
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-platform :ios, '10.0'
+platform :ios, '11.0'
 
 target 'Mobile' do
   config = use_native_modules!
@@ -35,7 +35,6 @@ target 'Mobile' do
   pod 'FBSDKLoginKit', '~> 5.8.0'
   pod 'FBSDKShareKit', '~> 5.8.0'
   pod 'GoogleSignIn', '~> 5.0.0'
-  pod 'TesseractOCRiOS', '4.0.0'
   pod 'GPUImage', '0.1.7'
 
   pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'

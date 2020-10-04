@@ -372,6 +372,7 @@
     "title" : "Social",
     "placeholder": "What's on your mind?",
     "createpost": "Create Post",
+    "image": "Attach",
     "post": "Post",
     "likePrefix": "You and",
     "likeOnlyYou": "You",
@@ -379,7 +380,7 @@
     "like": "Like",
     "comment": "Comment",
     "commentInput":{
-      "placeholder" : "write comments.."
+      "placeholder" : "Leave your comments.."
     },
     "nodata":"NO POST YET"
   },

@@ -1,47 +1,48 @@
 /* eslint-disable react-native/no-inline-styles */
-import {firebase} from '@react-native-firebase/database';
-import {useObserver} from 'mobx-react';
+import { firebase } from '@react-native-firebase/database';
+import { useObserver } from 'mobx-react';
 import moment from 'moment';
-import React, {useEffect, useState} from 'react';
-import {useTranslation} from 'react-i18next';
-import {StatusBar, TouchableOpacity, View, Platform, Alert} from 'react-native';
-import {GiftedChat} from 'react-native-gifted-chat';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {withTheme} from 'react-native-paper';
-import {useNavigationParam} from 'react-navigation-hooks';
-import {FirebaseService} from '../../api/FirebaseService';
-import {NavigationService} from '../../navigation';
+import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { StatusBar, TouchableOpacity, View, Platform, Alert } from 'react-native';
+import { GiftedChat } from 'react-native-gifted-chat';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { withTheme } from 'react-native-paper';
+import { useNavigationParam } from 'react-navigation-hooks';
+import { FirebaseService } from '../../api/FirebaseService';
+import { NavigationService } from '../../navigation';
 import Back from '../../shared/components/Icons/Back';
 import Loading from '../../shared/components/Loading';
 import IALocalStorage from '../../shared/utils/storage/IALocalStorage';
 import ModalActionSheet from '../../shared/components/Modal/ModalActionSheet';
-import {ToastHelper} from '../../shared/components/ToastHelper';
+import { ToastHelper } from '../../shared/components/ToastHelper';
 import TopUserItem from '../../shared/components/TopUserItem';
 import Constant from '../../shared/utils/constant/Constant';
-import {StringHelper} from '../../shared/utils/helper/stringHelper';
+import { StringHelper } from '../../shared/utils/helper/stringHelper';
 import icons from '../../shared/utils/icons/icons';
 import ImagePicker from 'react-native-image-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {SPACINGS} from '../../themes';
-import {containerStyle} from '../../themes/styles';
-import {styles} from './styles';
-import {uploadFileToFireBase} from '../../shared/utils/firebaseStorageUtils';
+import { SPACINGS } from '../../themes';
+import { containerStyle } from '../../themes/styles';
+import { styles } from './styles';
+import { uploadFileToFireBase } from '../../shared/utils/firebaseStorageUtils';
 import AxiosFetcher from '../../api/AxiosFetch';
 import ModalPingMessage from '../../shared/components/Modal/ModalPinMessage';
-import {ScreenWidth} from '../../shared/utils/dimension/Divices';
-import {Base64} from 'js-base64';
-import {useStores} from '../../store/useStore';
-import {ScreenNames} from '../../route/ScreenNames';
-import {colors} from '../../shared/utils/colors/colors';
+import { ScreenWidth } from '../../shared/utils/dimension/Divices';
+import { Base64 } from 'js-base64';
+import { useStores } from '../../store/useStore';
+import { ScreenNames } from '../../route/ScreenNames';
+import { colors } from '../../shared/utils/colors/colors';
+import TextNormal from '../../shared/components/Text/TextNormal';
 
 var uuid = require('uuid');
 let childTemp = '';
 let ownerTemp = {};
 let toUserTemp = {};
 const ChatRoomScreen = (props) => {
-  const {colorsApp} = props.theme;
-  const {userStore} = useStores();
-  const {t} = useTranslation();
+  const { colorsApp } = props.theme;
+  const { userStore } = useStores();
+  const { t } = useTranslation();
   const toUserData = useNavigationParam('toUserData');
   const [isLoading, setIsLoading] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -80,7 +81,7 @@ const ChatRoomScreen = (props) => {
       },
       hasToken: true,
     })
-      .then((val) => {})
+      .then((val) => { })
       .catch(() => {
         ToastHelper.showError(
           'Opps, error while trying to touch your recipient wake up but failed. Dont worry, message still has been sent successful',
@@ -134,7 +135,7 @@ const ChatRoomScreen = (props) => {
       .then(async (val) => {
         userStore.setItemsBag(val || []);
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
   const getMessages = async (child) => {
@@ -161,19 +162,21 @@ const ChatRoomScreen = (props) => {
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => NavigationService.goBack()}
-          style={{flexDirection: 'row'}}>
+          style={{ flexDirection: 'row' }}>
           <Back props={props} />
         </TouchableOpacity>
-        <TopUserItem onItemPress={() => {}} item={item} />
+        <TopUserItem onItemPress={() => { }} item={item} />
         <TouchableOpacity
-          onPress={() => setIsVisible(true)}
+          onPress={() => {
+            NavigationService.navigate(ScreenNames.VideoCall, { item })
+          }}
           style={{
             width: 50,
             justifyContent: 'flex-end',
             alignItems: 'flex-end',
             alignContent: 'flex-end',
           }}>
-          {icons.IC_MORE_VERT}
+          <TextNormal text="Call" />
         </TouchableOpacity>
       </View>
     );
@@ -270,9 +273,9 @@ const ChatRoomScreen = (props) => {
   const renderSend = (props) => {
     return (
       <TouchableOpacity
-        style={{marginLeft: SPACINGS.large}}
+        style={{ marginLeft: SPACINGS.large }}
         onPress={() => {
-          props.onSend({text: props.text});
+          props.onSend({ text: props.text });
           setMsg('');
         }}>
         {icons.IC_SEND_MSG}
@@ -386,11 +389,11 @@ const ChatRoomScreen = (props) => {
       <View style={styles.avatarSendContainer}>
         <TouchableOpacity
           onPress={() => checkImage()}
-          style={{padding: 5, zIndex: 10}}>
+          style={{ padding: 5, zIndex: 10 }}>
           <Ionicons name="ios-images" color={colors.black_rect} size={30} />
         </TouchableOpacity>
         <TouchableOpacity
-          style={{marginLeft: SPACINGS.default, zIndex: 10}}
+          style={{ marginLeft: SPACINGS.default, zIndex: 10 }}
           onPress={() => checkCamera()}>
           <Ionicons name="ios-camera" color={colors.black_rect} size={30} />
         </TouchableOpacity>
@@ -428,17 +431,17 @@ const ChatRoomScreen = (props) => {
               avatar: userDetail?.avatar,
               name: userDetail?.name,
             }}
-            listViewProps={{initialNumToRender: 10}}
+            listViewProps={{ initialNumToRender: 10 }}
             alwaysShowSend={true}
             primaryStyle={styles.primaryInputToolBarStyle}
             textInputStyle={styles.textInputStyle}
             textStyle={styles.textSendStyle}
             dateFormat={'ddd LT'}
-            imageStyle={{backgroundColor: 'white'}}
-            imageProps={{backgroundColor: 'white'}}
+            imageStyle={{ backgroundColor: 'white' }}
+            imageProps={{ backgroundColor: 'white' }}
             renderSend={renderSend}
             renderAvatarInput={Platform.OS === 'ios' ? renderAvatarInput : null}
-            // minComposerHeight={30}
+          // minComposerHeight={30}
           />
           {Platform.OS === 'android' ? renderAvatarInput() : null}
         </KeyboardAwareScrollView>

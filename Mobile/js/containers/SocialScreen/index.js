@@ -25,6 +25,7 @@ import TrackPlayer from 'react-native-track-player';
 import {styles} from './style';
 import {firebase} from '@react-native-firebase/messaging';
 import AxiosFetcher from '../../api/AxiosFetch';
+import Video from 'react-native-video';
 import IALocalStorage from '../../shared/utils/storage/IALocalStorage';
 import Loading from '../../shared/components/Loading';
 import {ToastHelper} from '../../shared/components/ToastHelper';
@@ -63,6 +64,7 @@ const SocialScreen = (props) => {
     getMessages();
   }, []);
   const getAllPost = async () => {
+    setIsLoading(true);
     try {
       let allPost = await FirebaseService.queryAllItemBySchemaWithOrderedByChild(
         Constant.SCHEMA.SOCIAL,
@@ -73,10 +75,12 @@ const SocialScreen = (props) => {
       let arr = allPost.sort(function(x, y){
         return y.timeInMillosecond - x.timeInMillosecond;
       });
+      setIsLoading(false);
       setAllPost(arr);
       setIsFetching(false);
     } catch (err) {
       setAllPost([]);
+      setIsLoading(false);
       setIsFetching(false);
     }
   };
@@ -374,6 +378,7 @@ const SocialScreen = (props) => {
     let isLike =
             item.likes && item.likes.indexOf(userStore?.userInfo?.id) !== -1;
     let isToDay = TimeHelper.isToday(moment(item?.timeInMillosecond));
+    console.log("==========="+JSON.stringify(item));
     return (
       <TouchableOpacity
         onPress={() => {
@@ -417,7 +422,8 @@ const SocialScreen = (props) => {
               numberOfLines={100}
             />
             <View style={styles.contentImageStyle}>
-              {item?.images && (
+              {item?.images && (item?.images[0]?.includes('PNG') || item?.images[0]?.includes('JPG') || item?.images[0]?.includes('JPEG') ||
+              item?.images[0]?.includes('png') || item?.images[0]?.includes('jpg') || item?.images[0]?.includes('jpeg')) ?
                 <FastImage
                   source={{
                     uri:
@@ -425,9 +431,10 @@ const SocialScreen = (props) => {
                       Constant.MOCKING_DATA.NO_IMG_PLACE_HOLDER,
                   }}
                   resizeMode="cover"
-                  style={styles.postImages}
-                />
-              )}
+                  style={styles.postImages} 
+                /> : 
+                <Video playWhenInactive={false} playInBackground={false} controls={true} source={{uri: item?.images?.[0]}} style={{width: ScreenWidth/2, height: ScreenWidth/2}}/>
+              }
             </View>
           </View>
           <View style={styles.postFooter}>

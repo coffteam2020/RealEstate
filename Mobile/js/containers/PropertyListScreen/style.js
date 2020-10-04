@@ -68,9 +68,9 @@ export const styles = StyleSheet.create({
   },
   cardTitle:{
     color: colors.black,
-    textAlign: "center",
+    // textAlign: "center",
     fontSize: 18,
-    textAlign: "center"
+    // textAlign: "center"
   },
   cardContent:{
     color: colors.gray_new,

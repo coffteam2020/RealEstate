@@ -16,6 +16,7 @@ import MateScreenDetail from '../containers/MateScreenDetail';
 import MessageScreen from '../containers/MessageScreen';
 import ChatRoomScreen from '../containers/ChatRoomScreen';
 import VideoCallScreen from '../containers/VideoCallScreen';
+import VideoCall from '../containers/VideoCall';
 import Livestream from '../containers/Livestream';
 import InformationRoom from '../containers/Livestream/InformationRoom';
 import LocationScreen from '../containers/LocationScreen';
@@ -203,6 +204,7 @@ const TabNavigator = createStackNavigator(
     Livestream: {screen: Livestream},
     InformationRoom: {screen: InformationRoom},
     VideoCallScreen: {screen: VideoCallScreen},
+    VideoCall: {screen: VideoCall},
     SocialScreen: {screen: SocialScreenNavigator},
   },
   {

@@ -20,4 +20,5 @@ export const images = {
   noowner: require('./imgs/home/button_explorer/noowner.png'),
   space: require('./imgs/home/button_explorer/spaces.png'),
   locationbg: require('./imgs/locationbg.png'),
+  map: require('./imgs/maps.png'),
 }

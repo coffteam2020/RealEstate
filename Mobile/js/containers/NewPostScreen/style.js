@@ -19,9 +19,11 @@ export const styles = StyleSheet.create({
 	marginRight: SPACINGS.avg
   },
   image: {
-    width: ScreenWidth / 2,
-    height: ScreenWidth / 2,
+    width: ScreenWidth / 3,
+    height: ScreenWidth / 3,
     borderRadius: 10,
+    marginTop: 20,
+    marginBottom: 20,
     backgroundColor: colors.red
   },
   parentContainer: {

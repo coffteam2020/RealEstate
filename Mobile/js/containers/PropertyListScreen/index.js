@@ -341,7 +341,8 @@ const PropertyListScreen = (props) => {
               }}
               style={[
                 containerStyle.defaultMarginBottom,
-                {borderRadius: 1000},
+                
+                {borderRadius: 1000, marginBottom: 30},
               ]}>
               <View
                 style={{
@@ -353,12 +354,13 @@ const PropertyListScreen = (props) => {
                 <FastImage
                   source={{
                     uri:
-                      item.photos && item.photos.length > 0
+                      item.photos && item.photos.length > 0 && item.photos[0] !== ''
                         ? item.photos[0]
                         : Constant.MOCKING_DATA.NO_IMG_PLACE_HOLDER,
                   }}
                   style={{
                     width: ScreenWidth / 4,
+                    height: ScreenWidth / 4,
                     borderRadius: RADIUS.default,
                   }}></FastImage>
                 <View
@@ -378,17 +380,18 @@ const PropertyListScreen = (props) => {
                       flexDirection: 'row',
                       justifyContent: 'flex-end',
                     }}>
+                    
+                  </View>
+                    <TextNormal style={styles.cardTitle} text={item.projectName}></TextNormal>
+                    <TextNormal numberOfLines={2} style={styles.cardContent} text={item.description}></TextNormal>
                     <View style={{
                       display: 'flex',
                       flexDirection: 'row',
-                      justifyContent: 'space-between',
+                      // justifyContent: 'space-between',
                     }}>
                         <Ionicons name="ios-pricetags" size={16} color={colors.gray_new}></Ionicons>
                         <TextNormal style={{marginLeft: SPACINGS.small, marginRight: SPACINGS.small, color: colors.purpleMain}} text={'$ ' + item.priceOrMonthlyRent}></TextNormal>
                     </View>
-                  </View>
-                    <TextNormal style={styles.cardTitle} text={item.projectName}></TextNormal>
-                    <TextNormal numberOfLines={2} style={styles.cardContent} text={item.description}></TextNormal>
                 </View>
               </View>
             </TouchableOpacity>
