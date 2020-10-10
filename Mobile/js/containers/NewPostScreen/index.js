@@ -289,7 +289,7 @@ const NewPostScreen = (props) => {
   const pickVideo = () => {
     ImagePicker.showImagePicker({
       title: 'Select video',
-      mediaType: 'video',
+      mediaType: 'mixed',
       path: 'video',
       quality: 1
     }, (response) => {

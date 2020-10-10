@@ -55,30 +55,7 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 import { TimeHelper } from '../../shared/utils/helper/timeHelper';
 
   const labels = ['Infomation', 'Address', 'Utilities', 'Conformation'];
-  const customStyles = {
-    stepIndicatorSize: 30,
-    currentStepIndicatorSize: 40,
-    separatorStrokeWidth: 2,
-    currentStepStrokeWidth: 3,
-    stepStrokeCurrentColor: colors.purpleMain,
-    stepStrokeWidth: 3,
-    separatorStrokeFinishedWidth: 4,
-    stepStrokeFinishedColor: colors.purpleMain,
-    stepStrokeUnFinishedColor: '#aaaaaa',
-    separatorFinishedColor: colors.purpleMain,
-    separatorUnFinishedColor: '#aaaaaa',
-    stepIndicatorFinishedColor: colors.purpleMain,
-    stepIndicatorUnFinishedColor: '#ffffff',
-    stepIndicatorCurrentColor: '#ffffff',
-    stepIndicatorLabelFontSize: 13,
-    currentStepIndicatorLabelFontSize: 13,
-    stepIndicatorLabelCurrentColor: colors.purpleMain,
-    stepIndicatorLabelFinishedColor: '#ffffff',
-    stepIndicatorLabelUnFinishedColor: '#aaaaaa',
-    labelColor: '#999999',
-    labelSize: 13,
-    currentStepLabelColor: '#fe7013',
-  };
+  
   const PropertyTypes = [
     {label: 'Domitory', value: 'DOMITIRY'},
     {label: 'Room for rent', value: 'ROOM_FOR_RENT'},
@@ -145,6 +122,8 @@ const PropertyScreen = (props) => {
   const [role, setRole] = useState(Roles[0].value);
 
   const propertyParam = props?.navigation?.state?.params?.data || null;
+  const type = props?.navigation?.state?.params?.type || "PROPERTY";
+  const mainColor = props?.navigation?.state?.params?.mainColor || colors.purpleMain;
 
   const IMAGE_CONFIG = {
     title: t('imagePicker.name'),
@@ -155,6 +134,31 @@ const PropertyScreen = (props) => {
       skipBackup: true,
       path: 'images',
     },
+  };
+
+  const customStyles = {
+    stepIndicatorSize: 30,
+    currentStepIndicatorSize: 40,
+    separatorStrokeWidth: 2,
+    currentStepStrokeWidth: 3,
+    stepStrokeCurrentColor: mainColor,
+    stepStrokeWidth: 3,
+    separatorStrokeFinishedWidth: 4,
+    stepStrokeFinishedColor: mainColor,
+    stepStrokeUnFinishedColor: '#aaaaaa',
+    separatorFinishedColor: mainColor,
+    separatorUnFinishedColor: '#aaaaaa',
+    stepIndicatorFinishedColor: mainColor,
+    stepIndicatorUnFinishedColor: '#ffffff',
+    stepIndicatorCurrentColor: '#ffffff',
+    stepIndicatorLabelFontSize: 13,
+    currentStepIndicatorLabelFontSize: 13,
+    stepIndicatorLabelCurrentColor: mainColor,
+    stepIndicatorLabelFinishedColor: '#ffffff',
+    stepIndicatorLabelUnFinishedColor: '#aaaaaa',
+    labelColor: '#999999',
+    labelSize: 13,
+    currentStepLabelColor: '#fe7013',
   };
 
 
@@ -168,6 +172,7 @@ const PropertyScreen = (props) => {
   }, []);
 
   const initPropertFromParam = () =>{
+    console.log(propertyParam)
     if(null != propertyParam){
       setProperty(propertyParam);
       if(propertyParam?.address){
@@ -190,30 +195,6 @@ const PropertyScreen = (props) => {
       }
     }
   }
-  // const getProfile = async () => {
-  //   let userInfo = await IALocalStorage.getDetailUserInfo();
-  //   setIsLoading(true);
-  //   AxiosFetcher({
-  //     method: 'GET',
-  //     url: 'user/' + userInfo?.id,
-  //     hasToken: true,
-  //   })
-  //     .then((val) => {
-  //       if (val?.data !== '') {
-  //         setIsLoading(false);
-  //         userStore.userInfo = val;
-  //         setUserInfo(val);
-  //         setAvt(val?.avatar);
-  //       } else {
-  //         setIsLoading(false);
-  //         ToastHelper.showError(t('account.getInfoErr'));
-  //       }
-  //     })
-  //     .catch(() => {
-  //       setIsLoading(false);
-  //       ToastHelper.showError(t('account.getInfoErr'));
-  //     });
-  // };
 
   const onStepPress = (position) => {
     setCurrentPage(position);
@@ -257,7 +238,7 @@ const PropertyScreen = (props) => {
   const getStepIndicatorIconConfig = ({position, stepStatus}) => {
     const iconConfig = {
       name: 'feed',
-      color: stepStatus === 'finished' ? '#ffffff' : colors.purpleMain,
+      color: stepStatus === 'finished' ? '#ffffff' : mainColor,
       size: 15,
     };
     if (stepStatus === 'finished') {
@@ -274,8 +255,10 @@ const PropertyScreen = (props) => {
         break;
       }
       case 2: {
-        iconConfig.name = 'assessment';
-        break;
+        if (type !== 'CAFE') {
+          iconConfig.name = 'assessment';
+          break;
+        }
       }
       case 3: {
         iconConfig.name = 'payment';
@@ -295,11 +278,14 @@ const PropertyScreen = (props) => {
   const renderLabel = ({position, label, currentPosition}) => {
     return (
       <Text
-        style={
-          position === currentPosition
-            ? styles.stepLabelSelected
-            : styles.stepLabel
-        }>
+        style={{
+          fontSize: 12,
+          textAlign: 'center',
+          fontWeight: '500',
+          color: position === currentPosition
+                ? mainColor
+                : colors.gray_new,
+        }}>
         {label}
       </Text>
     );
@@ -402,8 +388,8 @@ const openImagePicker = () => {
                 </TouchableOpacity>
                 <CheckBox
                   disabled={propertyType === item.value}
-                  onCheckColor={colors.purpleMain}
-                  onTintColor={colors.purpleMain}
+                  onCheckColor={mainColor}
+                  onTintColor={mainColor}
                   key={index}
                   value={propertyType === item.value}
                   style={{height: 20}}
@@ -464,8 +450,8 @@ const openImagePicker = () => {
                 </TouchableOpacity>
                 <CheckBox
                   disabled={propertyFor === item.value}
-                  onCheckColor={colors.purpleMain}
-                  onTintColor={colors.purpleMain}
+                  onCheckColor={mainColor}
+                  onTintColor={mainColor}
                   key={index}
                   value={propertyFor === item.value}
                   style={{height: 20}}
@@ -595,6 +581,8 @@ const openImagePicker = () => {
             style={styles.nextButton}
             onPress={() => onNextStepPress()}
             text={t('property.next')}
+            fromColor={mainColor}
+            toColor={mainColor}
           />
         </View>
       </View>
@@ -659,12 +647,16 @@ const openImagePicker = () => {
             style={styles.nextButton}
             onPress={() => onNextStepPress()}
             text={t('property.next')}
+            fromColor={mainColor}
+            toColor={mainColor}
           />
       </View>
     );
   };
 
   const renderTabUtilties = () => {
+    if(type === "CAFE")
+      return null;
     return (
       <View
         style={[
@@ -777,6 +769,8 @@ const openImagePicker = () => {
           onPress={() => openCamera()}
           text={t('property.takeAPicture')}
           hasIco={true}
+          fromColor={mainColor}
+          toColor={mainColor}
           ico={
             <Ionicons
               name={'camera'}
@@ -844,6 +838,8 @@ const openImagePicker = () => {
           style={styles.nextButton}
           onPress={() => onNextStepPress()}
           text={t('property.publishRoom')}
+          fromColor={mainColor}
+          toColor={mainColor}
         />
       </View>
     );
@@ -884,8 +880,8 @@ const openImagePicker = () => {
               </TouchableOpacity>
               <CheckBox
                 disabled={role === item.value}
-                onCheckColor={colors.purpleMain}
-                onTintColor={colors.purpleMain}
+                onCheckColor={mainColor}
+                onTintColor={mainColor}
                 key={index}
                 value={role === item.value}
                 style={{height: 20}}
@@ -962,7 +958,7 @@ const openImagePicker = () => {
               }
               style={{width: ScreenWidth * 0.9}}
               hasRightIco={true}
-              ico={<Ionicons name={'time'} size={24}></Ionicons>}
+              ico={<Ionicons name={'time'} size={24} color={mainColor}/>}
               onPressIco={() => setShowOpenTime(true)}
             />
             <DateTimePickerModal
@@ -985,6 +981,8 @@ const openImagePicker = () => {
           style={styles.nextButton}
           onPress={() => onNextStepPress()}
           text={t('property.publishRoom')}
+          fromColor={mainColor}
+          toColor={mainColor}
         />
       </View>
     );
@@ -1000,6 +998,7 @@ const openImagePicker = () => {
         isVisible={showModal}
         title={title}
         subTitle={subTitle}
+        mainColor={mainColor}
         onPress={() => {
           postNewProperty();
         }}
@@ -1038,7 +1037,8 @@ const openImagePicker = () => {
       attachmentMedia: attachmentMedia,
       address: address,
       availabilityDate: moment(availabilityDate).valueOf(),
-      youAre: role
+      youAre: role,
+      type: type
     };
     setIsLoading(true);
     AxiosFetcher({

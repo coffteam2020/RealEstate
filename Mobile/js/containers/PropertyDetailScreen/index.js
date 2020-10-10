@@ -71,8 +71,11 @@ const PropertyDetailScreen = (props) => {
   const [bookingTime, setBookingTime] = useState(new Date());
   const [showModal, setShowModal] = useState(false);
   
-  const property = props.navigation.state.params.data || {};
+  const property = props?.navigation?.state?.params?.data || {};
+  const type = props?.navigation?.state?.params?.type || "PROPERTY";
+  const mainColor = props?.navigation?.state?.params?.mainColor || colors.purpleMain;
 
+  console.log(property)
   useEffect(() => {
     props?.navigation.addListener('willFocus', () => {
       getProfile();
@@ -90,10 +93,30 @@ const PropertyDetailScreen = (props) => {
       propertyId: property?.id,
       bookedAt: moment(bookingTime).valueOf(),
       userId: userInfo?.userId,
-      TimeZoneId: momentTimezone.tz.guess(),
+      timeZoneId: momentTimezone.tz.guess(),
+      userId: userInfo.id,
+      bookingStatus: "BOOKING",
     };
-    ToastHelper.showSuccess('Success create new post, enjoy! :re')
-    NavigationService.goBack();
+    console.log(data);
+
+    
+    setIsLoading(true);
+    AxiosFetcher({
+      method: 'POST',
+      url: '/bookingProperty/'+ userInfo.id +'/booking',
+      hasToken: true,
+      data: data
+    })
+      .then((val) => {
+        setIsLoading(false);
+        console.log(val);
+        ToastHelper.showSuccess('Booking successful , enjoy!  ');
+        // NavigationService.goBack();
+      })
+      .catch((error) => {
+        setIsLoading(false);
+      });
+    
   };
 
   const renderDetail = () => {
@@ -126,7 +149,7 @@ const PropertyDetailScreen = (props) => {
                 fontSize: FONTSIZES.avg,
                 marginLeft: SPACINGS.small,
                 marginRight: SPACINGS.small,
-                color: colors.purpleMain,
+                color: mainColor,
               }}
               text={'$ ' + property?.priceOrMonthlyRent}></TextNormal>
           </View>
@@ -139,7 +162,7 @@ const PropertyDetailScreen = (props) => {
               style={{
                 marginLeft: SPACINGS.small,
                 marginRight: SPACINGS.small,
-                color: colors.purpleMain,
+                color: mainColor,
               }}
               text={property?.address?.address || 'N/A'}></TextNormal>
           </View>
@@ -152,26 +175,23 @@ const PropertyDetailScreen = (props) => {
           ]}>
           <View
             style={[
-              // containerStyle.defaultMarginTopSmall,
-              // containerStyle.defaultMarginBottom,
               styles.detailContentWrapper,
               {
-                // display: 'flex',
                 flexDirection: 'row',
                 justifyContent: 'space-between',
               },
             ]}>
             <View style={{width: '50%', alignContent: 'center', marginLeft: 20 }}>
               <TextNormal style={styles.fieldHeader} text={t('property.size')}></TextNormal>
-              <TextNormal style={styles.fieldValue} text={property?.areaUnit ? property?.areaUnit : 'N/A'}></TextNormal>
+              <TextNormal style={[styles.fieldValue, {color: mainColor}]} text={property?.areaUnit ? property?.areaUnit : 'N/A'}></TextNormal>
             </View>
             <View style={{width: '50%', alignContent: 'center', }}>
               <TextNormal style={styles.fieldHeader} text={t('property.deposit')}></TextNormal>
-              <TextNormal style={styles.fieldValue} text={property?.bookingAmount || 0}></TextNormal>
+              <TextNormal style={[styles.fieldValue, {color: mainColor}]} text={property?.bookingAmount || 0}></TextNormal>
             </View>
           </View>
           <View style={{display: 'flex', justifyContent: 'center'}}>
-            {property?.amenities && (
+            {type !== "CAFE" && property?.amenities && (
               <FlatList
                 numColumns={2}
                 style={{}}
@@ -193,8 +213,6 @@ const PropertyDetailScreen = (props) => {
                       <View
                         style={{
                           backgroundColor: colors.whiteBackground,
-                          // margin: SPACINGS.avg,
-                          // marginEnd: 20,
                           marginBottom: 10,
                           borderRadius: 40,
                           marginLeft: 20,
@@ -207,12 +225,12 @@ const PropertyDetailScreen = (props) => {
                           alignItems: "center"
                         }}>
                         <MaterialCommunityIcons
-                          color={colors.purpleMain}
+                          color={mainColor}
                           name={current.icon}
                           size={24}></MaterialCommunityIcons>
                         <TextNormal
                           style={{
-                            color: colors.purpleMain,
+                            color: mainColor,
                             margin : SPACINGS.small
                           }}
                           text={current.label}></TextNormal>
@@ -243,7 +261,7 @@ const PropertyDetailScreen = (props) => {
                 fontSize: FONTSIZES.avg,
                 marginLeft: SPACINGS.small,
                 marginRight: SPACINGS.small,
-                color: colors.purpleMain,
+                color: mainColor,
               }}
               text={property?.availabilityDate ? (moment(property?.availabilityDate).format("DD / MMM / yyyy")) : 'N/A'}></TextNormal>
           </View>
@@ -274,6 +292,35 @@ const PropertyDetailScreen = (props) => {
       </View>
     );
   };
+
+  const renderBookingInfo = () =>{
+    return(
+      <View
+      style={[
+        styles.detailContentMarginTopBottom,
+        styles.detailContentWrapper,
+        {paddingLeft: 20}
+      ]}>
+      <TextNormal
+        style={{fontSize: FONTSIZES.avg}}
+        text={t('property.postDate')}></TextNormal>
+      <View style={[styles.detailContent, {alignItems: 'center'}]}>
+        <Ionicons
+          name="calendar"
+          size={16}
+          color={colors.gray_new}></Ionicons>
+        <TextNormal
+          style={{
+            fontSize: FONTSIZES.avg,
+            marginLeft: SPACINGS.small,
+            marginRight: SPACINGS.small,
+            color: colors.purpleMain,
+          }}
+          text={property?.availabilityDate ? (moment(property?.availabilityDate).format("DD / MMM / yyyy")) : 'N/A'}></TextNormal>
+      </View>
+    </View>
+    );
+  }
 
   const renderContactButton = () => {
     
@@ -310,17 +357,19 @@ const PropertyDetailScreen = (props) => {
                 onPress={()=>{
                   NavigationService.navigate(ScreenNames.PropertyScreen, {
                     data: property,
+                    type: type,
+                    mainColor: mainColor
                   });
                 }}
                 style={styles.buttonEitWrapper}>
                 <MaterialCommunityIcons
                   name="file-edit"
                   size={24}
-                  color={colors.purpleMain}
+                  color={mainColor}
                 />
                 <TextNormal
                   text={t('common.edit')}
-                  style={{color: colors.purpleMain}}></TextNormal>
+                  style={{color: mainColor}}></TextNormal>
               </TouchableOpacity>
               <TouchableOpacity
               onPress={() => {
@@ -370,10 +419,10 @@ const PropertyDetailScreen = (props) => {
               }
               style={styles.nextButton}
               onPress={() => {
-                // setShowOpenTime(true);
-                ToastHelper.showWarning(
-                  'This feature is in progress working. Wait for next version',
-                );
+                setShowOpenTime(true);
+                // ToastHelper.showWarning(
+                //   'This feature is in progress working. Wait for next version',
+                // );
               }}
               text={t('common.book')}
             />
@@ -458,6 +507,7 @@ const PropertyDetailScreen = (props) => {
               setShowOpenTime(false);
               setShowModal(true);
             }}
+            minimumDate={new Date()}
             date={bookingTime}
             onCancel={() => setShowOpenTime(false)}
             cancelTextIOS={t('common.cancel')}
@@ -476,7 +526,7 @@ const PropertyDetailScreen = (props) => {
               setShowModal(false);
             }}
             hasIco
-            ico={<MaterialCommunityIcons name={'calendar-edit'} size={24}></MaterialCommunityIcons>}
+            ico={<MaterialCommunityIcons name={'calendar-edit'} color={mainColor} size={24}></MaterialCommunityIcons>}
             icoPress={reSelectTimeBooking}
             onClose={() => {
               setShowModal(false);

@@ -147,12 +147,43 @@ const PropertyListScreen = (props) => {
   const [maxPriceInit, setMaxPriceInit] = useState(999);
   const flatListfilter = useRef(FlatList);
 
+  const [mainColor, setMainColor] = useState(colors.purpleMain);
+  const [title, setTitle] = useState(t('proper'));
+
+  const type = props.navigation.state.params.type || "PROPERTY";
+  
   useEffect(() => {
     props?.navigation.addListener('willFocus', () => {
       getPropertyList();
     });
     getPropertyList();
+    initMainColor();
   }, []);
+
+  const initMainColor = () => {
+    switch (type) {
+      case 'HOTEL':
+        setMainColor(colors.pink);
+        setTitle(t('property.hotelTitle'));
+        break;
+      case 'RESTAURANT':
+        setMainColor(colors.orange_new);
+        setTitle(t('property.restaurantTitle'));
+        break;
+      case 'CAFE':
+        setMainColor(colors.brown);
+        setTitle(t('property.cafeTitle'));
+        break;
+      case 'SNACK':
+        setMainColor(colors.green_new);
+        setTitle(t('property.snacksTitle'));
+        break;
+      default:
+        setMainColor(colors.purpleMain);
+        setTitle(t('property.propertyTitle'));
+        break;
+    }
+  };
 
   const getPropertyList = async () => {
     setIsLoading(true);
@@ -295,7 +326,6 @@ const PropertyListScreen = (props) => {
     setCapacity(0);
     setSortBy(SortByList[0]);
     setPropertyType(PropertyTypes[0])
-    setPropertyTypeTmp(PropertyTypes[0])
     setSelectedUltilities([]);
     setMinPrice(0);
     setMaxPrice(99999);
@@ -337,6 +367,8 @@ const PropertyListScreen = (props) => {
               onPress={() => {
                 NavigationService.navigate(ScreenNames.PropertyDetailScreen, {
                   data: item,
+                  type: type,
+                  mainColor: mainColor
                 });
               }}
               style={[
@@ -390,7 +422,7 @@ const PropertyListScreen = (props) => {
                       // justifyContent: 'space-between',
                     }}>
                         <Ionicons name="ios-pricetags" size={16} color={colors.gray_new}></Ionicons>
-                        <TextNormal style={{marginLeft: SPACINGS.small, marginRight: SPACINGS.small, color: colors.purpleMain}} text={'$ ' + item.priceOrMonthlyRent}></TextNormal>
+                        <TextNormal style={{marginLeft: SPACINGS.small, marginRight: SPACINGS.small, color: mainColor}} text={'$ ' + item.priceOrMonthlyRent}></TextNormal>
                     </View>
                 </View>
               </View>
@@ -442,7 +474,7 @@ const PropertyListScreen = (props) => {
               style={styles.plusButton}
               fromColor={colors.gray}
               toColor={colors.gray}
-              textStyle={{color: colors.purpleMain}}
+              textStyle={{color: mainColor}}
               text={'-'}
             />
             <View
@@ -458,15 +490,15 @@ const PropertyListScreen = (props) => {
                 height: 50,
               }}>
               <TextNormal
-                style={{backgroundColor: colors.whiteBackground}}
-                text={capacity}></TextNormal>
+                style={{backgroundColor: colors.whiteBackground, color: mainColor}}
+                text={capacity} ></TextNormal>
             </View>
             <GradientButton
               onPress={() => setCapacity(capacity + 1)}
               style={styles.plusButton}
               fromColor={colors.gray}
               toColor={colors.gray}
-              textStyle={{color: colors.purpleMain}}
+              textStyle={{color: mainColor}}
               text={'+'}
             />
           </View>
@@ -498,11 +530,13 @@ const PropertyListScreen = (props) => {
               return (
                 <GradientButton
                   onPress={() => setGender(item.value)}
-                  style={
-                    gender === item.value
-                      ? styles.selectedButton
-                      : styles.genderButton
-                  }
+                  style={{
+                      borderRadius: 40,
+                      width: ScreenWidth * 0.25,
+                      borderWidth: 1,
+                      borderColor: gender === item.value ? mainColor : colors.gray_bg,
+                      color: colors.black,
+                  }}
                   fromColor={
                     gender === item.value ? colors.whiteBackground : colors.gray
                   }
@@ -510,7 +544,7 @@ const PropertyListScreen = (props) => {
                     gender === item.value ? colors.whiteBackground : colors.gray
                   }
                   textStyle={{
-                    color: gender === item.value ? colors.purpleMain : colors.black,
+                    color: gender === item.value ? mainColor : colors.black,
                   }}
                   text={item.label}
                 />
@@ -532,6 +566,8 @@ const PropertyListScreen = (props) => {
             setFilterValue(newFilter);
             setSelectedFilter('');
           }}
+          fromColor={mainColor}
+          toColor={mainColor}
           text={t('common.apply')}
         />
       </View>
@@ -567,8 +603,8 @@ const PropertyListScreen = (props) => {
                 </TouchableOpacity>
                 <CheckBox
                   disabled={sortByTmp.value === item.value}
-                  onCheckColor={colors.purpleMain}
-                  onTintColor={colors.purpleMain}
+                  onCheckColor={mainColor}
+                  onTintColor={mainColor}
                   key={index}
                   value={sortByTmp.value  === item.value}
                   style={{height: 20}}
@@ -591,6 +627,8 @@ const PropertyListScreen = (props) => {
             setSelectedFilter('');
             setSortBy(sortByTmp);
           }}
+          fromColor={mainColor}
+          toColor={mainColor}
           text={t('common.apply')}
         />
       </View>
@@ -626,8 +664,8 @@ const PropertyListScreen = (props) => {
                 </TouchableOpacity>
                 <CheckBox
                   disabled={propertyType.value === item.value}
-                  onCheckColor={colors.purpleMain}
-                  onTintColor={colors.purpleMain}
+                  onCheckColor={mainColor}
+                  onTintColor={mainColor}
                   key={index}
                   value={propertyType.value  === item.value}
                   style={{height: 20}}
@@ -650,6 +688,8 @@ const PropertyListScreen = (props) => {
             setSelectedFilter('');
           }}
           text={t('common.apply')}
+          fromColor={mainColor}
+          toColor={mainColor}
         />
       </View>
     );
@@ -669,8 +709,8 @@ const PropertyListScreen = (props) => {
           <TextNormal text={'Price range'} />
         </View>
         <View style={{width: ScreenWidth * 0.9, display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
-          <TextNormal style={{color: colors.purpleMain}} text={'Min: ' + minPrice} />
-          <TextNormal style={{color: colors.purpleMain}} text={'Max: ' + maxPrice} />
+          <TextNormal style={{color: mainColor}} text={'Min: ' + minPrice} />
+          <TextNormal style={{color: mainColor}} text={'Max: ' + maxPrice} />
         </View>
         <RangeSlider
           style={{width: ScreenWidth * 0.8, height: 80}}
@@ -680,10 +720,10 @@ const PropertyListScreen = (props) => {
           min={0}
           max={maxPriceInit}
           step={10}
-          selectionColor={colors.purpleMain}
+          selectionColor={mainColor}
           labelBackgroundColor={colors.whiteBackground}
-          labelBorderColor={colors.purpleMain}
-          labelTextColor={colors.purpleMain}
+          labelBorderColor={mainColor}
+          labelTextColor={mainColor}
           blankColor={colors.white}
           onValueChanged={(low, high, fromUser) => {
             setMinPrice(low);
@@ -691,6 +731,8 @@ const PropertyListScreen = (props) => {
           }}
         />
         <GradientButton
+          fromColor={mainColor}
+          toColor={mainColor}
           style={[
             styles.applyButton,
             {
@@ -752,12 +794,12 @@ const PropertyListScreen = (props) => {
                     alignItems: 'center',
                   }}>
                   <MaterialCommunityIcons
-                    color={isSelected ? colors.purpleMain : colors.gray_new}
+                    color={isSelected ? mainColor : colors.gray_new}
                     name={item.icon}
                     size={24}></MaterialCommunityIcons>
                   <TextNormal
                     style={{
-                      color: isSelected ? colors.purpleMain : colors.gray_new,
+                      color: isSelected ? mainColor : colors.gray_new,
                     }}
                     text={item.label}></TextNormal>
                 </View>
@@ -775,6 +817,8 @@ const PropertyListScreen = (props) => {
             setSelectedFilter('');
           }}
           text={t('common.apply')}
+          fromColor={mainColor}
+          toColor={mainColor}
         />
       </View>
     );
@@ -803,10 +847,19 @@ const PropertyListScreen = (props) => {
             data={filterParams}
             renderItem={({item}) => {
               let isSelected = selectedFilter === item.id;
+              if( type === "CAFE" && item.id === "AMENITIES"){
+                return null;
+              }
+              else
               return (
                 <TouchableOpacity
                   onPress={() => {
-                    setSelectedFilter(item.id);
+                    if(isSelected){
+                      setSelectedFilter('');
+                    }else{
+                      setSelectedFilter(item.id);
+                    }
+                    
                   }}
                   style={{
                     backgroundColor: colors.whiteBackground,
@@ -820,14 +873,14 @@ const PropertyListScreen = (props) => {
                     alignItems: 'center',
                     borderWidth: 1,
                     borderColor: isSelected
-                      ? colors.purpleMain
+                      ? mainColor
                       : colors.gray_new,
                   }}>
                   <TextNormal
                     text={item.label}
                     style={{
                       fontSize: 15,
-                      color: isSelected ? colors.purpleMain : colors.black,
+                      color: isSelected ? mainColor : colors.black,
                     }}></TextNormal>
                   <Ionicons
                     name={isSelected ? "chevron-up" : "chevron-down"}
@@ -880,7 +933,7 @@ const PropertyListScreen = (props) => {
                   text={item.label}
                   style={{
                     fontSize: FONTSIZES.avg,
-                    color: colors.purpleMain,
+                    color: mainColor,
                   }}></TextNormal>
                 <Ionicons
                   onPress={() => removeFilterValueByType(item.type)}
@@ -930,9 +983,12 @@ const PropertyListScreen = (props) => {
       <SafeAreaView>
         <HeaderFull
           hasButton={true}
-          title={'Properties List'}
+          title={title}
           onPress={() => {
-            NavigationService.navigate(ScreenNames.PropertyScreen);
+            NavigationService.navigate(ScreenNames.PropertyScreen, {
+              type: type,
+              mainColor: mainColor
+            });
           }}
           rightIco={<Ionicons name="add" size={20} color={colors.blackInput} />}
         />

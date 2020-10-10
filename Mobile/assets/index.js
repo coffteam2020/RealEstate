@@ -20,5 +20,9 @@ export const images = {
   noowner: require('./imgs/home/button_explorer/noowner.png'),
   space: require('./imgs/home/button_explorer/spaces.png'),
   locationbg: require('./imgs/locationbg.png'),
-  map: require('./imgs/maps.png'),
+  map: require('./imgs/locationbg.png'),
+  cafe: require('./imgs/location.png'),
+  hotel: require('./imgs/location.png'),
+  restaurent: require('./imgs/location.png'),
+  snack: require('./imgs/location.png'),
 }
