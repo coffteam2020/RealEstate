@@ -303,7 +303,13 @@ const SocialScreen = (props) => {
                 numberOfLines={100}
               />
               <View style={styles.contentImageStyle}>
-                {item?.images && (
+                {item?.images &&
+                (item?.images[0]?.includes('PNG') ||
+                  item?.images[0]?.includes('JPG') ||
+                  item?.images[0]?.includes('JPEG') ||
+                  item?.images[0]?.includes('png') ||
+                  item?.images[0]?.includes('jpg') ||
+                  item?.images[0]?.includes('jpeg')) ? (
                   <FastImage
                     source={{
                       uri:
@@ -313,6 +319,21 @@ const SocialScreen = (props) => {
                     resizeMode="cover"
                     style={styles.postImages}
                   />
+                ) : (
+                  <View
+                    style={{
+                      alignItems: "center",
+                      width: ScreenWidth
+                    }}>
+                    <Video
+                      paused={true}
+                      playWhenInactive={false}
+                      playInBackground={false}
+                      controls={true}
+                      source={{uri: item?.images?.[0]}}
+                      style={{width: ScreenWidth / 2, height: ScreenWidth / 2}}
+                    />
+                  </View>
                 )}
               </View>
             </View>
@@ -433,8 +454,21 @@ const SocialScreen = (props) => {
                   resizeMode="cover"
                   style={styles.postImages} 
                 /> : 
-                <Video playWhenInactive={false} playInBackground={false} controls={true} source={{uri: item?.images?.[0]}} style={{width: ScreenWidth/2, height: ScreenWidth/2}}/>
-              }
+                <View
+                    style={{
+                      alignItems: "center",
+                      width: ScreenWidth
+                    }}>
+                    <Video
+                      paused={true}
+                      playWhenInactive={false}
+                      playInBackground={false}
+                      controls={true}
+                      source={{uri: item?.images?.[0]}}
+                      style={{width: ScreenWidth / 2, height: ScreenWidth / 2}}
+                    />
+                  </View>
+                }
             </View>
           </View>
           <View style={styles.postFooter}>

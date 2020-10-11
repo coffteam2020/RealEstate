@@ -45,7 +45,8 @@ import moment from 'moment'
 import {SPACINGS, FONTSIZES} from '../../themes';
 import { FirebaseService } from '../../api/FirebaseService';
 import { TextInput } from 'react-native-gesture-handler';
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import icons from '../../shared/utils/icons/icons';
 
 const PostDetailScreen = (props) => {
   const {colorsApp} = props.theme;
@@ -140,7 +141,7 @@ const PostDetailScreen = (props) => {
                   resizeMode="cover"
                   style={styles.postImages}
                 />)}) : 
-                <Video playWhenInactive={false} playInBackground={false} controls={true} source={{uri: post?.images?.[0]}} style={{width: ScreenWidth/2, height: ScreenWidth/2}}/>
+                <Video paused={true} playWhenInactive={false} playInBackground={false} controls={true} source={{uri: post?.images?.[0]}} style={{width: ScreenWidth/2, height: ScreenWidth/2}}/>
               }
             </View>
       </View>
@@ -258,7 +259,7 @@ const PostDetailScreen = (props) => {
                 placeholder={t('social.commentInput.placeholder')}
               />
             </View>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => {
                 postComment();
               }}>
@@ -268,7 +269,15 @@ const PostDetailScreen = (props) => {
                 style={{margin: SPACINGS.small}}
                 color={colors.purpleMain}
               />
-            </TouchableOpacity>
+              
+            </TouchableOpacity> */}
+            <TouchableOpacity
+                style={{ marginLeft: SPACINGS.large }}
+                onPress={() => {
+                  postComment();
+                }}>
+                {icons.IC_SEND_MSG}
+              </TouchableOpacity>
           </View>
       </View>
     );
@@ -350,6 +359,15 @@ const PostDetailScreen = (props) => {
           behavior= {"padding"}
           keyboardVerticalOffset={(Platform.OS === 'ios' ? 0 : -230)}
           style={{display: 'flex', flexGrow: 1}}>
+            {/* <KeyboardAwareScrollView
+          keyboardShouldPersistTaps="handled"
+          extraHeight={100}
+          contentContainerStyle={{
+            flex: 1,
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'white',
+          }}> */}
           <ScrollView
             contentContainerStyle={styles.content}
             ref={refScrollView}
@@ -362,6 +380,7 @@ const PostDetailScreen = (props) => {
             {rennderComments(post)}
           </ScrollView>
         </KeyboardAvoidingView>
+        {/* </KeyboardAwareScrollView> */}
       </SafeAreaView>
       {isLoading && <Loading />}
     </View>

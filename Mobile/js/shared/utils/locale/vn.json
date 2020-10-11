@@ -431,7 +431,12 @@
     "information":"Infomation",
     "propertyFor": "Property For",
     "postDate": "Ngày đăng",
-    "gender": "Giới tinh"
+    "gender": "Giới tinh",
+    "propertyTitle": "Properties List",
+    "hotelTitle": "Hotels List",
+    "restaurantTitle": "Restaurants List",
+    "cafeTitle": "Cafe List",
+    "snacksTitle": "Snack List",
   },
   "explorer": {
     "search": "Find district, name, ...",
@@ -444,7 +449,12 @@
     "facebook": "DFace",
     "dMark": "DMark",
     "dCar": "DCar",
-    "dShare": "DShare"
+    "dShare": "DShare",
+    "hotel": "Hotel",
+    "restaurant": "Restaurant",
+    "cafe": "Cafe",
+    "snack": "Snack"
+
   }, 
   "setting" : {
     "permission" : {

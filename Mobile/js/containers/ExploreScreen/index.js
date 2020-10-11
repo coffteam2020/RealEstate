@@ -81,14 +81,54 @@ const ExploreScreen = (props) => {
       onPress: () =>
         NavigationService.navigate(ScreenNames.PropertyListScreen, {
           key: t('explorer.properties'),
+          type: "PROPERTY"
         }),
     },
+    
     {
       title: t('explorer.social'),
       icon: images.hurry,
       onPress: () =>
         NavigationService.navigate(ScreenNames.SocialScreen, {
           key: t('explorer.social'),
+        }),
+    },
+  ];
+  const BTNS4 = [
+    {
+      title: t('explorer.hotel'),
+      icon: images.location,
+      onPress: () =>
+        NavigationService.navigate(ScreenNames.PropertyListScreen, {
+          key: t('explorer.hotel'),
+          type: "HOTEL"
+        }),
+    },
+    {
+      title: t('explorer.restaurant'),
+      icon: images.location,
+      onPress: () =>
+        NavigationService.navigate(ScreenNames.PropertyListScreen, {
+          key: t('explorer.restaurant'),
+          type: "RESTAURANT"
+        }),
+    },
+    {
+      title: t('explorer.cafe'),
+      icon: images.location,
+      onPress: () =>
+        NavigationService.navigate(ScreenNames.PropertyListScreen, {
+          key: t('explorer.cafe'),
+          type: "CAFE"
+        }),
+    },
+    {
+      title: t('explorer.snack'),
+      icon: images.location,
+      onPress: () =>
+        NavigationService.navigate(ScreenNames.PropertyListScreen, {
+          key: t('explorer.snack'),
+          type: "SNACK"
         }),
     },
   ];
@@ -419,9 +459,34 @@ const ExploreScreen = (props) => {
         <View
           style={[
             styles.banner,
-            { borderBottomLeftRadius: 20, borderBottomRightRadius: 20 },
+            // { borderBottomLeftRadius: 20, borderBottomRightRadius: 20 },
           ]}>
           {BTNS3?.map((item) => {
+            return (
+              <TouchableOpacity
+                style={[styles.button]}
+                onPress={() => item?.onPress()}>
+                <View style={[styles.btn2, { backgroundColor: item?.color }]}>
+                  <FastImage
+                    source={item?.icon}
+                    style={{ width: 40, height: 40 }}
+                  />
+                </View>
+                <TextNormal
+                  text={item?.title}
+                  numberOfLines={5}
+                  style={styles.buttonText}
+                />
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+        <View
+          style={[
+            styles.banner,
+            { borderBottomLeftRadius: 20, borderBottomRightRadius: 20 },
+          ]}>
+          {BTNS4?.map((item) => {
             return (
               <TouchableOpacity
                 style={[styles.button]}

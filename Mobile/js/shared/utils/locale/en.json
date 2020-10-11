@@ -319,6 +319,10 @@
     "dCar": "DCar",
     "dShare": "DShare",
     "social": "Social",
+    "hotel": "Hotel",
+    "restaurant": "Restaurant",
+    "cafe": "Cafe",
+    "snack": "Snack"
   }, 
   "location":{
     "near": "Find near you",
@@ -413,6 +417,11 @@
     "information":"Infomation",
     "propertyFor": "Property For",
     "postDate": "Posting Date",
-    "gender": "Gender"
+    "gender": "Gender",
+    "propertyTitle": "Properties List",
+    "hotelTitle": "Hotels List",
+    "restaurantTitle": "Restaurants List",
+    "cafeTitle": "Cafe List",
+    "snacksTitle": "Snack List",
   }
 }

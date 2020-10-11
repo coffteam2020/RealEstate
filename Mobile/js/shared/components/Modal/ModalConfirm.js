@@ -10,7 +10,7 @@ import TextNormal from '../Text/TextNormal';
 import {useTranslation} from 'react-i18next';
 import GradientButton from '../../../shared/components/Buttons/GradientButton';
 
-const ModalConfirm = ({isVisible, onPress, title, subTitle, style, onClose, secondSubTitle, hasIco = false, ico, icoPress}) => {
+const ModalConfirm = ({isVisible, onPress, title, subTitle, style, onClose, secondSubTitle, hasIco = false, ico, icoPress, mainColor}) => {
 	const {t} = useTranslation();
 	return (
     <Modal
@@ -51,7 +51,9 @@ const ModalConfirm = ({isVisible, onPress, title, subTitle, style, onClose, seco
             onPress={() => onPress()}
             style={styles.confirmButton}
             onPress={() => onPress()}
-            text={t('common.confirm')}
+			text={t('common.confirm')}
+			fromColor={mainColor ? mainColor : ""}
+			toColor={mainColor ? mainColor : ""}
           />
           <GradientButton
             onPress={() => onClose()}
@@ -59,7 +61,7 @@ const ModalConfirm = ({isVisible, onPress, title, subTitle, style, onClose, seco
             isFullBackground={true}
             onPress={() => onClose()}
             text={t('common.cancel')}
-            textStyle={{color: colors.purpleMain}}
+            textStyle={{color: mainColor ? mainColor : colors.purpleMain}}
             fromColor={colors.gray_bg_new}
             toColor={colors.gray_bg_new}
           />

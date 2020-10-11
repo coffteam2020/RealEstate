@@ -5,6 +5,7 @@ export const colors = {
 	whiteTransparent: "#fff",
 	whiteBackground: "#fafafa",
 	green: "#6abd45",
+	green_new: "#83B84C",
 	black: "#1E1F20",
 	blackBackground: "#141415",
 	blackInput: "#1b1b1c",
@@ -19,6 +20,7 @@ export const colors = {
 	pink: "#FA4169",
 	gray: "#ececec",
 	orange: "#FF874D",
+	orange_new: "#E49223",
 	orange_heavy: "#F5874D",
 	gray_less: "#f7f7f7",
 	gray_new: "#989898",
@@ -61,7 +63,8 @@ export const colors = {
 	borderColor: "#dcdcdc",
 	textBlue: "#00011A",
 	textPuple: "#665AAA",
-	purpleMain: "#574EAE"
+	purpleMain: "#574EAE",
+	brown: "#45341B"
 };
 
 export default {colors};
