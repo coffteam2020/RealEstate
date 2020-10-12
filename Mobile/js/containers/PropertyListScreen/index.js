@@ -154,10 +154,11 @@ const PropertyListScreen = (props) => {
   
   useEffect(() => {
     props?.navigation.addListener('willFocus', () => {
+      initMainColor();
       getPropertyList();
     });
-    getPropertyList();
     initMainColor();
+    getPropertyList();
   }, []);
 
   const initMainColor = () => {
@@ -195,9 +196,13 @@ const PropertyListScreen = (props) => {
       .then((val) => {
         setIsLoading(false);
         if (val?.content !== '') {
-          setProperties(val.content);
-          setMaxPriceInit(getMaxPrice(val.content));
-          setMaxPrice(getMaxPrice(val.content))
+          let datas = val?.content || [];
+          datas = datas.filter(
+            (item) => (!item.type && type === 'PROPERTY') || item.type === type,
+          );
+          setProperties(datas);
+          setMaxPriceInit(getMaxPrice(datas));
+          setMaxPrice(getMaxPrice(datas));
         } else {
           // ToastHelper.showError(t('account.getInfoErr'));
           setProperties([]);
