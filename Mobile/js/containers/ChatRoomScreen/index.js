@@ -73,11 +73,20 @@ const ChatRoomScreen = (props) => {
   const notifyToUserId = (idOwner, id, nameOwner) => {
     AxiosFetcher({
       method: 'POST',
-      url: '/api/useraction/' + idOwner + '/pushNotification',
+      url: '/api/user/' + idOwner + '/sendNotification',
       data: {
-        messageType: 'NOTIFICATION',
-        message: `You have a message ${nameOwner ? 'from ' + nameOwner : ''}`,
-        receiverUserId: id,
+        // messageType: 'NOTIFICATION',
+        // message: `You have a message ${nameOwner ? 'from ' + nameOwner : ''}`,
+        // receiverUserId: id,
+        "fromUserAvatar": "",
+        "fromUserId": idOwner,
+        "fromUserName": nameOwner,
+        "message": JSON.stringify({
+          messageType: 'MESSAGES',
+          message: `You have a new message ${nameOwner ? 'from ' + nameOwner : ''}`,
+          receiverUserId: id,
+        }),
+        "receiverUserId": id
       },
       hasToken: true,
     })
@@ -263,7 +272,7 @@ const ChatRoomScreen = (props) => {
         childTemp,
         data,
       );
-      //   notifyToUserId(userDetail?.id, toUserTemp?.id, userDetail?.name);
+        notifyToUserId(userDetail?.id, toUserTemp?.id, userDetail?.name);
       return;
     } catch (err) {
       console.log('err' + err?.message);

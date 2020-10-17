@@ -7236,6 +7236,11 @@ react-native-video@^5.1.0-alpha8:
     prop-types "^15.7.2"
     shaka-player "^2.5.9"
 
+react-native-voip-call@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/react-native-voip-call/-/react-native-voip-call-1.1.1.tgz#0d447c68660507204fe22e2908e7fbdaa7210d8c"
+  integrity sha512-EQXjynWhge6G0awnYZ7SkUnBUTjq84vYNsZZ629/Poa9nSIZ2SGtCvNjkWwFPPcrFlqaC75x0z4B6+0JsQ/P7Q==
+
 react-native-webview@^9.3.0, react-native-webview@^9.4.0:
   version "9.4.0"
   resolved "https://registry.yarnpkg.com/react-native-webview/-/react-native-webview-9.4.0.tgz#108da34a6c7e1c032dcabc942b7e4947ca1d8028"

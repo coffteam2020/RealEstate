@@ -83,7 +83,7 @@ export default {
   },
   FIREBASE_SPECIFIC: {
     appIdAndroid: '1:821862726561:android:8300b8d635bdf573b6e9e0',
-    appIdiOS: '1:821862726561:ios:20b26a1b27eb2e1fb6e9e0',
+    appIdiOS: '1:821862726561:ios:481dd2b455c21839b6e9e0',
   },
   SCHEMA: {
     USER: 'Users',

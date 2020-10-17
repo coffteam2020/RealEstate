@@ -57,6 +57,8 @@ target 'Mobile' do
    pod 'Google-Maps-iOS-Utils'
   pod 'react-native-camera', :path => '../node_modules/react-native-camera'
 
+  pod 'react-native-netinfo', :path => '../node_modules/@react-native-community/netinfo'
+
   target 'MobileTests' do
     inherit! :complete
     # Pods for testing

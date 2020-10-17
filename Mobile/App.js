@@ -14,6 +14,7 @@ import { Appearance } from 'react-native-appearance';
 import { CustomDarkTheme, CustomLightTheme } from './js/themes/index';
 import { NavigationService } from './js/navigation';
 import NetInfo from '@react-native-community/netinfo';
+import notifee from '@notifee/react-native';
 import firebase from '@react-native-firebase/app';
 import ModalConnection from './js/shared/components/Modal/ModalConnection';
 import Constant from './js/shared/utils/constant/Constant';

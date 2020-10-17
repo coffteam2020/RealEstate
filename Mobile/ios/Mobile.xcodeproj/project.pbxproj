@@ -38,6 +38,10 @@
 		74522E08409A46D290E24F38 /* Proxima Nova ScOsf Extra Condensed Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 39F3717235324C608BAF2E11 /* Proxima Nova ScOsf Extra Condensed Light.otf */; };
 		74622FBA0A854FF8A781A801 /* Proxima Nova Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0E09C77479D94F61AE2F27F6 /* Proxima Nova Black.otf */; };
 		7CD4737E46BB4AACA7E67F9A /* Nunito-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 23E5D6920F0D48F2B7233998 /* Nunito-LightItalic.ttf */; };
+		7E2C728E253B3A4100E280FA /* Intents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E2C728D253B3A4100E280FA /* Intents.framework */; };
+		7E2C7290253B3A4700E280FA /* CallKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E2C728F253B3A4700E280FA /* CallKit.framework */; };
+		7E2C7292253B440E00E280FA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7E2C7291253B440E00E280FA /* GoogleService-Info.plist */; };
+		7E2C7294253B53CC00E280FA /* PushKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E2C7293253B53CB00E280FA /* PushKit.framework */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		8A641181C9F3410D885D1CAB /* Nunito-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8F8820C2A4374CDB8BF05901 /* Nunito-Italic.ttf */; };
 		8D30DAB346CF4F5EA6A64ED4 /* PlayfairDisplay-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F3A07AEE7FBF48B18559CFDC /* PlayfairDisplay-SemiBoldItalic.ttf */; };
@@ -60,7 +64,6 @@
 		E3A87B700E2841B89E3679C1 /* Nunito-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AE893D98A3EE4E018D5A5711 /* Nunito-SemiBoldItalic.ttf */; };
 		EBC6C953B2AA450D9AE779E7 /* Nunito-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F9F47D3EB57546D58BE29C9B /* Nunito-Black.ttf */; };
 		FB97C6DE2818C4B0F4BA01E8 /* libPods-Mobile-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 85A2058A2825E31FA88D8FB3 /* libPods-Mobile-tvOS.a */; };
-		FD6B1C0724F2951E00DFCEE8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FD6B1C0624F2951E00DFCEE8 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -125,6 +128,10 @@
 		75DE1BF7BF14B9BC26FB2D27 /* libPods-Mobile-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Mobile-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7837B686E03C4EB89021ED2D /* Proxima Nova Extra Condensed Light.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Proxima Nova Extra Condensed Light.otf"; path = "../assets/fonts/Proxima Nova Extra Condensed Light.otf"; sourceTree = "<group>"; };
 		78DFCDD078E04292AA8ED511 /* Proxima Nova Alt Light.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Proxima Nova Alt Light.otf"; path = "../assets/fonts/Proxima Nova Alt Light.otf"; sourceTree = "<group>"; };
+		7E2C728D253B3A4100E280FA /* Intents.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Intents.framework; path = System/Library/Frameworks/Intents.framework; sourceTree = SDKROOT; };
+		7E2C728F253B3A4700E280FA /* CallKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CallKit.framework; path = System/Library/Frameworks/CallKit.framework; sourceTree = SDKROOT; };
+		7E2C7291253B440E00E280FA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../../Desktop/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		7E2C7293253B53CB00E280FA /* PushKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PushKit.framework; path = System/Library/Frameworks/PushKit.framework; sourceTree = SDKROOT; };
 		7E5FA75D87FA45E78E9FC1E3 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
 		7F91C4B0A34649A19122929A /* Proxima Nova Bold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Proxima Nova Bold.otf"; path = "../assets/fonts/Proxima Nova Bold.otf"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Mobile/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -164,7 +171,6 @@
 		F91571D6A7BC4296A408B35F /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 		F9F47D3EB57546D58BE29C9B /* Nunito-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Nunito-Black.ttf"; path = "../assets/fonts/Nunito-Black.ttf"; sourceTree = "<group>"; };
 		FB6B4416FF6E403EB1CF8FC0 /* PlayfairDisplay-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "PlayfairDisplay-Medium.ttf"; path = "../assets/fonts/PlayfairDisplay-Medium.ttf"; sourceTree = "<group>"; };
-		FD6B1C0624F2951E00DFCEE8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		FD6B1C0824F2C78E00DFCEE8 /* Real Estate.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = "Real Estate.entitlements"; path = "Mobile/Real Estate.entitlements"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -181,6 +187,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7E2C7290253B3A4700E280FA /* CallKit.framework in Frameworks */,
+				7E2C7294253B53CC00E280FA /* PushKit.framework in Frameworks */,
+				7E2C728E253B3A4100E280FA /* Intents.framework in Frameworks */,
 				1D616EA6082A8DEA38F40122 /* libPods-Mobile.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -224,14 +233,14 @@
 		13B07FAE1A68108700A75B9A /* Mobile */ = {
 			isa = PBXGroup;
 			children = (
+				7E2C7291253B440E00E280FA /* GoogleService-Info.plist */,
 				FD6B1C0824F2C78E00DFCEE8 /* Real Estate.entitlements */,
-				FD6B1C0624F2951E00DFCEE8 /* GoogleService-Info.plist */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
+				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
-				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
 			);
 			name = Mobile;
@@ -240,6 +249,9 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7E2C7293253B53CB00E280FA /* PushKit.framework */,
+				7E2C728F253B3A4700E280FA /* CallKit.framework */,
+				7E2C728D253B3A4100E280FA /* Intents.framework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
 				D8B50A30C63CD8052C343A2F /* libPods-Mobile.a */,
@@ -519,7 +531,7 @@
 				1CFEDADA05094B9FB719AF92 /* Nunito-ExtraBoldItalic.ttf in Resources */,
 				6FEA05F8E1E64974A47FC080 /* Nunito-ExtraLight.ttf in Resources */,
 				173C004DE47F4987B2A593E1 /* Nunito-ExtraLightItalic.ttf in Resources */,
-				FD6B1C0724F2951E00DFCEE8 /* GoogleService-Info.plist in Resources */,
+				7E2C7292253B440E00E280FA /* GoogleService-Info.plist in Resources */,
 				8A641181C9F3410D885D1CAB /* Nunito-Italic.ttf in Resources */,
 				C225CA3B1D9849A0858B2E80 /* Nunito-Light.ttf in Resources */,
 				7CD4737E46BB4AACA7E67F9A /* Nunito-LightItalic.ttf in Resources */,
@@ -585,7 +597,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
+			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
 		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
 			isa = PBXShellScriptBuildPhase;

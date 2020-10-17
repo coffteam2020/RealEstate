@@ -28,6 +28,7 @@ import { colors } from '../../shared/utils/colors/colors';
 import AxiosFetcher from '../../api/AxiosFetch';
 import { NavigationService } from '../../navigation';
 import { ScreenNames } from '../../route/ScreenNames';
+import { firebase } from '@react-native-firebase/messaging';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import IALocalStorage from '../../shared/utils/storage/IALocalStorage';
 import { ToastHelper } from '../../shared/components/ToastHelper';
@@ -122,7 +123,7 @@ const ExploreScreen = (props) => {
     },
   ];
   const BTNS4 = [
-   
+
   ];
   const BTNS2 = [
     {
@@ -279,6 +280,22 @@ const ExploreScreen = (props) => {
       .catch(() => {
         ToastHelper.showError(t('account.getInfoErr'));
       });
+
+    const fcmToken = await firebase.messaging().getToken();
+    if (fcmToken) {
+      console.log('Token FCM: ' + fcmToken);
+      AxiosFetcher({
+        method: 'POST',
+        url: 'user/' + userStore?.userInfo?.id + '/fcmtoken',
+        data: `${fcmToken}`,
+        hasToken: true,
+      })
+        .then(async (val) => {
+        })
+        .catch(() => {
+
+        });
+    }
   };
   const getProfile = async () => {
     let userInfo = await IALocalStorage.getDetailUserInfo();
@@ -395,7 +412,7 @@ const ExploreScreen = (props) => {
 
                 <FastImage
                   source={HOME_BANNERS_CLIENTS[index].imgUrl}
-                  style={[styles.slide1, { height: ScreenHeight * 0.1,borderRadius: 8, width: ScreenWidth * 0.8 }]}
+                  style={[styles.slide1, { height: ScreenHeight * 0.1, borderRadius: 8, width: ScreenWidth * 0.8 }]}
                   resizeMode="cover"
                 >
                   <View style={[{ backgroundColor: 'rgba(0,0,0,0.2)', borderRadius: 6, padding: 5 }, containerStyle.shadow]}>
