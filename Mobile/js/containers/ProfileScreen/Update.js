@@ -42,7 +42,7 @@ const Update = (props) => {
     })
       .then((val) => {
         setIsLoading(false);
-        if (val?.avatar) {
+        if (val?.id) {
           ToastHelper.showSuccess(t('account.success'));
           setTimeout(() => {
             NavigationService.goBack();

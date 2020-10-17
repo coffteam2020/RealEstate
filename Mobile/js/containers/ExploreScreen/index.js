@@ -56,11 +56,11 @@ const ExploreScreen = (props) => {
 
   const BTNS = [
     {
-      title: t('explorer.hurry'),
-      icon: images.nine,
+      title: t('explorer.video_call'),
+      icon: images.ten,
       onPress: () =>
-        NavigationService.navigate(ScreenNames.ListProductScreen, {
-          key: t('explorer.hurry'),
+        NavigationService.navigate(ScreenNames.VideoCall, {
+          isGroup: true
         }),
     },
     {

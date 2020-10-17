@@ -91,6 +91,7 @@ class VideoCallScreen extends Component {
       participiantsCount: 0,
       imgBackground: IMG,
       owner: {},
+      like: -1,
       isOwner: false,
       messages: [],
       password: '',
@@ -121,10 +122,12 @@ class VideoCallScreen extends Component {
   listenRoomChange = async (id) => {
     let userInfo = await IALocalStorage.getDetailUserInfo();
     firebase.database().ref(Constant.SCHEMA.LIVESTREAM).child(id).on('value', snapshot => {
+
       if (snapshot.val() != undefined) {
         let data = snapshot.val() || [];
-        console.log(LogManager.parseJsonObjectToJsonString(data));
-        if (userInfo?.userId === data?.ownerUserId?.id) {
+        console.log(Platform.OS + '_' + JSON.stringify(data.ownerUserId));
+        console.log(JSON.stringify(userInfo));
+        if (userInfo?.userId === data?.ownerUserId?.id && userInfo?.name === data?.ownerUserId?.name) {
           this.setState({
             isOwner: true
           });
@@ -142,7 +145,14 @@ class VideoCallScreen extends Component {
           hasVol: data?.hasVol || false,
           roomId: data?.roomId,
           uid: data?.uid,
+
         }, () => {
+          if ((data?.like || 0) !== this.state.like) {
+            this.setState({
+              like: data?.like,
+              showHeart: true
+            })
+          }
           if (this.state.isOwner && this.state.messages[this.state.messages.length - 1]?.data?.includes('has taken a screenshot')) {
             ToastHelper.showWarning(this.state.messages[this.state.messages.length - 1]?.data || 'Someone has taken a screenshot');
           }
@@ -200,6 +210,7 @@ class VideoCallScreen extends Component {
         }
       });
     }
+    this.listenRoomChange(keyRoom);
   }
 
   componentDidMount = async () => {
@@ -368,7 +379,6 @@ class VideoCallScreen extends Component {
   * @description Function to end the call
   */
   endCall = async () => {
-    console.log(keyRoom);
     let userInfo = await IALocalStorage.getDetailUserInfo();
     firebase.database().ref(Constant.SCHEMA.LIVESTREAM).child(keyRoom).once('value', snapshot => {
       const data = snapshot.val() || [];
@@ -447,7 +457,7 @@ class VideoCallScreen extends Component {
         <View style={styles.header}>
           <FastImage style={styles.avatar} resizeMode="cover" resizeMethod="resize" source={{ uri: this.state.owner?.avatar || Constant.MOCKING_DATA.PLACE_HOLDER }} />
           <View style={{ marginLeft: 10 }}>
-            <TextNormal numberOfLines={1} ellipsizeMode="tail" text={channelName?.trim() || ''} style={[containerStyle.textDefault, { color: colors.whiteBackground }]} />
+            <TextNormal numberOfLines={1} ellipsizeMode="tail" text={channelName?.trim() || ''} style={[containerStyle.textDefault, { color: colors.whiteBackground, marginTop: 10 }]} />
           </View>
         </View>
       </View>
@@ -685,7 +695,7 @@ class VideoCallScreen extends Component {
   renderInput = () => {
     return (
       <View style={styles.input}>
-        {!this.state.isOwner &&
+        {/* {!this.state.isOwner &&
           <TouchableOpacity style={{
             backgroundColor: colors.textPuple,
             borderColor: colors.textPuple,
@@ -700,7 +710,7 @@ class VideoCallScreen extends Component {
             this.setState({ modalItem: true });
           }}>
             {icons.IC_GIFT_ITEM}
-          </TouchableOpacity>}
+          </TouchableOpacity>} */}
         <TextInput
           value={this.state.textChat}
           onChangeText={(text) => {
@@ -709,7 +719,7 @@ class VideoCallScreen extends Component {
             });
           }}
           text={''}
-          style={[styles.inputChat, { width: this.state.isOwner ? ScreenWidth * 0.7 : ScreenWidth * 0.55 }]}
+          style={[styles.inputChat, { width: this.state.isOwner ? ScreenWidth * 0.7 : ScreenWidth * 0.7 }]}
         />
         <TouchableOpacity style={{
           zIndex: 10, height: ScreenHeight * 0.06,
@@ -769,7 +779,7 @@ class VideoCallScreen extends Component {
     this.setState({ keyboardShow: false });
   }
   render() {
-    console.log(Platform.OS + '' + parseInt(uudddd) + '__' + this.state.hasVideo);
+    console.log(Platform.OS + '' + parseInt(uudddd) + '__' + this.state.showHeart);
     return (
       <View style={styles.max}>
         <KeyboardAwareScrollView keyboardShouldPersistTaps='handled' extraHeight={10} extraScrollHeight={20} contentContainerStyle={styles.max} scrollEnabled nestedScrollEnabled>
@@ -779,7 +789,15 @@ class VideoCallScreen extends Component {
           {this.renderMute()}
           {/* {this.renderBackground()} */}
           {this.renderParticipiants()}
-          <TouchableOpacity delayPressIn={0} style={{ zIndex: 1001, position: 'absolute', bottom: 50, right: 0, width: 100, height: 100 }} onPress={() => this.setState({ showHeart: true })}>
+          <TouchableOpacity delayPressIn={0} style={{ zIndex: 1001, position: 'absolute', bottom: 50, right: 0, width: 100, height: 100 }} onPress={async () => {
+            this.setState({ showHeart: true });
+            await firebase.database().ref(Constant.SCHEMA.LIVESTREAM).child(keyRoom).once('value', snapshot => {
+              const data = snapshot.val() || [];
+              let like = data?.like || 0;
+              like = like + 1;
+              FirebaseService.updateItem(Constant.SCHEMA.LIVESTREAM, keyRoom, { ...data, like: like });
+            })
+          }}>
             <LottieView
               autoPlay
               loop={false}
@@ -787,7 +805,7 @@ class VideoCallScreen extends Component {
             />
           </TouchableOpacity>
           {this.state.showHeart ?
-            <TouchableOpacity style={{ zIndex: 1000, position: 'absolute', top: ScreenHeight / 2, left: ScreenWidth / 4, width: 200, height: 200 }}>
+            <TouchableOpacity style={{ zIndex: 1000, position: 'absolute', top: ScreenHeight / 2, alignContent: 'center', alignItems: 'center', alignSelf: 'center', width: 400, height: 400, borderRadius: 200 }}>
               <LottieView
                 autoPlay
                 onAnimationFinish={() => { this.setState({ showHeart: false }) }}
@@ -807,7 +825,7 @@ class VideoCallScreen extends Component {
 
           </ScrollView>
           {this.state.joinSucceed ?
-            (this.state.hasVideo && this.state.isOwner ?
+            (this.state.isOwner ?
               <AgoraView style={styles.localVideoStyle}
                 zOrderMediaOverlay={false} showLocalVideo={true} mode={1} />
               /* <View style={{ zIndex: 5 }}>
@@ -815,9 +833,8 @@ class VideoCallScreen extends Component {
                 </View>
               </View> */
               :
-              (!this.state.hasVideo ? <ImageBackground style={[styles.max, { zIndex: -1 }]} source={{ uri: this.state.imgBackground || IMG }}></ImageBackground> :
-                !this.state.isOwner && typeof parseInt(this.state.uid) === 'number' ? <AgoraView style={styles.localVideoStyle} showLocalVideo={false}
-                  mode={1} remoteUid={parseInt(this.state.uid) || 0} /> : null))
+              (typeof parseInt(this.state.uid) === 'number' ? <AgoraView style={styles.localVideoStyle} showLocalVideo={false}
+                mode={1} remoteUid={parseInt(this.state.uid) || 0} /> : null))
             : null}
           {/* {this.renderaR()} */}
           {this.renderImg()}

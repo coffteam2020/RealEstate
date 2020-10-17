@@ -50,7 +50,7 @@ const Livestream = (props) => {
     TrackPlayer.stop();
     getLivestreamingChannel();
     props?.navigation.addListener('willFocus', () => {
-      getInfoItem();
+      // getInfoItem();
     });
   }, []);
 
