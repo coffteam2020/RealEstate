@@ -80,7 +80,6 @@ import com.android.build.OutputFile
 project.ext.react = [
     enableHermes: false,  // clean and rebuild if changing
     entryFile: "index.js",
-    bundleAssetName: "app.bundle",
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
@@ -135,7 +134,7 @@ android {
         minSdkVersion 24
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "1.0"
+        versionName "1.1"
         missingDimensionStrategy 'react-native-camera', 'general'
     }
     packagingOptions {
@@ -214,7 +213,9 @@ dependencies {
     debugImplementation("com.facebook.flipper:flipper-fresco-plugin:${FLIPPER_VERSION}") {
         exclude group:'com.facebook.flipper'
     }
-
+    implementation(project(':react-native-jitsi-meet')) {
+        exclude group: 'com.facebook.react',module:'react-native-svg'
+    }
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";
         debugImplementation files(hermesPath + "hermes-debug.aar")

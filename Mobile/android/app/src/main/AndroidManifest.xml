@@ -34,7 +34,9 @@
         android:largeHeap="true"
         android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme"
-        tools:replace="android:allowBackup">
+        android:requestLegacyExternalStorage="true"
+        tools:replace="android:allowBackup"
+        tools:targetApi="q">
 
         <service android:name="io.invertase.firebase.messaging.ReactNativeFirebaseMessagingService">
             <intent-filter>

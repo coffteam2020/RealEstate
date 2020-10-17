@@ -1,7 +1,7 @@
-import {firebase} from '@react-native-firebase/database';
-import {useObserver} from 'mobx-react';
-import React, {useEffect, useState} from 'react';
-import {useTranslation} from 'react-i18next';
+import { firebase } from '@react-native-firebase/database';
+import { useObserver } from 'mobx-react';
+import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Alert,
   FlatList,
@@ -10,37 +10,37 @@ import {
   View,
   SafeAreaView,
 } from 'react-native';
-import {withTheme} from 'react-native-paper';
+import { withTheme } from 'react-native-paper';
 import Swipeout from 'react-native-swipeout';
 import Back from '../../shared/components/Icons/Back';
 import Loading from '../../shared/components/Loading';
 import TextNormal from '../../shared/components/Text/TextNormal';
 import TextInputFlatLeftIconTouchable from '../../shared/components/TextInput/TextInputFlatLeftIconTouchable';
-import {colors} from '../../shared/utils/colors/colors';
+import { colors } from '../../shared/utils/colors/colors';
 import Constant from '../../shared/utils/constant/Constant';
 import icons from '../../shared/utils/icons/icons';
-import {useStores} from '../../store/useStore';
-import {containerStyle} from '../../themes/styles';
+import { useStores } from '../../store/useStore';
+import { containerStyle } from '../../themes/styles';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Empty from '../../shared/components/Empty';
-import {styles} from './style';
-import {RefreshControl} from 'react-native';
+import { styles } from './style';
+import { RefreshControl } from 'react-native';
 import IALocalStorage from '../../shared/utils/storage/IALocalStorage';
 import AxiosFetcher from '../../api/AxiosFetch';
-import {ToastHelper} from '../../shared/components/ToastHelper';
-import {NavigationService} from '../../navigation';
+import { ToastHelper } from '../../shared/components/ToastHelper';
+import { NavigationService } from '../../navigation';
 import MessageItem from '../../shared/components/MessageItem/index';
-import {ScreenNames} from '../../route/ScreenNames';
+import { ScreenNames } from '../../route/ScreenNames';
 import HeaderFull from '../../shared/components/Header/HeaderFull';
 
 const MessageScreen = (props) => {
-  const {colorsApp} = props.theme;
-  const {t} = useTranslation();
+  const { colorsApp } = props.theme;
+  const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
   const [messagesList, setMessagesList] = useState([]);
   const [messagesTList, setMessagesTList] = useState([]);
   const [searchText, setSearchText] = useState('');
-  const {userStore} = useStores();
+  const { userStore } = useStores();
   const [currentUser, setCurrentUser] = useState('');
 
   useEffect(() => {
@@ -118,19 +118,19 @@ const MessageScreen = (props) => {
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => NavigationService.goBack()}
-          style={{flexDirection: 'row'}}>
+          style={{ flexDirection: 'row' }}>
           <Back props={props} />
         </TouchableOpacity>
         <TextNormal
           props={props}
           text={t('message.title')}
-          style={[containerStyle.textHeader, {color: colors.textBlue}]}
+          style={[containerStyle.textHeader, { color: colors.textBlue }]}
         />
         <TouchableOpacity
           onPress={() => {
             NavigationService.navigate(ScreenNames.AddFriendScreen);
           }}
-          style={{flexDirection: 'row'}}>
+          style={{ flexDirection: 'row' }}>
           {icons.IC_ADD_FRIEND}
         </TouchableOpacity>
       </View>
@@ -145,7 +145,7 @@ const MessageScreen = (props) => {
         rowId={index}
         backgroundColor={'transparent'}
         sectionId={1}
-        style={{width: '100%'}}
+        style={{ width: '100%' }}
         right={[
           {
             onPress: () => {
@@ -158,7 +158,7 @@ const MessageScreen = (props) => {
                   },
                   {
                     text: t('common.yes'),
-                    onPress: () => {},
+                    onPress: () => { },
                   },
                 ],
               );
@@ -243,18 +243,18 @@ const MessageScreen = (props) => {
               return b?.timeInMillosecond - a?.timeInMillosecond;
             })}
             ItemSeparatorComponent={() => renderSeparator()}
-            renderItem={({item, index}) => renderMessageItem(item, index)}
+            renderItem={({ item, index }) => renderMessageItem(item, index)}
             keyExtractor={(item, index) => index + ''}
             style={styles.listMessages}
-            // contentContainerStyle={styles.listMessages}
+          // contentContainerStyle={styles.listMessages}
           />
         ) : (
-          <Empty
-            message={
-              'No message history data chat. \nWanna chat with your friend 🤠? \nFollow them and give a shot try chat feature'
-            }
-          />
-        )}
+            <Empty
+              message={
+                t('message.no')
+              }
+            />
+          )}
       </SafeAreaView>
       {isLoading ? <Loading /> : null}
     </View>

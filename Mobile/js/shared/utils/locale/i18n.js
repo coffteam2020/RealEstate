@@ -36,7 +36,7 @@ i18n
 				translation: translationGetters['en'](),
 			},
 			['vn']: {
-				translation: translationGetters['en'](),
+				translation: translationGetters['vn'](),
 			},
 		},
 		react: {

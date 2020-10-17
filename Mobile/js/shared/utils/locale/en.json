@@ -299,7 +299,8 @@
     "reportUser": "Report User",
     "blockUser": "Block User",
     "deleteUser": "Delete User",
-    "dismiss": "Dismiss"
+    "dismiss": "Dismiss",
+    "no": "No message history data chat. \nWanna chat with your friend 🤠? \nFollow them and give a shot try chat feature"
   },
   "setting" : {
     "permission" : {
