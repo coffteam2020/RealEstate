@@ -1,36 +1,54 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useEffect} from 'react';
-import {StatusBar, View, SafeAreaView, FlatList} from 'react-native';
-import {styles} from './style';
-import {withTheme} from 'react-native-paper';
+import React, { useEffect, useState } from 'react';
+import { StatusBar, View, SafeAreaView, FlatList } from 'react-native';
+import { styles } from './style';
+import { withTheme } from 'react-native-paper';
 import TextNormal from '../../shared/components/Text/TextNormal';
-import {containerStyle} from '../../themes/styles';
-import {useTranslation} from 'react-i18next';
-import {useStores} from '../../store/useStore';
-import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
+import { containerStyle } from '../../themes/styles';
+import { useTranslation } from 'react-i18next';
+import { useStores } from '../../store/useStore';
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FastImage from 'react-native-fast-image';
-import {ScreenWidth, ScreenHeight} from '../../shared/utils/dimension/Divices';
-import {NavigationService} from '../../navigation';
-import {ScreenNames} from '../../route/ScreenNames';
+import { ScreenWidth, ScreenHeight } from '../../shared/utils/dimension/Divices';
+import { NavigationService } from '../../navigation';
+import { ScreenNames } from '../../route/ScreenNames';
 import HeaderFull from '../../shared/components/Header/HeaderFull';
 import AxiosFetcher from '../../api/AxiosFetch';
-import {ToastHelper} from '../../shared/components/ToastHelper';
+import { ToastHelper } from '../../shared/components/ToastHelper';
 import Empty from '../../shared/components/Empty';
-import {colors} from '../../shared/utils/colors/colors';
+import { colors } from '../../shared/utils/colors/colors';
+import { firebase } from '@react-native-firebase/database';
 import IALocalStorage from '../../shared/utils/storage/IALocalStorage';
 import { useObserver } from 'mobx-react';
+import Constant from '../../shared/utils/constant/Constant';
 
 const MateScreen = (props) => {
-  const {colorsApp} = props.theme;
-  const {t} = useTranslation();
-  const {userStore} = useStores();
+  const { colorsApp } = props.theme;
+  const { t } = useTranslation();
+  const { userStore } = useStores();
+  const [liv, setLiv] = useState([]);
   useEffect(() => {
     props.navigation.addListener('willFocus', () => {
       getUsers();
     })
     getUsers();
+    getLiv();
   }, []);
+  const getLiv = async () => {
+    firebase.database().ref(Constant.SCHEMA.LIVESTREAM).once('value', async snapshot => {
+      if (snapshot.val() != undefined) {
+        let data = Object.values(snapshot.val()) || [];
+        if (data && typeof data === 'object' && data?.length >= 0) {
+          (data || [])?.forEach(element => {
+            if (element) {
+              setLiv([...liv, element?.uid])
+            }
+          });
+        }
+      }
+    });
+  }
   const getUsers = async () => {
     AxiosFetcher({
       method: 'GET',
@@ -50,7 +68,7 @@ const MateScreen = (props) => {
         ToastHelper.showError(t('account.getInfoErr'));
       });
   };
-  const filterFollowing = async () => {};
+  const filterFollowing = async () => { };
   const renderMates = () => {
     if (userStore?.follows?.slice().length === 0) {
       return <Empty />;
@@ -64,8 +82,8 @@ const MateScreen = (props) => {
           height: ScreenHeight,
           marginTop: 10,
         }}
-        keyExtractor={(item) => item.id}
-        renderItem={({item}) => {
+        keyExtractor={(item) => item?.id}
+        renderItem={({ item }) => {
           return (
             <TouchableOpacity
               onPress={() => {
@@ -80,7 +98,7 @@ const MateScreen = (props) => {
               ]}>
               <View style={[styles.item, containerStyle.shadow]}>
                 <FastImage
-                  source={{uri: item?.avatar}}
+                  source={{ uri: item?.avatar }}
                   resizeMode="cover"
                   style={styles.avatar}
                 />
@@ -109,10 +127,23 @@ const MateScreen = (props) => {
                       style={[
                         containerStyle.textInputHeaderDefault,
                         containerStyle.defaultTextMarginLeft,
-                        {width: ScreenWidth * 0.5},
+                        { width: ScreenWidth * 0.5 },
                       ]}
                     />
                   </View>
+                  {liv?.includes(item?.id) &&
+                    <View style={styles.gender}>
+                      <Ionicons name="bonfire-outline" size={20} color={'red'} />
+                      <TextNormal
+                        numberOfLines={3}
+                        text={'Livestreaming 💥'}
+                        style={[
+                          containerStyle.textInputHeaderDefault,
+                          containerStyle.defaultTextMarginLeft,
+                          { width: ScreenWidth * 0.5, color: 'red' },
+                        ]}
+                      />
+                    </View>}
                 </View>
               </View>
               <View
@@ -128,7 +159,7 @@ const MateScreen = (props) => {
       />
     );
   };
-  return useObserver(()=>(
+  return useObserver(() => (
     <View style={[containerStyle.default, containerStyle.defaultBackground]}>
       <StatusBar barStyle={colorsApp.statusBar} />
       <SafeAreaView>

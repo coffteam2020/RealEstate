@@ -416,6 +416,7 @@ const SocialScreen = (props) => {
         ]}>
         <View style={styles.postContainer}>
           <View style={styles.postHeader}>
+            <TouchableOpacity onPress={()=>{}}>
             <FastImage
               source={{
                 uri:
@@ -425,6 +426,7 @@ const SocialScreen = (props) => {
               resizeMode="cover"
               style={styles.avatar}
             />
+            </TouchableOpacity>
             <View style={{display: 'flex', flexDirection: 'column'}}>
               <TextNormal
                 style={styles.postOwner}

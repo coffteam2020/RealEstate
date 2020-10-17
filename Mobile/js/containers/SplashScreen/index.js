@@ -81,8 +81,8 @@ const SplashScreen = (props) => {
   };
   const navigate = async () => {
     let timeOut = setTimeout(async () => {
-      let userInfo = await IALocalStorage.getDetailUserInfo();
-      if (userInfo?.accessToken) {
+      let userInfo = await IALocalStorage.getTokenUserInfo();
+      if (userInfo) {
         NavigationService.navigate(ScreenNames.TabsScreen);
       } else {
         NavigationService.navigate(ScreenNames.LoginScreen);

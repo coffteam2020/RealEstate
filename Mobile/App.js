@@ -95,6 +95,25 @@ const App = () => {
       },
     });
   };
+  connectLiv = async () => {
+    const user = await IALocalStorage.getDetailUserInfo();
+    firebase.database().ref(Constant.SCHEMA.LIVESTREAM).on('value', async snapshot => {
+      if (snapshot.val() != undefined) {
+        let data = Object.values(snapshot.val()) || [];
+        if (data && typeof data === 'object' && data?.length >= 0) {
+          (data || [])?.forEach(element => {
+            if (element?.status === 'LIVESTREAMING') {
+              if (userStore?.follows?.filter(item => item?.id === element?.uid)?.length > 0) {
+                ToastHelper.showSuccess('Your friend, ' + element?.ownerUserId?.name + 'is livestreaming. \nGo to friend screen and join now! 🔥');
+                return;
+              }
+            }
+          });
+          
+        }
+      }
+    });
+  }
   useEffect(() => {
     connectFirebase();
     configure();
@@ -103,7 +122,7 @@ const App = () => {
     setThemeChange();
     removeScalingText();
     netWorkChange();
-
+    connectLiv()
   }, []);
 
   return useObserver(() => (

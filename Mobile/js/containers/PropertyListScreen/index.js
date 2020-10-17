@@ -1,6 +1,6 @@
-import {useObserver} from 'mobx-react';
-import React, {useState, useEffect, useRef} from 'react';
-import {useTranslation} from 'react-i18next';
+import { useObserver } from 'mobx-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Button,
   Text,
@@ -13,32 +13,32 @@ import {
   Dimensions,
 
 } from 'react-native';
-import {List, ListItem} from 'react-native-elements';
-import {withTheme} from 'react-native-paper';
-import {images} from '../../../assets';
-import {NavigationService} from '../../navigation';
-import {ScreenNames} from '../../route/ScreenNames';
+import { List, ListItem } from 'react-native-elements';
+import { withTheme } from 'react-native-paper';
+import { images } from '../../../assets';
+import { NavigationService } from '../../navigation';
+import { ScreenNames } from '../../route/ScreenNames';
 import TextNormal from '../../shared/components/Text/TextNormal';
-import {useStores} from '../../store/useStore';
-import {containerStyle} from '../../themes/styles';
+import { useStores } from '../../store/useStore';
+import { containerStyle } from '../../themes/styles';
 import * as Animatable from 'react-native-animatable';
 import TrackPlayer from 'react-native-track-player';
-import {styles} from './style';
-import {firebase} from '@react-native-firebase/messaging';
+import { styles } from './style';
+import { firebase } from '@react-native-firebase/messaging';
 import AxiosFetcher from '../../api/AxiosFetch';
 import IALocalStorage from '../../shared/utils/storage/IALocalStorage';
 import Loading from '../../shared/components/Loading';
-import {ToastHelper} from '../../shared/components/ToastHelper';
+import { ToastHelper } from '../../shared/components/ToastHelper';
 import Constant from '../../shared/utils/constant/Constant';
 import HeaderFull from '../../shared/components/Header/HeaderFull';
-import {colors} from '../../shared/utils/colors/colors';
+import { colors } from '../../shared/utils/colors/colors';
 import FastImage from 'react-native-fast-image';
-import {ScreenWidth, ScreenHeight} from '../../shared/utils/dimension/Divices';
+import { ScreenWidth, ScreenHeight } from '../../shared/utils/dimension/Divices';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import moment from 'moment'
-import {SPACINGS, FONTSIZES, RADIUS} from '../../themes';
+import { SPACINGS, FONTSIZES, RADIUS } from '../../themes';
 import Empty from '../../shared/components/Empty';
 import GradientButton from '../../shared/components/Buttons/GradientButton';
 import CheckBox from '@react-native-community/checkbox';
@@ -67,7 +67,7 @@ const filterParams = [
   },
 ];
 const FilterType = {
-  PRICE : 'PRICE',
+  PRICE: 'PRICE',
   AMENITIES: 'AMENITIES',
   ROOM_TYPE: 'ROOMTYPE',
   CAPACITY: 'CAPACITY',
@@ -76,45 +76,45 @@ const FilterType = {
 }
 
 const PropertyTypes = [
-  {label: 'All', value: 'ALL'},
-  {label: 'Domitory', value: 'DOMITIRY'},
-  {label: 'Room for rent', value: 'ROOM_FOR_RENT'},
-  {label: 'Room For Share', value: 'ROOM_FOR_SHARE'},
-  {label: 'House', value: 'HOUSE'},
-  {label: 'Apartment', value: 'APARTMENT'},
+  { label: 'All', value: 'ALL' },
+  { label: 'Domitory', value: 'DOMITIRY' },
+  { label: 'Room for rent', value: 'ROOM_FOR_RENT' },
+  { label: 'Room For Share', value: 'ROOM_FOR_SHARE' },
+  { label: 'House', value: 'HOUSE' },
+  { label: 'Apartment', value: 'APARTMENT' },
 ];
 const SortByList = [
-  {label: 'Recently', value: 'Recently'},
-  {label: 'Lastest', value: 'Lastest'},
-  {label: 'Lowest to Highest', value: 'PRICE_LOW_TO_HIGHT'},
-  {label: 'Highest to Lowest', value: 'PRICE_HIGH_TO_LOW'},
-  {label: 'Nearest', value: 'Nearest'},
+  { label: 'Recently', value: 'Recently' },
+  { label: 'Lastest', value: 'Lastest' },
+  { label: 'Lowest to Highest', value: 'PRICE_LOW_TO_HIGHT' },
+  { label: 'Highest to Lowest', value: 'PRICE_HIGH_TO_LOW' },
+  { label: 'Nearest', value: 'Nearest' },
 ];
 const Genders = [
-  {label: 'All', value: 'ALL'},
-  {label: 'Male', value: 'MALE'},
-  {label: 'Female', value: 'FEMALE'},
+  { label: 'All', value: 'ALL' },
+  { label: 'Male', value: 'MALE' },
+  { label: 'Female', value: 'FEMALE' },
 ];
 
 const PropertyFors = [
-  {label: 'All', value: 'All'},
-  {label: 'Sale', value: 'Sale'},
-  {label: 'Rent', value: 'Rent'},
+  { label: 'All', value: 'All' },
+  { label: 'Sale', value: 'Sale' },
+  { label: 'Rent', value: 'Rent' },
 ];
 
 const ListUltilities = [
-  {label: 'Internet', value: 'Internet', icon: 'wifi'},
-  {label: 'Water', value: 'Water', icon: 'water'},
-  {label: 'Light', value: 'Light', icon: 'lightbulb-on'},
-  {label: 'Parking', value: 'Parking', icon: 'car'},
-  {label: 'TV', value: 'TV', icon: 'television'},
-  {label: 'Air conditioning', value: 'AirConditioning', icon: 'air-conditioner'},
-  {label: 'Washing', value: 'Washing', icon: 'washing-machine'},
-  {label: 'Bed', value: 'Bed', icon: 'bed-empty'},
-  {label: 'Security', value: 'Security', icon: 'account-cowboy-hat'},
-  {label: 'Fridge', value: 'Fridge', icon: 'fridge'},
-  {label: 'WC', value: 'WC', icon: 'toilet'},
-  {label: 'Heater Water', value: 'HeaterWater', icon: 'water-pump'},
+  { label: 'Internet', value: 'Internet', icon: 'wifi' },
+  { label: 'Water', value: 'Water', icon: 'water' },
+  { label: 'Light', value: 'Light', icon: 'lightbulb-on' },
+  { label: 'Parking', value: 'Parking', icon: 'car' },
+  { label: 'TV', value: 'TV', icon: 'television' },
+  { label: 'Air conditioning', value: 'AirConditioning', icon: 'air-conditioner' },
+  { label: 'Washing', value: 'Washing', icon: 'washing-machine' },
+  { label: 'Bed', value: 'Bed', icon: 'bed-empty' },
+  { label: 'Security', value: 'Security', icon: 'account-cowboy-hat' },
+  { label: 'Fridge', value: 'Fridge', icon: 'fridge' },
+  { label: 'WC', value: 'WC', icon: 'toilet' },
+  { label: 'Heater Water', value: 'HeaterWater', icon: 'water-pump' },
 ];
 
 
@@ -127,9 +127,9 @@ const filterSkeleton = {
 
 
 const PropertyListScreen = (props) => {
-  const {colorsApp} = props.theme;
-  const {t} = useTranslation();
-  const {userStore} = useStores();
+  const { colorsApp } = props.theme;
+  const { t } = useTranslation();
+  const { userStore } = useStores();
   const [userInfo, setUserInfo] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [properties, setProperties] = useState([]);
@@ -151,7 +151,7 @@ const PropertyListScreen = (props) => {
   const [title, setTitle] = useState(t('proper'));
 
   const type = props.navigation.state.params.type || "PROPERTY";
-  
+
   useEffect(() => {
     props?.navigation.addListener('willFocus', () => {
       initMainColor();
@@ -225,7 +225,7 @@ const PropertyListScreen = (props) => {
     }
     return 0;
   }
-  
+
   function getComparator() {
     if (sortBy.value === 'Recently') {
       return (a, b) => descendingComparator(a, b, 'createdOn');
@@ -237,7 +237,7 @@ const PropertyListScreen = (props) => {
       return (a, b) => descendingComparator(a, b, 'priceOrMonthlyRent');
     } else return (a, b) => descendingComparator(a, b, 'createdOn');
   }
-  
+
   function stableSort(array, comparator) {
     const stabilizedThis = array.map((el, index) => [el, index]);
     stabilizedThis.sort((a, b) => {
@@ -250,8 +250,8 @@ const PropertyListScreen = (props) => {
 
   const getMaxPrice = (listItems) => {
     let maxPrice = 0;
-    listItems.forEach(item =>{
-      if(item.priceOrMonthlyRent && item.priceOrMonthlyRent > maxPrice){
+    listItems.forEach(item => {
+      if (item.priceOrMonthlyRent && item.priceOrMonthlyRent > maxPrice) {
         maxPrice = item.priceOrMonthlyRent;
       }
     })
@@ -259,20 +259,20 @@ const PropertyListScreen = (props) => {
   }
 
   const applyFilterObj = (item) => {
-    
+
     let cond = true;
     let filteredValue;
     filterValue &&
-      filterValue.forEach(param =>{
-        switch(param.type){
+      filterValue.forEach(param => {
+        switch (param.type) {
           case FilterType.PRICE:
             filteredValue = !item["priceOrMonthlyRent"] ? false : (param.min <= item["priceOrMonthlyRent"] && item["priceOrMonthlyRent"] <= param.max);
             cond = cond && filteredValue;
             break;
           case FilterType.AMENITIES:
             filteredValue = false;
-            item["amenities"].forEach(itm =>{
-              if(param?.value.indexOf(itm) !== -1){
+            item["amenities"].forEach(itm => {
+              if (param?.value.indexOf(itm) !== -1) {
                 filteredValue = true;
               }
             });
@@ -295,10 +295,10 @@ const PropertyListScreen = (props) => {
 
   const doSelectUltilities = (ulti) => {
     let current = [...selectedUltilities];
-    if(current.indexOf(ulti.value) !== -1){
+    if (current.indexOf(ulti.value) !== -1) {
       //exist
       current = current.filter(item => item !== ulti.value);
-    }else{
+    } else {
       current.push(ulti.value);
     }
     setSelectedUltilities(current);
@@ -318,14 +318,14 @@ const PropertyListScreen = (props) => {
     } else if (type === FilterType.PRICE) {
       setMinPrice(0);
       setMaxPrice(99999);
-    }else if (type === FilterType.SORTBY) {
+    } else if (type === FilterType.SORTBY) {
       setSortBy(SortByList[0]);
       setSortByTmp(SortByList[0]);
     }
     setFilterValue(curFilter);
   };
 
-  const resetAllFilterValue = () =>{
+  const resetAllFilterValue = () => {
     setFilterValue([]);
     setGender(Genders[0].value);
     setCapacity(0);
@@ -341,7 +341,7 @@ const PropertyListScreen = (props) => {
       case FilterType.PRICE:
         return renderPrice();
       case FilterType.AMENITIES:
-        return renderAmenities();
+        return type !== 'PROPERTY' ? null : renderAmenities();
       case FilterType.ROOM_TYPE:
         return renderRoomType();
       case FilterType.CAPACITY:
@@ -366,7 +366,7 @@ const PropertyListScreen = (props) => {
           marginTop: 10,
         }}
         keyExtractor={(item) => item.id}
-        renderItem={({item}) => {
+        renderItem={({ item }) => {
           return (
             <TouchableOpacity
               onPress={() => {
@@ -378,8 +378,8 @@ const PropertyListScreen = (props) => {
               }}
               style={[
                 containerStyle.defaultMarginBottom,
-                
-                {borderRadius: 1000, marginBottom: 30},
+
+                { borderRadius: 1000, marginBottom: 30 },
               ]}>
               <View
                 style={{
@@ -417,18 +417,18 @@ const PropertyListScreen = (props) => {
                       flexDirection: 'row',
                       justifyContent: 'flex-end',
                     }}>
-                    
+
                   </View>
-                    <TextNormal style={styles.cardTitle} text={item.projectName}></TextNormal>
-                    <TextNormal numberOfLines={2} style={styles.cardContent} text={item.description}></TextNormal>
-                    <View style={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      // justifyContent: 'space-between',
-                    }}>
-                        <Ionicons name="ios-pricetags" size={16} color={colors.gray_new}></Ionicons>
-                        <TextNormal style={{marginLeft: SPACINGS.small, marginRight: SPACINGS.small, color: mainColor}} text={'$ ' + item.priceOrMonthlyRent}></TextNormal>
-                    </View>
+                  <TextNormal style={styles.cardTitle} text={item.projectName}></TextNormal>
+                  <TextNormal numberOfLines={2} style={styles.cardContent} text={item.description}></TextNormal>
+                  <View style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    // justifyContent: 'space-between',
+                  }}>
+                    <Ionicons name="ios-pricetags" size={16} color={colors.gray_new}></Ionicons>
+                    <TextNormal style={{ marginLeft: SPACINGS.small, marginRight: SPACINGS.small, color: mainColor }} text={'$ ' + item.priceOrMonthlyRent}></TextNormal>
+                  </View>
                 </View>
               </View>
             </TouchableOpacity>
@@ -439,7 +439,7 @@ const PropertyListScreen = (props) => {
   };
 
 
-  
+
 
   const renderCapacity = () => {
     return (
@@ -479,7 +479,7 @@ const PropertyListScreen = (props) => {
               style={styles.plusButton}
               fromColor={colors.gray}
               toColor={colors.gray}
-              textStyle={{color: mainColor}}
+              textStyle={{ color: mainColor }}
               text={'-'}
             />
             <View
@@ -495,7 +495,7 @@ const PropertyListScreen = (props) => {
                 height: 50,
               }}>
               <TextNormal
-                style={{backgroundColor: colors.whiteBackground, color: mainColor}}
+                style={{ backgroundColor: colors.whiteBackground, color: mainColor }}
                 text={capacity} ></TextNormal>
             </View>
             <GradientButton
@@ -503,7 +503,7 @@ const PropertyListScreen = (props) => {
               style={styles.plusButton}
               fromColor={colors.gray}
               toColor={colors.gray}
-              textStyle={{color: mainColor}}
+              textStyle={{ color: mainColor }}
               text={'+'}
             />
           </View>
@@ -536,11 +536,11 @@ const PropertyListScreen = (props) => {
                 <GradientButton
                   onPress={() => setGender(item.value)}
                   style={{
-                      borderRadius: 40,
-                      width: ScreenWidth * 0.25,
-                      borderWidth: 1,
-                      borderColor: gender === item.value ? mainColor : colors.gray_bg,
-                      color: colors.black,
+                    borderRadius: 40,
+                    width: ScreenWidth * 0.25,
+                    borderWidth: 1,
+                    borderColor: gender === item.value ? mainColor : colors.gray_bg,
+                    color: colors.black,
                   }}
                   fromColor={
                     gender === item.value ? colors.whiteBackground : colors.gray
@@ -561,12 +561,12 @@ const PropertyListScreen = (props) => {
           style={styles.applyButton}
           onPress={() => {
             let newFilter = [...filterValue];
-            newFilter = newFilter.filter(item => ( item.type !== FilterType.CAPACITY || item.type !== FilterType.GENDER))
-            if(capacity > 0){
-              let filter = { type : FilterType.CAPACITY, value : capacity, label : "Capacity: " + capacity};
+            newFilter = newFilter.filter(item => (item.type !== FilterType.CAPACITY || item.type !== FilterType.GENDER))
+            if (capacity > 0) {
+              let filter = { type: FilterType.CAPACITY, value: capacity, label: "Capacity: " + capacity };
               newFilter.push(filter);
             }
-            let filter = { type : FilterType.GENDER, value : gender, label : "GENDER: " + gender};
+            let filter = { type: FilterType.GENDER, value: gender, label: "GENDER: " + gender };
             newFilter.push(filter);
             setFilterValue(newFilter);
             setSelectedFilter('');
@@ -579,7 +579,7 @@ const PropertyListScreen = (props) => {
     );
   };
 
-  const renderSortBy = () =>{
+  const renderSortBy = () => {
     return (
       <View
         style={{
@@ -589,7 +589,7 @@ const PropertyListScreen = (props) => {
           justifyContent: 'center',
           alignItems: "center"
         }}>
-        <View style={{marginBottom: SPACINGS.large, width: ScreenWidth * 0.7}}>
+        <View style={{ marginBottom: SPACINGS.large, width: ScreenWidth * 0.7 }}>
           {SortByList.map((item, index) => {
             return (
               <View
@@ -603,7 +603,7 @@ const PropertyListScreen = (props) => {
                 }}>
                 <TouchableOpacity
                   onPress={() => setSortByTmp(item)}
-                  style={{flex: 1, backgroundColor: colors.ređ}}>
+                  style={{ flex: 1, backgroundColor: colors.ređ }}>
                   <TextNormal text={item.label} />
                 </TouchableOpacity>
                 <CheckBox
@@ -611,8 +611,8 @@ const PropertyListScreen = (props) => {
                   onCheckColor={mainColor}
                   onTintColor={mainColor}
                   key={index}
-                  value={sortByTmp.value  === item.value}
-                  style={{height: 20}}
+                  value={sortByTmp.value === item.value}
+                  style={{ height: 20 }}
                   onValueChange={(newValue) => {
                     if (newValue) setSortByTmp(item);
                   }}
@@ -626,7 +626,7 @@ const PropertyListScreen = (props) => {
           onPress={() => {
             let newFilter = [...filterValue];
             newFilter = newFilter.filter(item => item.type !== FilterType.SORTBY)
-            let filter = { type : FilterType.SORTBY, value : sortByTmp.value, label: 'Sort by: ' + sortByTmp.label};
+            let filter = { type: FilterType.SORTBY, value: sortByTmp.value, label: 'Sort by: ' + sortByTmp.label };
             newFilter.push(filter);
             setFilterValue(newFilter);
             setSelectedFilter('');
@@ -640,7 +640,7 @@ const PropertyListScreen = (props) => {
     );
   }
 
-  const renderRoomType = () =>{
+  const renderRoomType = () => {
     return (
       <View
         style={{
@@ -650,7 +650,7 @@ const PropertyListScreen = (props) => {
           justifyContent: 'center',
           alignItems: "center"
         }}>
-        <View style={{marginBottom: SPACINGS.large, width: ScreenWidth * 0.7}}>
+        <View style={{ marginBottom: SPACINGS.large, width: ScreenWidth * 0.7 }}>
           {PropertyTypes.map((item, index) => {
             return (
               <View
@@ -664,7 +664,7 @@ const PropertyListScreen = (props) => {
                 }}>
                 <TouchableOpacity
                   onPress={() => setPropertyType(item)}
-                  style={{flex: 1, backgroundColor: colors.ređ}}>
+                  style={{ flex: 1, backgroundColor: colors.ređ }}>
                   <TextNormal text={item.label} />
                 </TouchableOpacity>
                 <CheckBox
@@ -672,8 +672,8 @@ const PropertyListScreen = (props) => {
                   onCheckColor={mainColor}
                   onTintColor={mainColor}
                   key={index}
-                  value={propertyType.value  === item.value}
-                  style={{height: 20}}
+                  value={propertyType.value === item.value}
+                  style={{ height: 20 }}
                   onValueChange={(newValue) => {
                     if (newValue) setPropertyType(item);
                   }}
@@ -687,7 +687,7 @@ const PropertyListScreen = (props) => {
           onPress={() => {
             let newFilter = [...filterValue];
             newFilter = newFilter.filter(item => item.type !== FilterType.ROOM_TYPE)
-            let filter = { type : FilterType.ROOM_TYPE, value : propertyType.value, label: 'Room Type: ' + propertyType.label};
+            let filter = { type: FilterType.ROOM_TYPE, value: propertyType.value, label: 'Room Type: ' + propertyType.label };
             newFilter.push(filter);
             setFilterValue(newFilter);
             setSelectedFilter('');
@@ -710,15 +710,15 @@ const PropertyListScreen = (props) => {
           alignItems: 'center',
           marginBottom: SPACINGS.large,
         }}>
-        <View style={{width: ScreenWidth * 0.9, marginTop: SPACINGS.avg, marginBottom: SPACINGS.avg}}>
+        <View style={{ width: ScreenWidth * 0.9, marginTop: SPACINGS.avg, marginBottom: SPACINGS.avg }}>
           <TextNormal text={'Price range'} />
         </View>
-        <View style={{width: ScreenWidth * 0.9, display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
-          <TextNormal style={{color: mainColor}} text={'Min: ' + minPrice} />
-          <TextNormal style={{color: mainColor}} text={'Max: ' + maxPrice} />
+        <View style={{ width: ScreenWidth * 0.9, display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+          <TextNormal style={{ color: mainColor }} text={'Min: ' + minPrice} />
+          <TextNormal style={{ color: mainColor }} text={'Max: ' + maxPrice} />
         </View>
         <RangeSlider
-          style={{width: ScreenWidth * 0.8, height: 80}}
+          style={{ width: ScreenWidth * 0.8, height: 80 }}
           gravity={'top'}
           initialLowValue={minPrice}
           initialHighValue={maxPrice}
@@ -763,7 +763,7 @@ const PropertyListScreen = (props) => {
     );
   };
 
-  const renderAmenities = () =>{
+  const renderAmenities = () => {
     return (
       <View
         style={{
@@ -781,7 +781,7 @@ const PropertyListScreen = (props) => {
           }}
           data={ListUltilities}
           keyExtractor={(item, index) => item.value}
-          renderItem={({item}) => {
+          renderItem={({ item }) => {
             isSelected = selectedUltilities.indexOf(item.value) !== -1;
             return (
               <TouchableOpacity onPress={() => doSelectUltilities(item)}>
@@ -815,8 +815,8 @@ const PropertyListScreen = (props) => {
           style={styles.applyButton}
           onPress={() => {
             let newFilter = [...filterValue];
-            newFilter  = newFilter.filter(item => item.type !== FilterType.AMENITIES);
-            let filter = {type : FilterType.AMENITIES, value : [...selectedUltilities], label: 'AMENITIES:...'};
+            newFilter = newFilter.filter(item => item.type !== FilterType.AMENITIES);
+            let filter = { type: FilterType.AMENITIES, value: [...selectedUltilities], label: 'AMENITIES:...' };
             newFilter.push(filter);
             setFilterValue(newFilter);
             setSelectedFilter('');
@@ -828,7 +828,7 @@ const PropertyListScreen = (props) => {
       </View>
     );
   }
-  
+
   const renderFilter = () => {
     return (
       <View>
@@ -843,57 +843,57 @@ const PropertyListScreen = (props) => {
             },
           ]}>
           <FlatList
-            style={{width: ScreenWidth, height: 50}}
+            style={{ width: ScreenWidth, height: 50 }}
             horizontal={true}
             ref={flatListfilter}
             showsHorizontalScrollIndicator={false}
             legacyImplementation={false}
             keyExtractor={(item) => item.id}
-            data={filterParams}
-            renderItem={({item}) => {
+            data={type === 'PROPERTY' ? filterParams : filterParams?.filter(item => item?.id === 'PRICE' || item?.id === 'SORTBY')}
+            renderItem={({ item }) => {
               let isSelected = selectedFilter === item.id;
-              if( type === "CAFE" && item.id === "AMENITIES"){
+              if (type === "CAFE" && item.id === "AMENITIES") {
                 return null;
               }
               else
-              return (
-                <TouchableOpacity
-                  onPress={() => {
-                    if(isSelected){
-                      setSelectedFilter('');
-                    }else{
-                      setSelectedFilter(item.id);
-                    }
-                    
-                  }}
-                  style={{
-                    backgroundColor: colors.whiteBackground,
-                    borderRadius: 40,
-                    margin: SPACINGS.avg,
-                    paddingLeft: SPACINGS.avg,
-                    paddingRight: SPACINGS.avg,
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'space-around',
-                    alignItems: 'center',
-                    borderWidth: 1,
-                    borderColor: isSelected
-                      ? mainColor
-                      : colors.gray_new,
-                  }}>
-                  <TextNormal
-                    text={item.label}
+                return (
+                  <TouchableOpacity
+                    onPress={() => {
+                      if (isSelected) {
+                        setSelectedFilter('');
+                      } else {
+                        setSelectedFilter(item.id);
+                      }
+
+                    }}
                     style={{
-                      fontSize: 15,
-                      color: isSelected ? mainColor : colors.black,
-                    }}></TextNormal>
-                  <Ionicons
-                    name={isSelected ? "chevron-up" : "chevron-down"}
-                    size={20}
-                    color={colors.gray_new}
-                  />
-                </TouchableOpacity>
-              );
+                      backgroundColor: colors.whiteBackground,
+                      borderRadius: 40,
+                      margin: SPACINGS.avg,
+                      paddingLeft: SPACINGS.avg,
+                      paddingRight: SPACINGS.avg,
+                      display: 'flex',
+                      flexDirection: 'row',
+                      justifyContent: 'space-around',
+                      alignItems: 'center',
+                      borderWidth: 1,
+                      borderColor: isSelected
+                        ? mainColor
+                        : colors.gray_new,
+                    }}>
+                    <TextNormal
+                      text={item.label}
+                      style={{
+                        fontSize: 15,
+                        color: isSelected ? mainColor : colors.black,
+                      }}></TextNormal>
+                    <Ionicons
+                      name={isSelected ? "chevron-up" : "chevron-down"}
+                      size={20}
+                      color={colors.gray_new}
+                    />
+                  </TouchableOpacity>
+                );
             }}
           />
         </View>
@@ -914,14 +914,14 @@ const PropertyListScreen = (props) => {
             name={'delete'}
             size={36}></MaterialCommunityIcons>
           <FlatList
-            style={{width: ScreenWidth * 0.85, height: 50}}
+            style={{ width: ScreenWidth * 0.85, height: 50 }}
             horizontal={true}
             pagingEnabled={true}
             showsHorizontalScrollIndicator={false}
             legacyImplementation={false}
             keyExtractor={(item) => item.id}
             data={filterValue}
-            renderItem={({item}) => (
+            renderItem={({ item }) => (
               <TouchableOpacity
                 style={{
                   backgroundColor: colors.whiteBackground,
@@ -974,15 +974,15 @@ const PropertyListScreen = (props) => {
               justifyContent: "space-between"
             }
           }>
-          <TextNormal style={{fontSize: FONTSIZES.avg}} text={getFilteredItemsList().length + ' results'}></TextNormal>
-          <TextNormal style={{fontSize: FONTSIZES.avg}} text={'Sort by: '+ sortBy.label}></TextNormal>
+          <TextNormal style={{ fontSize: FONTSIZES.avg }} text={getFilteredItemsList().length + ' results'}></TextNormal>
+          <TextNormal style={{ fontSize: FONTSIZES.avg }} text={'Sort by: ' + sortBy.label}></TextNormal>
         </View>
       </View>
     );
-  
+
   };
 
-  return useObserver(()=>(
+  return useObserver(() => (
     <View style={[containerStyle.default, containerStyle.defaultBackground]}>
       <StatusBar barStyle={colorsApp.statusBar} />
       <SafeAreaView>
@@ -1005,5 +1005,5 @@ const PropertyListScreen = (props) => {
       {isLoading && <Loading />}
     </View>
   ));
-  };
+};
 export default withTheme(PropertyListScreen);

@@ -18,9 +18,9 @@ import moment from 'moment'
 import {color} from 'react-native-reanimated';
 import fonts from '../../../shared/utils/fonts/fonts';
 
-const HeaderFullPostDetail = ({title, hasButton = false, rightIco, onPress, avatar, name, createdAt}) => {
+const HeaderFullPostDetail = ({title, hasButton = false, rightIco, onPress, avatar, name, createdAt, onDetail}) => {
   return (
-    <View style={{flexDirection: 'row', justifyContent: 'flex-start', marginTop: SPACINGS.avg}}>
+    <TouchableOpacity style={{flexDirection: 'row', justifyContent: 'flex-start', marginTop: SPACINGS.avg}} onPress={onDetail}>
       <TouchableOpacity
         style={{width: ScreenWidth / 7}}
         onPress={() => {
@@ -69,7 +69,7 @@ const HeaderFullPostDetail = ({title, hasButton = false, rightIco, onPress, avat
           <TouchableOpacity onPress={onPress}>{rightIco}</TouchableOpacity>
         )}
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

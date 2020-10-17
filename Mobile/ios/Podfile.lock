@@ -339,6 +339,22 @@ PODS:
     - DoubleConversion
     - glog
   - glog (0.3.5)
+  - Google-Maps-iOS-Utils (2.1.0):
+    - Google-Maps-iOS-Utils/Clustering (= 2.1.0)
+    - Google-Maps-iOS-Utils/Geometry (= 2.1.0)
+    - Google-Maps-iOS-Utils/Heatmap (= 2.1.0)
+    - Google-Maps-iOS-Utils/QuadTree (= 2.1.0)
+    - GoogleMaps
+  - Google-Maps-iOS-Utils/Clustering (2.1.0):
+    - Google-Maps-iOS-Utils/QuadTree
+    - GoogleMaps
+  - Google-Maps-iOS-Utils/Geometry (2.1.0):
+    - GoogleMaps
+  - Google-Maps-iOS-Utils/Heatmap (2.1.0):
+    - Google-Maps-iOS-Utils/QuadTree
+    - GoogleMaps
+  - Google-Maps-iOS-Utils/QuadTree (2.1.0):
+    - GoogleMaps
   - GoogleAppMeasurement (6.1.6):
     - GoogleUtilities/AppDelegateSwizzler (~> 6.0)
     - GoogleUtilities/MethodSwizzler (~> 6.0)
@@ -349,6 +365,11 @@ PODS:
   - GoogleDataTransportCCTSupport (3.0.0):
     - GoogleDataTransport (~> 6.0)
     - nanopb (~> 0.3.901)
+  - GoogleMaps (3.5.0):
+    - GoogleMaps/Maps (= 3.5.0)
+  - GoogleMaps/Base (3.5.0)
+  - GoogleMaps/Maps (3.5.0):
+    - GoogleMaps/Base
   - GoogleSignIn (5.0.2):
     - AppAuth (~> 1.2)
     - GTMAppAuth (~> 1.0)
@@ -389,9 +410,9 @@ PODS:
     - gRPC-Core/Interface (= 1.21.0)
     - nanopb (~> 0.3)
   - gRPC-Core/Interface (1.21.0)
-  - GTMAppAuth (1.0.0):
-    - AppAuth/Core (~> 1.0)
-    - GTMSessionFetcher (~> 1.1)
+  - GTMAppAuth (1.1.0):
+    - AppAuth/Core (~> 1.4)
+    - GTMSessionFetcher (~> 1.4)
   - GTMSessionFetcher (1.4.0):
     - GTMSessionFetcher/Full (= 1.4.0)
   - GTMSessionFetcher/Core (1.4.0)
@@ -446,7 +467,7 @@ PODS:
     - RNPermissions
   - Permission-Reminders (2.2.1):
     - RNPermissions
-  - PromisesObjC (1.2.10)
+  - PromisesObjC (1.2.11)
   - Protobuf (3.13.0)
   - RCTRequired (0.63.2)
   - RCTTypeSafety (0.63.2):
@@ -623,12 +644,26 @@ PODS:
     - React
   - react-native-appearance (0.3.4):
     - React
+  - react-native-camera (3.40.0):
+    - React-Core
+    - react-native-camera/RCT (= 3.40.0)
+    - react-native-camera/RN (= 3.40.0)
+  - react-native-camera/RCT (3.40.0):
+    - React-Core
+  - react-native-camera/RN (3.40.0):
+    - React-Core
   - react-native-document-picker (3.5.4):
+    - React
+  - react-native-google-maps (0.27.1):
+    - Google-Maps-iOS-Utils (= 2.1.0)
+    - GoogleMaps (= 3.5.0)
     - React
   - react-native-image-picker (2.3.4):
     - React-Core
   - react-native-jitsi-meet (2.1.1):
     - JitsiMeetSDK (= 2.4.0)
+    - React
+  - react-native-maps (0.27.1):
     - React
   - react-native-netinfo (5.0.0):
     - React
@@ -793,9 +828,9 @@ PODS:
     - React
   - RNVectorIcons (6.7.0):
     - React
-  - SDWebImage (5.9.1):
-    - SDWebImage/Core (= 5.9.1)
-  - SDWebImage/Core (5.9.1)
+  - SDWebImage (5.9.2):
+    - SDWebImage/Core (= 5.9.2)
+  - SDWebImage/Core (5.9.2)
   - SDWebImageWebPCoder (0.6.1):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.7)
@@ -840,6 +875,8 @@ DEPENDENCIES:
   - FlipperKit/SKIOSNetworkPlugin (~> 0.41.1)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
+  - Google-Maps-iOS-Utils
+  - GoogleMaps
   - GoogleSignIn (~> 5.0.0)
   - GPUImage (= 0.1.7)
   - lottie-ios (from `../node_modules/lottie-ios`)
@@ -871,9 +908,12 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - react-native-agora (from `../node_modules/react-native-agora`)
   - react-native-appearance (from `../node_modules/react-native-appearance`)
+  - react-native-camera (from `../node_modules/react-native-camera`)
   - react-native-document-picker (from `../node_modules/react-native-document-picker`)
+  - react-native-google-maps (from `../node_modules/react-native-maps`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-jitsi-meet (from `../node_modules/react-native-jitsi-meet`)
+  - react-native-maps (from `../node_modules/react-native-maps`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-notifications (from `../node_modules/react-native-notifications`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
@@ -958,9 +998,11 @@ SPEC REPOS:
     - Flipper-PeerTalk
     - Flipper-RSocket
     - FlipperKit
+    - Google-Maps-iOS-Utils
     - GoogleAppMeasurement
     - GoogleDataTransport
     - GoogleDataTransportCCTSupport
+    - GoogleMaps
     - GoogleSignIn
     - GoogleUtilities
     - GPUImage
@@ -1046,12 +1088,18 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-agora"
   react-native-appearance:
     :path: "../node_modules/react-native-appearance"
+  react-native-camera:
+    :path: "../node_modules/react-native-camera"
   react-native-document-picker:
     :path: "../node_modules/react-native-document-picker"
+  react-native-google-maps:
+    :path: "../node_modules/react-native-maps"
   react-native-image-picker:
     :path: "../node_modules/react-native-image-picker"
   react-native-jitsi-meet:
     :path: "../node_modules/react-native-jitsi-meet"
+  react-native-maps:
+    :path: "../node_modules/react-native-maps"
   react-native-netinfo:
     :path: "../node_modules/@react-native-community/netinfo"
   react-native-notifications:
@@ -1192,15 +1240,17 @@ SPEC CHECKSUMS:
   FlipperKit: bc68102cd4952a258a23c9c1b316c7bec1fecf83
   Folly: b73c3869541e86821df3c387eb0af5f65addfab4
   glog: 40a13f7840415b9a77023fbcae0f1e6f43192af3
+  Google-Maps-iOS-Utils: c32891ff472eaaa1fca032beedafa1a013af7875
   GoogleAppMeasurement: dfe55efa543e899d906309eaaac6ca26d249862f
   GoogleDataTransport: 9a8a16f79feffc7f42096743de2a7c4815e84020
   GoogleDataTransportCCTSupport: 0f39025e8cf51f168711bd3fb773938d7e62ddb5
+  GoogleMaps: 32ca02de09de357a10ac773f2c70f1986751392d
   GoogleSignIn: 7137d297ddc022a7e0aa4619c86d72c909fa7213
   GoogleUtilities: 7f2f5a07f888cdb145101d6042bc4422f57e70b3
   GPUImage: 733a5f0fab92df9de1c37ba9df520a833ccb406d
   "gRPC-C++": 9dfe7b44821e7b3e44aacad2af29d2c21f7cde83
   gRPC-Core: c9aef9a261a1247e881b18059b84d597293c9947
-  GTMAppAuth: 4deac854479704f348309e7b66189e604cf5e01e
+  GTMAppAuth: 197a8dabfea5d665224aa00d17f164fc2248dab9
   GTMSessionFetcher: 6f5c8abbab8a9bce4bb3f057e317728ec6182b10
   JitsiMeetSDK: d4a3aeed1a75fd57e6a78e5d202b6051dfcb9320
   leveldb-library: 55d93ee664b4007aac644a782d11da33fba316f7
@@ -1222,7 +1272,7 @@ SPEC CHECKSUMS:
   Permission-Notifications: 68ed977040885caa5c9ace4812ed448c70018e8d
   Permission-PhotoLibrary: 6c7add434f810971ea2019117f5322cf54bcace0
   Permission-Reminders: 7f664e6c5361fd123a174171eea40e178411c521
-  PromisesObjC: b14b1c6b68e306650688599de8a45e49fae81151
+  PromisesObjC: 8c196f5a328c2cba3e74624585467a557dcb482f
   Protobuf: 3dac39b34a08151c6d949560efe3f86134a3f748
   RCTRequired: f13f25e7b12f925f1f6a6a8c69d929a03c0129fe
   RCTTypeSafety: 44982c5c8e43ff4141eb519a8ddc88059acd1f3a
@@ -1236,9 +1286,12 @@ SPEC CHECKSUMS:
   React-jsinspector: b14e62ebe7a66e9231e9581279909f2fc3db6606
   react-native-agora: d6405ca3db2abfd14dc7c7ca22febf11c8c3ff65
   react-native-appearance: 0f0e5fc2fcef70e03d48c8fe6b00b9158c2ba8aa
+  react-native-camera: 35854c4f764a4a6cf61c1c3525888b92f0fe4b31
   react-native-document-picker: 4921045c5c6c78243010f784eae0a3f4b2af7799
+  react-native-google-maps: 0a989abda71059db2caa98b9dacca7a8f38a47d0
   react-native-image-picker: c6d75c4ab2cf46f9289f341242b219cb3c1180d3
   react-native-jitsi-meet: 29ed76cdc6142d9a6c013bb14dd6205df0b5452b
+  react-native-maps: f4b89da81626ad7f151a8bfcb79733295d31ce5c
   react-native-netinfo: 841c2a83fe7df998fed56fd48b73229f17a5aa5b
   react-native-notifications: 09086eb278cde6ccb463fe5f1dbd57e315c7f642
   react-native-safe-area-context: e200d4433aba6b7e60b52da5f37af11f7a0b0392
@@ -1288,12 +1341,12 @@ SPEC CHECKSUMS:
   RNSound: da030221e6ac7e8290c6b43f2b5f2133a8e225b0
   RNSVG: 8ba35cbeb385a52fd960fd28db9d7d18b4c2974f
   RNVectorIcons: 368d6d8b8301224e5ffb6254191f4f8876c2be0d
-  SDWebImage: a990c053fff71e388a10f3357edb0be17929c9c5
+  SDWebImage: 0b42b8719ab0c5257177d5894306e8a336b21cbb
   SDWebImageWebPCoder: d0dac55073088d24b2ac1b191a71a8f8d0adac21
   toolbar-android: 85f3ef4d691469f2d304e7dee4bca013aa1ba1ff
   Yoga: 7740b94929bbacbddda59bf115b5317e9a161598
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 12e8df2340eb0e889d87fda655b2a86aa394e5e8
+PODFILE CHECKSUM: 1bd04bde181c775b1dbcc066c96249e53e18fb72
 
 COCOAPODS: 1.9.3

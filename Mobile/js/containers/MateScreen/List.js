@@ -54,7 +54,7 @@ const List = (props) => {
     setIsLoading(true);
     AxiosFetcher({
       method: 'GET',
-      url: `user/${userStore?.userInfo?.id}/followup/${item.id}`,
+      url: `user/${userStore?.userInfo?.id}/followup/${item?.id}`,
       hasToken: true,
     })
       .then((data) => {

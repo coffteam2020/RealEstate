@@ -1,58 +1,57 @@
-import React, {Component} from 'react';
-import {
-  View,
-  NativeModules,
-  Text,
-  TouchableOpacity,
-  Platform,
-  Dimensions,
-  Alert,
-  Keyboard,
-  ImageBackground,
-} from 'react-native';
-import {RtcEngine, AgoraView} from 'react-native-agora';
+import React, { Component } from 'react';
+import { View, NativeModules, Text, TouchableOpacity, Platform, Dimensions, Alert, Keyboard, Image, ImageBackground, Slider } from 'react-native';
+import { RtcEngine, AgoraView } from 'react-native-agora';
 import styles from './Styles';
 import requestCameraAndAudioPermission from './permission';
-import {withTheme} from 'react-native-paper';
-import {ScrollView, TextInput} from 'react-native-gesture-handler';
-import {firebase} from '@react-native-firebase/database';
-import FastImage from 'react-native-fast-image';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import ImagePicker from 'react-native-image-picker';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import * as ScreenshotDetector from 'react-native-screenshot-detect';
-import {NavigationService} from '../../navigation';
-import {FirebaseService} from '../../api/FirebaseService';
-import {uploadFileToFireBase} from '../../shared/utils/firebaseStorageUtils';
+import { withTheme, Modal } from 'react-native-paper';
+import { ScrollView, TextInput } from 'react-native-gesture-handler';
+import { firebase } from '@react-native-firebase/database';
+import LottieView from 'lottie-react-native';
+import { NavigationService } from '../../navigation';
+import { FirebaseService } from '../../api/FirebaseService';
 import Constant from '../../shared/utils/constant/Constant';
 import IALocalStorage from '../../shared/utils/storage/IALocalStorage';
 import LogManager from '../../shared/utils/logging/LogManager';
-import {ToastHelper} from '../../shared/components/ToastHelper';
-import AxiosFetcher from '../../api/AxiosFetch';
+import FastImage from 'react-native-fast-image';
 import TextNormal from '../../shared/components/Text/TextNormal';
-import {containerStyle} from '../../themes/styles';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import icons from '../../shared/utils/icons/icons';
-import {ScreenWidth, ScreenHeight} from '../../shared/utils/dimension/Divices';
+import { containerStyle } from '../../themes/styles';
+import { BackHandler } from 'react-native';
+import { colors } from '../../shared/utils/colors/colors';
+import ImagePicker from 'react-native-image-picker';
+import LinearGradient from 'react-native-linear-gradient';
+import { ScreenHeight, ScreenWidth } from '../../shared/utils/dimension/Divices';
+import TextInputFlat from '../../shared/components/TextInput/TextInputFlat';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { SPACINGS } from '../../themes';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import fonts from '../../shared/utils/fonts/fonts';
+import { uploadFileToFireBase } from '../../shared/utils/firebaseStorageUtils';
 import Loading from '../../shared/components/Loading';
-import {colors} from '../../shared/utils/colors/colors';
+import { ToastHelper } from '../../shared/components/ToastHelper';
+import AxiosFetcher from '../../api/AxiosFetch';
+import { useObserver } from 'mobx-react';
+import * as ScreenshotDetector from 'react-native-screenshot-detect';
+import ModalItem from '../../shared/components/Modal/ModalItem';
 var uuid = require('uuid');
 
-const {Agora} = NativeModules; //Define Agora object as a native module
+
+const { Agora } = NativeModules;            //Define Agora object as a native module
 let keyRoom = '';
-let dimensions = {
-  //get dimensions of the device to use in view styles
+let dimensions = {                                            //get dimensions of the device to use in view styles
   width: Dimensions.get('window').width,
   height: Dimensions.get('window').height,
 };
-const {FPS30, AudioProfileDefault, AudioScenarioDefault, Adaptative} = Agora; //Set defaults for Stream
+const { FPS30,
+  AudioProfileDefault,
+  AudioScenarioDefault,
+  Adaptative, } = Agora;                                  //Set defaults for Stream
 
-const config = {
-  //Setting config of the app
-  appid: '5ab51eb1c25a446d85d6c42f2053e11d', //Enter the App ID generated from the Agora Website
-  channelProfile: 0, //Set channel profile as 0 for RTC
-  videoEncoderConfig: {
-    //Set Video feed encoder settings
+const config = {                            //Setting config of the app
+  appid: '3f1a0c97f4a84988a3c09718209ff267',               //Enter the App ID generated from the Agora Website
+  channelProfile: 0,                        //Set channel profile as 0 for RTC
+  videoEncoderConfig: {                     //Set Video feed encoder settings
     width: 720,
     height: 1080,
     bitrate: 1,
@@ -72,8 +71,7 @@ const IMAGE_CONFIG = {
     path: 'images',
   },
 };
-const IMG =
-  'https://firebasestorage.googleapis.com/v0/b/stayalone-prod.appspot.com/o/blur.jpg?alt=media&token=23d5379e-8c8f-4f0b-8926-59811eeb9ce4';
+const IMG = 'https://firebasestorage.googleapis.com/v0/b/stayalone-prod.appspot.com/o/blur.jpg?alt=media&token=23d5379e-8c8f-4f0b-8926-59811eeb9ce4';
 // var isOwner = false;
 var uid = Math.floor(Math.random() * 1000000);
 var uudddd = 0;
@@ -81,14 +79,15 @@ class VideoCallScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      peerIds: [], //Array for storing connected peers
-      uid: uid, //Generate a UID for local user
+      peerIds: [],                                       //Array for storing connected peers
+      uid: uid,              //Generate a UID for local user
       appid: config.appid,
-      vidMute: false, //State variable for Video Mute
+      vidMute: false,                             //State variable for Video Mute
       audMute: false,
-      channelName: '', //Channel Name for the current session
+      channelName: '',                        //Channel Name for the current session
       joinSucceed: false,
-      textChat: '', //State variable for storing success
+      showModalFilter: false,
+      textChat: '',                     //State variable for storing success
       participiantsCount: 0,
       imgBackground: IMG,
       owner: {},
@@ -99,82 +98,68 @@ class VideoCallScreen extends Component {
       hasVideo: true,
       isLoading: false,
       tags: [],
+      showHeart: false,
       idForServer: '',
       keyboardShow: false,
       createdAt: new Date().getTime(),
       ranking: 0,
+      filter: 0,
+      contract: 1,
+      light: 1,
+      smooth: 1,
+      red: 1,
       modalItem: false,
+      modalAR: false,
+      itemAR: -1,
     };
-    if (Platform.OS === 'android') {
-      //Request required permissions from Android
-      requestCameraAndAudioPermission().then((_) => {
+    if (Platform.OS === 'android') {                    //Request required permissions from Android
+      requestCameraAndAudioPermission().then(_ => {
         console.log('requested!');
       });
     }
   }
   listenRoomChange = async (id) => {
     let userInfo = await IALocalStorage.getDetailUserInfo();
-    firebase
-      .database()
-      .ref(Constant.SCHEMA.LIVESTREAM)
-      .child(id)
-      .on('value', (snapshot) => {
-        if (snapshot.val() != undefined) {
-          let data = snapshot.val() || [];
-          console.log(LogManager.parseJsonObjectToJsonString(data));
-          if (userInfo?.id === data?.ownerUserId?.id) {
-            this.setState({
-              isOwner: true,
-            });
-          } else {
-            this.setState({
-              isOwner: false,
-            });
-          }
-          this.setState(
-            {
-              participiantsCount: data?.participiants?.length,
-              messages: data?.messages || [],
-              imgBackground: data?.backgroundImg || IMG,
-              ranking: data?.ownerUserId?.ranking,
-            },
-            () => {
-              if (
-                this.state.isOwner &&
-                this.state.messages[
-                  this.state.messages.length - 1
-                ]?.data?.includes('has taken a screenshot')
-              ) {
-                ToastHelper.showWarning(
-                  this.state.messages[this.state.messages.length - 1]?.data ||
-                    'Someone has taken a screenshot',
-                );
-              }
-              if (
-                !this.state.isOwner &&
-                this.state.messages[
-                  this.state.messages.length - 1
-                ]?.data?.includes('Hey everyone, Im leave now. Good bye!')
-              ) {
-                Alert.alert(
-                  'Opps',
-                  'Owner has cancelled livestreaming channel',
-                  [
-                    {
-                      text: 'Leave me',
-                      onPress: () => {
-                        this.endCall();
-                      },
-                    },
-                  ],
-                );
-                return;
-              }
-            },
-          );
+    firebase.database().ref(Constant.SCHEMA.LIVESTREAM).child(id).on('value', snapshot => {
+      if (snapshot.val() != undefined) {
+        let data = snapshot.val() || [];
+        console.log(LogManager.parseJsonObjectToJsonString(data));
+        if (userInfo?.userId === data?.ownerUserId?.id) {
+          this.setState({
+            isOwner: true
+          });
+        } else {
+          this.setState({
+            isOwner: false
+          });
         }
-      });
-  };
+        this.setState({
+          participiantsCount: data?.participiants?.length,
+          messages: data?.messages || [],
+          imgBackground: data?.backgroundImg || IMG,
+          ranking: data?.ownerUserId?.ranking,
+          hasVideo: data?.hasVideo || false,
+          hasVol: data?.hasVol || false,
+          roomId: data?.roomId,
+          uid: data?.uid,
+        }, () => {
+          if (this.state.isOwner && this.state.messages[this.state.messages.length - 1]?.data?.includes('has taken a screenshot')) {
+            ToastHelper.showWarning(this.state.messages[this.state.messages.length - 1]?.data || 'Someone has taken a screenshot');
+          }
+          // if (!this.state.isOwner && this.state.messages[this.state.messages.length - 1]?.data?.includes('Hey everyone, Im leave now. Good bye!')) {
+          // 	Alert.alert('Opps', 'Owner has cancelled livestreaming channel', [
+          // 		{
+          // 			text: 'Leave me',
+          // 			onPress: () => { this.endCall(); }
+          // 		}
+          // 	]);
+          // 	return;
+          // }
+        });
+
+      }
+    });
+  }
   checkRoom = async () => {
     let curLiveStream = this.props.navigation.state.params?.curLiveStream;
     if (curLiveStream && curLiveStream?.ownerUserId) {
@@ -186,11 +171,8 @@ class VideoCallScreen extends Component {
         uid: curLiveStream?.uid,
         channelName: curLiveStream?.channelName || curLiveStream?.ownerUserId,
         note: curLiveStream?.note || 'Hello, nice to meet ya all',
-        imgBackground:
-          curLiveStream?.backgroundImg ||
-          curLiveStream?.ownerUserId?.avatar ||
-          IMG,
-        owner: curLiveStream?.ownerUserId,
+        imgBackground: curLiveStream?.backgroundImg || curLiveStream?.ownerUserId?.avatar || IMG,
+        owner: curLiveStream?.ownerUserId
       });
       keyRoom = curLiveStream?.id;
       this.listenRoomChange(curLiveStream?.id);
@@ -200,40 +182,35 @@ class VideoCallScreen extends Component {
     let userInfo = await IALocalStorage.getDetailUserInfo();
     let data = this.props.navigation.state.params.data;
     if (data && data?.channelName) {
-      let convertChannelName = `${data?.channelName}_${
-        userInfo?.id
-      }_${new Date().getTime()}`;
+      let convertChannelName = `${data?.channelName}_${userInfo?.userId}_${new Date().getTime()}`;
       this.setState({
         vidMute: true,
-		audMute: false,
-		isOwner: true,
+        audMute: false,
         tags: data?.tags || [],
+        uid: userInfo?.userId,
         password: data?.password,
         channelName: convertChannelName,
         note: data?.note || 'Hello, nice to meet ya all',
         imgBackground: userInfo?.avatar,
         owner: {
-          address: userInfo?.address,
-          id: userInfo?.id,
+          address: userInfo?.addressStr,
+          id: userInfo?.userId,
           name: userInfo?.name,
-          avatar: userInfo?.avatar,
-        },
+          avatar: userInfo?.avatar
+        }
       });
     }
-  };
+  }
 
   componentDidMount = async () => {
-    this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () =>
-      this._keyboardDidShow(),
-    );
-    this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () =>
-      this._keyboardDidHide(),
-    );
+    BackHandler.addEventListener('hardwareBackPress', () => {
+      //
+    });
+    this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => this._keyboardDidShow());
+    this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => this._keyboardDidHide());
     let userInfo = await IALocalStorage.getDetailUserInfo();
     this.eventEmitter = ScreenshotDetector.subscribe(() => {
-      this.onSendMessage(
-        `Opps, ${userInfo?.name || 'I'} has taken a screenshot`,
-      );
+      this.onSendMessage(`Opps, ${userInfo?.name || 'I'} has taken a screenshot`);
     });
 
     // Unsubscribe later (a good place would be componentWillUnmount)
@@ -244,38 +221,39 @@ class VideoCallScreen extends Component {
     // Init room
     this.configRoom();
 
-    // After join success,
+    // After join success, 
     // Joiner: update participiant
     // Owner: create livestream to db
     this.checkActionForJoiner();
-  };
+
+  }
 
   configRoom() {
     RtcEngine.on('userJoined', (data) => {
-      const {peerIds} = this.state; //Get currrent peer IDs
-      if (peerIds.indexOf(data?.uid) === -1) {
-        //If new user has joined
+      const { peerIds } = this.state;                   //Get currrent peer IDs
+      if (peerIds.indexOf(data?.uid) === -1) {           //If new user has joined
         this.setState({
-          peerIds: [...peerIds, data?.uid], //add peer ID to state array
+          peerIds: [...peerIds, data?.uid],              //add peer ID to state array
         });
       }
     });
-    RtcEngine.on('userOffline', (data) => {
-      //If user leaves
+    RtcEngine.on('userOffline', (data) => {             //If user leaves
       this.setState({
-        peerIds: this.state.peerIds.filter((uid) => uid !== data.uid), //remove peer ID from state array
+        peerIds: this.state.peerIds.filter(uid => uid !== data.uid), //remove peer ID from state array
       });
     });
-    RtcEngine.on('joinChannelSuccess', () => {
-      //If Local user joins RTC channel
-      RtcEngine.startPreview(); //Start RTC preview
-      this.setState({
-        joinSucceed: true, //Set state variable to true
-      });
+    RtcEngine.on('joinChannelSuccess', (data) => {                   //If Local user joins RTC channel
+      RtcEngine.startPreview();                                      //Start RTC preview
+
     });
-    RtcEngine.init(config); //Initialize the RTC engine
+    RtcEngine.init(config);                                         //Initialize the RTC engine
     setTimeout(() => {
       this.startCall();
+      setTimeout(() => {
+        this.setState({
+          joinSucceed: true,                                           //Set state variable to true
+        });
+      }, 500)
     }, 1500);
   }
 
@@ -286,61 +264,48 @@ class VideoCallScreen extends Component {
     } else {
       this.updateOwnerForLivestream();
     }
-  };
+  }
 
   updateParticipiantsForLivestream = async (curLiveStream) => {
     RtcEngine.muteLocalAudioStream(true);
-    RtcEngine.muteLocalVideoStream(false);
+    RtcEngine.muteLocalVideoStream(true);
     let userInfo = await IALocalStorage.getDetailUserInfo();
-    firebase
-      .database()
-      .ref(Constant.SCHEMA.LIVESTREAM)
-      .orderByChild('id')
-      .equalTo(curLiveStream?.id)
-      .once('value', (snapshot) => {
-        const dataWithKey = snapshot.val() || [];
-        let key = Object.keys(dataWithKey)[0];
-        let data = Object.values(dataWithKey)[0];
-        let participiants = data?.participiants || [];
-        var isFound = false;
-        this.setState({uid: data?.uid, idForServer: data?.idForServer});
-        for (let i = 0; i < participiants?.length; i++) {
-          if (participiants[i].id === userInfo?.id) {
-            isFound = true;
-          }
+    firebase.database().ref(Constant.SCHEMA.LIVESTREAM).orderByChild('id').equalTo(curLiveStream?.id).once('value', snapshot => {
+      const dataWithKey = snapshot.val() || [];
+      let key = Object.keys(dataWithKey)[0];
+      let data = Object.values(dataWithKey)[0];
+      let participiants = data?.participiants || [];
+      var isFound = false;
+      this.setState({ uid: parseInt(data?.uid), idForServer: data?.idForServer });
+      for (let i = 0; i < participiants?.length; i++) {
+        if (participiants[i].id === userInfo?.userId) {
+          isFound = true;
         }
-        // If owner go back to room (by crashing app or killing app force)
-        if (data?.ownerUserId?.id === userInfo?.id) {
-          RtcEngine.muteLocalAudioStream(false);
-        }
-        // If not found, append
-        if (!isFound) {
-          let newJoiner = {
-            id: userInfo?.id,
-            name: userInfo?.name,
-            avatar: userInfo?.avatar,
-            ranking: userInfo?.ranking,
-            address: userInfo?.addressStr,
-          };
-          participiants.push(newJoiner);
-          FirebaseService.updateItem(Constant.SCHEMA.LIVESTREAM, key, {
-            ...data,
-            participiants: participiants,
-          });
-        }
-        this.onSendMessage(
-          `Hi everyone! Im ${
-            userInfo?.name || 'new user'
-          }. Nice to meet ya all!`,
-        );
-      });
+      }
+      // If owner go back to room (by crashing app or killing app force)
+
+      // If not found, append 
+      if (!isFound) {
+        let newJoiner = {
+          id: userInfo?.userId,
+          name: userInfo?.name,
+          avatar: userInfo?.avatar,
+          ranking: userInfo?.ranking,
+          address: userInfo?.addressStr,
+        };
+        participiants.push(newJoiner);
+        FirebaseService.updateItem(Constant.SCHEMA.LIVESTREAM, key, { ...data, participiants: participiants });
+      }
+      this.onSendMessage(`Hi everyone! Im ${userInfo?.name || 'new user'}. Nice to meet ya all!`);
+    });
+
   };
 
   // Update data for livestreaming channel
   updateOwnerForLivestream = async () => {
     console.log('updateOwnerForLivestream');
     let userInfo = await IALocalStorage.getDetailUserInfo();
-    let keyUser = `${userInfo?.id}_${new Date().getTime()}`;
+    let keyUser = `${userInfo?.userId}_${new Date().getTime()}`;
     keyRoom = keyUser;
     let tempObjRoom = {
       id: keyUser,
@@ -351,11 +316,14 @@ class VideoCallScreen extends Component {
         id: userInfo?.userId,
         name: userInfo?.name,
         avatar: userInfo?.avatar,
-        address: userInfo?.address,
+        address: userInfo?.addressStr,
+        ranking: userInfo?.ranking,
       },
       createdAt: new Date().getTime(),
       startedAt: new Date().getTime(),
       password: this.state.password,
+      hasVideo: this.state.hasVideo,
+      hasVol: this.state.hasVol,
       tags: this.state.tags || [],
       participiants: [
         {
@@ -363,178 +331,123 @@ class VideoCallScreen extends Component {
           name: userInfo?.name,
           avatar: userInfo?.avatar,
           address: userInfo?.addressStr,
-        },
+        }
       ],
       status: 'LIVESTREAMING',
     };
-    FirebaseService.pushNewItemWithChildKey(
-      Constant.SCHEMA.LIVESTREAM,
-      keyUser,
-      tempObjRoom,
-    );
+    FirebaseService.pushNewItemWithChildKey(Constant.SCHEMA.LIVESTREAM, keyUser, tempObjRoom);
     // RtcEngine.muteLocalVideoStream(true);
     this.listenRoomChange(keyUser);
-
-    // Update to api server for ranking calculation
   };
 
   /**
-   * @name startCall
-   * @description Function to start the call
-   */
-  startCall = () => {
+  * @name startCall
+  * @description Function to start the call
+  */
+  startCall = async () => {
     try {
-      console.log('isOwner ' + this.state.isOwner);
+      await RtcEngine.enableVideo();
+      // await RtcEngine.addVideoWatermark('https://upload.wikimedia.org/wikipedia/commons/6/62/Paracas_National_Reserve%2C_Ica%2C_Peru-3April2011.jpg', { x: 20, y: 20, height: 20, width: 20 }).then(a => {
+      // 	console.log(a);
+      // })
+      // RtcEngine.setLiveTranscoding()
+
       if (this.state.isOwner) {
-        RtcEngine.joinChannel(this.state.channelName, this.state.uid); //Join Channel
+        RtcEngine.joinChannel(this.state.channelName, this.state.uid);  //Join Channel	
       } else {
         let ran = Math.floor(Math.random() * 100);
-        RtcEngine.joinChannel(this.state.channelName, ran); //Join Channel
+        RtcEngine.joinChannel(this.state.channelName, ran);  //Join Channel
       }
-      RtcEngine.enableAudio(); //Enable the audio
+      RtcEngine.enableAudio();                                        //Enable the audio
     } catch (err) {
       console.log(LogManager.parseJsonObjectToJsonString(err));
     }
-  };
+  }
   /**
-   * @name endCall
-   * @description Function to end the call
-   */
+  * @name endCall
+  * @description Function to end the call
+  */
   endCall = async () => {
     console.log(keyRoom);
     let userInfo = await IALocalStorage.getDetailUserInfo();
-    firebase
-      .database()
-      .ref(Constant.SCHEMA.LIVESTREAM)
-      .child(keyRoom)
-      .once('value', (snapshot) => {
-        const data = snapshot.val() || [];
-        if (userInfo?.userId === data?.ownerUserId?.id) {
-          //Owner => update status
-          let participiants = data?.participiants || [];
-          participiants = participiants?.filter(
-            (item) => item?.id != userInfo?.userId,
-          );
-          FirebaseService.updateItem(Constant.SCHEMA.LIVESTREAM, keyRoom, {
-            ...data,
-            participiants: participiants,
-            status: 'END',
-          });
-        } else {
-          // Not Owner => remove participiants
-          let participiants = data?.participiants || [];
-          participiants = participiants?.filter(
-            (item) => item?.id != userInfo?.userId,
-          );
-          FirebaseService.updateItem(Constant.SCHEMA.LIVESTREAM, keyRoom, {
-            ...data,
-            participiants: participiants,
-          });
-        }
-      });
+    firebase.database().ref(Constant.SCHEMA.LIVESTREAM).child(keyRoom).once('value', snapshot => {
+      const data = snapshot.val() || [];
+      if (userInfo?.userId === data?.ownerUserId?.id) {
+        //Owner => update status
+        let participiants = data?.participiants || [];
+        participiants = participiants?.filter(item => item?.id != userInfo?.userId);
+        FirebaseService.updateItem(Constant.SCHEMA.LIVESTREAM, keyRoom, { ...data, participiants: participiants, status: 'END' });
+      } else {
+        // Not Owner => remove participiants
+        let participiants = data?.participiants || [];
+        participiants = participiants?.filter(item => item?.id != userInfo?.userId);
+        FirebaseService.updateItem(Constant.SCHEMA.LIVESTREAM, keyRoom, { ...data, participiants: participiants });
+      }
+    });
     RtcEngine.leaveChannel();
     this.setState({
       peerIds: [],
       joinSucceed: false,
     });
     NavigationService.goBack();
-  };
+  }
   /**
-   * @name videoView
-   * @description Function to return the view for the app
-   */
+  * @name videoView
+  * @description Function to return the view for the app
+  */
 
   renderMultipleConnections = () => {
     return (
-      <View style={{flex: 1}}>
-        <View style={{height: (dimensions.height * 3) / 4 - 50}}>
-          <AgoraView
-            style={{flex: 1}}
-            remoteUid={this.state.peerIds[0]}
-            mode={1}
-            key={this.state.peerIds[0]}
-          />
+      <View style={{ flex: 1 }}>
+        <View style={{ height: dimensions.height * 3 / 4 - 50 }}>
+          <AgoraView style={{ flex: 1 }}
+            remoteUid={this.state.peerIds[0]} mode={1} key={this.state.peerIds[0]} />
         </View>
-        <View style={{height: dimensions.height / 4}}>
-          <ScrollView
-            horizontal={true}
-            decelerationRate={0}
-            snapToInterval={dimensions.width / 2}
-            snapToAlignment={'center'}
-            style={{width: dimensions.width, height: dimensions.height / 4}}>
-            {this.state.peerIds.slice(1).map((data) => (
-              <TouchableOpacity
-                style={{
-                  width: dimensions.width / 2,
-                  height: dimensions.height / 4,
-                }}
-                onPress={() => this.peerClick(data)}
-                key={data}>
-                <AgoraView
-                  style={{
-                    width: dimensions.width / 2,
-                    height: dimensions.height / 4,
-                  }}
-                  remoteUid={data}
-                  mode={1}
-                  key={data}
-                />
-              </TouchableOpacity>
-            ))}
+        <View style={{ height: dimensions.height / 4 }}>
+          <ScrollView horizontal={true} decelerationRate={0}
+            snapToInterval={dimensions.width / 2} snapToAlignment={'center'} style={{ width: dimensions.width, height: dimensions.height / 4 }}>
+            {
+              this.state.peerIds.slice(1).map((data) => (
+                <TouchableOpacity style={{ width: dimensions.width / 2, height: dimensions.height / 4 }}
+                  onPress={() => this.peerClick(data)} key={data}>
+                  <AgoraView style={{ width: dimensions.width / 2, height: dimensions.height / 4 }}
+                    remoteUid={data} mode={1} key={data} />
+                </TouchableOpacity>
+              ))
+            }
           </ScrollView>
         </View>
       </View>
     );
-  };
+  }
   renderCouple = () => {
     return (
-      <View style={{height: dimensions.height - 50}}>
-        <AgoraView
-          style={{flex: 1}}
-          remoteUid={this.state.peerIds[0]}
-          mode={1}
-        />
+      <View style={{ height: dimensions.height - 50 }}>
+        <AgoraView style={{ flex: 1 }}
+          remoteUid={this.state.peerIds[0]} mode={1} />
       </View>
     );
-  };
+  }
   renderNoUsers = () => {
-    return <Text>No users connected</Text>;
-  };
+    return (
+      <Text>No users connected</Text>
+    );
+  }
 
   showLocalVideo = () => {
     return (
-      <AgoraView
-        style={styles.localVideoStyle}
-        zOrderMediaOverlay={true}
-        showLocalVideo={true}
-        mode={1}
-      />
+      <AgoraView style={styles.localVideoStyle}
+        zOrderMediaOverlay={true} showLocalVideo={true} mode={1} />
     );
-  };
+  }
   renderHeader() {
     let channelName = this.state.channelName?.split('_')[0];
     return (
-      <View style={{zIndex: 10}}>
+      <View style={{ zIndex: 100 }}>
         <View style={styles.header}>
-          <FastImage
-            style={styles.avatar}
-            resizeMode="contain"
-            resizeMethod="resize"
-            source={{
-              uri:
-                this.state.owner?.avatar || Constant.MOCKING_DATA.PLACE_HOLDER,
-            }}
-          />
-          <View style={{marginLeft: 10}}>
-            <TextNormal
-              numberOfLines={1}
-              ellipsizeMode="tail"
-              text={channelName?.trim() || ''}
-              style={[
-                containerStyle.textDefault,
-                {color: colors.whiteBackground},
-              ]}
-            />
+          <FastImage style={styles.avatar} resizeMode="cover" resizeMethod="resize" source={{ uri: this.state.owner?.avatar || Constant.MOCKING_DATA.PLACE_HOLDER }} />
+          <View style={{ marginLeft: 10 }}>
+            <TextNormal numberOfLines={1} ellipsizeMode="tail" text={channelName?.trim() || ''} style={[containerStyle.textDefault, { color: colors.whiteBackground }]} />
           </View>
         </View>
       </View>
@@ -544,16 +457,11 @@ class VideoCallScreen extends Component {
     return (
       <View style={styles.participiants}>
         <Ionicons name="ios-eye" size={25} color={'white'} />
-        <TextNormal
-          text={` ${this.state.participiantsCount || 0}`}
-          style={[
-            containerStyle.textDefault,
-            {color: colors.whiteBackground, marginBottom: -5},
-          ]}
-        />
+        <TextNormal text={` ${this.state.participiantsCount || 0}`} style={[containerStyle.textDefault, { color: colors.whiteBackground, marginBottom: -10 }]} />
+
       </View>
     );
-  };
+  }
   closeVideo = () => {
     if (this.state.isOwner) {
       Alert.alert('Hey', 'Do you want to stop livestreaming?', [
@@ -564,127 +472,153 @@ class VideoCallScreen extends Component {
             setTimeout(() => {
               this.endCall();
             }, 1000);
-          },
+          }
         },
         {
           text: 'No',
-          onPress: () => {},
-        },
+          onPress: () => { }
+        }
       ]);
     } else {
       Alert.alert('Hey', 'Do you want to leave?', [
         {
           text: 'Yes, leave me',
-          onPress: () => {
-            this.endCall();
-          },
+          onPress: () => { this.endCall(); }
         },
         {
           text: 'No',
-          onPress: () => {},
-        },
+          onPress: () => { }
+        }
       ]);
     }
-  };
+  }
   renderCloseLiveStream = () => {
     return (
       <TouchableOpacity onPress={() => this.closeVideo()} style={styles.close}>
         <Ionicons name="ios-close" color={'white'} size={30} />
       </TouchableOpacity>
     );
-  };
+  }
   renderMute = () => {
     if (!this.state.isOwner) {
       return;
     }
     return (
-      <TouchableOpacity
-        style={styles.noVol}
-        onPress={async () => {
-          let userInfo = await IALocalStorage.getDetailUserInfo();
-          firebase
-            .database()
-            .ref(Constant.SCHEMA.LIVESTREAM)
-            .child(keyRoom)
-            .once('value', (snapshot) => {
+      <TouchableOpacity style={styles.noVol} onPress={async () => {
+        let userInfo = await IALocalStorage.getDetailUserInfo();
+        firebase.database().ref(Constant.SCHEMA.LIVESTREAM).child(keyRoom).once('value', snapshot => {
+          const data = snapshot.val() || [];
+          if (userInfo?.userId === data?.ownerUserId?.id) {
+            RtcEngine.muteLocalAudioStream(!this.state.hasVol);
+            firebase.database().ref(Constant.SCHEMA.LIVESTREAM).child(keyRoom).once('value', snapshot => {
               const data = snapshot.val() || [];
-              if (userInfo?.id === data?.ownerUserId?.id) {
-                RtcEngine.muteLocalAudioStream(!this.state.hasVol);
-                this.setState({hasVol: !this.state.hasVol}, () => {
-                  ToastHelper.showSuccess(
-                    'You have reversed audio ' +
-                      (this.state.hasVol
-                        ? 'remote to local'
-                        : 'local to remote'),
-                  );
-                });
-              }
+              // Not Owner => remove participiants
+              FirebaseService.updateItem(Constant.SCHEMA.LIVESTREAM, keyRoom, { ...data, hasVol: !this.state.hasVol });
             });
-        }}>
-        <Ionicons
-          name={this.state.hasVol ? 'ios-volume-off' : 'ios-volume-high'}
-          size={25}
-          color={colors.white}
-        />
+            // this.setState({ hasVol: !this.state.hasVol }, () => {
+            ToastHelper.showSuccess('You have reversed audio ' + (!this.state.hasVol ? 'remote to local' : 'local to remote'));
+            // });
+          }
+        });
+
+      }}>
+        <Ionicons name={this.state.hasVol ? 'ios-volume-off' : 'ios-volume-high'} size={25} color={colors.white} />
       </TouchableOpacity>
     );
-  };
+  }
   renderMuteVideo = () => {
     if (!this.state.isOwner) {
       return;
     }
     return (
-      <TouchableOpacity
-        style={styles.noVideo}
-        onPress={async () => {
-          let userInfo = await IALocalStorage.getDetailUserInfo();
-          firebase
-            .database()
-            .ref(Constant.SCHEMA.LIVESTREAM)
-            .child(keyRoom)
-            .once('value', (snapshot) => {
+      <TouchableOpacity style={styles.noVideo} onPress={async () => {
+        let userInfo = await IALocalStorage.getDetailUserInfo();
+        firebase.database().ref(Constant.SCHEMA.LIVESTREAM).child(keyRoom).once('value', snapshot => {
+          const data = snapshot.val() || [];
+          if (userInfo?.userId === data?.ownerUserId?.id) {
+            RtcEngine.muteLocalVideoStream(!this.state.hasVideo);
+            firebase.database().ref(Constant.SCHEMA.LIVESTREAM).child(keyRoom).once('value', snapshot => {
               const data = snapshot.val() || [];
-              if (userInfo?.id === data?.ownerUserId?.id) {
-                RtcEngine.muteLocalVideoStream(!this.state.hasVideo);
-                this.setState({hasVideo: !this.state.hasVideo}, () => {
-                  ToastHelper.showSuccess(
-                    'You have reversed video ' +
-                      (this.state.hasVideo
-                        ? 'remote to local'
-                        : 'local to remote'),
-                  );
-                });
-              } else {
-                alert('You have not permission to disable video call');
-              }
+              // Not Owner => remove participiants
+              FirebaseService.updateItem(Constant.SCHEMA.LIVESTREAM, keyRoom, { ...data, hasVideo: !this.state.hasVideo });
             });
-        }}>
-        <MaterialCommunityIcons
-          name={this.state.hasVideo ? 'video-outline' : 'video-off-outline'}
-          size={25}
-          color={colors.white}
-        />
+            // this.setState({ hasVideo: !this.state.hasVideo }, () => {
+            ToastHelper.showSuccess('You have reversed video ' + (!this.state.hasVideo ? 'remote to local' : 'local to remote'));
+            // });
+          } else {
+            alert('You have not permission to disable video call');
+          }
+        });
+
+      }}>
+        <MaterialCommunityIcons name={this.state.hasVideo ? 'video-outline' : 'video-off-outline'} size={25} color={colors.white} />
       </TouchableOpacity>
     );
-  };
+  }
+  renderFilter = () => {
+    if (!this.state.isOwner) {
+      return;
+    }
+    return (
+      <TouchableOpacity style={[styles.noVideo, {
+        left: '10%', flexDirection: 'column', width: 50,
+        height: 50,
+        top: 145,
+      }]} onPress={async () => {
+        this.setState({ showModalFilter: true })
+
+      }}>
+        <MaterialCommunityIcons name={'image-filter-vintage'} size={25} color={colors.white} />
+        <TextNormal text={'Filter'} style={{ fontSize: 12, color: 'white' }} />
+      </TouchableOpacity>
+    );
+  }
+  renderaR = () => {
+    if (!this.state.isOwner) {
+      return;
+    }
+    return (
+      <TouchableOpacity style={[styles.noVideo, {
+        position: 'absolute', left: '30%', flexDirection: 'column', width: 50,
+        height: 50,
+        top: 145, zIndex: 1000
+      }]} onPress={async () => {
+        this.setState({ modalAR: true })
+
+      }}>
+        <MaterialCommunityIcons name={'image-filter-vintage'} size={25} color={colors.white} />
+        <TextNormal text={'AR'} style={{ fontSize: 12, color: 'white' }} />
+
+      </TouchableOpacity>
+    );
+  }
+  renderImg = () => {
+    if (this.state.itemAR >= 0) {
+      return (
+        <TouchableOpacity onPress={() => { this.setState({ itemAR: -1 }) }} style={{
+          position: 'absolute', right: 60, flexDirection: 'column', width: 50,
+          height: 50,
+          top: this.state.itemAR === 1 ? 120 : this.state.itemAR === 2 ? 160 : 145, zIndex: 10000
+        }}>
+          <Image source={{ uri: this.state.itemAR === 0 ? 'https://creazilla-store.fra1.digitaloceanspaces.com/emojis/56996/cat-face-emoji-clipart-md.png' : this.state.itemAR === 2 ? 'https://i.pinimg.com/originals/eb/05/cb/eb05cbcdeb70fd3cff116437c5c75f19.png' : this.state.itemAR === 1 ? 'https://pngriver.com/wp-content/uploads/2018/04/Download-Transparent-Deer-Antlers-PNG.png' : '' }} style={[{ height: 70, backgroundColor: 'transparent', width: 80 },]} />
+        </TouchableOpacity>
+      )
+    }
+    return null;
+  }
   renderBackground = () => {
     if (!this.state.isOwner) {
       return;
     }
     return (
-      <TouchableOpacity
-        style={[styles.noVideo, {left: '34%'}]}
-        onPress={async () => {
-          this.openImagePicker();
-        }}>
-        <MaterialCommunityIcons
-          name={'camera-image'}
-          size={25}
-          color={colors.white}
-        />
+      <TouchableOpacity style={[styles.noVideo, { left: '34%' }]} onPress={async () => {
+        this.openImagePicker();
+
+      }}>
+        <MaterialCommunityIcons name={'camera-image'} size={25} color={colors.white} />
       </TouchableOpacity>
     );
-  };
+  }
   openImagePicker = async () => {
     let userInfo = await IALocalStorage.getDetailUserInfo();
     ImagePicker.showImagePicker(IMAGE_CONFIG, (response) => {
@@ -696,35 +630,22 @@ class VideoCallScreen extends Component {
       } else if (response.customButton) {
         console.log('User tapped custom button: ', response.customButton);
       } else {
-        this.setState({isLoading: true});
-        Promise.resolve(uploadFileToFireBase(response, userInfo?.id))
-          .then((val) => {
-            this.setState({isLoading: false});
-            firebase
-              .database()
-              .ref(Constant.SCHEMA.LIVESTREAM)
-              .child(keyRoom)
-              .once('value', (snapshot) => {
-                const data = snapshot.val() || [];
-                if (userInfo?.id === data?.ownerUserId?.id) {
-                  FirebaseService.updateItem(
-                    Constant.SCHEMA.LIVESTREAM,
-                    keyRoom,
-                    {...data, backgroundImg: val},
-                  );
-                  ToastHelper.showSuccess(
-                    'Change background image for room successful',
-                  );
-                }
-              });
-          })
-          .catch((error) => {
-            console.log(error.message);
-            this.setState({isLoading: false});
-            ToastHelper.showError(
-              'Could not change background image for channel',
-            );
+        this.setState({ isLoading: true });
+        Promise.resolve(uploadFileToFireBase(response, userInfo?.userId)).then(val => {
+          this.setState({ isLoading: false });
+          firebase.database().ref(Constant.SCHEMA.LIVESTREAM).child(keyRoom).once('value', snapshot => {
+            const data = snapshot.val() || [];
+            if (userInfo?.userId === data?.ownerUserId?.id) {
+
+              FirebaseService.updateItem(Constant.SCHEMA.LIVESTREAM, keyRoom, { ...data, backgroundImg: val });
+              ToastHelper.showSuccess('Change background image for room successful');
+            }
           });
+        }).catch(error => {
+          console.log(error.message);
+          this.setState({ isLoading: false });
+          ToastHelper.showError('Could not change background image for channel');
+        });
       }
     });
   };
@@ -733,180 +654,176 @@ class VideoCallScreen extends Component {
     let isOwner = item?.user?.id === this.state.owner?.id;
     return (
       <View style={styles.msgContainer}>
-        <FastImage
-          source={{
-            uri: item?.user?.avatar || Constant.MOCKING_DATA.PLACE_HOLDER,
-          }}
-          style={[
-            styles.avtChat,
-            {borderColor: isOwner ? colors.yellow_fresh : colors.white},
-          ]}
-        />
-        <View
-          style={{flexWrap: 'wrap', alignSelf: 'baseline', maxWidth: '90%'}}>
-          <TextNormal
-            text={`${item?.user?.name} ${isOwner ? '- Host' : ''}`}
-            style={[
-              containerStyle.textContent,
-              {color: isOwner ? colors.red : colors.white, marginLeft: 10},
-            ]}
-          />
-          <TextNormal
-            numberOfLines={1000}
-            text={`${item?.data}`}
-            style={[
-              containerStyle.textDefault,
-              {color: colors.white, paddingLeft: 10},
-            ]}
-          />
+        <FastImage source={{ uri: item?.user?.avatar || Constant.MOCKING_DATA.PLACE_HOLDER }} style={[styles.avtChat, { borderColor: isOwner ? colors.yellow_fresh : colors.white }]} />
+        <View style={{ flexWrap: 'wrap', alignSelf: 'baseline', maxWidth: '90%' }}>
+          <TextNormal text={`${item?.user?.name} ${isOwner ? '- Host' : ''}`} style={[containerStyle.textContent, { color: isOwner ? colors.red : colors.white, marginLeft: 10 }]} />
+          <TextNormal numberOfLines={1000} text={`${item?.data}`} style={[containerStyle.textDefault, { color: colors.whiteBackground, paddingLeft: 10 }]} />
         </View>
       </View>
     );
-  };
+  }
   onSendMessage = async (text) => {
     let userInfo = await IALocalStorage.getDetailUserInfo();
-    await firebase
-      .database()
-      .ref(Constant.SCHEMA.LIVESTREAM)
-      .child(keyRoom)
-      .once('value', (snapshot) => {
-        const data = snapshot.val() || [];
-        let messages = data?.messages || [];
-        messages = [
-          ...messages,
-          ...[
-            {
-              id: uuid.v4(),
-              user: {
-                id: userInfo?.id,
-                name: userInfo?.name,
-                avatar: userInfo?.avatar,
-              },
-              data: text ? text : this.state.textChat,
-              type: 'text',
-              createdAt: `${new Date().getTime()}`,
-            },
-          ],
-        ];
-        FirebaseService.updateItem(Constant.SCHEMA.LIVESTREAM, keyRoom, {
-          ...data,
-          messages: messages,
-        });
-        this.setState({textChat: ''});
-      });
-  };
+    await firebase.database().ref(Constant.SCHEMA.LIVESTREAM).child(keyRoom).once('value', snapshot => {
+      const data = snapshot.val() || [];
+      let messages = data?.messages || [];
+      messages = [...messages, ...[{
+        id: uuid.v4(),
+        user: {
+          id: userInfo?.userId,
+          name: userInfo?.name,
+          avatar: userInfo?.avatar,
+        },
+        data: text ? text : this.state.textChat,
+        type: 'text',
+        createdAt: `${new Date().getTime()}`
+      }]];
+      FirebaseService.updateItem(Constant.SCHEMA.LIVESTREAM, keyRoom, { ...data, messages: messages });
+      this.setState({ textChat: '' });
+    });
+  }
   renderInput = () => {
     return (
       <View style={styles.input}>
+        {!this.state.isOwner &&
+          <TouchableOpacity style={{
+            backgroundColor: colors.textPuple,
+            borderColor: colors.textPuple,
+            height: ScreenHeight * 0.06,
+            width: ScreenHeight * 0.06,
+            borderRadius: ScreenHeight * 0.03,
+            alignItems: 'center',
+            alignContent: 'center',
+            justifyContent: 'center',
+            marginRight: 10
+          }} onPress={() => {
+            this.setState({ modalItem: true });
+          }}>
+            {icons.IC_GIFT_ITEM}
+          </TouchableOpacity>}
         <TextInput
           value={this.state.textChat}
           onChangeText={(text) => {
             this.setState({
-              textChat: text,
+              textChat: text
             });
           }}
           text={''}
-          style={[
-            styles.inputChat,
-            {
-              width: ScreenWidth * 0.7
-            },
-          ]}
+          style={[styles.inputChat, { width: this.state.isOwner ? ScreenWidth * 0.7 : ScreenWidth * 0.55 }]}
         />
-        <TouchableOpacity
-          style={{
-            zIndex: 10,
-            height: ScreenHeight * 0.06,
-            maxWidth: ScreenHeight * 0.06,
-          }}
-          onPress={() => {
-            this.onSendMessage();
-          }}>
+        <TouchableOpacity style={{
+          zIndex: 10, height: ScreenHeight * 0.06,
+          maxWidth: ScreenHeight * 0.06,
+        }} onPress={() => {
+          this.onSendMessage();
+        }}>
           {icons.IC_SEND}
         </TouchableOpacity>
+
       </View>
     );
-  };
+  }
+  onSendItem = async (item) => {
+    this.setState({ modalItem: false });
+    let userInfoId = await IALocalStorage.getDetailUserInfo();
+    let body = {
+      'createdOn': new Date().getTime(),
+      'fromUserAvatar': userInfoId?.avatar,
+      'fromUserId': userInfoId?.userId,
+      'fromUserName': userInfoId?.name || '',
+      'itemType': 'GIFT',
+      'itemCode': item?.itemCode,
+      'message': '',
+      'mediaUrl': item?.itemUrl,
+      'messageType': 'GIFT',
+      'receiverUserId': this.state.owner?.id,
+    };
+    // AxiosFetcher({
+    // 	method: 'POST',
+    // 	url: '/api/useraction/' + userInfoId?.userId + '/sendFloatingMessage',
+    // 	data: body,
+    // 	hasToken: true,
+    // }).then(val => {
+    // 	this.setState({ isLoading: false });
+    // 	if (val) {
+    // 		this.onSendMessage(`Ohh ohh, ${userInfoId?.name} just send to ${this.state.owner?.name} a gift 📦🔓🗃. Have fun!`);
+    // 	} else {
+    // 		ToastHelper.showError('You reach exceed items sendable today. Buy more item to send gift to host in our store');
+    // 	}
+    // }).catch((err) => {
+    // 	this.setState({ isLoading: false });
+    // 	ToastHelper.showError('You reach exceed items sendable today. Buy more item to send gift to host in our store');
+    // });
+  }
+
   componentWillUnmount() {
     this.keyboardDidShowListener.remove();
     this.keyboardDidHideListener.remove();
   }
 
   _keyboardDidShow() {
-    this.setState({keyboardShow: true});
+    this.setState({ keyboardShow: true });
   }
 
   _keyboardDidHide() {
-    this.setState({keyboardShow: false});
+    this.setState({ keyboardShow: false });
   }
   render() {
-    console.log(
-      Platform.OS + '' + parseInt(uudddd) + '__' + this.state.isOwner,
-    );
+    console.log(Platform.OS + '' + parseInt(uudddd) + '__' + this.state.hasVideo);
     return (
       <View style={styles.max}>
-        <KeyboardAwareScrollView
-          keyboardShouldPersistTaps="handled"
-          extraHeight={10}
-          extraScrollHeight={20}
-          contentContainerStyle={styles.max}
-          scrollEnabled
-          nestedScrollEnabled>
-          <ImageBackground
-            style={[styles.max, {zIndex: -1}]}
-            source={{uri: this.state.imgBackground || IMG}}>
-            {this.renderHeader()}
-            {this.renderMute()}
-            {this.renderMuteVideo()}
-            {this.renderBackground()}
-            {this.renderParticipiants()}
-            {this.renderCloseLiveStream()}
-            <View
-              style={[
-                styles.max,
-                {zIndex: 0, backgroundColor: 'rgba(0,0,0,0.5)'},
-              ]}>
-              <ScrollView
-                ref={(ref) => {
-                  this.scrollView = ref;
-                }}
-                onContentSizeChange={() =>
-                  this.scrollView.scrollToEnd({animated: true})
-                }
-                showsVerticalScrollIndicator={false}
-                nestedScrollEnabled
-                style={[
-                  styles.message,
-                  Platform.OS === 'android' && this.state.keyboardShow
-                    ? {height: ScreenHeight / 6}
-                    : {},
-                ]}>
-                {this.state.messages.map((item) => {
-                  return this.renderMessages(item);
-                })}
-              </ScrollView>
-            </View>
-          </ImageBackground>
+        <KeyboardAwareScrollView keyboardShouldPersistTaps='handled' extraHeight={10} extraScrollHeight={20} contentContainerStyle={styles.max} scrollEnabled nestedScrollEnabled>
+          {this.renderCloseLiveStream()}
           {this.renderInput()}
-          {this.state.hasVideo && this.state.isOwner ? (
-            <AgoraView
-              style={styles.localVideoStyle}
-              zOrderMediaOverlay={true}
-              showLocalVideo={true}
-              mode={1}
+          {this.renderHeader()}
+          {this.renderMute()}
+          {/* {this.renderBackground()} */}
+          {this.renderParticipiants()}
+          <TouchableOpacity delayPressIn={0} style={{ zIndex: 1001, position: 'absolute', bottom: 50, right: 0, width: 100, height: 100 }} onPress={() => this.setState({ showHeart: true })}>
+            <LottieView
+              autoPlay
+              loop={false}
+              source={require('../../../assets/imgs/heart.json')}
             />
-          ) : !this.state.isOwner &&
-            this.state.joinSucceed &&
-            typeof parseInt(this.state.uid) === 'number' ? (
-            <AgoraView
-              style={styles.localVideoStyle}
-              showLocalVideo={false}
-              mode={1}
-              remoteUid={parseInt(this.state.uid)}
-            />
-          ) : null}
+          </TouchableOpacity>
+          {this.state.showHeart ?
+            <TouchableOpacity style={{ zIndex: 1000, position: 'absolute', top: ScreenHeight / 2, left: ScreenWidth / 4, width: 200, height: 200 }}>
+              <LottieView
+                autoPlay
+                onAnimationFinish={() => { this.setState({ showHeart: false }) }}
+                loop={false}
+                source={require('../../../assets/imgs/center-heart.json')}
+              />
+            </TouchableOpacity> : null}
+          <ScrollView
+            ref={ref => { this.scrollView = ref; }}
+            onContentSizeChange={() => this.scrollView.scrollToEnd({ animated: true })}
+            showsVerticalScrollIndicator={false} nestedScrollEnabled style={[styles.message, Platform.OS === 'android' && this.state.keyboardShow ? { height: ScreenHeight / 6 } : {}]}>
+            {this.state.messages.map(item => {
+              return (
+                this.renderMessages(item)
+              );
+            })}
+
+          </ScrollView>
+          {this.state.joinSucceed ?
+            (this.state.hasVideo && this.state.isOwner ?
+              <AgoraView style={styles.localVideoStyle}
+                zOrderMediaOverlay={false} showLocalVideo={true} mode={1} />
+              /* <View style={{ zIndex: 5 }}>
+                <View style={[styles.max, { zIndex: 2, backgroundColor: 'rgba(0,0,0,0.5)' }]}>
+                </View>
+              </View> */
+              :
+              (!this.state.hasVideo ? <ImageBackground style={[styles.max, { zIndex: -1 }]} source={{ uri: this.state.imgBackground || IMG }}></ImageBackground> :
+                !this.state.isOwner && typeof parseInt(this.state.uid) === 'number' ? <AgoraView style={styles.localVideoStyle} showLocalVideo={false}
+                  mode={1} remoteUid={parseInt(this.state.uid) || 0} /> : null))
+            : null}
+          {/* {this.renderaR()} */}
+          {this.renderImg()}
         </KeyboardAwareScrollView>
         {this.state.isLoading && <Loading />}
+
       </View>
     );
   }

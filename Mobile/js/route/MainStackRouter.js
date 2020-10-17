@@ -1,14 +1,14 @@
 /* eslint-disable react/display-name */
 import 'react-native-gesture-handler';
-import {createAppContainer} from 'react-navigation';
-import {createStackNavigator, TransitionPresets} from 'react-navigation-stack';
-import {createBottomTabNavigator} from 'react-navigation-tabs';
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator, TransitionPresets } from 'react-navigation-stack';
+import { createBottomTabNavigator } from 'react-navigation-tabs';
 import React from 'react';
 import SplashScreen from '../containers/SplashScreen/index';
 import LoginScreen from '../containers/Authentication/LoginScreen/index';
 import RegisterScreen from '../containers/Authentication/RegisterScreen/index';
 import createAnimatedSwitchNavigator from 'react-navigation-animated-switch';
-import {Transition} from 'react-native-reanimated';
+import { Transition } from 'react-native-reanimated';
 import ExploreScreen from '../containers/ExploreScreen';
 import MateScreen from '../containers/MateScreen';
 import List from '../containers/MateScreen/List';
@@ -21,12 +21,14 @@ import Livestream from '../containers/Livestream';
 import InformationRoom from '../containers/Livestream/InformationRoom';
 import LocationScreen from '../containers/LocationScreen';
 import ProfileScreen from '../containers/ProfileScreen';
+import Account from '../containers/ProfileScreen/Account';
+import Scanner from '../containers/ProfileScreen/Scanner'
 import ListProductScreen from '../containers/ListProductScreen';
 import Update from '../containers/ProfileScreen/Update';
-import {colors} from '../shared/utils/colors/colors';
+import { colors } from '../shared/utils/colors/colors';
 import TabbarComponentCustom from './TabbarComponentCustom';
-import {Image, View} from 'react-native';
-import {images} from '../../assets';
+import { Image, View } from 'react-native';
+import { images } from '../../assets';
 import styles from './styles';
 import SocialScreen from '../containers/SocialScreen';
 import NewPostScreen from '../containers/NewPostScreen';
@@ -38,9 +40,9 @@ import PropertyDetailScreen from '../containers/PropertyDetailScreen';
 // ScreenNavigator for separately each screen into stack one
 const MateScreenNavigator = createStackNavigator(
   {
-    MateScreen: {screen: MateScreen},
-    MateScreenDetail: {screen: MateScreenDetail},
-    List: {screen: List}
+    MateScreen: { screen: MateScreen },
+    MateScreenDetail: { screen: MateScreenDetail },
+    List: { screen: List }
   },
   {
     mode: 'modal',
@@ -50,9 +52,11 @@ const MateScreenNavigator = createStackNavigator(
 );
 const SocialScreenNavigator = createStackNavigator(
   {
-    SocialScreen: {screen: SocialScreen},
-    NewPostScreen: {screen: NewPostScreen},
-    PostDetailScreen: {screen: PostDetailScreen},
+    SocialScreen: { screen: SocialScreen },
+    NewPostScreen: { screen: NewPostScreen },
+    PostDetailScreen: { screen: PostDetailScreen },
+    Account: { screen: Account },
+    Scanner: { screen: Scanner }
   },
   {
     mode: 'modal',
@@ -62,9 +66,9 @@ const SocialScreenNavigator = createStackNavigator(
 );
 const PropertyScreenNavigator = createStackNavigator(
   {
-    PropertyListScreen: {screen: PropertyListScreen},
-    PropertyScreen: {screen: PropertyScreen},
-    PropertyDetailScreen: {screen: PropertyDetailScreen}
+    PropertyListScreen: { screen: PropertyListScreen },
+    PropertyScreen: { screen: PropertyScreen },
+    PropertyDetailScreen: { screen: PropertyDetailScreen }
   },
   {
     mode: 'modal',
@@ -74,7 +78,7 @@ const PropertyScreenNavigator = createStackNavigator(
 );
 const ProfileNavigator = createStackNavigator(
   {
-    ProfileScreen: {screen: ProfileScreen},
+    ProfileScreen: { screen: ProfileScreen },
     Update: {
       screen: Update,
       navigationOptions: {
@@ -93,11 +97,11 @@ const ProfileNavigator = createStackNavigator(
 );
 const ExplorerNavigator = createStackNavigator(
   {
-    ExploreScreen: {screen: ExploreScreen},
-    ListProductScreen: {screen: ListProductScreen},
-    PropertyListScreen: {screen: PropertyListScreen},
-    PropertyScreen: {screen: PropertyScreen},
-    PropertyDetailScreen: {screen: PropertyDetailScreen}
+    ExploreScreen: { screen: ExploreScreen },
+    ListProductScreen: { screen: ListProductScreen },
+    PropertyListScreen: { screen: PropertyListScreen },
+    PropertyScreen: { screen: PropertyScreen },
+    PropertyDetailScreen: { screen: PropertyDetailScreen },
   },
   {
     mode: 'modal',
@@ -110,7 +114,7 @@ const Tabs = createBottomTabNavigator(
     ExplorerNavigator: {
       screen: ExplorerNavigator,
       navigationOptions: {
-        tabBarIcon: ({focused}) => {
+        tabBarIcon: ({ focused }) => {
           return (
             <View>
               <Image
@@ -126,7 +130,7 @@ const Tabs = createBottomTabNavigator(
     MateScreenNavigator: {
       screen: MateScreenNavigator,
       navigationOptions: {
-        tabBarIcon: ({focused}) => {
+        tabBarIcon: ({ focused }) => {
           return (
             <View>
               <Image
@@ -142,7 +146,7 @@ const Tabs = createBottomTabNavigator(
     LocationScreen: {
       screen: LocationScreen,
       navigationOptions: {
-        tabBarIcon: ({focused}) => {
+        tabBarIcon: ({ focused }) => {
           return (
             <View>
               <Image
@@ -158,7 +162,7 @@ const Tabs = createBottomTabNavigator(
     MessageScreen: {
       screen: MessageScreen,
       navigationOptions: {
-        tabBarIcon: ({focused}) => {
+        tabBarIcon: ({ focused }) => {
           return (
             <View>
               <Image
@@ -174,7 +178,7 @@ const Tabs = createBottomTabNavigator(
     ProfileNavigator: {
       screen: ProfileNavigator,
       navigationOptions: {
-        tabBarIcon: ({focused}) => {
+        tabBarIcon: ({ focused }) => {
           return (
             <View>
               <Image
@@ -199,13 +203,13 @@ const Tabs = createBottomTabNavigator(
 );
 const TabNavigator = createStackNavigator(
   {
-    Tabs: {screen: Tabs},
-    ChatRoomScreen: {screen: ChatRoomScreen},
-    Livestream: {screen: Livestream},
-    InformationRoom: {screen: InformationRoom},
-    VideoCallScreen: {screen: VideoCallScreen},
-    VideoCall: {screen: VideoCall},
-    SocialScreen: {screen: SocialScreenNavigator},
+    Tabs: { screen: Tabs },
+    ChatRoomScreen: { screen: ChatRoomScreen },
+    Livestream: { screen: Livestream },
+    InformationRoom: { screen: InformationRoom },
+    VideoCallScreen: { screen: VideoCallScreen },
+    VideoCall: { screen: VideoCall },
+    SocialScreen: { screen: SocialScreenNavigator },
   },
   {
     mode: 'modal',
@@ -216,10 +220,10 @@ const TabNavigator = createStackNavigator(
 // SwitchNavigator for using the multiple stack in the same route
 const AppBottombarSwitchNavigator = createAnimatedSwitchNavigator(
   {
-    SplashScreen: {screen: SplashScreen},
-    LoginScreen: {screen: LoginScreen},
-    RegisterScreen: {screen: RegisterScreen},
-    TabsScreen: {screen: TabNavigator},
+    SplashScreen: { screen: SplashScreen },
+    LoginScreen: { screen: LoginScreen },
+    RegisterScreen: { screen: RegisterScreen },
+    TabsScreen: { screen: TabNavigator },
   },
   {
     initialRouteName: 'SplashScreen',

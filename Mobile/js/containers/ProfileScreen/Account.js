@@ -1,46 +1,47 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { useEffect, useState } from 'react';
-import { StatusBar, View, SafeAreaView, TouchableOpacity } from 'react-native';
-import { styles } from './style';
-import { images } from '../../../assets/index';
-import { withTheme } from 'react-native-paper';
+import React, {useEffect, useState} from 'react';
+import {StatusBar, View, SafeAreaView, TouchableOpacity} from 'react-native';
+import {styles} from './style';
+import {images} from '../../../assets/index';
+import {withTheme} from 'react-native-paper';
 import TextNormal from '../../shared/components/Text/TextNormal';
-import { containerStyle } from '../../themes/styles';
-import { useTranslation } from 'react-i18next';
-import { useStores } from '../../store/useStore';
-import { colors } from '../../shared/utils/colors/colors';
-import { ScrollView } from 'react-native-gesture-handler';
+import {containerStyle} from '../../themes/styles';
+import {useTranslation} from 'react-i18next';
+import {useStores} from '../../store/useStore';
+import {colors} from '../../shared/utils/colors/colors';
+import {ScrollView} from 'react-native-gesture-handler';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import ImagePicker from 'react-native-image-picker';
-import { uploadFileToFireBase } from '../../shared/utils/firebaseStorageUtils/index';
+import {uploadFileToFireBase} from '../../shared/utils/firebaseStorageUtils/index';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FastImage from 'react-native-fast-image';
 import GradientButton from '../../shared/components/Buttons/GradientButton';
-import { ScreenWidth, ScreenHeight } from '../../shared/utils/dimension/Divices';
-import { NavigationService } from '../../navigation';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import { ScreenNames } from '../../route/ScreenNames';
-import LottieView from 'lottie-react-native';
+import {ScreenWidth, ScreenHeight} from '../../shared/utils/dimension/Divices';
+import {NavigationService} from '../../navigation';
+import {ScreenNames} from '../../route/ScreenNames';
 import AxiosFetcher from '../../api/AxiosFetch';
 import HeaderFull from '../../shared/components/Header/HeaderFull';
 import IALocalStorage from '../../shared/utils/storage/IALocalStorage';
-import { ToastHelper } from '../../shared/components/ToastHelper';
+import {ToastHelper} from '../../shared/components/ToastHelper';
 import Constant from '../../shared/utils/constant/Constant';
-import { useObserver } from 'mobx-react';
+import {useObserver} from 'mobx-react';
 import Loading from '../../shared/components/Loading';
 import ModalAccount from '../../shared/components/Modal/ModalAccount';
 
-const ProfileScreen = (props) => {
-  const { colorsApp } = props.theme;
-  const { t } = useTranslation();
-  const { userStore } = useStores();
+const Account = (props) => {
+  const {colorsApp} = props.theme;
+  const a = props.navigation.state.params?.data;
+//   console.log(JSON.stringify(data));
+  const {t} = useTranslation();
+  const {userStore} = useStores();
   const [isLoading, setIsLoading] = useState(false);
   const [avt, setAvt] = useState('');
   const [modelSelect, setModalSelect] = useState('');
   const [showModal, setShowModal] = useState(false);
-
+  const [data, setData]= useState(a);
+  
   const IMAGE_CONFIG = {
     title: t('imagePicker.name'),
     cancelButtonTitle: t('common.cancel'),
@@ -63,14 +64,15 @@ const ProfileScreen = (props) => {
     setIsLoading(true);
     AxiosFetcher({
       method: 'GET',
-      url: 'user/' + userInfo?.id,
+      url: 'user/' + data?.userId,
       hasToken: true,
     })
       .then((val) => {
         if (val?.data !== '') {
           setIsLoading(false);
-          userStore.userInfo = val;
-          setAvt(val?.avatar);
+          setData(val);
+        //   userStore.userInfo = val;
+        //   setAvt(val?.avatar);
         } else {
           setIsLoading(false);
           ToastHelper.showError(t('account.getInfoErr'));
@@ -90,12 +92,12 @@ const ProfileScreen = (props) => {
             onPress
               ? onPress
               : () => {
-                NavigationService.navigate(ScreenNames.Update, {
-                  key: title,
-                  value: title?.toLowerCase(),
-                  item: hasMoreDesc ? desc : rightTitle,
-                });
-              }
+                  NavigationService.navigate(ScreenNames.Update, {
+                    key: title,
+                    value: title?.toLowerCase(),
+                    item: hasMoreDesc ? desc : rightTitle,
+                  });
+                }
           }>
           <View style={styles.nestedContainer}>
             {ico}
@@ -126,7 +128,7 @@ const ProfileScreen = (props) => {
                 containerStyle.defaultTextMarginEnd,
               ]}
             />
-            <SimpleLineIcons name="arrow-right" size={20} />
+            {/* <SimpleLineIcons name="arrow-right" size={20} /> */}
           </View>
         </TouchableOpacity>
         <View style={styles.line} />
@@ -153,7 +155,7 @@ const ProfileScreen = (props) => {
           ToastHelper.showError(t('error.common'));
           userStore.userInfo = {
             ...userStore?.userInfo,
-            avatar: userStore?.userInfo?.avatar,
+            avatar: data?.avatar,
           };
         }
       })
@@ -175,10 +177,10 @@ const ProfileScreen = (props) => {
       } else if (response.customButton) {
         console.log('User tapped custom button: ', response.customButton);
       } else {
-        const source = { uri: response.uri };
-        userStore.userInfo = { ...userStore?.userInfo, avatar: source?.uri };
+        const source = {uri: response.uri};
+        userStore.userInfo = {...userStore?.userInfo, avatar: source?.uri};
         setIsLoading(true);
-        Promise.resolve(uploadFileToFireBase(response, userStore?.userInfo?.id))
+        Promise.resolve(uploadFileToFireBase(response, data?.id))
           .then(async (val) => {
             await updateProfilePicture(val);
             setIsLoading(false);
@@ -190,11 +192,11 @@ const ProfileScreen = (props) => {
       }
     });
   };
-  const logout = async () => {
+  const logout = async () =>{
     await IALocalStorage.resetLocalStorage();
     NavigationService.navigate(ScreenNames.LoginScreen);
   }
-  const closeDialog = () => {
+  const closeDialog = () =>{
     setModalSelect(null);
     setShowModal(true);
   }
@@ -210,38 +212,20 @@ const ProfileScreen = (props) => {
           <FastImage
             source={{
               uri:
-                userStore?.userInfo?.avatar ||
+                data?.avatar ||
                 Constant.MOCKING_DATA.NO_IMG_PLACE_HOLDER,
             }}
             resizeMode="cover"
             style={styles.avatar}
           />
         </TouchableOpacity>
-
         <TextNormal
-          text={userStore?.userInfo?.name || ''}
+          text={data?.name || ''}
           style={[
             containerStyle.textHeaderSmall,
             containerStyle.defaultMarginTop,
           ]}
         />
-        <View style={{ flexDirection: 'row', justifyContent: 'center', alignContent: 'center', alignItems: 'center', alignSelf: 'center', marginTop: 10, marginLeft: -5 }}>
-          <View style={{width: 60, height: 40}}>
-            <LottieView
-              autoPlay
-              loop={false}
-              style={{width: 60, height: 40}}
-              source={require('../../../assets/imgs/wallet.json')}
-            />
-          </View>
-          <TextNormal
-            text={`0 🏵 (${userStore?.userInfo?.currency})`}
-            style={[
-              containerStyle.textContentSmall,
-              {marginLeft: -10, color: 'grey'}
-            ]}
-          />
-        </View>
         <View style={containerStyle.defaultMarginTopSmall}>
           {renderItem(
             <MaterialCommunityIcons
@@ -250,8 +234,8 @@ const ProfileScreen = (props) => {
               color={colors.black_clear_all}
             />,
             t('account.name'),
-            userStore?.userInfo?.name || '',
-            () => { },
+            data?.name || '',
+            () => {},
           )}
           {renderItem(
             <MaterialCommunityIcons
@@ -260,8 +244,8 @@ const ProfileScreen = (props) => {
               color={colors.black_clear_all}
             />,
             t('account.dob'),
-            userStore?.userInfo?.dateOfBirth || '',
-            () => { },
+            data?.dateOfBirth || '',
+            () => {},
           )}
           {renderItem(
             <MaterialCommunityIcons
@@ -270,8 +254,8 @@ const ProfileScreen = (props) => {
               color={colors.black_clear_all}
             />,
             t('account.phone'),
-            userStore?.userInfo?.phoneNumber,
-            () => { },
+            data?.phoneNumber,
+            () => {},
           )}
           {renderItem(
             <MaterialCommunityIcons
@@ -280,8 +264,8 @@ const ProfileScreen = (props) => {
               color={colors.black_clear_all}
             />,
             t('account.email'),
-            userStore?.userInfo?.email,
-            () => { },
+            data?.email,
+            () => {},
           )}
           {renderItem(
             <MaterialCommunityIcons
@@ -290,8 +274,8 @@ const ProfileScreen = (props) => {
               color={colors.black_clear_all}
             />,
             t('account.sex'),
-            userStore?.userInfo?.gender,
-            () => { },
+            data?.gender,
+            () => {},
           )}
           {renderItem(
             <Ionicons
@@ -300,8 +284,8 @@ const ProfileScreen = (props) => {
               color={colors.black_clear_all}
             />,
             t('account.address'),
-            userStore?.userInfo?.address,
-            () => { },
+            data?.address,
+            () => {},
           )}
           {renderItem(
             <Ionicons
@@ -310,53 +294,8 @@ const ProfileScreen = (props) => {
               color={colors.black_clear_all}
             />,
             t('account.language'),
-            userStore?.userInfo?.language,
-            () => { },
-          )}
-          {renderItem(
-            <Fontisto
-              name="money-symbol"
-              size={25}
-              color={colors.black_clear_all}
-            />,
-            t('account.currentcy'),
-            userStore?.userInfo?.currency || 'VND',
-            () => { },
-          )}
-          {renderItem(
-            <SimpleLineIcons
-              name="emotsmile"
-              size={25}
-              color={colors.black_clear_all}
-            />,
-            t('account.about'),
-            '',
-            () => { },
-            true,
-            userStore?.userInfo?.aboutMe,
-          )}
-          {renderItem(
-            <Ionicons
-              name="md-notifications-circle-outline"
-              size={25}
-              color={colors.black_clear_all}
-            />,
-            t('account.notification'),
-            userStore?.userInfo?.notification || 'Off',
-            () => { },
-          )}
-          {renderItem(
-            <MaterialCommunityIcons
-              name="logout"
-              size={25}
-              color={colors.black_clear_all}
-            />,
-            t('account.logout'),
-            '',
-            async () => {
-              setModalSelect('LOGOUT');
-              setShowModal(true);
-            },
+            data?.language,
+            () => {},
           )}
         </View>
       </View>
@@ -368,6 +307,7 @@ const ProfileScreen = (props) => {
       <SafeAreaView>
         <HeaderFull
           title={t('account.title')}
+          hasButton
           onPress={() => NavigationService.navigate(ScreenNames.Update)}
           rightIco={
             <Ionicons name="pencil" size={20} color={colors.blackInput} />
@@ -392,4 +332,4 @@ const ProfileScreen = (props) => {
   ));
 };
 
-export default withTheme(ProfileScreen);
+export default withTheme(Account);

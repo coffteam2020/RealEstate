@@ -28,8 +28,10 @@ import { colors } from '../../shared/utils/colors/colors';
 import AxiosFetcher from '../../api/AxiosFetch';
 import { NavigationService } from '../../navigation';
 import { ScreenNames } from '../../route/ScreenNames';
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import IALocalStorage from '../../shared/utils/storage/IALocalStorage';
 import { ToastHelper } from '../../shared/components/ToastHelper';
+import { StyleSheet } from 'react-native';
 
 const HOME_BANNERS = [
   { imgUrl: images.home1 },
@@ -55,58 +57,47 @@ const ExploreScreen = (props) => {
   const BTNS = [
     {
       title: t('explorer.hurry'),
-      icon: images.hurry,
+      icon: images.nine,
       onPress: () =>
         NavigationService.navigate(ScreenNames.ListProductScreen, {
           key: t('explorer.hurry'),
         }),
     },
     {
-      title: t('explorer.nearby'), icon: images.nearby, onPress: () =>
+      title: t('explorer.qr'),
+      icon: images.hurry,
+      onPress: () =>
+        NavigationService.navigate(ScreenNames.Scanner, {
+          key: t('explorer.qr'),
+        }),
+    },
+    {
+      title: t('explorer.nearby'), icon: images.five, onPress: () =>
         NavigationService.navigate(ScreenNames.LocationScreen, {
           key: t('explorer.hurry'),
         }),
     },
-    { title: t('explorer.ownerOnsite'), icon: images.noowner },
-    // {
-    //   title: t('explorer.yourPlaces'),
-    //   icon: images.space,
-    // },
-
+    {
+      title: t('explorer.ownerOnsite'), icon: images.noowner, onPress: () =>
+        NavigationService.navigate(ScreenNames.PropertyListScreen, {
+          key: t('explorer.properties'),
+          type: "PROPERTY"
+        }),
+    },
   ];
   const BTNS3 = [
     {
       title: t('explorer.properties'),
-      icon: images.space,
+      icon: images.nearby,
       onPress: () =>
         NavigationService.navigate(ScreenNames.PropertyListScreen, {
           key: t('explorer.properties'),
           type: "PROPERTY"
         }),
     },
-    
-    {
-      title: t('explorer.social'),
-      icon: images.hurry,
-      onPress: () =>
-        NavigationService.navigate(ScreenNames.SocialScreen, {
-          key: t('explorer.social'),
-        }),
-    },
-  ];
-  const BTNS4 = [
-    {
-      title: t('explorer.hotel'),
-      icon: images.location,
-      onPress: () =>
-        NavigationService.navigate(ScreenNames.PropertyListScreen, {
-          key: t('explorer.hotel'),
-          type: "HOTEL"
-        }),
-    },
     {
       title: t('explorer.restaurant'),
-      icon: images.location,
+      icon: images.nearby,
       onPress: () =>
         NavigationService.navigate(ScreenNames.PropertyListScreen, {
           key: t('explorer.restaurant'),
@@ -114,23 +105,24 @@ const ExploreScreen = (props) => {
         }),
     },
     {
-      title: t('explorer.cafe'),
-      icon: images.location,
+      title: t('explorer.livestream'),
+      icon: images.space,
       onPress: () =>
-        NavigationService.navigate(ScreenNames.PropertyListScreen, {
-          key: t('explorer.cafe'),
-          type: "CAFE"
+        NavigationService.navigate(ScreenNames.LiveStream, {
+          key: t('explorer.social'),
         }),
     },
     {
-      title: t('explorer.snack'),
-      icon: images.location,
+      title: t('explorer.social'),
+      icon: images.six,
       onPress: () =>
-        NavigationService.navigate(ScreenNames.PropertyListScreen, {
-          key: t('explorer.snack'),
-          type: "SNACK"
+        NavigationService.navigate(ScreenNames.SocialScreen, {
+          key: t('explorer.social'),
         }),
     },
+  ];
+  const BTNS4 = [
+   
   ];
   const BTNS2 = [
     {
@@ -269,6 +261,25 @@ const ExploreScreen = (props) => {
       getProfile();
     });
   }, []);
+  const getUsers = async () => {
+    AxiosFetcher({
+      method: 'GET',
+      url: 'user/' + userStore?.userInfo?.id,
+      hasToken: true,
+    })
+      .then(async (val) => {
+        if (val?.data !== '') {
+          await IALocalStorage.setDetailUserInfo(val);
+          userStore.userInfo = val;
+          userStore.follows = val?.followers || [];
+        } else {
+          ToastHelper.showError(t('account.getInfoErr'));
+        }
+      })
+      .catch(() => {
+        ToastHelper.showError(t('account.getInfoErr'));
+      });
+  };
   const getProfile = async () => {
     let userInfo = await IALocalStorage.getDetailUserInfo();
     AxiosFetcher({
@@ -280,6 +291,7 @@ const ExploreScreen = (props) => {
         if (val?.data !== '') {
           await IALocalStorage.setDetailUserInfo(val);
           userStore.userInfo = val;
+          getUsers();
         } else {
           ToastHelper.showError(t('account.getInfoErr'));
         }
@@ -367,7 +379,7 @@ const ExploreScreen = (props) => {
   };
   const renderBannerClient = () => {
     return (
-      <View style={{ height: ScreenHeight * 0.1, width: '92%'  }}>
+      <View style={{ height: ScreenHeight * 0.12, width: '92%' }}>
         <ScrollView
           // autoplay
           // autoplayTimeout={5}
@@ -383,11 +395,11 @@ const ExploreScreen = (props) => {
 
                 <FastImage
                   source={HOME_BANNERS_CLIENTS[index].imgUrl}
-                  style={[styles.slide1, { height: ScreenHeight * 0.1, }]}
+                  style={[styles.slide1, { height: ScreenHeight * 0.1,borderRadius: 8, width: ScreenWidth * 0.8 }]}
                   resizeMode="cover"
                 >
-                  <View style={[{ backgroundColor: 'rgba(0,0,0,0.2)', borderRadius: 2, padding: 5 }, containerStyle.shadow]}>
-                    <TextNormal text={item?.text} style={{ color: 'white', zIndex: 100, marginTop: 20, alignSelf: 'center' }} />
+                  <View style={[{ backgroundColor: 'rgba(0,0,0,0.2)', borderRadius: 6, padding: 5 }, containerStyle.shadow]}>
+                    {/* <TextNormal text={item?.text} style={{ color: 'white', zIndex: 100, marginTop: 20, alignSelf: 'center' }} /> */}
                   </View>
                 </FastImage>
               </View>
@@ -405,6 +417,12 @@ const ExploreScreen = (props) => {
           props={props}
           hasLeftIcon
           ico={icons.IC_LOCATION}
+          onSubmitEditing={() => {
+            NavigationService.navigate(ScreenNames.PropertyListScreen, {
+              key: t('explorer.restaurant'),
+              type: "PROPERTY"
+            })
+          }}
           placeHolder={t('explorer.search')}
           textInputStyle={styles.fieldEmailPhone}
         />
@@ -420,7 +438,7 @@ const ExploreScreen = (props) => {
               <TouchableOpacity style={styles.button} onPress={item?.onPress}>
                 <FastImage
                   source={item?.icon}
-                  style={{ width: 40, height: 40 }}
+                  style={{ width: 40, height: 40, borderRadius: 20 }}
                 />
                 <TextNormal
                   text={item?.title}
@@ -469,7 +487,7 @@ const ExploreScreen = (props) => {
                 <View style={[styles.btn2, { backgroundColor: item?.color }]}>
                   <FastImage
                     source={item?.icon}
-                    style={{ width: 40, height: 40 }}
+                    style={{ width: 40, height: 40, borderRadius: 20 }}
                   />
                 </View>
                 <TextNormal
@@ -494,7 +512,7 @@ const ExploreScreen = (props) => {
                 <View style={[styles.btn2, { backgroundColor: item?.color }]}>
                   <FastImage
                     source={item?.icon}
-                    style={{ width: 40, height: 40 }}
+                    style={{ width: 40, height: 40, borderRadius: 20 }}
                   />
                 </View>
                 <TextNormal
@@ -565,12 +583,25 @@ const ExploreScreen = (props) => {
         {renderSearch()}
         {renderBtns()}
         {renderBannerClient()}
-        <FastImage
+        {/* <FastImage
           source={images.map}
           style={[styles.slide1, { height: ScreenHeight * 0.3, width: '90%', margin: 20, borderRadius: 10 }]}
-          imageStyle={{borderRadius: 10 }}
+          imageStyle={{ borderRadius: 10 }}
           resizeMode="cover"
-        ></FastImage>
+        ></FastImage> */}
+        <View style={{ height: ScreenHeight / 4, width: ScreenWidth, padding: 20, borderRadius: 10 }}>
+          <MapView
+            provider={PROVIDER_GOOGLE} // remove if not using Google Maps
+            style={{ height: ScreenHeight / 4, borderRadius: 20 }}
+            region={{
+              latitude: 10.763159330300518,
+              longitude: 106.4324,
+              latitudeDelta: 0.015,
+              longitudeDelta: 0.0121,
+            }}
+          >
+          </MapView>
+        </View>
         <View style={{ width: '100%', marginLeft: 35, marginTop: 20 }}>
           {/* <TextNormal
             text={t('explorer.trend')}

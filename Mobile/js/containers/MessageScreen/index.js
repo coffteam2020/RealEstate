@@ -220,13 +220,6 @@ const MessageScreen = (props) => {
           onPress={() => {
             NavigationService.navigate(ScreenNames.LiveStream);
           }}
-          rightIco={
-            <MaterialCommunityIcons
-              name="microphone-plus"
-              size={20}
-              color={colors.blackInput}
-            />
-          }
         />
         <TextInputFlatLeftIconTouchable
           hideText

@@ -25,7 +25,7 @@
     "locationErrorMessages": "We can directly help you open settings to enable",
     "dontHaveAccount": "Don`t have an account? ",
     "signInSuccess": "Welcome back",
-    "error": "Opps. Maybe you logged in with wrong username of password",
+    "error": "Opps. Maybe you logged in with wrong username of password"
   },
   "signUp": {
     "name": "Sign Up",
@@ -34,7 +34,7 @@
     "signUpDone": "Welcome to Real Estate! \nLogin and enjoy your time with us",
     "agreement": "By creating an account your aggree to out",
     "term": "Term and Condtions",
-    "error": "Register failed, maybe you registered with existing phone number",
+    "error": "Register failed, maybe you registered with existing phone number"
   },
   "forget": {
     "name": "Forget Password",
@@ -299,11 +299,11 @@
     "reportUser": "Report User",
     "blockUser": "Block User",
     "deleteUser": "Delete User",
-    "dismiss": "Dismiss",
+    "dismiss": "Dismiss"
   },
   "setting" : {
     "permission" : {
-      "record" : "Please grant microphone permissions to use this feature",
+      "record" : "Please grant microphone permissions to use this feature"
     }
   },
   "explorer": {
@@ -322,7 +322,11 @@
     "hotel": "Hotel",
     "restaurant": "Restaurant",
     "cafe": "Cafe",
-    "snack": "Snack"
+    "video_call": "Call video",
+    "join": "Scanned succesfully, join room now!",
+    "qr": "QRCode",
+    "snack": "Snack",
+    "livestream": "Livestream"
   }, 
   "location":{
     "near": "Find near you",
@@ -360,6 +364,7 @@
     "getInfoErr": "Could not get your information data, try again later!",
     "name": "Name" ,
     "sex": "Gender",
+    "wallet": "Wallet",
     "dob": "Birth day",
     "phone": "Phone",
     "email": "Email",
@@ -422,6 +427,6 @@
     "hotelTitle": "Hotels List",
     "restaurantTitle": "Restaurants List",
     "cafeTitle": "Cafe List",
-    "snacksTitle": "Snack List",
+    "snacksTitle": "Snack List"
   }
 }

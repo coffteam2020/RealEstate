@@ -17,7 +17,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
@@ -40,27 +40,27 @@
 	<key>NSAppleMusicUsageDescription</key>
 	<string>Our app need to clarify</string>
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>Our app need to clarify</string>
+	<string>Our app need to clarify for usage bluetooth</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string>Our app need to clarify</string>
 	<key>NSCalendarsUsageDescription</key>
 	<string>Our app need to clarify</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Our app need to clarify</string>
+	<string>Our app need to clarify to send image in chatting</string>
 	<key>NSContactsUsageDescription</key>
 	<string>Our app need to clarify</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Our app need to clarify</string>
+	<string>Our app need to clarify your current location for matching best choices item for you</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Our app need to clarify</string>
+	<string>Our app need to clarify your current location for matching best choices item for you</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Our app need to clarify</string>
+	<string>Our app need to clarify to use your voice to send chat</string>
 	<key>NSMotionUsageDescription</key>
 	<string>Our app need to clarify</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Our app need to clarify</string>
+	<string>Our app need to clarify to pick your image in gallery</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Our app need to clarify</string>
+	<string>Our app need to clarify to pick your image in gallery</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>Our app need to clarify</string>
 	<key>UIAppFonts</key>

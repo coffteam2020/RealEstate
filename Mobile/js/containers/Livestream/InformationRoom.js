@@ -36,7 +36,7 @@ const InformationRoom = (props) => {
   }, []);
 
   const onCreateLivestream = () => {
-    if (roomName === '' || category === '' || note === '' || tags === '') {
+    if (roomName === '') {
       ToastHelper.showError('Dont leave us empty!');
       return;
     }
@@ -74,7 +74,7 @@ const InformationRoom = (props) => {
         </TouchableOpacity>
         <TextNormal
           props={props}
-          text={'Room information'}
+          text={'Information'}
           style={[
             containerStyle.textHeader,
             {color: colors.textBlue, textAlignVertical: 'center'},
@@ -107,7 +107,7 @@ const InformationRoom = (props) => {
               onChangeText={(text) => {
                 setRoomName(text);
               }}
-              text={'Room name'}
+              text={'Title'}
               props={props}
               style={style.fieldItem}
             />
