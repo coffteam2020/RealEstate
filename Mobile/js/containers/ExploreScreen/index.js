@@ -550,12 +550,6 @@ const ExploreScreen = (props) => {
             provider={PROVIDER_GOOGLE} // remove if not using Google Maps
             style={{ height: ScreenHeight / 4, borderRadius: 20 }}
             region={{
-              latitude: 10.763159330300518,
-              longitude: 106.4324,
-              latitudeDelta: 0.015,
-              longitudeDelta: 0.0121,
-            }}
-            region={{
               latitude: lo?.latitude,
               longitude: lo?.longitude,
             }}
@@ -576,8 +570,8 @@ const ExploreScreen = (props) => {
           >
             <Marker
               coordinate={{
-                "latitude": lo?.latitude,
-                "longitude": lo?.longitude
+                latitude: lo?.latitude,
+                longitude: lo?.longitude
               }}
 
               title={t('location.me')}

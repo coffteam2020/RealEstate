@@ -88,22 +88,15 @@ const ProfileScreen = (props) => {
       <View>
         <TouchableOpacity
           style={styles.itemContainer}
-          onPress={() => {
-            onPress
-              ? onPress
-              : () => {
-                NavigationService.navigate(ScreenNames.Update, {
-                  key: title,
-                  value: title?.toLowerCase(),
-                  item: hasMoreDesc ? desc : rightTitle,
-                });
-              }
-            if (di !== title) {
-              setDi(title);
-            } else {
-              setDi(-1);
+          onPress={onPress
+            ? onPress
+            : () => {
+              NavigationService.navigate(ScreenNames.Update, {
+                key: title,
+                value: title?.toLowerCase(),
+                item: hasMoreDesc ? desc : rightTitle,
+              });
             }
-          }
           }>
           <View style={styles.nestedContainer}>
             {ico}
@@ -274,7 +267,13 @@ const ProfileScreen = (props) => {
             />,
             t('account.name'),
             userStore?.userInfo?.name || '',
-            () => { },
+            () => {
+              if (di !== title) {
+                setDi(t('account.name'));
+              } else {
+                setDi(-1);
+              }
+            },
           )}
           {renderItem(
             <MaterialCommunityIcons
@@ -284,7 +283,13 @@ const ProfileScreen = (props) => {
             />,
             t('account.dob'),
             userStore?.userInfo?.dateOfBirth || '',
-            () => { },
+            () => {
+              if (di !== title) {
+                setDi(t('account.dob'));
+              } else {
+                setDi(-1);
+              }
+            },
           )}
           {renderItem(
             <MaterialCommunityIcons
@@ -294,7 +299,13 @@ const ProfileScreen = (props) => {
             />,
             t('account.phone'),
             userStore?.userInfo?.phoneNumber,
-            () => { },
+            () => {
+              if (di !== title) {
+                setDi(t('account.phone'));
+              } else {
+                setDi(-1);
+              }
+            },
           )}
           {renderItem(
             <MaterialCommunityIcons
@@ -304,7 +315,13 @@ const ProfileScreen = (props) => {
             />,
             t('account.email'),
             userStore?.userInfo?.email,
-            () => { },
+            () => {
+              if (di !== title) {
+                setDi(t('account.email'),);
+              } else {
+                setDi(-1);
+              }
+            },
           )}
           {renderItem(
             <MaterialCommunityIcons
@@ -314,7 +331,13 @@ const ProfileScreen = (props) => {
             />,
             t('account.sex'),
             userStore?.userInfo?.gender,
-            () => { },
+            () => {
+              if (di !== title) {
+                setDi(t('account.sex'),);
+              } else {
+                setDi(-1);
+              }
+            },
           )}
           {renderItem(
             <Ionicons
@@ -324,7 +347,13 @@ const ProfileScreen = (props) => {
             />,
             t('account.address'),
             userStore?.userInfo?.address,
-            () => { },
+            () => {
+              if (di !== title) {
+                setDi(t('account.address'));
+              } else {
+                setDi(-1);
+              }
+            },
           )}
           {renderItem(
             <Ionicons
@@ -334,7 +363,13 @@ const ProfileScreen = (props) => {
             />,
             t('account.language'),
             userStore?.userInfo?.language,
-            () => { },
+            () => {
+              if (di !== title) {
+                setDi(t('account.language'));
+              } else {
+                setDi(-1);
+              }
+            },
           )}
           {renderItem(
             <Fontisto
@@ -344,7 +379,13 @@ const ProfileScreen = (props) => {
             />,
             t('account.currentcy'),
             userStore?.userInfo?.currency || 'VND',
-            () => { },
+            () => {
+              if (di !== title) {
+                setDi(t('account.currentcy'));
+              } else {
+                setDi(-1);
+              }
+            },
           )}
           {renderItem(
             <SimpleLineIcons
@@ -354,7 +395,13 @@ const ProfileScreen = (props) => {
             />,
             t('account.about'),
             '',
-            () => { },
+            () => {
+              if (di !== title) {
+                setDi(t('account.about'));
+              } else {
+                setDi(-1);
+              }
+            },
             true,
             userStore?.userInfo?.aboutMe,
           )}
@@ -366,7 +413,13 @@ const ProfileScreen = (props) => {
             />,
             t('account.notification'),
             userStore?.userInfo?.notification || 'Off',
-            () => { },
+            () => {
+              if (di !== title) {
+                setDi(t('account.notification'));
+              } else {
+                setDi(-1);
+              }
+            },
           )}
           {renderItem(
             <MaterialCommunityIcons
