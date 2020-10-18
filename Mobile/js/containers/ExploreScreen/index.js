@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
   ImageBackground,
+  Alert,
 } from 'react-native';
 import { styles } from './style';
 import { withTheme } from 'react-native-paper';
@@ -319,12 +320,18 @@ const ExploreScreen = (props) => {
   const tryOpenIAP = async (url) => {
     try {
       if (await InAppBrowser.isAvailable()) {
-        // Alert.alert(JSON.stringify(result));
+        InAppBrowser.open(url, {
+          modalEnabled: true,
+          showTitle: false,
+          enableUrlBarHiding: false,
+          modalPresentationStyle: 'fullScreen',
+          enableBarCollapsing: false
+        });
       } else {
         Linking.openURL(url);
       }
     } catch (error) {
-      // Alert.alert(error.message);
+      Alert.alert(error.message);
     }
   };
   const getSearchTrend = async () => {

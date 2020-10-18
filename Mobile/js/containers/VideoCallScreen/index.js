@@ -122,7 +122,9 @@ class VideoCallScreen extends Component {
     }
   }
   listenRoomChange = async (id) => {
+
     let userInfo = await IALocalStorage.getDetailUserInfo();
+    console.log("=================" + JSON.stringify(userInfo));
     firebase.database().ref(Constant.SCHEMA.LIVESTREAM).child(id).on('value', snapshot => {
 
       if (snapshot.val() != undefined) {
@@ -359,6 +361,7 @@ class VideoCallScreen extends Component {
     FirebaseService.pushNewItemWithChildKey(Constant.SCHEMA.LIVESTREAM, keyUser, tempObjRoom);
     // RtcEngine.muteLocalVideoStream(true);
     this.listenRoomChange(keyUser);
+    this.onSendMessage(`Hi everyone! Im ${userInfo?.name || 'new user'}. Nice to meet ya all!`);
   };
 
   /**

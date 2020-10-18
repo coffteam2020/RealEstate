@@ -75,7 +75,7 @@ const InformationRoom = (props) => {
         </TouchableOpacity>
         <TextNormal
           props={props}
-          text={'Information'}
+          text={t('property.createTitle')}
           style={[
             containerStyle.textHeader,
             {color: colors.textBlue, textAlignVertical: 'center'},
