@@ -41,7 +41,7 @@ const MateScreen = (props) => {
         let data = Object.values(snapshot.val()) || [];
         if (data && typeof data === 'object' && data?.length >= 0) {
           (data || [])?.forEach(element => {
-            if (element) {
+            if (element && element?.status === 'LIVESTREAMING') {
               setLiv([...liv, element?.uid])
             }
           });

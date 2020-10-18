@@ -1,6 +1,6 @@
-import {useObserver} from 'mobx-react';
-import React, {useState, useEffect} from 'react';
-import {useTranslation} from 'react-i18next';
+import { useObserver } from 'mobx-react';
+import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Button,
   Text,
@@ -12,93 +12,94 @@ import {
   FlatList,
   Dimensions,
 } from 'react-native';
-import {List, ListItem} from 'react-native-elements';
-import {withTheme} from 'react-native-paper';
-import {images} from '../../../assets';
-import {NavigationService} from '../../navigation';
-import {ScreenNames} from '../../route/ScreenNames';
+import { List, ListItem } from 'react-native-elements';
+import { withTheme } from 'react-native-paper';
+import { images } from '../../../assets';
+import { NavigationService } from '../../navigation';
+import { ScreenNames } from '../../route/ScreenNames';
 import TextNormal from '../../shared/components/Text/TextNormal';
-import {useStores} from '../../store/useStore';
-import {containerStyle} from '../../themes/styles';
+import { useStores } from '../../store/useStore';
+import { containerStyle } from '../../themes/styles';
 import * as Animatable from 'react-native-animatable';
 import TrackPlayer from 'react-native-track-player';
-import {styles} from './style';
-import {firebase} from '@react-native-firebase/messaging';
+import { styles } from './style';
+import { firebase } from '@react-native-firebase/messaging';
 import AxiosFetcher from '../../api/AxiosFetch';
 import IALocalStorage from '../../shared/utils/storage/IALocalStorage';
 import Loading from '../../shared/components/Loading';
-import {ToastHelper} from '../../shared/components/ToastHelper';
+import { ToastHelper } from '../../shared/components/ToastHelper';
 import Constant from '../../shared/utils/constant/Constant';
 import HeaderFull from '../../shared/components/Header/HeaderFull';
-import {colors} from '../../shared/utils/colors/colors';
+import { colors } from '../../shared/utils/colors/colors';
 import FastImage from 'react-native-fast-image';
-import {ScreenWidth, ScreenHeight} from '../../shared/utils/dimension/Divices';
+import { ScreenWidth, ScreenHeight } from '../../shared/utils/dimension/Divices';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import moment from 'moment'
-import {SPACINGS, FONTSIZES, RADIUS} from '../../themes';
+import { SPACINGS, FONTSIZES, RADIUS } from '../../themes';
 import { FirebaseService } from '../../api/FirebaseService';
 import StepIndicator from 'react-native-step-indicator';
 import CheckBox from '@react-native-community/checkbox';
 import TextInputFlat from '../../shared/components/TextInput/TextInputFlat';
 import TextInputFlatWithRightCheckbox from '../../shared/components/TextInput/TextInputFlatWithRightCheckbox';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import GradientButton from '../../shared/components/Buttons/GradientButton';
 import GridList from 'react-native-grid-list';
 import ImagePicker from 'react-native-image-picker';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import TextInputFlatNew from '../../shared/components/TextInput/TextInputFlatNew';
-import {uploadFileToFireBase} from '../../shared/utils/firebaseStorageUtils';
+import { uploadFileToFireBase } from '../../shared/utils/firebaseStorageUtils';
 import ModalConfirm from '../../shared/components/Modal/ModalConfirm';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { TimeHelper } from '../../shared/utils/helper/timeHelper';
 
-  const labels = ['Infomation', 'Address', 'Utilities', 'Conformation'];
-  
+
+
+const PropertyScreen = (props) => {
+  const { colorsApp } = props.theme;
+  const { t } = useTranslation();
+  const labels = [t('chat.Infomation'), t('chat.Address'), t('chat.Utilities'), t('chat.Conformation')];
   const PropertyTypes = [
-    {label: 'Domitory', value: 'DOMITIRY'},
-    {label: 'Room for rent', value: 'ROOM_FOR_RENT'},
-    {label: 'Room For Share', value: 'ROOM_FOR_SHARE'},
-    {label: 'House', value: 'HOUSE'},
-    {label: 'Apartment', value: 'APARTMENT'},
+    { label: t('chat.All'), value: 'ALL' },
+    { label: t('chat.Domitory'), value: 'DOMITIRY' },
+    { label: t('chat.Room_for_rent'), value: 'ROOM_FOR_RENT' },
+    { label: t('chat.Room_For_Share'), value: 'ROOM_FOR_SHARE' },
+    { label: t('chat.House'), value: 'HOUSE' },
+    { label: t('chat.Apartment'), value: 'APARTMENT' },
   ];
   const Genders = [
-    {label: 'All', value: 'ALL'},
-    {label: 'Male', value: 'MALE'},
-    {label: 'Female', value: 'FEMALE'},
+    { label: 'All', value: 'ALL' },
+    { label: 'Male', value: 'MALE' },
+    { label: 'Female', value: 'FEMALE' },
   ];
 
   const PropertyFors = [
-    {label: 'Sale', value: 'Sale'},
-    {label: 'Rent', value: 'Rent'},
+    { label: t('chat.Sale'), value: 'Sale' },
+    { label: t('chat.Rent'), value: 'Rent' },
   ];
-
   const ListUltilities = [
-    {label: 'Internet', value: 'Internet', icon: 'wifi'},
-    {label: 'Water', value: 'Water', icon: 'water'},
-    {label: 'Light', value: 'Light', icon: 'lightbulb-on'},
-    {label: 'Parking', value: 'Parking', icon: 'car'},
-    {label: 'TV', value: 'TV', icon: 'television'},
-    {label: 'Air conditioning', value: 'AirConditioning', icon: 'air-conditioner'},
-    {label: 'Washing', value: 'Washing', icon: 'washing-machine'},
-    {label: 'Bed', value: 'Bed', icon: 'bed-empty'},
-    {label: 'Security', value: 'Security', icon: 'account-cowboy-hat'},
-    {label: 'Fridge', value: 'Fridge', icon: 'fridge'},
-    {label: 'WC', value: 'WC', icon: 'toilet'},
-    {label: 'Heater Water', value: 'HeaterWater', icon: 'water-pump'},
+    { label: 'Internet', value: 'Internet', icon: 'wifi' },
+    { label: t('chat.Water'), value: 'Water', icon: 'water' },
+    { label: t('chat.Light'), value: 'Light', icon: 'lightbulb-on' },
+    { label: t('chat.Parking'), value: 'Parking', icon: 'car' },
+    { label: 'TV', value: 'TV', icon: 'television' },
+    { label: t('chat.Air_conditioning'), value: 'AirConditioning', icon: 'air-conditioner' },
+    { label: t('chat.Washing'), value: 'Washing', icon: 'washing-machine' },
+    { label: t('chat.Bed'), value: 'Bed', icon: 'bed-empty' },
+    { label: t('chat.Security'), value: 'Security', icon: 'account-cowboy-hat' },
+    { label: t('chat.Fridge'), value: 'Fridge', icon: 'fridge' },
+    { label: 'WC', value: 'WC', icon: 'toilet' },
+    { label: t('chat.Heater_Water'), value: 'HeaterWater', icon: 'water-pump' },
   ];
 
   const Roles = [
-    {label: 'Owner', value: 'Owner'},
-    {label: 'Broker', value: 'Broker'},
-    {label: 'Builder', value: 'Builder'}
+    { label: 'Owner', value: 'Owner' },
+    { label: 'Broker', value: 'Broker' },
+    { label: 'Builder', value: 'Builder' }
   ];
 
-const PropertyScreen = (props) => {
-  const {colorsApp} = props.theme;
-  const {t} = useTranslation();
-  const {userStore} = useStores();
+  const { userStore } = useStores();
   const [userInfo, setUserInfo] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [propertyType, setPropertyType] = useState(PropertyTypes[0].value);
@@ -171,26 +172,26 @@ const PropertyScreen = (props) => {
     initPropertFromParam();
   }, []);
 
-  const initPropertFromParam = () =>{
+  const initPropertFromParam = () => {
     console.log(propertyParam)
-    if(null != propertyParam){
+    if (null != propertyParam) {
       setProperty(propertyParam);
-      if(propertyParam?.address){
-        setAddress({address:propertyParam?.address})
+      if (propertyParam?.address) {
+        setAddress({ address: propertyParam?.address })
       }
       setSelectedUltilities(propertyParam?.amenities);
       setImages(propertyParam?.photos);
       setFirebaseImages(propertyParam?.photos);
-      if(propertyParam?.youAre)
+      if (propertyParam?.youAre)
         setRole(propertyParam?.youAre);
-      if(propertyParam?.propertyFor)
+      if (propertyParam?.propertyFor)
         setPropertyFor(propertyParam?.propertyFor);
-      if(propertyParam?.propertyType)
+      if (propertyParam?.propertyType)
         setPropertyType(propertyParam?.propertyType);
-      if(propertyParam?.leaseDuration){
+      if (propertyParam?.leaseDuration) {
         setLeaseDuration(propertyParam?.leaseDuration);
       }
-      if(propertyParam?.availabilityDate){
+      if (propertyParam?.availabilityDate) {
         setAvailabilityDate(TimeHelper.getTimeDefaultFormat(propertyParam?.availabilityDate));
       }
     }
@@ -206,36 +207,36 @@ const PropertyScreen = (props) => {
       localImages.forEach(async (item) => {
         Promise.resolve(uploadFileToFireBase(item, userStore?.userInfo?.id))
           .then((val) => {
-            attachments.push({attactmentType: 'PHOTO', urlMedia: val});
+            attachments.push({ attactmentType: 'PHOTO', urlMedia: val });
           })
           .catch((error) => {
             console.log(error.message);
           });
       });
       //Edit case
-      if(images && images.length > 0){
+      if (images && images.length > 0) {
         images.forEach(item => {
-          if(firebaseImages.indexOf(item) !== -1)
-            attachments.push({attactmentType: 'PHOTO', urlMedia: item});
+          if (firebaseImages.indexOf(item) !== -1)
+            attachments.push({ attactmentType: 'PHOTO', urlMedia: item });
         })
       }
       setAttachmentMedia(attachments);
-    }else if(currentPage === 3){
+    } else if (currentPage === 3) {
       setShowModal(true);
     }
     setCurrentPage(currentPage + 1);
   };
 
   const onTypeChange = (evt, item) => {
-    if(!evt){
+    if (!evt) {
       setPropertyType(PropertyTypes[0].value);
-    }else{
+    } else {
       setPropertyType(item.value);
     }
-    
+
   };
 
-  const getStepIndicatorIconConfig = ({position, stepStatus}) => {
+  const getStepIndicatorIconConfig = ({ position, stepStatus }) => {
     const iconConfig = {
       name: 'feed',
       color: stepStatus === 'finished' ? '#ffffff' : mainColor,
@@ -275,7 +276,7 @@ const PropertyScreen = (props) => {
     <MaterialIcons {...getStepIndicatorIconConfig(params)} />
   );
 
-  const renderLabel = ({position, label, currentPosition}) => {
+  const renderLabel = ({ position, label, currentPosition }) => {
     return (
       <Text
         style={{
@@ -283,8 +284,8 @@ const PropertyScreen = (props) => {
           textAlign: 'center',
           fontWeight: '500',
           color: position === currentPosition
-                ? mainColor
-                : colors.gray_new,
+            ? mainColor
+            : colors.gray_new,
         }}>
         {label}
       </Text>
@@ -293,15 +294,15 @@ const PropertyScreen = (props) => {
 
 
   const renderItem = ({ item, index }) => (
-    <FastImage style={styles.image} source={{uri: item.uri}} resizeMode="cover" />
+    <FastImage style={styles.image} source={{ uri: item.uri }} resizeMode="cover" />
   );
 
   const doSelectUltilities = (ulti) => {
     let current = [...selectedUltilities];
-    if(current.indexOf(ulti.value) !== -1){
+    if (current.indexOf(ulti.value) !== -1) {
       //exist
       current = current.filter(item => item !== ulti.value);
-    }else{
+    } else {
       current.push(ulti.value);
     }
     setSelectedUltilities(current);
@@ -322,7 +323,7 @@ const PropertyScreen = (props) => {
       }
     });
   };
-const openImagePicker = () => {
+  const openImagePicker = () => {
     ImagePicker.launchImageLibrary(IMAGE_CONFIG, (response) => {
       // console.log('Response = ', response);
       if (response.didCancel) {
@@ -337,18 +338,18 @@ const openImagePicker = () => {
       }
     });
   };
-  const removeImages = (item) =>{
+  const removeImages = (item) => {
     let current = [...images];
     current = current.filter(itm => itm !== item)
     setImages(current);
   }
-  
-  const handleInputField = (field, value) =>{
-    setProperty({...property, [field] : value});
+
+  const handleInputField = (field, value) => {
+    setProperty({ ...property, [field]: value });
   }
 
-  const handleInputFieldAddress = (field, value) =>{
-    setAddress({...address, [field] : value});
+  const handleInputFieldAddress = (field, value) => {
+    setAddress({ ...address, [field]: value });
   }
 
   const renderTabInfomation = () => {
@@ -364,12 +365,12 @@ const openImagePicker = () => {
           },
         ]}>
         <TextNormal
-          style={{fontSize: FONTSIZES.large}}
+          style={{ fontSize: FONTSIZES.large }}
           text={t('property.information')}></TextNormal>
         <TextNormal
-          style={{width: ScreenWidth * 0.9}}
+          style={{ width: ScreenWidth * 0.9 }}
           text={t('property.propertyType')}></TextNormal>
-        <View style={{marginBottom: SPACINGS.large, width: ScreenWidth * 0.7}}>
+        <View style={{ marginBottom: SPACINGS.large, width: ScreenWidth * 0.7 }}>
           {PropertyTypes.map((item, index) => {
             return (
               <View
@@ -383,7 +384,7 @@ const openImagePicker = () => {
                 }}>
                 <TouchableOpacity
                   onPress={() => setPropertyType(item.value)}
-                  style={{flex: 1, backgroundColor: colors.ređ}}>
+                  style={{ flex: 1, backgroundColor: colors.ređ }}>
                   <TextNormal text={item.label} />
                 </TouchableOpacity>
                 <CheckBox
@@ -392,7 +393,7 @@ const openImagePicker = () => {
                   onTintColor={mainColor}
                   key={index}
                   value={propertyType === item.value}
-                  style={{height: 20}}
+                  style={{ height: 20 }}
                   onValueChange={(newValue) => {
                     if (newValue) onTypeChange(newValue, item);
                   }}
@@ -402,7 +403,7 @@ const openImagePicker = () => {
           })}
         </View>
 
-        <View style={{marginBottom: SPACINGS.large}}>
+        <View style={{ marginBottom: SPACINGS.large }}>
           <TextInputFlat
             keyboardType="numeric"
             props={props}
@@ -410,10 +411,10 @@ const openImagePicker = () => {
               handleInputField('bedRoom', text);
             }}
             text={t('property.numOfRoom')}
-            value={property?.bedRoom ?  (property?.bedRoom  + '' ) : ''}
+            value={property?.bedRoom ? (property?.bedRoom + '') : ''}
             placeholder={'0'}
             textInputStyle={[styles.field, containerStyle.defaultMarginBottom]}
-            style={{marginBottom: SPACINGS.avg}}
+            style={{ marginBottom: SPACINGS.avg }}
           />
           <TextInputFlat
             keyboardType="numeric"
@@ -425,14 +426,14 @@ const openImagePicker = () => {
             value={property?.areaUnit || ''}
             placeholder={'0'}
             textInputStyle={[styles.field, containerStyle.defaultMarginBottom]}
-            style={{marginBottom: SPACINGS.avg}}
+            style={{ marginBottom: SPACINGS.avg }}
           />
         </View>
 
         <TextNormal
-          style={{width: ScreenWidth * 0.9}}
+          style={{ width: ScreenWidth * 0.9 }}
           text={t('property.propertyFor')}></TextNormal>
-        <View style={{marginBottom: SPACINGS.large, width: ScreenWidth * 0.7}}>
+        <View style={{ marginBottom: SPACINGS.large, width: ScreenWidth * 0.7 }}>
           {PropertyFors.map((item, index) => {
             return (
               <View
@@ -445,7 +446,7 @@ const openImagePicker = () => {
                 }}>
                 <TouchableOpacity
                   onPress={() => setGender(item.value)}
-                  style={{flex: 1}}>
+                  style={{ flex: 1 }}>
                   <TextNormal text={item.label} />
                 </TouchableOpacity>
                 <CheckBox
@@ -454,7 +455,7 @@ const openImagePicker = () => {
                   onTintColor={mainColor}
                   key={index}
                   value={propertyFor === item.value}
-                  style={{height: 20}}
+                  style={{ height: 20 }}
                   onValueChange={(newValue) => {
                     handleInputField("propertyFor", item.value);
                   }}
@@ -468,7 +469,7 @@ const openImagePicker = () => {
           style={[
             containerStyle.center,
             containerStyle.shadow,
-            {marginBottom: SPACINGS.large},
+            { marginBottom: SPACINGS.large },
           ]}>
           <TextInputFlat
             keyboardType="numeric"
@@ -477,7 +478,7 @@ const openImagePicker = () => {
               handleInputField('priceOrMonthlyRent', text);
             }}
             text={t('property.rentalPrice')}
-            value={property?.priceOrMonthlyRent ?  (property?.priceOrMonthlyRent  + '' ) : ''}
+            value={property?.priceOrMonthlyRent ? (property?.priceOrMonthlyRent + '') : ''}
             placeholder={'0'}
             textInputStyle={[styles.field, containerStyle.defaultMarginBottom]}
           />
@@ -487,7 +488,7 @@ const openImagePicker = () => {
             onChangeText={(text) => {
               handleInputField('bookingAmount', text);
             }}
-            value={property?.bookingAmount ?  (property?.bookingAmount  + '' ) : ''}
+            value={property?.bookingAmount ? (property?.bookingAmount + '') : ''}
             text={t('property.deposit')}
             placeholder={'0'}
             textInputStyle={[styles.field, containerStyle.defaultMarginBottom]}
@@ -498,7 +499,7 @@ const openImagePicker = () => {
           style={[
             containerStyle.center,
             containerStyle.shadow,
-            {marginBottom: SPACINGS.large},
+            { marginBottom: SPACINGS.large },
           ]}>
           <TouchableOpacity
             style={{
@@ -515,7 +516,7 @@ const openImagePicker = () => {
               disabled="true"
               onCheckColor={colors.purpleMain}
               onTintColor={colors.purpleMain}
-              style={{height: 20}}
+              style={{ height: 20 }}
               value={leaseDuration}
             />
             <TextNormal text={t('property.leaseDuration')}></TextNormal>
@@ -528,19 +529,19 @@ const openImagePicker = () => {
               handleInputField('leaseDurationMonth', text);
             }}
             value={property?.leaseDurationMonth ? (property?.leaseDurationMonth + '') : ''}
-            style={{flex: 1}}
+            style={{ flex: 1 }}
             placeholder={'0'}
             textInputStyle={[styles.field, containerStyle.defaultMarginBottom]}
           />
           <View
-            style={{width: ScreenWidth * 0.9, marginBottom: SPACINGS.large}}>
+            style={{ width: ScreenWidth * 0.9, marginBottom: SPACINGS.large }}>
             <TouchableOpacity
-              style={{display: 'flex', flexDirection: 'row'}}
+              style={{ display: 'flex', flexDirection: 'row' }}
               onPress={() => {
                 setParkingAvailable(!parkingAvailable);
                 if (parkingAvailable) {
                   setReservedParking(0);
-                  setProperty({...property, reservedParking: ''});
+                  setProperty({ ...property, reservedParking: '' });
                 }
               }}>
               <CheckBox
@@ -548,7 +549,7 @@ const openImagePicker = () => {
                 disabled="true"
                 onCheckColor={colors.purpleMain}
                 onTintColor={colors.purpleMain}
-                style={{height: 20}}
+                style={{ height: 20 }}
                 value={parkingAvailable}
               />
               <TextNormal text={t('property.parkingAvailable')}></TextNormal>
@@ -563,16 +564,16 @@ const openImagePicker = () => {
               setReservedParking(text);
             }}
             value={reservedParking}
-            style={{flex: 1}}
+            style={{ flex: 1 }}
             text={t('property.parkingCost')}
             placeholder={'0'}
             textInputStyle={[styles.field, containerStyle.defaultMarginBottom]}
             hasCheckbox={true}
             checkboxChange={(checked) => {
               if (checked) {
-                setProperty({...property, reservedParking: 0});
+                setProperty({ ...property, reservedParking: 0 });
               } else {
-                setProperty({...property, reservedParking: reservedParking});
+                setProperty({ ...property, reservedParking: reservedParking });
               }
             }}
           />
@@ -593,11 +594,12 @@ const openImagePicker = () => {
     return (
       <View
         style={[containerStyle.center, containerStyle.shadow,
-          {width: ScreenWidth * 0.9,
+        {
+          width: ScreenWidth * 0.9,
           height: '100%',
           paddingBottom: 50,
         }]}>
-            {/* <GooglePlacesAutocomplete
+        {/* <GooglePlacesAutocomplete
             onPress={(data, details = null) => console.log(data)}
             onFail={(error) => console.error(error)}
               placeholder='Enter Location'
@@ -629,7 +631,7 @@ const openImagePicker = () => {
                 },
               }}
             /> */}
-          <TextInputFlat
+        <TextInputFlat
           keyboardType="default"
           props={props}
           onChangeText={(text) => {
@@ -643,19 +645,19 @@ const openImagePicker = () => {
             containerStyle.defaultMarginBottom,
           ]}
         />
-          <GradientButton
-            style={styles.nextButton}
-            onPress={() => onNextStepPress()}
-            text={t('property.next')}
-            fromColor={mainColor}
-            toColor={mainColor}
-          />
+        <GradientButton
+          style={styles.nextButton}
+          onPress={() => onNextStepPress()}
+          text={t('property.next')}
+          fromColor={mainColor}
+          toColor={mainColor}
+        />
       </View>
     );
   };
 
   const renderTabUtilties = () => {
-    if(type === "CAFE")
+    if (type === "CAFE")
       return null;
     return (
       <View
@@ -669,8 +671,8 @@ const openImagePicker = () => {
           },
         ]}>
         <TextNormal
-          style={{fontSize: FONTSIZES.large}}
-          text={'Images and Utilities'}></TextNormal>
+          style={{ fontSize: FONTSIZES.large }}
+          text={t('chat.Images_and_Utilities')}></TextNormal>
 
         <TextNormal
           style={{
@@ -679,7 +681,7 @@ const openImagePicker = () => {
             width: ScreenWidth * 0.9,
             marginTop: SPACINGS.large
           }}
-          text={'Images'}></TextNormal>
+          text={t('chat.Images')}></TextNormal>
         <View
           style={{
             width: ScreenWidth * 0.9,
@@ -699,7 +701,7 @@ const openImagePicker = () => {
               }}
               data={images}
               keyExtractor={(item, index) => index}
-              renderItem={({item}) => {
+              renderItem={({ item }) => {
                 return (
                   <TouchableOpacity
                     style={{
@@ -724,7 +726,7 @@ const openImagePicker = () => {
                           height: 100,
                           borderRadius: RADIUS.default,
                         }}
-                        source={{uri: item}}
+                        source={{ uri: item }}
                         resizeMode="cover"
                       />
                     </View>
@@ -733,7 +735,7 @@ const openImagePicker = () => {
               }}></FlatList>
           )}
           {images && images.length == 0 && (
-            <View style={[containerStyle.center, {color: colors.gray_new}]}>
+            <View style={[containerStyle.center, { color: colors.gray_new }]}>
               <MaterialCommunityIcons
                 onPress={() => openImagePicker()}
                 color={colors.gray_new}
@@ -741,23 +743,20 @@ const openImagePicker = () => {
                 size={48}
               />
               <TextNormal
-                style={{color: colors.gray_new}}
-                text={'Click here to post images'}></TextNormal>
-              <TextNormal
-                style={{color: colors.gray_new}}
-                text={'from the gallery!'}></TextNormal>
+                style={{ color: colors.gray_new }}
+                text={t('chat.mottos')}></TextNormal>
             </View>
           )}
           {images && images.length > 0 && (
-            <View style={[containerStyle.center, {color: colors.gray_new}]}>
+            <View style={[containerStyle.center, { color: colors.gray_new }]}>
               <TouchableOpacity onPress={() => openImagePicker()}>
                 <TextNormal
-                  style={{color: colors.purpleMain, fontSize: FONTSIZES.avg}}
+                  style={{ color: colors.purpleMain, fontSize: FONTSIZES.avg }}
                   text={'Post more picture'}></TextNormal>
               </TouchableOpacity>
               <TextNormal
                 numberOfLines={2}
-                style={{color: colors.gray_new, textAlign: 'center'}}
+                style={{ color: colors.gray_new, textAlign: 'center' }}
                 text={
                   'Limited at least 4 images, maximum of 20 images and do not exceed over 10 mb'
                 }></TextNormal>
@@ -803,7 +802,7 @@ const openImagePicker = () => {
             }}
             data={ListUltilities}
             keyExtractor={(item, index) => item.value}
-            renderItem={({item}) => {
+            renderItem={({ item }) => {
               isSelected = selectedUltilities.indexOf(item.value) !== -1;
               return (
                 <TouchableOpacity onPress={() => doSelectUltilities(item)}>
@@ -858,10 +857,10 @@ const openImagePicker = () => {
           },
         ]}>
         <TextNormal
-          style={{fontSize: FONTSIZES.large}}
+          style={{ fontSize: FONTSIZES.large }}
           text={'Confirmation'}></TextNormal>
         <TextNormal
-          style={{width: ScreenWidth * 0.9}}
+          style={{ width: ScreenWidth * 0.9 }}
           text={t('property.youAre')}></TextNormal>
         {Roles.map((item, index) => {
           return (
@@ -875,7 +874,7 @@ const openImagePicker = () => {
               }}>
               <TouchableOpacity
                 onPress={() => setRole(item.value)}
-                style={{flex: 1}}>
+                style={{ flex: 1 }}>
                 <TextNormal text={item.label} />
               </TouchableOpacity>
               <CheckBox
@@ -884,7 +883,7 @@ const openImagePicker = () => {
                 onTintColor={mainColor}
                 key={index}
                 value={role === item.value}
-                style={{height: 20}}
+                style={{ height: 20 }}
                 onValueChange={(newValue) => {
                   if (newValue) setRole(item.value);
                 }}
@@ -897,7 +896,7 @@ const openImagePicker = () => {
           style={[
             containerStyle.center,
             containerStyle.shadow,
-            {marginBottom: SPACINGS.large},
+            { marginBottom: SPACINGS.large },
           ]}>
           <TextInputFlat
             keyboardType="numeric"
@@ -905,7 +904,7 @@ const openImagePicker = () => {
             onChangeText={(text) => {
               handleInputField('phoneContact', text);
             }}
-            value={property?.phoneContact ?  (property?.phoneContact  + '' ) : ''}
+            value={property?.phoneContact ? (property?.phoneContact + '') : ''}
             text={t('property.phone')}
             placeholder={t('property.phone')}
             textInputStyle={[styles.field, containerStyle.defaultMarginBottom]}
@@ -916,7 +915,7 @@ const openImagePicker = () => {
             onChangeText={(text) => {
               handleInputField('projectName', text);
             }}
-            value={property?.projectName ?  (property?.projectName  + '' ) : ''}
+            value={property?.projectName ? (property?.projectName + '') : ''}
             text={t('property.title')}
             placeholder={t('property.title')}
             textInputStyle={[styles.field, containerStyle.defaultMarginBottom]}
@@ -924,7 +923,7 @@ const openImagePicker = () => {
           <TextInputFlat
             keyboardType="default"
             props={props}
-            value={property?.description ?  (property?.description  + '' ) : ''}
+            value={property?.description ? (property?.description + '') : ''}
             onChangeText={(text) => {
               handleInputField('description', text);
             }}
@@ -956,9 +955,9 @@ const openImagePicker = () => {
                   ? moment(availabilityDate).format('DD/MM/yyyy')
                   : ''
               }
-              style={{width: ScreenWidth * 0.9}}
+              style={{ width: ScreenWidth * 0.9 }}
               hasRightIco={true}
-              ico={<Ionicons name={'time'} size={24} color={mainColor}/>}
+              ico={<Ionicons name={'time'} size={24} color={mainColor} />}
               onPressIco={() => setShowOpenTime(true)}
             />
             <DateTimePickerModal
@@ -992,28 +991,28 @@ const openImagePicker = () => {
     let title = "Confirmation";
     let subTitle = "Do you want to publish?";
     return (
-    <View>
-    {showModal ? (
-      <ModalConfirm
-        isVisible={showModal}
-        title={title}
-        subTitle={subTitle}
-        mainColor={mainColor}
-        onPress={() => {
-          postNewProperty();
-        }}
-        onClose={() => {
-          setShowModal(false);
-          setCurrentPage(currentPage - 1);
-        }}
-      />
-    ) : null}
-    </View>)
+      <View>
+        {showModal ? (
+          <ModalConfirm
+            isVisible={showModal}
+            title={title}
+            subTitle={subTitle}
+            mainColor={mainColor}
+            onPress={() => {
+              postNewProperty();
+            }}
+            onClose={() => {
+              setShowModal(false);
+              setCurrentPage(currentPage - 1);
+            }}
+          />
+        ) : null}
+      </View>)
   }
 
-  const renderForm = () =>{
-    switch(currentPage) {
-      case 0: 
+  const renderForm = () => {
+    switch (currentPage) {
+      case 0:
         return renderTabInfomation();
       case 1:
         return renderTabAddress();
@@ -1066,17 +1065,17 @@ const openImagePicker = () => {
   const initAmenities = () => {
     let amenities = [];
     selectedUltilities.forEach((item) => {
-      let amenitiy = {amenityType: item};
+      let amenitiy = { amenityType: item };
       amenities.push(amenitiy);
     });
     return amenities;
   };
 
-  return useObserver(() =>(
+  return useObserver(() => (
     <View style={[containerStyle.default]}>
       <StatusBar barStyle={colorsApp.statusBar} />
       <SafeAreaView>
-        <HeaderFull title={t('property.createTitle')} hasButton/>
+        <HeaderFull title={t('property.createTitle')} hasButton />
         <View style={styles.stepIndicator}>
           <StepIndicator
             customStyles={customStyles}
@@ -1096,5 +1095,5 @@ const openImagePicker = () => {
       {isLoading && <Loading />}
     </View>
   ));
-  };
+};
 export default withTheme(PropertyScreen);

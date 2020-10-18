@@ -222,7 +222,7 @@ class VideoCallScreen extends Component {
         }
       });
     }
-    this.listenRoomChange(keyRoom);
+    // this.listenRoomChange(keyRoom);
   }
 
   componentDidMount = async () => {

@@ -17,11 +17,11 @@ const Empty = ({message}) => {
           source={require('../../../assets/imgs/sleep.json')}
         />
       </Animatable.View>
-      <TextNormal
+      {/* <TextNormal
         style={styles.text}
         numberOfLines={10}
         text={message || 'No data available for now'}
-      />
+      /> */}
     </View>
   );
 };

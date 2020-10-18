@@ -84,7 +84,7 @@ export default StyleSheet.create({
     paddingEnd: 10,
     fontFamily: fonts.family.nunito.bold,
     fontSize: 20,
-    color: colors.whiteBackground,
+    color: colors.black,
   },
   msgContainer: {
     flexWrap: 'wrap',

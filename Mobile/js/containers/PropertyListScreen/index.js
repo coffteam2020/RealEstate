@@ -44,88 +44,6 @@ import GradientButton from '../../shared/components/Buttons/GradientButton';
 import CheckBox from '@react-native-community/checkbox';
 import RangeSlider from 'rn-range-slider';
 
-const filterParams = [
-  {
-    id: 'PRICE',
-    label: 'Price',
-  },
-  {
-    id: 'AMENITIES',
-    label: 'Amenities',
-  },
-  {
-    id: 'ROOMTYPE',
-    label: 'Room Type',
-  },
-  {
-    id: 'CAPACITY',
-    label: 'Capacity',
-  },
-  {
-    id: 'SORTBY',
-    label: 'Sort By',
-  },
-];
-const FilterType = {
-  PRICE: 'PRICE',
-  AMENITIES: 'AMENITIES',
-  ROOM_TYPE: 'ROOMTYPE',
-  CAPACITY: 'CAPACITY',
-  GENDER: 'GENDER',
-  SORTBY: 'SORTBY'
-}
-
-const PropertyTypes = [
-  { label: 'All', value: 'ALL' },
-  { label: 'Domitory', value: 'DOMITIRY' },
-  { label: 'Room for rent', value: 'ROOM_FOR_RENT' },
-  { label: 'Room For Share', value: 'ROOM_FOR_SHARE' },
-  { label: 'House', value: 'HOUSE' },
-  { label: 'Apartment', value: 'APARTMENT' },
-];
-const SortByList = [
-  { label: 'Recently', value: 'Recently' },
-  { label: 'Lastest', value: 'Lastest' },
-  { label: 'Lowest to Highest', value: 'PRICE_LOW_TO_HIGHT' },
-  { label: 'Highest to Lowest', value: 'PRICE_HIGH_TO_LOW' },
-  { label: 'Nearest', value: 'Nearest' },
-];
-const Genders = [
-  { label: 'All', value: 'ALL' },
-  { label: 'Male', value: 'MALE' },
-  { label: 'Female', value: 'FEMALE' },
-];
-
-const PropertyFors = [
-  { label: 'All', value: 'All' },
-  { label: 'Sale', value: 'Sale' },
-  { label: 'Rent', value: 'Rent' },
-];
-
-const ListUltilities = [
-  { label: 'Internet', value: 'Internet', icon: 'wifi' },
-  { label: 'Water', value: 'Water', icon: 'water' },
-  { label: 'Light', value: 'Light', icon: 'lightbulb-on' },
-  { label: 'Parking', value: 'Parking', icon: 'car' },
-  { label: 'TV', value: 'TV', icon: 'television' },
-  { label: 'Air conditioning', value: 'AirConditioning', icon: 'air-conditioner' },
-  { label: 'Washing', value: 'Washing', icon: 'washing-machine' },
-  { label: 'Bed', value: 'Bed', icon: 'bed-empty' },
-  { label: 'Security', value: 'Security', icon: 'account-cowboy-hat' },
-  { label: 'Fridge', value: 'Fridge', icon: 'fridge' },
-  { label: 'WC', value: 'WC', icon: 'toilet' },
-  { label: 'Heater Water', value: 'HeaterWater', icon: 'water-pump' },
-];
-
-
-const filterSkeleton = {
-  gender: [],
-  propertyType: [],
-  price: [],
-  amenities: []
-};
-
-
 const PropertyListScreen = (props) => {
   const { colorsApp } = props.theme;
   const { t } = useTranslation();
@@ -138,10 +56,7 @@ const PropertyListScreen = (props) => {
   const [gender, setGender] = useState('ALL');
   const [capacity, setCapacity] = useState(0);
   const [filterValue, setFilterValue] = useState([]);
-  const [sortBy, setSortBy] = useState(SortByList[0]);
-  const [sortByTmp, setSortByTmp] = useState(SortByList[0]);
 
-  const [propertyType, setPropertyType] = useState(PropertyTypes[0]);
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(0);
   const [maxPriceInit, setMaxPriceInit] = useState(999);
@@ -149,6 +64,92 @@ const PropertyListScreen = (props) => {
 
   const [mainColor, setMainColor] = useState(colors.purpleMain);
   const [title, setTitle] = useState(t('proper'));
+
+  const filterParams = [
+    {
+      id: 'PRICE',
+      label: t('chat.price'),
+    },
+    {
+      id: 'AMENITIES',
+      label: t('chat.Amenities'),
+    },
+    {
+      id: 'ROOMTYPE',
+      label: t('chat.Room_Type'),
+    },
+    {
+      id: 'CAPACITY',
+      label: t('chat.Capacity'),
+    },
+    {
+      id: 'SORTBY',
+      label: t('chat.Sort_By'),
+    },
+  ];
+  const FilterType = {
+    PRICE: t('chat.price'),
+    AMENITIES: t('chat.Amenities'),
+    ROOM_TYPE: t('chat.Room_Type'),
+    CAPACITY: t('chat.Capacity'),
+    GENDER: t('chat.gender'),
+    SORTBY: t('chat.Sort_By'),
+  }
+
+  const PropertyTypes = [
+    { label: t('chat.All'), value: 'ALL' },
+    { label: t('chat.Domitory'), value: 'DOMITIRY' },
+    { label: t('chat.Room_for_rent'), value: 'ROOM_FOR_RENT' },
+    { label: t('chat.Room_For_Share'), value: 'ROOM_FOR_SHARE' },
+    { label: t('chat.House'), value: 'HOUSE' },
+    { label: t('chat.Apartment'), value: 'APARTMENT' },
+  ];
+  const SortByList = [
+    { label: t('chat.Recently'), value: 'Recently' },
+    { label: t('chat.Lastest'), value: 'Lastest' },
+    { label: t('chat.Lowest_to_Highest'), value: 'PRICE_LOW_TO_HIGHT' },
+    { label: t('chat.Highest_to_Lowest'), value: 'PRICE_HIGH_TO_LOW' },
+    { label: t('chat.Nearest'), value: 'Nearest' },
+  ];
+  const Genders = [
+    { label: 'All', value: 'ALL' },
+    { label: 'M', value: 'MALE' },
+    { label: 'F', value: 'FEMALE' },
+  ];
+
+  const PropertyFors = [
+    { label: 'All', value: 'All' },
+    { label: 'Sale', value: 'Sale' },
+    { label: 'Rent', value: 'Rent' },
+  ];
+  const [sortBy, setSortBy] = useState(SortByList[0]);
+  const [sortByTmp, setSortByTmp] = useState(SortByList[0]);
+
+  const [propertyType, setPropertyType] = useState(PropertyTypes[0]);
+  const ListUltilities = [
+    { label: 'Internet', value: 'Internet', icon: 'wifi' },
+    { label: t('chat.Water'), value: 'Water', icon: 'water' },
+    { label: t('chat.Light'), value: 'Light', icon: 'lightbulb-on' },
+    { label: t('chat.Parking'), value: 'Parking', icon: 'car' },
+    { label: 'TV', value: 'TV', icon: 'television' },
+    { label: t('chat.Air_conditioning'), value: 'AirConditioning', icon: 'air-conditioner' },
+    { label: t('chat.Washing'), value: 'Washing', icon: 'washing-machine' },
+    { label: t('chat.Bed'), value: 'Bed', icon: 'bed-empty' },
+    { label: t('chat.Security'), value: 'Security', icon: 'account-cowboy-hat' },
+    { label: t('chat.Fridge'), value: 'Fridge', icon: 'fridge' },
+    { label: 'WC', value: 'WC', icon: 'toilet' },
+    { label: t('chat.Heater_Water'), value: 'HeaterWater', icon: 'water-pump' },
+  ];
+
+
+  const filterSkeleton = {
+    gender: [],
+    propertyType: [],
+    price: [],
+    amenities: []
+  };
+
+
 
   const type = props.navigation.state.params.type || "PROPERTY";
 
@@ -319,8 +320,8 @@ const PropertyListScreen = (props) => {
       setMinPrice(0);
       setMaxPrice(99999);
     } else if (type === FilterType.SORTBY) {
-      setSortBy(SortByList[0]);
-      setSortByTmp(SortByList[0]);
+      setSortBy(SortByList?.[0]);
+      setSortByTmp(SortByList?.[0]);
     }
     setFilterValue(curFilter);
   };
@@ -329,7 +330,7 @@ const PropertyListScreen = (props) => {
     setFilterValue([]);
     setGender(Genders[0].value);
     setCapacity(0);
-    setSortBy(SortByList[0]);
+    setSortBy(SortByList?.[0]);
     setPropertyType(PropertyTypes[0])
     setSelectedUltilities([]);
     setMinPrice(0);
@@ -626,7 +627,7 @@ const PropertyListScreen = (props) => {
           onPress={() => {
             let newFilter = [...filterValue];
             newFilter = newFilter.filter(item => item.type !== FilterType.SORTBY)
-            let filter = { type: FilterType.SORTBY, value: sortByTmp.value, label: 'Sort by: ' + sortByTmp.label };
+            let filter = { type: FilterType.SORTBY, value: sortByTmp.value, label: t('chat.Sort_By') + sortByTmp.label };
             newFilter.push(filter);
             setFilterValue(newFilter);
             setSelectedFilter('');
@@ -974,8 +975,8 @@ const PropertyListScreen = (props) => {
               justifyContent: "space-between"
             }
           }>
-          <TextNormal style={{ fontSize: FONTSIZES.avg }} text={getFilteredItemsList().length + ' results'}></TextNormal>
-          <TextNormal style={{ fontSize: FONTSIZES.avg }} text={'Sort by: ' + sortBy.label}></TextNormal>
+          <TextNormal style={{ fontSize: FONTSIZES.avg }} text={getFilteredItemsList().length + " " + t('chat.result')}></TextNormal>
+          <TextNormal style={{ fontSize: FONTSIZES.avg }} text={t('chat.Sort_By') + " "+ sortBy.label}></TextNormal>
         </View>
       </View>
     );

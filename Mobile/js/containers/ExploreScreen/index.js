@@ -341,6 +341,7 @@ const ExploreScreen = (props) => {
     })
       .then((location) => {
         setLo(location);
+        console.log(JSON.stringify(location));
         AxiosFetcher({
           method: 'GET',
           url:
@@ -546,25 +547,15 @@ const ExploreScreen = (props) => {
           resizeMode="cover"
         ></FastImage> */}
         <View style={{ height: ScreenHeight / 4, width: ScreenWidth, padding: 20, borderRadius: 10 }}>
-          <MapView
+          {lo?.latitude && <MapView
             provider={PROVIDER_GOOGLE} // remove if not using Google Maps
             style={{ height: ScreenHeight / 4, borderRadius: 20 }}
             region={{
               latitude: lo?.latitude,
               longitude: lo?.longitude,
+              latitudeDelta: 3,
+              longitudeDelta: 4,
             }}
-            initialRegion={{
-              latitude: lo?.latitude,
-              longitude: lo?.longitude,
-              latitudeDelta: 0.01,
-              longitudeDelta: 0.01
-            }}
-            annotations={[
-              {
-                latitude: lo?.latitude,
-                longitude: lo?.longitude,
-              },
-            ]}
             scrollEnabled={true}
             zoomEnabled={true}
           >
@@ -576,7 +567,7 @@ const ExploreScreen = (props) => {
 
               title={t('location.me')}
               draggable />
-          </MapView>
+          </MapView>}
         </View>
         <View style={{ width: '100%', marginLeft: 35, marginTop: 20 }}>
           {/* <TextNormal
