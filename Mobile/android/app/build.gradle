@@ -134,7 +134,7 @@ android {
         applicationId "com.dtechno.dapp.premium"
         minSdkVersion 24
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 3
+        versionCode 4
         versionName "1.0"
         missingDimensionStrategy 'react-native-camera', 'general'
     }
@@ -214,18 +214,18 @@ dependencies {
     debugImplementation("com.facebook.flipper:flipper-fresco-plugin:${FLIPPER_VERSION}") {
         exclude group:'com.facebook.flipper'
     }
-//    implementation(project(':react-native-jitsi-meet')) {
-//        exclude group: 'com.facebook.react',module:'react-native-svg'
-//        exclude group: 'com.facebook.react',module:'react-native-vector-icons'
-//        exclude group: 'com.facebook.react', module:'react-native-community-async-storage'
-//        exclude group: 'com.facebook.react', module:'react-native-device-info'
-//        exclude group: 'com.facebook.react', module:'react-native-community_netinfo'
-//        exclude group: 'com.facebook.react', module:'react-native-webview'
-//        exclude group: 'com.facebook.react', module:'react-native-community_webview'
-//        exclude group: 'com.facebook.react', module:'react-native-sound'
-//        exclude group: 'com.facebook.react', module:'react-native-linear-gradient'
-//        exclude group: 'com.facebook.react', module:'react-native-google-signin'
-//    }
+    implementation(project(':react-native-jitsi-meet')) {
+        exclude group: 'com.facebook.react',module:'react-native-svg'
+        exclude group: 'com.facebook.react',module:'react-native-vector-icons'
+        exclude group: 'com.facebook.react', module:'react-native-community-async-storage'
+        exclude group: 'com.facebook.react', module:'react-native-device-info'
+        exclude group: 'com.facebook.react', module:'react-native-community_netinfo'
+        exclude group: 'com.facebook.react', module:'react-native-webview'
+        exclude group: 'com.facebook.react', module:'react-native-community_webview'
+        exclude group: 'com.facebook.react', module:'react-native-sound'
+        exclude group: 'com.facebook.react', module:'react-native-linear-gradient'
+        exclude group: 'com.facebook.react', module:'react-native-google-signin'
+    }
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";
         debugImplementation files(hermesPath + "hermes-debug.aar")

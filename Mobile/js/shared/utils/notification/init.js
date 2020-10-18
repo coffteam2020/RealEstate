@@ -134,7 +134,7 @@ const displayIncoming = async (message) => {
 const registerNotificationInBackground = () => {
 	firebase.messaging().setBackgroundMessageHandler(async remoteMessage => {
 		onDisplayNotification(remoteMessage);
-		displayIncoming(remoteMessage);
+		displayIncoming(remoteMessage?.data);
 	});
 
 };
@@ -144,7 +144,9 @@ const registerWatchingNotificationOpened = () => {
 	var notificationOpenedListener = firebase.messaging().onNotificationOpenedApp(async (notificationOpen) => {
 		// Get information about the notification that was opened
 		console.log('notificationOpenedListener: ' + LogManager.parseJsonObjectToJsonString(notificationOpen));
-		if (notificationOpen.notification) {
+		if (notificationOpen?.notification) {
+			var body = notificationOpen?.notification?.body?.split("#") || [];
+			displayIncoming(body)
 		}
 	});
 };
@@ -197,18 +199,18 @@ const registerHearingNotification = async (store, currentScreen) => {
 	var notificationListener = await firebase.messaging().onMessage(async (notification) => {
 		console.log('registerHearingNotification: ' + LogManager.parseJsonObjectToJsonString(notification));
 		onDisplayNotification(notification);
-		displayIncoming(notification);
+		displayIncoming(notification?.notification?.body);
 	});
 	firebase.messaging().setBackgroundMessageHandler(async remoteMessage => {
 		console.log('registerHearingNotification Background: ' + LogManager.parseJsonObjectToJsonString(remoteMessage));
 		onDisplayNotification(remoteMessage);
-		displayIncoming(remoteMessage);
+		displayIncoming(remoteMessage?.data);
 	});
 
 	// Handle notification in background - automatically
 	firebase.messaging().onMessage((message) => {
 		onDisplayNotification(message);
-		displayIncoming(message);
+		displayIncoming(message?.data);
 		backgroundNotificationHandler(message)
 			.then();
 	});
