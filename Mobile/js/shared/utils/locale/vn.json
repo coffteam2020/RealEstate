@@ -16,7 +16,7 @@
     "name": "Đăng nhập",
     "welcomeBack": "Chào mừng quay lại!",
     "email": "Email",
-    "emailOrPhone":"Số điện thoại",
+    "emailOrPhone": "Số điện thoại",
     "password": "Mật khẩu",
     "forget": "Quên mật khẩu",
     "social": " ⏤ OR ⏤",
@@ -54,7 +54,7 @@
     "call": "Gọi",
     "chat": "Chat",
     "book": "Đặt",
-    "edit":"Sửa",
+    "edit": "Sửa",
     "delete": "Xoá",
     "apply": "Thực thi"
   },
@@ -302,9 +302,9 @@
     "dismiss": "Bỏ qua",
     "no": "Không có lịch sử chat. \nBạn muốn trò chuyện với bạn bè? 🤠? \nTheo dõi và bắt đầu trò chuyện thôi"
   },
-  "setting" : {
-    "permission" : {
-      "record" : "Vui lòng cấp quyền camera để sử dụng tính năng"
+  "setting": {
+    "permission": {
+      "record": "Vui lòng cấp quyền camera để sử dụng tính năng"
     }
   },
   "explorer": {
@@ -328,8 +328,8 @@
     "qr": "Mã QR code",
     "snack": "Ăn vặt",
     "livestream": "Livestream"
-  }, 
-  "location":{
+  },
+  "location": {
     "near": "Gần bạn",
     "from": "Tên đường, quận, ...",
     "to": "Thêm ",
@@ -363,7 +363,7 @@
     "confirmation": "Xác nhận",
     "logoutAsk": "Bạn muốn đăng xuất?",
     "getInfoErr": "Không thể lấy thông tin người dùng",
-    "name": "Tên" ,
+    "name": "Tên",
     "sex": "Giới tính",
     "wallet": "Ví",
     "dob": "Ngày sinh",
@@ -378,24 +378,24 @@
     "city": "Thành phố",
     "district": "Quận"
   },
-  "social" : {
-    "title" : "Xã hội",
+  "social": {
+    "title": "Xã hội",
     "placeholder": "Bạn nghĩ gì?...",
     "createpost": "Tạo bài",
-    "image": "Đính kèm",
+    "image": "Thêm",
     "post": "Đăng",
     "likePrefix": "Bạn và ",
     "likeOnlyYou": "Bạn",
     "othersLike": "khác",
     "like": "Thích",
     "comment": "Bình luận",
-    "commentInput":{
-      "placeholder" : "Để lại bình luận.."
+    "commentInput": {
+      "placeholder": "Để lại bình luận.."
     },
-    "nodata":"Không có bài đăng"
+    "nodata": "Không có bài đăng"
   },
   "property": {
-    "createTitle" : "Liệt kê thông tin",
+    "createTitle": "Liệt kê thông tin",
     "numOfRoom": "Số phòng",
     "capacity": "Khả năng",
     "areaUnit": "Đơn vị",
@@ -410,7 +410,7 @@
     "free": "Miễn phí",
     "next": "Tiếp",
     "publishRoom": "Đăng",
-    "takeAPicture":"Chụp ảnh",
+    "takeAPicture": "Chụp ảnh",
     "phone": "Số điện thoại",
     "title": "Tiêu đề",
     "description": "Mô tả",
@@ -420,7 +420,7 @@
     "leaseDurationMonth": "Cho thuê theo tháng",
     "youAre": "Bạn là",
     "propertyType": "Kiểu",
-    "information":"Thông tin",
+    "information": "Thông tin",
     "propertyFor": "BDS cho",
     "postDate": "Ngày đăng",
     "gender": "Giới tính",
@@ -429,5 +429,18 @@
     "restaurantTitle": "Nhà hàng",
     "cafeTitle": "Quán cafe",
     "snacksTitle": "Danh sách ăn vặt"
+  },
+  "chat": {
+    "title": "Chọn một lựa chọn",
+    "call": "Gọi",
+    "distance": "Khoảng cách tới chỗ bạn",
+    "attachment": "Bài đăng",
+    "del": "Bạn muốn xoá bài đăng này?",
+    "delOk": "Xoá thành công 🌔",
+    "goLive": "Tạo",
+    "motto": "Tìm kiếm kênh bằng id, thẻ, ...",
+    "category": "Thẻ",
+    "note": " Ghi chú",
+    "tag": "Tags"
   }
 }

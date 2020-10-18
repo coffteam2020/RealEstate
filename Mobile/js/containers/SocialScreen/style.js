@@ -61,7 +61,7 @@ export const styles = StyleSheet.create({
   postImages:{
 	width: ScreenWidth,
     height: ScreenWidth,
-	margin: SPACINGS.small
+	// margin: SPACINGS.small
   },
   postFooter:{
 	display: "flex",

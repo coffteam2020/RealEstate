@@ -22,17 +22,15 @@ import TextInputFlatLeftIconTouchable from '../../shared/components/TextInput/Te
 import { ScreenHeight, ScreenWidth } from '../../shared/utils/dimension/Divices';
 import TextNormal from '../../shared/components/Text/TextNormal';
 import icons from '../../shared/utils/icons/icons';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
 import { colors } from '../../shared/utils/colors/colors';
 import AxiosFetcher from '../../api/AxiosFetch';
 import { NavigationService } from '../../navigation';
 import { ScreenNames } from '../../route/ScreenNames';
 import { firebase } from '@react-native-firebase/messaging';
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import IALocalStorage from '../../shared/utils/storage/IALocalStorage';
 import { ToastHelper } from '../../shared/components/ToastHelper';
-import { StyleSheet } from 'react-native';
 
 const HOME_BANNERS = [
   { imgUrl: images.home1 },
@@ -53,7 +51,7 @@ const ExploreScreen = (props) => {
   const { colorsApp } = props.theme;
   const { t } = useTranslation();
   const { userStore } = useStores();
-  const [trends, setTrends] = useState([]);
+  const [lo, setLo] = useState({});
 
   const BTNS = [
     {
@@ -290,7 +288,7 @@ const ExploreScreen = (props) => {
         data: `${fcmToken}`,
         hasToken: true,
       })
-        .then(async (val) => {
+        .then(async () => {
         })
         .catch(() => {
 
@@ -316,31 +314,11 @@ const ExploreScreen = (props) => {
       .catch(() => {
         ToastHelper.showError(t('account.getInfoErr'));
       });
+
   };
   const tryOpenIAP = async (url) => {
     try {
       if (await InAppBrowser.isAvailable()) {
-        const result = await InAppBrowser.open(url, {
-          // iOS Properties
-          dismissButtonStyle: 'cancel',
-          preferredBarTintColor: '#453AA4',
-          preferredControlTintColor: 'white',
-          readerMode: false,
-          // animated: true,
-          modalPresentationStyle: 'fullScreen',
-          enableBarCollapsing: false,
-          // Android Properties
-          showTitle: true,
-          toolbarColor: '#6200EE',
-          secondaryToolbarColor: 'black',
-          enableUrlBarHiding: true,
-          enableDefaultShare: true,
-          forceCloseOnRedirection: false,
-          // Specify full animation resource identifier(package:anim/name)
-          // or only resource name(in case of animation bundled with app).
-          animations: {},
-          headers: {},
-        });
         // Alert.alert(JSON.stringify(result));
       } else {
         Linking.openURL(url);
@@ -355,6 +333,7 @@ const ExploreScreen = (props) => {
       timeout: 15000,
     })
       .then((location) => {
+        setLo(location);
         AxiosFetcher({
           method: 'GET',
           url:
@@ -545,53 +524,6 @@ const ExploreScreen = (props) => {
     );
   };
 
-  const renderSearchTrend = () => {
-    return (
-      <View style={styles.trendContainer}>
-        <ImageBackground
-          source={{ uri: MOCK[0].photo[0] }}
-          imageStyle={{ borderRadius: 20 }}
-          style={styles.img1}>
-          <View style={styles.shadownImg1}>
-            <TextNormal
-              text={MOCK[0].address}
-              style={[containerStyle.textWhite, containerStyle.textHeaderSmall]}
-            />
-          </View>
-        </ImageBackground>
-        <View style={{ flex: 2, marginLeft: 10 }}>
-          <ImageBackground
-            source={{ uri: MOCK[1].photo[0] }}
-            imageStyle={{ borderRadius: 20 }}
-            style={styles.img2}>
-            <View style={styles.shadowImg2}>
-              <TextNormal
-                text={MOCK[1].address}
-                style={[
-                  containerStyle.textWhite,
-                  containerStyle.textHeaderSmall,
-                ]}
-              />
-            </View>
-          </ImageBackground>
-          <ImageBackground
-            imageStyle={{ borderRadius: 20 }}
-            source={{ uri: MOCK[2].photo[0] }}
-            style={styles.img3}>
-            <View style={styles.shadowImg3}>
-              <TextNormal
-                text={MOCK[2].address}
-                style={[
-                  containerStyle.textWhite,
-                  containerStyle.textHeaderSmall,
-                ]}
-              />
-            </View>
-          </ImageBackground>
-        </View>
-      </View>
-    );
-  };
   return (
     <View style={[containerStyle.defaultBackground]}>
       <StatusBar barStyle={colorsApp.statusBar} />
@@ -616,7 +548,33 @@ const ExploreScreen = (props) => {
               latitudeDelta: 0.015,
               longitudeDelta: 0.0121,
             }}
+            region={{
+              latitude: lo?.latitude,
+              longitude: lo?.longitude,
+            }}
+            initialRegion={{
+              latitude: lo?.latitude,
+              longitude: lo?.longitude,
+              latitudeDelta: 0.01,
+              longitudeDelta: 0.01
+            }}
+            annotations={[
+              {
+                latitude: lo?.latitude,
+                longitude: lo?.longitude,
+              },
+            ]}
+            scrollEnabled={true}
+            zoomEnabled={true}
           >
+            <Marker
+              coordinate={{
+                "latitude": lo?.latitude,
+                "longitude": lo?.longitude
+              }}
+
+              title={t('location.me')}
+              draggable />
           </MapView>
         </View>
         <View style={{ width: '100%', marginLeft: 35, marginTop: 20 }}>

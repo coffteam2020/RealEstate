@@ -1,47 +1,54 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useEffect, useState} from 'react';
-import {StatusBar, View, SafeAreaView, TouchableOpacity} from 'react-native';
-import {styles} from './style';
-import {images} from '../../../assets/index';
-import {withTheme} from 'react-native-paper';
+import React, { useEffect, useState } from 'react';
+import { StatusBar, View, SafeAreaView, TouchableOpacity } from 'react-native';
+import { styles } from './style';
+import { images } from '../../../assets/index';
+import { withTheme } from 'react-native-paper';
 import TextNormal from '../../shared/components/Text/TextNormal';
-import {containerStyle} from '../../themes/styles';
-import {useTranslation} from 'react-i18next';
-import {useStores} from '../../store/useStore';
-import {colors} from '../../shared/utils/colors/colors';
-import {ScrollView} from 'react-native-gesture-handler';
+import { containerStyle } from '../../themes/styles';
+import { useTranslation } from 'react-i18next';
+import { useStores } from '../../store/useStore';
+import { colors } from '../../shared/utils/colors/colors';
+import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import ImagePicker from 'react-native-image-picker';
-import {uploadFileToFireBase} from '../../shared/utils/firebaseStorageUtils/index';
+import { uploadFileToFireBase } from '../../shared/utils/firebaseStorageUtils/index';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FastImage from 'react-native-fast-image';
 import GradientButton from '../../shared/components/Buttons/GradientButton';
-import {ScreenWidth, ScreenHeight} from '../../shared/utils/dimension/Divices';
-import {NavigationService} from '../../navigation';
-import {ScreenNames} from '../../route/ScreenNames';
+import { ScreenWidth, ScreenHeight } from '../../shared/utils/dimension/Divices';
+import { NavigationService } from '../../navigation';
+import { ScreenNames } from '../../route/ScreenNames';
+import Video from 'react-native-video';
 import AxiosFetcher from '../../api/AxiosFetch';
+import { firebase } from '@react-native-firebase/messaging';
 import HeaderFull from '../../shared/components/Header/HeaderFull';
 import IALocalStorage from '../../shared/utils/storage/IALocalStorage';
-import {ToastHelper} from '../../shared/components/ToastHelper';
+import { ToastHelper } from '../../shared/components/ToastHelper';
 import Constant from '../../shared/utils/constant/Constant';
-import {useObserver} from 'mobx-react';
+import { useObserver } from 'mobx-react';
 import Loading from '../../shared/components/Loading';
 import ModalAccount from '../../shared/components/Modal/ModalAccount';
+import { SPACINGS } from '../../themes';
 
 const Account = (props) => {
-  const {colorsApp} = props.theme;
+  const { colorsApp } = props.theme;
   const a = props.navigation.state.params?.data;
-//   console.log(JSON.stringify(data));
-  const {t} = useTranslation();
-  const {userStore} = useStores();
+  //   console.log(JSON.stringify(data));
+  const { t } = useTranslation();
+  const { userStore } = useStores();
   const [isLoading, setIsLoading] = useState(false);
   const [avt, setAvt] = useState('');
+  const [isFetching, setIsFetching] = useState(false);
   const [modelSelect, setModalSelect] = useState('');
   const [showModal, setShowModal] = useState(false);
-  const [data, setData]= useState(a);
-  
+  const [allPost, setAllPost] = useState([]);
+  const [data, setData] = useState(a);
+
   const IMAGE_CONFIG = {
     title: t('imagePicker.name'),
     cancelButtonTitle: t('common.cancel'),
@@ -56,9 +63,111 @@ const Account = (props) => {
   useEffect(() => {
     props?.navigation.addListener('willFocus', () => {
       getProfile();
+      getMessages();
     });
     getProfile();
+    getMessages();
   }, []);
+  const getMessages = async () => {
+    let user = await IALocalStorage.getDetailUserInfo();
+    setIsLoading(true);
+    await firebase
+      .database()
+      .ref(Constant.SCHEMA.SOCIAL)
+      .once('value', (snapshot) => {
+        const data = snapshot.val() ? Object.values(snapshot.val()) : [];
+        let arr = data.sort(function (x, y) {
+          return y.timeInMillosecond - x.timeInMillosecond;
+        });
+        console.log(JSON.stringify(arr));
+        console.log(a?.userId);
+        arr = arr?.filter(a => a?.userId === a?.userId && a?.images?.length > 0);
+        setAllPost(arr)
+        console.log(arr.length);
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 500);
+      });
+  };
+
+  const renderPost = (item) => {
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          NavigationService.navigate(ScreenNames.PostDetailScreen, {
+            data: { ...item },
+          });
+        }}
+        style={[
+          {
+            paddingTop: SPACINGS.large,
+          },
+        ]}>
+        <View style={styles.postContainer}>
+          <View style={styles.postContent}>
+            <View style={{ justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
+              {item?.images && (item?.images[0]?.includes('PNG') || item?.images[0]?.includes('JPG') || item?.images[0]?.includes('JPEG') ||
+                item?.images[0]?.includes('png') || item?.images[0]?.includes('jpg') || item?.images[0]?.includes('jpeg')) ?
+                <FastImage
+                  source={{
+                    uri:
+                      item?.images[0] ||
+                      Constant.MOCKING_DATA.NO_IMG_PLACE_HOLDER,
+                  }}
+                  resizeMode="cover"
+                  style={styles.postImages}
+                /> :
+                <View
+                  style={{
+                    alignItems: "center",
+                    justifyContent: 'center',
+                    width: ScreenWidth / 2 - 10,
+                    height: ScreenWidth / 2 - 10
+                  }}>
+                  <Video
+                    paused={true}
+                    playWhenInactive={false}
+                    playInBackground={false}
+                    controls={true}
+                    source={{ uri: item?.images?.[0] }}
+                    style={{ width: ScreenWidth / 2 - 10, height: ScreenWidth / 2 - 10 }}
+                  />
+                </View>
+              }
+            </View>
+          </View>
+        </View>
+      </TouchableOpacity>
+    );
+  }
+  const renderAllPost = () => {
+    return (
+      <View>
+        <TextNormal text={t('chat.attachment')} style={{ marginLeft: 10, marginTop: 20 }} />
+
+        <FlatList
+          data={allPost}
+          scrollEnabled
+          numColumns={2}
+          style={{
+            width: ScreenWidth,
+            height: '100%',
+            marginTop: 10,
+          }}
+          onRefresh={() => {
+            setIsFetching(true);
+            getAllPost();
+          }}
+          refreshing={isFetching}
+          keyExtractor={(item) => item._id}
+          renderItem={({ item, index }) => {
+
+            return renderPost(item);
+          }}
+        />
+      </View>
+    );
+  };
   const getProfile = async () => {
     let userInfo = await IALocalStorage.getDetailUserInfo();
     setIsLoading(true);
@@ -71,8 +180,8 @@ const Account = (props) => {
         if (val?.data !== '') {
           setIsLoading(false);
           setData(val);
-        //   userStore.userInfo = val;
-        //   setAvt(val?.avatar);
+          //   userStore.userInfo = val;
+          //   setAvt(val?.avatar);
         } else {
           setIsLoading(false);
           ToastHelper.showError(t('account.getInfoErr'));
@@ -92,12 +201,12 @@ const Account = (props) => {
             onPress
               ? onPress
               : () => {
-                  NavigationService.navigate(ScreenNames.Update, {
-                    key: title,
-                    value: title?.toLowerCase(),
-                    item: hasMoreDesc ? desc : rightTitle,
-                  });
-                }
+                NavigationService.navigate(ScreenNames.Update, {
+                  key: title,
+                  value: title?.toLowerCase(),
+                  item: hasMoreDesc ? desc : rightTitle,
+                });
+              }
           }>
           <View style={styles.nestedContainer}>
             {ico}
@@ -177,8 +286,8 @@ const Account = (props) => {
       } else if (response.customButton) {
         console.log('User tapped custom button: ', response.customButton);
       } else {
-        const source = {uri: response.uri};
-        userStore.userInfo = {...userStore?.userInfo, avatar: source?.uri};
+        const source = { uri: response.uri };
+        userStore.userInfo = { ...userStore?.userInfo, avatar: source?.uri };
         setIsLoading(true);
         Promise.resolve(uploadFileToFireBase(response, data?.id))
           .then(async (val) => {
@@ -192,11 +301,11 @@ const Account = (props) => {
       }
     });
   };
-  const logout = async () =>{
+  const logout = async () => {
     await IALocalStorage.resetLocalStorage();
     NavigationService.navigate(ScreenNames.LoginScreen);
   }
-  const closeDialog = () =>{
+  const closeDialog = () => {
     setModalSelect(null);
     setShowModal(true);
   }
@@ -235,7 +344,7 @@ const Account = (props) => {
             />,
             t('account.name'),
             data?.name || '',
-            () => {},
+            () => { },
           )}
           {renderItem(
             <MaterialCommunityIcons
@@ -245,7 +354,7 @@ const Account = (props) => {
             />,
             t('account.dob'),
             data?.dateOfBirth || '',
-            () => {},
+            () => { },
           )}
           {renderItem(
             <MaterialCommunityIcons
@@ -255,7 +364,7 @@ const Account = (props) => {
             />,
             t('account.phone'),
             data?.phoneNumber,
-            () => {},
+            () => { },
           )}
           {renderItem(
             <MaterialCommunityIcons
@@ -265,7 +374,7 @@ const Account = (props) => {
             />,
             t('account.email'),
             data?.email,
-            () => {},
+            () => { },
           )}
           {renderItem(
             <MaterialCommunityIcons
@@ -275,7 +384,7 @@ const Account = (props) => {
             />,
             t('account.sex'),
             data?.gender,
-            () => {},
+            () => { },
           )}
           {renderItem(
             <Ionicons
@@ -285,7 +394,7 @@ const Account = (props) => {
             />,
             t('account.address'),
             data?.address,
-            () => {},
+            () => { },
           )}
           {renderItem(
             <Ionicons
@@ -295,7 +404,7 @@ const Account = (props) => {
             />,
             t('account.language'),
             data?.language,
-            () => {},
+            () => { },
           )}
         </View>
       </View>
@@ -308,13 +417,11 @@ const Account = (props) => {
         <HeaderFull
           title={t('account.title')}
           hasButton
-          onPress={() => NavigationService.navigate(ScreenNames.Update)}
-          rightIco={
-            <Ionicons name="pencil" size={20} color={colors.blackInput} />
-          }
         />
         <ScrollView nestedScrollEnabled contentContainerStyle={styles.content}>
           {renderMe()}
+
+          {renderAllPost()}
         </ScrollView>
       </SafeAreaView>
       {isLoading && <Loading />}

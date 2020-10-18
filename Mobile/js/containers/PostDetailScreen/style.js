@@ -102,6 +102,8 @@ export const styles = StyleSheet.create({
   },
   contentTextStyle: {
     marginHorizontal: SPACINGS.avg,
+    paddingBottom: 50,
+    paddingTop: 20,
   },
   postImages: {
     width: ScreenWidth,

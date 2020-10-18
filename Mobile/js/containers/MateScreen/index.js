@@ -36,7 +36,7 @@ const MateScreen = (props) => {
     getLiv();
   }, []);
   const getLiv = async () => {
-    firebase.database().ref(Constant.SCHEMA.LIVESTREAM).once('value', async snapshot => {
+    firebase.database().ref(Constant.SCHEMA.LIVESTREAM).on('value', async snapshot => {
       if (snapshot.val() != undefined) {
         let data = Object.values(snapshot.val()) || [];
         if (data && typeof data === 'object' && data?.length >= 0) {
@@ -46,6 +46,7 @@ const MateScreen = (props) => {
             }
           });
         }
+        console.log(JSON.stringify(liv));
       }
     });
   }

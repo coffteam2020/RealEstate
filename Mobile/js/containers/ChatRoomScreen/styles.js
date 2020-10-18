@@ -56,7 +56,7 @@ export const styles = StyleSheet.create({
   },
   textInputStyle: {
     paddingLeft: 10,
-    marginLeft: 52,
+    marginLeft: 20,
     fontSize: 15,
     borderRadius: 14,
     justifyContent: 'center',

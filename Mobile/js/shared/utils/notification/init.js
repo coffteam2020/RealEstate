@@ -79,7 +79,7 @@ export const checkPermission = async () => {
 const displayIncoming = async (message) => {
 	console.log("displayIncoming" + JSON.stringify(message));
 
-	if (message?.[1].includes('VIDEO_CALL')) {
+	if (message?.[1]?.includes('VIDEO_CALL')) {
 		let callOptions = {
 			callerId: '825f4094-a674-4765-96a7-1ac512c02a71', // Important uuid must in this format
 			ios: {

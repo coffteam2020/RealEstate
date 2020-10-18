@@ -47,6 +47,9 @@ export const styles = StyleSheet.create({
   detailContent: {
     display: 'flex',
     flexDirection: 'row',
+    alignContent: 'center',
+    alignItems: 'center',
+    marginTop: 10,
     // margin: SPACINGS.sSmall
   },
   buttonEitWrapper: {

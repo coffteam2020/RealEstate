@@ -5,7 +5,7 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { StatusBar, TouchableOpacity, View, Platform, Alert } from 'react-native';
-import { GiftedChat } from 'react-native-gifted-chat';
+import { Bubble, GiftedChat } from 'react-native-gifted-chat';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { withTheme } from 'react-native-paper';
 import { useNavigationParam } from 'react-navigation-hooks';
@@ -22,6 +22,7 @@ import { StringHelper } from '../../shared/utils/helper/stringHelper';
 import icons from '../../shared/utils/icons/icons';
 import ImagePicker from 'react-native-image-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import GetLocation from 'react-native-get-location';
 import { SPACINGS } from '../../themes';
 import { containerStyle } from '../../themes/styles';
 import { styles } from './styles';
@@ -34,6 +35,7 @@ import { useStores } from '../../store/useStore';
 import { ScreenNames } from '../../route/ScreenNames';
 import { colors } from '../../shared/utils/colors/colors';
 import TextNormal from '../../shared/components/Text/TextNormal';
+import { LocationView } from './LocationView';
 
 var uuid = require('uuid');
 let childTemp = '';
@@ -64,7 +66,18 @@ const ChatRoomScreen = (props) => {
   };
 
   const participants = [];
-
+  const getLocation = async () => {
+    return new Promise((res, rej) => {
+      GetLocation.getCurrentPosition({
+        enableHighAccuracy: true,
+        timeout: 15000,
+      }).then(a => {
+        res(a);
+      }).catch(e => {
+        rej(e);
+      })
+    })
+  }
   const [child, setChild] = useState('');
   // Standard data user
   const [owner, setOwner] = useState({});
@@ -192,14 +205,14 @@ const ChatRoomScreen = (props) => {
             //   hasToken: true,
             // })
             //   .then((val) => {
-                
+
             //   })
             //   .catch(() => {
             //     ToastHelper.showError(
             //       'Opps, error while trying to touch your recipient wake up but failed. Dont worry, video call request still has been sent successful',
             //     );
             //   });
-              NavigationService.navigate(ScreenNames.VideoCall, { item, userDetail, toUserTemp })
+            NavigationService.navigate(ScreenNames.VideoCall, { item, userDetail, toUserTemp })
           }}
           style={{
             width: 50,
@@ -207,20 +220,20 @@ const ChatRoomScreen = (props) => {
             alignItems: 'flex-end',
             alignContent: 'flex-end',
           }}>
-          <TextNormal text="Call" />
+          <TextNormal text={t('chat.call')} />
         </TouchableOpacity>
       </View>
     );
   };
 
   const onSend = (messages = [], image) => {
-    if (
-      !image &&
-      messages.length > 0 &&
-      messages[0]?.text.replace(' ', '') === ''
-    ) {
-      return;
-    }
+    // if (
+    //   !image &&
+    //   messages.length > 0
+    // ) {
+    //   console.log("====");
+    //   return;
+    // }
     messages[0] = {
       _id: uuid.v4(),
       ...messages[0],
@@ -419,15 +432,69 @@ const ChatRoomScreen = (props) => {
     return (
       <View style={styles.avatarSendContainer}>
         <TouchableOpacity
-          onPress={() => checkImage()}
+          onPress={() => {
+            Alert.alert(t('chat.title'), '', [
+              {
+                text: 'Image',
+                onPress: () => { checkImage() }
+              },
+              {
+                text: 'Camera',
+                onPress: () => { checkCamera() }
+              },
+              {
+                text: t('location.to'),
+                onPress: () => {
+                  getLocation().then(val => {
+                    console.log(JSON.stringify(val));
+                    let messages = [
+                      {
+                        _id: uuid.v4(),
+                        userId: userDetail?.id,
+                        timeInMillosecond: new Date().getTime(),
+                        createdAt: moment().utc().format('YYYY-MM-DDTHH:mm:ssZ'),
+                        createdOn: moment().format("YYYY-MM-DD'T'HH:mm:ssZ"),
+                        modifiedOn: moment().format("YYYY-MM-DD'T'HH:mm:ssZ"),
+                        text: 'Hi',
+                        image: '',
+                        location: {
+                          latitude: val?.latitude,
+                          longitude: val?.longitude
+                        },
+                        type: 'maps',
+                        toUserId: toUserTemp?.id,
+                        toUserDetail: {
+                          id: toUserTemp?.id,
+                          name: toUserTemp?.name || '',
+                          avatar:
+                            toUserTemp?.avatar || Constant.MOCKING_DATA.ANY_AVATAR,
+                        },
+                        user: {
+                          name: userDetail?.name || '',
+                          avatar:
+                            userDetail?.avatar || Constant.MOCKING_DATA.ANY_AVATAR,
+                          _id: user?.userId,
+                        },
+                      },
+                    ];
+                    onSend(messages, undefined);
+                  })
+                }
+              },
+              {
+                text: t('common.cancel'),
+                onPress: () => { }
+              }
+            ])
+          }}
           style={{ padding: 5, zIndex: 10 }}>
-          <Ionicons name="ios-images" color={colors.black_rect} size={30} />
+          <Ionicons name="add-circle-sharp" color={colors.black_rect} size={30} />
         </TouchableOpacity>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={{ marginLeft: SPACINGS.default, zIndex: 10 }}
           onPress={() => checkCamera()}>
           <Ionicons name="ios-camera" color={colors.black_rect} size={30} />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     );
   };
@@ -468,6 +535,13 @@ const ChatRoomScreen = (props) => {
             textInputStyle={styles.textInputStyle}
             textStyle={styles.textSendStyle}
             dateFormat={'ddd LT'}
+            renderBubble={props => {
+              const { currentMessage } = props;
+              if (currentMessage?.location) {
+                return <LocationView location={currentMessage?.location} />;
+              }
+              return <Bubble {...props} />;
+            }}
             imageStyle={{ backgroundColor: 'white' }}
             imageProps={{ backgroundColor: 'white' }}
             renderSend={renderSend}

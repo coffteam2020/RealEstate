@@ -335,7 +335,8 @@
     "to": "Add location",
     "motto": "Real Estate finds the accommodation that is most convenient for you by entering your work and your another address",
     "currentLocation": "Use current location",
-    "submit": "Submit"
+    "submit": "Submit",
+    "me": "Im here"
   },
   "mate": {
     "title": "Your followers",
@@ -429,5 +430,18 @@
     "restaurantTitle": "Restaurants List",
     "cafeTitle": "Cafe List",
     "snacksTitle": "Snack List"
+  },
+  "chat": {
+    "title": "Choose one of them to send",
+    "call": "Call",
+    "distance": "Distance from your location: ",
+    "attachment": "Posts",
+    "del": "You want to delete this post?",
+    "delOk": "Deleted successfully",
+    "goLive": "Go live",
+    "motto": "Search channel by id, name, tags ..",
+    "category": "Category",
+    "note": "Note",
+    "tag": "Tags"
   }
 }

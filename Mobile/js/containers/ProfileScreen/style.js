@@ -1,15 +1,15 @@
-import {StyleSheet} from 'react-native';
-import {colors} from '../../shared/utils/colors/colors';
-import {ScreenHeight, ScreenWidth} from '../../shared/utils/dimension/Divices';
-import {SPACINGS} from '../../themes';
+import { StyleSheet } from 'react-native';
+import { colors } from '../../shared/utils/colors/colors';
+import { ScreenHeight, ScreenWidth } from '../../shared/utils/dimension/Divices';
+import { SPACINGS } from '../../themes';
 
 export const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
   },
   content: {
-	alignItems: 'center',
-	paddingBottom: 50
+    alignItems: 'center',
+    paddingBottom: 50
   },
   location: {
     height: ScreenHeight / 2,
@@ -22,6 +22,11 @@ export const styles = StyleSheet.create({
   },
   fieldEmailPhone: {
     borderRadius: 30,
+  },
+  postImages: {
+    width: ScreenWidth / 2 - 10,
+    height: ScreenWidth / 2 - 10,
+    marginLeft: 20
   },
   search: {
     flexDirection: 'row',

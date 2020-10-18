@@ -39,6 +39,7 @@ const ProfileScreen = (props) => {
   const { userStore } = useStores();
   const [isLoading, setIsLoading] = useState(false);
   const [avt, setAvt] = useState('');
+  const [di, setDi] = useState(-1);
   const [modelSelect, setModalSelect] = useState('');
   const [showModal, setShowModal] = useState(false);
 
@@ -87,7 +88,7 @@ const ProfileScreen = (props) => {
       <View>
         <TouchableOpacity
           style={styles.itemContainer}
-          onPress={
+          onPress={() => {
             onPress
               ? onPress
               : () => {
@@ -97,6 +98,12 @@ const ProfileScreen = (props) => {
                   item: hasMoreDesc ? desc : rightTitle,
                 });
               }
+            if (di !== title) {
+              setDi(title);
+            } else {
+              setDi(-1);
+            }
+          }
           }>
           <View style={styles.nestedContainer}>
             {ico}
@@ -121,7 +128,7 @@ const ProfileScreen = (props) => {
           </View>
           <View style={styles.nestedContainer}>
             <TextNormal
-              text={rightTitle}
+              text={di === title ? "🌟🌟🌟🌟🌟🌟🌟" : rightTitle}
               style={[
                 containerStyle.textContent,
                 containerStyle.defaultTextMarginEnd,
@@ -242,11 +249,11 @@ const ProfileScreen = (props) => {
           ]}
         />
         <View style={{ flexDirection: 'row', justifyContent: 'center', alignContent: 'center', alignItems: 'center', alignSelf: 'center', marginTop: 10, marginLeft: -5 }}>
-          <View style={{width: 60, height: 40}}>
+          <View style={{ width: 60, height: 40 }}>
             <LottieView
               autoPlay
               loop={false}
-              style={{width: 60, height: 40}}
+              style={{ width: 60, height: 40 }}
               source={require('../../../assets/imgs/wallet.json')}
             />
           </View>
@@ -254,7 +261,7 @@ const ProfileScreen = (props) => {
             text={`0 🏵 (${userStore?.userInfo?.currency})`}
             style={[
               containerStyle.textContentSmall,
-              {marginLeft: -10, color: 'grey'}
+              { marginLeft: -10, color: 'grey' }
             ]}
           />
         </View>

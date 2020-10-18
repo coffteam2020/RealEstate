@@ -93,6 +93,8 @@ class VideoCallScreen extends Component {
       owner: {},
       like: -1,
       isOwner: false,
+      showGift: false,
+      gift: -1,
       messages: [],
       password: '',
       hasVol: true,
@@ -147,10 +149,18 @@ class VideoCallScreen extends Component {
           uid: data?.uid,
 
         }, () => {
+          console.log(this.state.like);
+          console.log(data.like);
           if ((data?.like || 0) !== this.state.like) {
             this.setState({
               like: data?.like,
-              showHeart: true
+              showHeart: data?.like !== this.state.like
+            })
+          }
+          if ((data?.gift || 0) !== this.state.gift) {
+            this.setState({
+              gift: data?.gift,
+              showGift: data?.gift !== this.state.gift
             })
           }
           if (this.state.isOwner && this.state.messages[this.state.messages.length - 1]?.data?.includes('has taken a screenshot')) {
@@ -789,7 +799,7 @@ class VideoCallScreen extends Component {
           {this.renderMute()}
           {/* {this.renderBackground()} */}
           {this.renderParticipiants()}
-          <TouchableOpacity delayPressIn={0} style={{ zIndex: 1001, position: 'absolute', bottom: 50, right: 0, width: 100, height: 100 }} onPress={async () => {
+          <TouchableOpacity delayPressIn={0} style={{ zIndex: 1001, position: 'absolute', bottom: 50, right: 0, width: 80, height: 100,}} onPress={async () => {
             this.setState({ showHeart: true });
             await firebase.database().ref(Constant.SCHEMA.LIVESTREAM).child(keyRoom).once('value', snapshot => {
               const data = snapshot.val() || [];
@@ -804,13 +814,37 @@ class VideoCallScreen extends Component {
               source={require('../../../assets/imgs/heart.json')}
             />
           </TouchableOpacity>
+          <TouchableOpacity delayPressIn={0} style={{ zIndex: 1001, position: 'absolute', bottom: 50, left: 0, width: 80, height: 100 }} onPress={async () => {
+            this.setState({ showGift: true });
+            await firebase.database().ref(Constant.SCHEMA.LIVESTREAM).child(keyRoom).once('value', snapshot => {
+              const data = snapshot.val() || [];
+              let g = data?.gift || 0;
+              g = g + 1;
+              FirebaseService.updateItem(Constant.SCHEMA.LIVESTREAM, keyRoom, { ...data, gift: g });
+            })
+          }}>
+            <LottieView
+              autoPlay
+              loop={false}
+              source={require('../../../assets/imgs/gift.json')}
+            />
+          </TouchableOpacity>
           {this.state.showHeart ?
-            <TouchableOpacity style={{ zIndex: 1000, position: 'absolute', top: ScreenHeight / 2, alignContent: 'center', alignItems: 'center', alignSelf: 'center', width: 400, height: 400, borderRadius: 200 }}>
+            <TouchableOpacity style={{ zIndex: 1000, position: 'absolute', top: ScreenHeight / 4, alignContent: 'center', alignItems: 'center', alignSelf: 'center', width: 400, height: 400, borderRadius: 200 }}>
               <LottieView
                 autoPlay
                 onAnimationFinish={() => { this.setState({ showHeart: false }) }}
                 loop={false}
                 source={require('../../../assets/imgs/center-heart.json')}
+              />
+            </TouchableOpacity> : null}
+            {this.state.showGift ?
+            <TouchableOpacity style={{ zIndex: 1000, position: 'absolute', top: ScreenHeight / 4, alignContent: 'center', alignItems: 'center', alignSelf: 'center', width: 400, height: 400, borderRadius: 200 }}>
+              <LottieView
+                autoPlay
+                onAnimationFinish={() => { this.setState({ showGift: false }) }}
+                loop={false}
+                source={require('../../../assets/imgs/gift.json')}
               />
             </TouchableOpacity> : null}
           <ScrollView

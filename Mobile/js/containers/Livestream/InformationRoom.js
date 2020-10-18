@@ -21,6 +21,7 @@ import TextInputFlat from '../../shared/components/TextInput/TextInputFlat';
 import GradientButton from '../../shared/components/Buttons/GradientButton';
 import Loading from '../../shared/components/Loading';
 import { colors } from '../../shared/utils/colors/colors';
+import { useTranslation } from 'react-i18next';
 
 const InformationRoom = (props) => {
   const {colorsApp} = props.theme;
@@ -30,7 +31,7 @@ const InformationRoom = (props) => {
   const [note, setNote] = useState('');
   const [tags, setTags] = useState('');
   const [password, setPassword] = useState('');
-
+  const {t}= useTranslation();
   useEffect(() => {
     TrackPlayer.stop();
   }, []);
@@ -107,7 +108,7 @@ const InformationRoom = (props) => {
               onChangeText={(text) => {
                 setRoomName(text);
               }}
-              text={'Title'}
+              text={t('property.title')}
               props={props}
               style={style.fieldItem}
             />
@@ -115,7 +116,7 @@ const InformationRoom = (props) => {
               onChangeText={(text) => {
                 setCategory(text);
               }}
-              text={'Category (Sport, Education ...)'}
+              text={t('chat.category')}
               props={props}
               style={style.fieldItem}
             />
@@ -123,7 +124,7 @@ const InformationRoom = (props) => {
               onChangeText={(text) => {
                 setNote(text);
               }}
-              text={'Especially note (for individual, for my class, ...)'}
+              text={t('chat.note')}
               props={props}
               style={style.fieldItem}
             />
@@ -131,20 +132,20 @@ const InformationRoom = (props) => {
               onChangeText={(text) => {
                 setTags(text);
               }}
-              text={'Tags (#gamefortoday, #playwithme ...)'}
+              text={t('chat.tag')}
               props={props}
               style={style.fieldItem}
             />
-            <TextInputFlat
+            {/* <TextInputFlat
               onChangeText={(text) => {
                 setPassword(text);
               }}
               text={'Password (if you really limit joiner)'}
               props={props}
               style={style.fieldItem}
-            />
+            /> */}
             <GradientButton
-              text={'Create'}
+              text={t('common.confirm')}
               onPress={() => onCreateLivestream()}
               style={{marginTop: 20}}
             />

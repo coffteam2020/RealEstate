@@ -103,13 +103,14 @@ const MessageScreen = (props) => {
     setSearchText(text);
     const dataFilter = messagesList;
     if (text && text != '') {
-      userStore.setMessages(
-        dataFilter.filter((item) =>
-          item?.toUserDetail?.name?.toLowerCase().includes(text?.toLowerCase()),
-        ),
-      );
+      userStore.messages = 
+        dataFilter.filter((item) => 
+          item?.toUserDetail?.name?.toLowerCase().includes(text?.toLowerCase()) ||
+          item?.user?.name?.toLowerCase().includes(text?.toLowerCase())
+          )
+        
     } else {
-      userStore.setMessages(messagesTList);
+      userStore.messages =  messagesTList;
     }
   };
 
@@ -225,7 +226,7 @@ const MessageScreen = (props) => {
           hideText
           placeHolder={t('message.search')}
           props={props}
-          // onChangeText={(text) => onSearchText(text)}
+          onChangeText={(text) => onSearchText(text)}
           value={searchText}
           style={styles.textInputHeader}
           textInputStyle={styles.textInputHeader}

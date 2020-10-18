@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StatusBar,
   View,
@@ -6,42 +6,43 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import {styles as style, styles} from './style';
-import {withTheme} from 'react-native-paper';
+import { styles as style, styles } from './style';
+import { withTheme } from 'react-native-paper';
 import TextNormal from '../../shared/components/Text/TextNormal';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import Loading from '../../shared/components/Loading';
 import DialogInput from 'react-native-dialog-input';
-import {NavigationService} from '../../navigation';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { NavigationService } from '../../navigation';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Back from '../../shared/components/Icons/Back';
-import {colors} from '../../shared/utils/colors/colors';
-import {ScreenNames} from '../../route/ScreenNames';
+import { colors } from '../../shared/utils/colors/colors';
+import { ScreenNames } from '../../route/ScreenNames';
 import AxiosFetcher from '../../api/AxiosFetch';
 import IALocalStorage from '../../shared/utils/storage/IALocalStorage';
 import TrackPlayer from 'react-native-track-player';
-import {firebase} from '@react-native-firebase/database';
+import { firebase } from '@react-native-firebase/database';
 import Constant from '../../shared/utils/constant/Constant';
-import {FlatList} from 'react-native-gesture-handler';
-import {ScreenWidth} from '../../shared/utils/dimension/Divices';
+import { FlatList } from 'react-native-gesture-handler';
+import { ScreenWidth } from '../../shared/utils/dimension/Divices';
 import FastImage from 'react-native-fast-image';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Empty from '../../shared/components/Empty';
 import TextInputFlat from '../../shared/components/TextInput/TextInputFlat';
-import {useStores} from '../../store/useStore';
-import {ToastHelper} from '../../shared/components/ToastHelper';
+import { useStores } from '../../store/useStore';
+import { ToastHelper } from '../../shared/components/ToastHelper';
 import LogManager from '../../shared/utils/logging/LogManager';
 import { containerStyle } from '../../themes/styles';
 const IMG =
   'https://firebasestorage.googleapis.com/v0/b/stayalone-prod.appspot.com/o/blur.jpg?alt=media&token=23d5379e-8c8f-4f0b-8926-59811eeb9ce4';
 const Livestream = (props) => {
-  const {colorsApp} = props.theme;
+  const { colorsApp } = props.theme;
   const [isLoading, setIsLoading] = useState(false);
   const [] = useState('');
+  const { t } = useTranslation();
   const [livestream, setLivestreamRooms] = useState([]);
   const [livestreamT, setLivestreamRoomsT] = useState([]);
-  const {userStore} = useStores();
+  const { userStore } = useStores();
   const [pass, setPass] = useState('');
   const [dialog, showDialog] = useState(false);
   const [tickLivestream, setTickLivestream] = useState(null);
@@ -65,7 +66,7 @@ const Livestream = (props) => {
       .then(async (val) => {
         userStore.setItemsBag(val || []);
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
   const getLivestreamingChannel = async () => {
@@ -80,7 +81,7 @@ const Livestream = (props) => {
   };
 
   const onCreateLivestream = async () => {
-	NavigationService.navigate(ScreenNames.InformationRoom);
+    NavigationService.navigate(ScreenNames.InformationRoom);
   };
 
   const renderHeader = () => {
@@ -89,11 +90,11 @@ const Livestream = (props) => {
         <View style={style.header}>
           <TouchableOpacity
             onPress={() => NavigationService.goBack()}
-            style={{flexDirection: 'row'}}>
+            style={{ flexDirection: 'row' }}>
             <Back
               props={props}
               onPress={() => NavigationService.goBack()}
-              style={{marginLeft: 15}}
+              style={{ marginLeft: 15 }}
             />
           </TouchableOpacity>
           <TextNormal
@@ -101,20 +102,20 @@ const Livestream = (props) => {
             text={'Live stream'}
             style={[
               containerStyle.textHeader,
-              {color: colors.textBlue, textAlignVertical: 'center'},
+              { color: colors.textBlue, textAlignVertical: 'center' },
             ]}
           />
           <TouchableOpacity
             onPress={() => {
               onCreateLivestream();
             }}
-            style={{flexDirection: 'row', marginEnd: 10, padding: 5}}>
+            style={{ flexDirection: 'row', marginEnd: 10, padding: 5 }}>
             <TextNormal
               props={props}
-              text={'Go live'}
+              text={t('chat.goLive')}
               style={[
                 containerStyle.textContent,
-                {color: colors.textBlue, textAlignVertical: 'center'},
+                { color: colors.textBlue, textAlignVertical: 'center' },
               ]}
             />
           </TouchableOpacity>
@@ -160,19 +161,19 @@ const Livestream = (props) => {
       (rateCount === 0
         ? '0.6'
         : rateCount < 20
-        ? '0.8'
-        : rateCount < 50
-        ? '0.8'
-        : '1') +
+          ? '0.8'
+          : rateCount < 50
+            ? '0.8'
+            : '1') +
       ')';
     return (
       <TouchableOpacity
         onPress={() => {
           onJoinLivestream(item);
         }}
-        style={[styles.item, {marginLeft: index % 2 === 0 ? 3 : -5}]}>
+        style={[styles.item, { marginLeft: index % 2 === 0 ? 3 : -5 }]}>
         <FastImage
-          source={{uri: item?.ownerUserId?.avatar || IMG}}
+          source={{ uri: item?.ownerUserId?.avatar || IMG }}
           style={{
             height: (ScreenWidth - 30) / 2,
             width: (ScreenWidth - 30) / 2,
@@ -185,12 +186,11 @@ const Livestream = (props) => {
         <View style={styles.count}>
           <Ionicons name="ios-eye" size={20} color={'white'} />
           <TextNormal
-            text={` ${
-              item?.status === 'END' ? 0 : item?.participiants?.length || 0
-            }`}
+            text={` ${item?.status === 'END' ? 0 : item?.participiants?.length || 0
+              }`}
             style={[
               containerStyle.textDefault,
-              {color: colors.whiteBackground},
+              { color: colors.whiteBackground },
             ]}
           />
         </View>
@@ -209,7 +209,7 @@ const Livestream = (props) => {
             text={`#${item?.uid}`}
             style={[
               containerStyle.textContentSmall,
-              {color: colors.whiteBackground},
+              { color: colors.whiteBackground },
             ]}
           />
         </View>
@@ -217,14 +217,14 @@ const Livestream = (props) => {
           <TextNormal
             numberOfLines={3}
             text={`${channelName}`}
-            style={[containerStyle.textHeader, {color: colors.whiteBackground}]}
+            style={[containerStyle.textHeader, { color: colors.whiteBackground }]}
           />
           <TextNormal
             numberOfLines={3}
             text={`${item?.ownerUserId?.name || ''} `}
             style={[
               containerStyle.textDefault,
-              {color: colors.whiteBackground},
+              { color: colors.whiteBackground },
             ]}
           />
           {item?.tags && item?.tags?.length > 0 ? (
@@ -233,26 +233,26 @@ const Livestream = (props) => {
               text={tags || ''}
               style={[
                 containerStyle.textContentSmall,
-                {color: colors.whiteBackground, width: ScreenWidth * 0.25},
+                { color: colors.whiteBackground, width: ScreenWidth * 0.25 },
               ]}
             />
           ) : (
-            <TextNormal
-              numberOfLines={3}
-              text={item?.ownerUserId?.address || ''}
-              style={[
-                containerStyle.textContentSmall,
-                {color: colors.whiteBackground},
-              ]}
-            />
-          )}
+              <TextNormal
+                numberOfLines={3}
+                text={item?.ownerUserId?.address || ''}
+                style={[
+                  containerStyle.textContentSmall,
+                  { color: colors.whiteBackground },
+                ]}
+              />
+            )}
         </View>
       </TouchableOpacity>
     );
   };
 
   return (
-    <View style={[{backgroundColor: colors.pinkBackground}]}>
+    <View style={[{ backgroundColor: colors.pinkBackground }]}>
       <StatusBar barStyle={colorsApp.statusBar} />
       <SafeAreaView>
         {renderHeader()}
@@ -294,21 +294,21 @@ const Livestream = (props) => {
                 }
               }}
               props={props}
-              style={{width: '90%', alignSelf: 'center', marginBottom: 20}}
-              placeholder="Search channel by id, name, tags ..."
+              style={{ width: '90%', alignSelf: 'center', marginBottom: 20 }}
+              placeholder={t('chat.motto')}
             />
           }
           {livestream?.filter((item) => item?.status != 'END')?.length === 0 ? (
             <Empty />
           ) : (
-            <FlatList
-              numColumns={2}
-              showsVerticalScrollIndicator={false}
-              data={livestream?.filter((item) => item?.status != 'END')}
-              renderItem={({item, index}) => renderItem(item, index)}
-              keyExtractor={(item, index) => index + ''}
-            />
-          )}
+              <FlatList
+                numColumns={2}
+                showsVerticalScrollIndicator={false}
+                data={livestream?.filter((item) => item?.status != 'END')}
+                renderItem={({ item, index }) => renderItem(item, index)}
+                keyExtractor={(item, index) => index + ''}
+              />
+            )}
         </KeyboardAwareScrollView>
         <DialogInput
           isDialogVisible={dialog}
@@ -327,7 +327,7 @@ const Livestream = (props) => {
               );
             }
           }}
-          closeDialog={() => {}}
+          closeDialog={() => { }}
         />
         {isLoading ? <Loading /> : null}
       </SafeAreaView>

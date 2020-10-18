@@ -142,7 +142,7 @@ const PostDetailScreen = (props) => {
                 style={styles.postImages}
               />)
             }) :
-            <Video paused={true} playWhenInactive={false} playInBackground={false} controls={true} source={{ uri: post?.images?.[0] }} style={{ width: ScreenWidth / 2, height: ScreenWidth / 2 }} />
+            <Video paused={true} playWhenInactive={false} playInBackground={false} controls={true} source={{ uri: post?.images?.[0] }} style={{ width: ScreenWidth / 2 }} />
           }
         </View>
       </View>
