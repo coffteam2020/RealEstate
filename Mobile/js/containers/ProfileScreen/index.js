@@ -9,6 +9,7 @@ import { containerStyle } from '../../themes/styles';
 import { useTranslation } from 'react-i18next';
 import { useStores } from '../../store/useStore';
 import { colors } from '../../shared/utils/colors/colors';
+import { firebase } from '@react-native-firebase/messaging';
 import { ScrollView } from 'react-native-gesture-handler';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Fontisto from 'react-native-vector-icons/Fontisto';
@@ -191,6 +192,21 @@ const ProfileScreen = (props) => {
     });
   };
   const logout = async () => {
+    const fcmToken = await firebase.messaging().getToken();
+    if (fcmToken) {
+      console.log('Token FCM: ' + fcmToken);
+      AxiosFetcher({
+        method: 'POST',
+        url: 'user/' + userStore?.userInfo?.id + '/fcmtoken',
+        data: `${fcmToken}`,
+        hasToken: true,
+      })
+        .then(async (val) => {
+        })
+        .catch(() => {
+
+        });
+    }
     await IALocalStorage.resetLocalStorage();
     NavigationService.navigate(ScreenNames.LoginScreen);
   }

@@ -13,7 +13,7 @@ import { initialMode } from 'react-native-dark-mode';
 import { Appearance } from 'react-native-appearance';
 import { CustomDarkTheme, CustomLightTheme } from './js/themes/index';
 import { NavigationService } from './js/navigation';
-import NetInfo from '@react-native-community/netinfo';
+// import NetInfo from '@react-native-community/netinfo';
 import notifee from '@notifee/react-native';
 import firebase from '@react-native-firebase/app';
 import ModalConnection from './js/shared/components/Modal/ModalConnection';
@@ -60,11 +60,11 @@ const App = () => {
     Text.defaultProps.allowFontScaling = false;
   };
   const netWorkChange = () => {
-    NetInfo.addEventListener((state) => {
-      console.log('Connection type device with: ', state.type);
-      console.log('Device is being connected? ', state.isConnected);
-      setIsVisible(!state.isConnected);
-    });
+    // NetInfo.addEventListener((state) => {
+    //   console.log('Connection type device with: ', state.type);
+    //   console.log('Device is being connected? ', state.isConnected);
+    //   setIsVisible(!state.isConnected);
+    // });
   };
   const connectFirebase = async () => {
     // Clear room local

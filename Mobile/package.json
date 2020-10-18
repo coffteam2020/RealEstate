@@ -17,7 +17,7 @@
     "@react-native-community/datetimepicker": "^2.6.2",
     "@react-native-community/google-signin": "^4.0.0",
     "@react-native-community/masked-view": "^0.1.7",
-    "@react-native-community/netinfo": "5.0.0",
+    "@react-native-community/netinfo": "^5.9.7",
     "@react-native-community/push-notification-ios": "^1.2.0",
     "@react-native-community/slider": "^3.0.3",
     "@react-native-community/toolbar-android": "^0.1.0-rc.2",

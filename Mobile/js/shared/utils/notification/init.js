@@ -2,15 +2,18 @@
 /* eslint-disable no-unused-vars */
 import { firebase } from '@react-native-firebase/messaging';
 import LogManager from '../logging/LogManager';
-import { Platform } from 'react-native';
+import { AppState, Platform } from 'react-native';
 import IALocalStorage from '../storage/IALocalStorage';
 import PushNotification from 'react-native-push-notification';
 import { Notifications, NotificationAction, NotificationCategory } from 'react-native-notifications';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import notifee from '@notifee/react-native';
 import RNVoipCall, { RNVoipPushKit } from 'react-native-voip-call';
+import { NavigationService } from '../../../navigation';
+import { ScreenNames } from '../../../route/ScreenNames';
 
 let notificationId = '';
+let uid = '';
 export const notificationInitialize = async (store, currentScreen) => {
 	checkPermission();
 	registerNotificationInBackground();
@@ -74,31 +77,57 @@ export const checkPermission = async () => {
 };
 
 const displayIncoming = async (message) => {
-	if (message?.notification?.body?.includes('video call')) {
+	console.log("displayIncoming" + JSON.stringify(message));
+
+	if (message?.[1].includes('VIDEO_CALL')) {
 		let callOptions = {
 			callerId: '825f4094-a674-4765-96a7-1ac512c02a71', // Important uuid must in this format
 			ios: {
-				phoneNumber: '12344', // Caller Mobile Number
-				name: 'Real Estate Video Calling', // caller Name
+				phoneNumber: '', // Caller Mobile Number
+				name: message?.[0] || `${'Your friend'} is calling you`, // caller Name
 				hasVideo: true
 			},
 			android: {
-				ringtuneSound: true, // defualt true
+				ringtuneSound: false, // defualt true
 				ringtune: 'ringtune', // add file inside Project_folder/android/app/res/raw
 				duration: 20000, // defualt 30000
 				vibration: true, // defualt is true
-				channel_name: 'call1asd', // 
+				channel_name: 'real_estate', // 
 				notificationId: 1121,
-				notificationTitle: 'Incomming Call',
-				notificationBody: 'Some One is Calling...',
+				notificationTitle: 'Incomming Real Estate Call',
+				notificationBody: message?.[0] || `${'Your friend'} is calling you`, // caller Name
 				answerActionTitle: 'Answer',
 				declineActionTitle: 'Decline',
 			}
 		}
 
 		RNVoipCall.displayIncomingCall(callOptions).then((data) => {
-			console.log(data)
+			console.log("displayIncomingCall" + JSON.stringify(data));
 		}).catch(e => console.log(e))
+		//app open Automatically when Call recived
+		RNVoipCall.onCallOpenAppEvent(event => {
+			console.log("onCallOpenAppEvent" + JSON.stringify(event));
+		});
+		// on click call Notification
+		RNVoipCall.onCallNotificationOpen(event => {
+			console.log("onCallNotificationOpen" + JSON.stringify(event));
+		});
+		RNVoipCall.onCallAnswer(data => {
+			console.log("onCallAnswer" + JSON.stringify(data));
+			RNVoipCall.endCall('825f4094-a674-4765-96a7-1ac512c02a71'); // End specific Call
+			RNVoipCall.endAllCalls(); // End All Calls
+			NavigationService.navigate(ScreenNames.VideoCall, { url: message?.[2] });
+		});
+		RNVoipCall.onEndCall(data => {
+			RNVoipCall.endCall('825f4094-a674-4765-96a7-1ac512c02a71'); // End specific Call
+			RNVoipCall.endAllCalls(); // End All Calls
+			console.log(data);
+		});
+		// missed call notification taped
+		RNVoipCall.onMissedCallOpen(event => {
+			RNVoipCall.endCall('825f4094-a674-4765-96a7-1ac512c02a71'); // End specific Call
+			RNVoipCall.endAllCalls(); // End All Calls
+		});
 	}
 }
 
@@ -125,21 +154,42 @@ const onDisplayNotification = async (notification) => {
 	} else {
 		return;
 	}
-	console.log(JSON.stringify(notification));
+	// console.log(JSON.stringify(notification));
 	// Create a channel
 	const channelId = await notifee.createChannel({
 		id: 'default',
-		name: 'StayAlone Channel',
+		name: 'Real Estate Channel',
 	});
+	try {
+		const body = notification?.notification?.body;
+		// console.log("body" + JSON.stringify(body));
+		console.log(body);
+		var a  = body?.split('#') || [];
+		console.log(a);
+		if (a[1]) {
+			if (a?.[1].includes('MESSAGE')) {
+				// Display a notification
+				await notifee.displayNotification({
+					title: 'Real Estate 🎗',
+					body: a?.[0] || 'You have a new chat message, check it out!',
+					android: {
+						channelId,
+					},
+				});
+			} else if (a?.[1].includes('VIDEO_CALL')) {
+				await notifee.displayNotification({
+					title: 'Real Estate',
+					body: a?.[0] || 'You have a new video call, check it out!',
+					android: {
+						channelId,
+					},
+				});
+				displayIncoming(a);
+			}
+		}
+	} catch (err) {
 
-	// Display a notification
-	await notifee.displayNotification({
-		title: notification?.data?.notification?.title || notification?.notification?.title || notification?.title || 'StayAlone',
-		body: notification?.data?.notification?.body || notification?.notification?.body || notification?.body || 'New notification, check it out!',
-		android: {
-			channelId,
-		},
-	});
+	}
 };
 
 const registerHearingNotification = async (store, currentScreen) => {

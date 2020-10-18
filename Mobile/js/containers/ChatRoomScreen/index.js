@@ -73,7 +73,7 @@ const ChatRoomScreen = (props) => {
   const notifyToUserId = (idOwner, id, nameOwner) => {
     AxiosFetcher({
       method: 'POST',
-      url: '/api/user/' + idOwner + '/sendNotification',
+      url: 'user/' + idOwner + '/sendNotification',
       data: {
         // messageType: 'NOTIFICATION',
         // message: `You have a message ${nameOwner ? 'from ' + nameOwner : ''}`,
@@ -81,11 +81,7 @@ const ChatRoomScreen = (props) => {
         "fromUserAvatar": "",
         "fromUserId": idOwner,
         "fromUserName": nameOwner,
-        "message": JSON.stringify({
-          messageType: 'MESSAGES',
-          message: `You have a new message ${nameOwner ? 'from ' + nameOwner : ''}`,
-          receiverUserId: id,
-        }),
+        "message": `You have a new message ${nameOwner ? 'from ' + nameOwner : ''}#MESSAGE`,
         "receiverUserId": id
       },
       hasToken: true,
@@ -134,17 +130,17 @@ const ChatRoomScreen = (props) => {
   }, []);
 
   const getInfoItem = async () => {
-    const userInfoId = await IALocalStorage.getUserInfo();
-    AxiosFetcher({
-      method: 'GET',
-      data: undefined,
-      url: `/api/person/${userInfoId?.id}/itemsuser`,
-      hasToken: true,
-    })
-      .then(async (val) => {
-        userStore.setItemsBag(val || []);
-      })
-      .catch(() => { });
+    // const userInfoId = await IALocalStorage.getUserInfo();
+    // AxiosFetcher({
+    //   method: 'GET',
+    //   data: undefined,
+    //   url: `/api/person/${userInfoId?.id}/itemsuser`,
+    //   hasToken: true,
+    // })
+    //   .then(async (val) => {
+    //     userStore.setItemsBag(val || []);
+    //   })
+    //   .catch(() => { });
   };
 
   const getMessages = async (child) => {
@@ -177,7 +173,33 @@ const ChatRoomScreen = (props) => {
         <TopUserItem onItemPress={() => { }} item={item} />
         <TouchableOpacity
           onPress={() => {
-            NavigationService.navigate(ScreenNames.VideoCall, { item })
+
+            // AxiosFetcher({
+            //   method: 'POST',
+            //   url: 'user/' + userDetail?.id + '/sendNotification',
+            //   data: {
+            //     "fromUserAvatar": "",
+            //     "fromUserId": userDetail?.id,
+            //     "fromUserName": userDetail?.name,
+            //     "message": JSON.stringify({
+            //       messageType: 'VIDEO_CALL',
+            //       message: `You have a new video calling ${userDetail?.name}`,
+            //       receiverUserId: toUserTemp?.id,
+
+            //     }),
+            //     "receiverUserId": toUserTemp?.id
+            //   },
+            //   hasToken: true,
+            // })
+            //   .then((val) => {
+                
+            //   })
+            //   .catch(() => {
+            //     ToastHelper.showError(
+            //       'Opps, error while trying to touch your recipient wake up but failed. Dont worry, video call request still has been sent successful',
+            //     );
+            //   });
+              NavigationService.navigate(ScreenNames.VideoCall, { item, userDetail, toUserTemp })
           }}
           style={{
             width: 50,
@@ -272,7 +294,7 @@ const ChatRoomScreen = (props) => {
         childTemp,
         data,
       );
-        notifyToUserId(userDetail?.id, toUserTemp?.id, userDetail?.name);
+      notifyToUserId(userDetail?.id, toUserTemp?.id, userDetail?.name);
       return;
     } catch (err) {
       console.log('err' + err?.message);
