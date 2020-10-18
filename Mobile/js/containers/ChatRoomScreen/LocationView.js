@@ -20,28 +20,21 @@ export const LocationView = ({ location, style }) => {
                 console.error('An error occurred', err);
             });
     };
+    if (!location?.latitude) {
+        return null;
+    }
     return (
         <TouchableOpacity
             onPress={() => { }}
             style={[{ backgroundColor: 'gray', width: 200, height: 200, borderRadius: 20 }, style]}>
-            <MapView
+            {location ? <MapView
                 style={[{ height: 200, width: 200, borderRadius: 20 }, style]}
                 region={{
                     latitude: location.latitude,
                     longitude: location.longitude,
+                    latitudeDelta: 3,
+                    longitudeDelta: 4,
                 }}
-                initialRegion={{
-                    latitude: location.latitude,
-                    longitude: location.longitude,
-                    latitudeDelta: 0.001,
-                    longitudeDelta: 0.001
-                }}
-                annotations={[
-                    {
-                        latitude: location.latitude,
-                        longitude: location.longitude,
-                    },
-                ]}
                 scrollEnabled={true}
                 zoomEnabled={true}
             >
@@ -53,7 +46,7 @@ export const LocationView = ({ location, style }) => {
                     title={t('location.me')}
                     draggable />
 
-            </MapView>
+            </MapView> : null}
         </TouchableOpacity>
     );
 };
