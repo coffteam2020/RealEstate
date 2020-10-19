@@ -50,29 +50,7 @@ const SplashScreen = (props) => {
         if (res === 'granted') {
           navigate();
         } else {
-          GetLocation.getCurrentPosition({
-            enableHighAccuracy: true,
-            timeout: 15000,
-          })
-            .then((location) => {
-              navigate();
-            })
-            .catch((error) => {
-              const {code, message} = error;
-              console.warn(code, message);
-              Alert.alert(
-                t('login.locationError'),
-                `${t('login.location')}. \n${t('login.locationErrorMessages')}`,
-                [
-                  {
-                    title: 'OK',
-                    onPress: () => {
-                      openSetting();
-                    },
-                  },
-                ],
-              );
-            });
+          navigate();
         }
       });
     } catch (error) {

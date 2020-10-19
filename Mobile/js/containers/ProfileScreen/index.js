@@ -198,7 +198,7 @@ const ProfileScreen = (props) => {
       AxiosFetcher({
         method: 'POST',
         url: 'user/' + userStore?.userInfo?.id + '/fcmtoken',
-        data: ``,
+        data: '_',
         hasToken: true,
       })
         .then(async (val) => {
