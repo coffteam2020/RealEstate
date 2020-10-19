@@ -268,7 +268,7 @@ const ProfileScreen = (props) => {
             t('account.name'),
             userStore?.userInfo?.name || '',
             () => {
-              if (di !== title) {
+              if (di !== t('account.name')) {
                 setDi(t('account.name'));
               } else {
                 setDi(-1);
@@ -284,7 +284,7 @@ const ProfileScreen = (props) => {
             t('account.dob'),
             userStore?.userInfo?.dateOfBirth || '',
             () => {
-              if (di !== title) {
+              if (di !== t('account.dob')) {
                 setDi(t('account.dob'));
               } else {
                 setDi(-1);
@@ -300,7 +300,7 @@ const ProfileScreen = (props) => {
             t('account.phone'),
             userStore?.userInfo?.phoneNumber,
             () => {
-              if (di !== title) {
+              if (di !== t('account.phone')) {
                 setDi(t('account.phone'));
               } else {
                 setDi(-1);
@@ -316,7 +316,7 @@ const ProfileScreen = (props) => {
             t('account.email'),
             userStore?.userInfo?.email,
             () => {
-              if (di !== title) {
+              if (di !== t('account.email')) {
                 setDi(t('account.email'),);
               } else {
                 setDi(-1);
@@ -332,7 +332,7 @@ const ProfileScreen = (props) => {
             t('account.sex'),
             userStore?.userInfo?.gender,
             () => {
-              if (di !== title) {
+              if (di !== t('account.sex')) {
                 setDi(t('account.sex'),);
               } else {
                 setDi(-1);
@@ -348,7 +348,7 @@ const ProfileScreen = (props) => {
             t('account.address'),
             userStore?.userInfo?.address,
             () => {
-              if (di !== title) {
+              if (di !== t('account.address')) {
                 setDi(t('account.address'));
               } else {
                 setDi(-1);
@@ -364,7 +364,7 @@ const ProfileScreen = (props) => {
             t('account.language'),
             userStore?.userInfo?.language,
             () => {
-              if (di !== title) {
+              if (di !== t('account.language')) {
                 setDi(t('account.language'));
               } else {
                 setDi(-1);
@@ -380,7 +380,7 @@ const ProfileScreen = (props) => {
             t('account.currentcy'),
             userStore?.userInfo?.currency || 'VND',
             () => {
-              if (di !== title) {
+              if (di !== t('account.currentcy')) {
                 setDi(t('account.currentcy'));
               } else {
                 setDi(-1);
@@ -396,7 +396,7 @@ const ProfileScreen = (props) => {
             t('account.about'),
             '',
             () => {
-              if (di !== title) {
+              if (di !== t('account.about')) {
                 setDi(t('account.about'));
               } else {
                 setDi(-1);
@@ -414,7 +414,7 @@ const ProfileScreen = (props) => {
             t('account.notification'),
             userStore?.userInfo?.notification || 'Off',
             () => {
-              if (di !== title) {
+              if (di !== t('account.notification')) {
                 setDi(t('account.notification'));
               } else {
                 setDi(-1);

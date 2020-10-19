@@ -459,7 +459,7 @@ const ExploreScreen = (props) => {
           ]}>
           {BTNS2?.map((item) => {
             return (
-              <TouchableOpacity style={styles.button} onPress={item?.onPress}>
+              <TouchableOpacity style={styles.button} onPress={() => tryOpenIAP(item?.link)}>
                 <FastImage
                   source={item?.icon}
                   style={{ width: 40, height: 40, borderRadius: 20 }}
