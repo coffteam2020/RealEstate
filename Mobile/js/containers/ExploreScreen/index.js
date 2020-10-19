@@ -65,7 +65,7 @@ const ExploreScreen = (props) => {
     },
     {
       title: t('explorer.qr'),
-      icon: images.hurry,
+      icon: images.wr,
       onPress: () =>
         NavigationService.navigate(ScreenNames.Scanner, {
           key: t('explorer.qr'),
@@ -78,7 +78,7 @@ const ExploreScreen = (props) => {
         }),
     },
     {
-      title: t('explorer.ownerOnsite'), icon: images.noowner, onPress: () =>
+      title: t('explorer.ownerOnsite'), icon: images.homesd, onPress: () =>
         NavigationService.navigate(ScreenNames.PropertyListScreen, {
           key: t('explorer.properties'),
           type: "PROPERTY"
@@ -88,7 +88,7 @@ const ExploreScreen = (props) => {
   const BTNS3 = [
     {
       title: t('explorer.properties'),
-      icon: images.nearby,
+      icon: images.noowner,
       onPress: () =>
         NavigationService.navigate(ScreenNames.PropertyListScreen, {
           key: t('explorer.properties'),
@@ -97,7 +97,7 @@ const ExploreScreen = (props) => {
     },
     {
       title: t('explorer.restaurant'),
-      icon: images.nearby,
+      icon: images.home3s,
       onPress: () =>
         NavigationService.navigate(ScreenNames.PropertyListScreen, {
           key: t('explorer.restaurant'),
@@ -114,7 +114,7 @@ const ExploreScreen = (props) => {
     },
     {
       title: t('explorer.social'),
-      icon: images.six,
+      icon: images.home4s,
       onPress: () =>
         NavigationService.navigate(ScreenNames.SocialScreen, {
           key: t('explorer.social'),
@@ -127,7 +127,7 @@ const ExploreScreen = (props) => {
   const BTNS2 = [
     {
       title: t('explorer.facebook'),
-      icon: images.hurry,
+      icon: images.seven,
       link: 'https://www.facebook.com/dappdtechnology/',
       color: colors.white,
       iconName: 'facebook',
@@ -135,7 +135,7 @@ const ExploreScreen = (props) => {
     },
     {
       title: t('explorer.dMark'),
-      icon: images.nearby,
+      icon: images.hurry,
       link: 'https://dmark.shop',
       color: 'green',
       iconName: 'cloud-drizzle',
@@ -143,7 +143,7 @@ const ExploreScreen = (props) => {
     },
     {
       title: t('explorer.dShare'),
-      icon: images.noowner,
+      icon: images.six,
       link: 'https://dtechno.tech',
       color: colors.blue_dodger,
       iconName: 'chrome',
@@ -151,7 +151,7 @@ const ExploreScreen = (props) => {
     },
     {
       title: t('explorer.dCar'),
-      icon: images.space,
+      icon: images.nearby,
       link: 'http://cardtechno.store',
       color: colors.red_cinnabar,
       iconName: 'crosshair',
@@ -459,19 +459,14 @@ const ExploreScreen = (props) => {
           ]}>
           {BTNS2?.map((item) => {
             return (
-              <TouchableOpacity
-                style={[styles.button]}
-                onPress={() => tryOpenIAP(item?.link)}>
-                <View style={[styles.btn2, { backgroundColor: item?.color }]}>
-                  <Feather
-                    name={item?.iconName}
-                    color={item?.iconColor}
-                    size={20}
-                  />
-                </View>
+              <TouchableOpacity style={styles.button} onPress={item?.onPress}>
+                <FastImage
+                  source={item?.icon}
+                  style={{ width: 40, height: 40, borderRadius: 20 }}
+                />
                 <TextNormal
                   text={item?.title}
-                  numberOfLines={5}
+                  numberOfLines={1}
                   style={styles.buttonText}
                 />
               </TouchableOpacity>

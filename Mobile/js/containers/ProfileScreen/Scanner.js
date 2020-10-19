@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { } from 'react';
+import React, { useState } from 'react';
 import { StatusBar, View, SafeAreaView, TouchableOpacity, Text } from 'react-native';
 import { styles } from './style';
 import { withTheme } from 'react-native-paper';
@@ -14,9 +14,13 @@ import { RNCamera } from 'react-native-camera';
 import { NavigationService } from '../../navigation';
 import { ScreenNames } from '../../route/ScreenNames';
 import { ToastHelper } from '../../shared/components/ToastHelper';
+import TextInputFlat from '../../shared/components/TextInput/TextInputFlat';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import GradientButton from '../../shared/components/Buttons/GradientButton';
 
-const Scanner = () => {
+const Scanner = (props) => {
     const { t } = useTranslation();
+    const [s, setS] = useState('');
     return useObserver(() => (
         <View style={[containerStyle.default, containerStyle.defaultBackground]}>
             <StatusBar barStyle={'dark-content'} />
@@ -25,7 +29,7 @@ const Scanner = () => {
                     title={t('explorer.qr')}
                     hasButton
                 />
-                <ScrollView nestedScrollEnabled contentContainerStyle={styles.content}>
+                <KeyboardAwareScrollView nestedScrollEnabled contentContainerStyle={styles.content}>
                     <QRCodeScanner
                         onRead={(a) => {
                             console.log(a.data);
@@ -40,7 +44,20 @@ const Scanner = () => {
                         topContent={''}
                         bottomContent={null}
                     />
-                </ScrollView>
+                    <TextInputFlat
+                        onChangeText={(text) => {
+                            setS(text);
+                        }}
+                        text={t('explorer.qr')}
+                        props={props}
+                        style={{ marginTop: 20, marginBottom: 20 }}
+                    />
+                    <GradientButton text={t('common.confirm')} onPress={() => {
+                        if (s !== '') {
+                            NavigationService.navigate(ScreenNames.VideoCall, { url: 'https://meet.jit.si/' + s?.replace(" ", "_") })
+                        }
+                    }} />
+                </KeyboardAwareScrollView>
             </SafeAreaView>
         </View>
     ));

@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
   },
   content: {
     alignItems: 'center',
-    paddingBottom: 50
+    paddingBottom: 50,
   },
   location: {
     height: ScreenHeight / 2,
