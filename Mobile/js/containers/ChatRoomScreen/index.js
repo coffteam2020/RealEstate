@@ -29,13 +29,14 @@ import { styles } from './styles';
 import { uploadFileToFireBase } from '../../shared/utils/firebaseStorageUtils';
 import AxiosFetcher from '../../api/AxiosFetch';
 import ModalPingMessage from '../../shared/components/Modal/ModalPinMessage';
-import { ScreenWidth } from '../../shared/utils/dimension/Divices';
+import { ScreenHeight, ScreenWidth } from '../../shared/utils/dimension/Divices';
 import { Base64 } from 'js-base64';
 import { useStores } from '../../store/useStore';
 import { ScreenNames } from '../../route/ScreenNames';
 import { colors } from '../../shared/utils/colors/colors';
 import TextNormal from '../../shared/components/Text/TextNormal';
 import { LocationView } from './LocationView';
+import EmojiSelector, { Categories } from "react-native-emoji-selector";
 
 var uuid = require('uuid');
 let childTemp = '';
@@ -52,6 +53,7 @@ const ChatRoomScreen = (props) => {
   const [messagesList, setMessagesList] = useState([]);
   const [user] = useState('');
   const [userDetail, setUserDetail] = useState('');
+  const [emoji, setEmoji] = useState(false);
   const [block, setBlock] = useState(false);
   const [deleteFr, setDeleteFr] = useState(false);
   const IMAGE_CONFIG = {
@@ -443,7 +445,7 @@ const ChatRoomScreen = (props) => {
                 onPress: () => { checkCamera() }
               },
               {
-                text: t('location.to'),
+                text: t('location.location'),
                 onPress: () => {
                   getLocation().then(val => {
                     console.log(JSON.stringify(val));
@@ -490,11 +492,12 @@ const ChatRoomScreen = (props) => {
           style={{ padding: 5, zIndex: 10 }}>
           <Ionicons name="add-circle-sharp" color={colors.black_rect} size={30} />
         </TouchableOpacity>
-        {/* <TouchableOpacity
+        <TouchableOpacity
           style={{ marginLeft: SPACINGS.default, zIndex: 10 }}
-          onPress={() => checkCamera()}>
-          <Ionicons name="ios-camera" color={colors.black_rect} size={30} />
-        </TouchableOpacity> */}
+          onPress={() => setEmoji(true)}>
+          <Ionicons name="aperture-sharp" color={colors.black_rect} size={30} />
+          
+        </TouchableOpacity>
       </View>
     );
   };
@@ -552,6 +555,12 @@ const ChatRoomScreen = (props) => {
         </KeyboardAwareScrollView>
       </View>
       {isLoading ? <Loading /> : null}
+      {emoji && <View style={{height: ScreenHeight / 2, backgroundColor: 'white', position: 'absolute', bottom: 0, left: 0}}><EmojiSelector
+            category={Categories.all}
+            onEmojiSelected={emoji => {
+              setMsg(emoji);
+              setEmoji(false);
+            }} /></View>}
     </View>
   ));
 };

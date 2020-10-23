@@ -112,24 +112,11 @@ const PostDetailScreen = (props) => {
   const renderPostContent = (data) => {
     return (
       <View style={styles.postContent}>
-        <TextNormal
+        {post?.content ? <TextNormal
           style={styles.contentTextStyle}
           text={post?.content}
-          numberOfLines={100}></TextNormal>
-        {/* <View>
-          {post.images && post.images.map((item, index)=>{
-            return (<FastImage
-            key={index}
-              source={{
-                uri: item || Constant.MOCKING_DATA.NO_IMG_PLACE_HOLDER,
-              }}
-              resizeMode="cover"
-              style={styles.postImages}
-            />)
-          })
-          }
-        </View> */}
-        <View style={{ alignSelf: 'center' }}>
+          numberOfLines={100}></TextNormal> : null}
+        <View style={{ backgroundColor: 'red', flexWrap: 'wrap' }}>
           {post?.images && (post?.images[0]?.includes('PNG') || post?.images[0]?.includes('JPG') || post?.images[0]?.includes('JPEG') ||
             post?.images[0]?.includes('png') || post?.images[0]?.includes('jpg') || post?.images[0]?.includes('jpeg')) ?
             post.images.map((item, index) => {
@@ -141,10 +128,12 @@ const PostDetailScreen = (props) => {
                 resizeMode="cover"
                 style={styles.postImages}
               />)
-            }) :
+            })
+             :
             <Video paused={true} playWhenInactive={false} playInBackground={false} controls={true} source={{ uri: post?.images?.[0] }} style={{ width: ScreenWidth / 2 }} />
           }
         </View>
+        {/* {rennderButton()} */}
       </View>
     );
   };
@@ -175,7 +164,7 @@ const PostDetailScreen = (props) => {
             <TextNormal text={t('social.comment')}></TextNormal>
           </TouchableOpacity>
         </View>
-        {post?.likes && (
+        {post?.likes?.length > 0 && (
           <View style={styles.likeDetail}>
             <AntDesign name={'like1'} size={20} color={colors.purpleMain} />
             <TextNormal
@@ -361,7 +350,7 @@ const PostDetailScreen = (props) => {
         <KeyboardAvoidingView
           behavior={"padding"}
           keyboardVerticalOffset={(Platform.OS === 'ios' ? 0 : -230)}
-          style={{ display: 'flex', flexGrow: 1 }}>
+          style={{ display: 'flex' }}>
           {/* <KeyboardAwareScrollView
           keyboardShouldPersistTaps="handled"
           extraHeight={100}
@@ -375,8 +364,8 @@ const PostDetailScreen = (props) => {
             contentContainerStyle={styles.content}
             ref={refScrollView}
             onContentSizeChange={(contentWidth, contentHeight) => {
-              setContentHeight(contentHeight);
-              console.log(contentHeight);
+              // setContentHeight(contentHeight);
+              // console.log(contentHeight);
             }}>
             {renderPostContent(post)}
             {rennderButton(post)}

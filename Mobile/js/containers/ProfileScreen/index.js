@@ -12,6 +12,8 @@ import { colors } from '../../shared/utils/colors/colors';
 import { firebase } from '@react-native-firebase/messaging';
 import { ScrollView } from 'react-native-gesture-handler';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import QRCode from 'react-native-qrcode-svg';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import ImagePicker from 'react-native-image-picker';
 import { uploadFileToFireBase } from '../../shared/utils/firebaseStorageUtils/index';
@@ -41,6 +43,7 @@ const ProfileScreen = (props) => {
   const [avt, setAvt] = useState('');
   const [di, setDi] = useState(-1);
   const [modelSelect, setModalSelect] = useState('');
+  const [qr, setQR] = useState(undefined);
   const [showModal, setShowModal] = useState(false);
 
   const IMAGE_CONFIG = {
@@ -241,22 +244,31 @@ const ProfileScreen = (props) => {
             containerStyle.defaultMarginTop,
           ]}
         />
-        <View style={{ flexDirection: 'row', justifyContent: 'center', alignContent: 'center', alignItems: 'center', alignSelf: 'center', marginTop: 10, marginLeft: -5 }}>
-          <View style={{ width: 60, height: 40 }}>
-            <LottieView
-              autoPlay
-              loop={false}
-              style={{ width: 60, height: 40 }}
-              source={require('../../../assets/imgs/wallet.json')}
+        <View style={{ flexDirection: 'row', justifyContent: 'center', alignContent: 'center', alignItems: 'center', alignSelf: 'center' }}>
+          <View style={{ flexDirection: 'row', justifyContent: 'center', alignContent: 'center', alignItems: 'center', alignSelf: 'center', }}>
+            <View style={{ width: 60, height: 40 }}>
+              <LottieView
+                autoPlay
+                loop={false}
+                style={{ width: 60, height: 40 }}
+                source={require('../../../assets/imgs/wallet.json')}
+              />
+            </View>
+            <TextNormal
+              text={`0 🏵 (${userStore?.userInfo?.currency})`}
+              style={[
+                containerStyle.textContentSmall,
+                { marginLeft: -10, color: 'grey' }
+              ]}
             />
           </View>
-          <TextNormal
-            text={`0 🏵 (${userStore?.userInfo?.currency})`}
-            style={[
-              containerStyle.textContentSmall,
-              { marginLeft: -10, color: 'grey' }
-            ]}
-          />
+          <TextNormal text="  🦯   " />
+          <TouchableOpacity onPress={() => {
+            const data = `${userStore?.userInfo?.id}_${userStore?.userInfo?.name}_${userStore?.userInfo?.phoneNumber}`;
+            setQR(data);
+          }}>
+            <FontAwesome name="qrcode" size={20} color={colors.blackInput} />
+          </TouchableOpacity>
         </View>
         <View style={containerStyle.defaultMarginTopSmall}>
           {renderItem(
@@ -448,6 +460,7 @@ const ProfileScreen = (props) => {
           rightIco={
             <Ionicons name="pencil" size={20} color={colors.blackInput} />
           }
+
         />
         <ScrollView nestedScrollEnabled contentContainerStyle={styles.content}>
           {renderMe()}
@@ -464,6 +477,9 @@ const ProfileScreen = (props) => {
           onClose={() => closeDialog()}
         />
       ) : null}
+      {qr && qr !== "" && qr && <TouchableOpacity onPress={() => { setQR(false) }} style={{ borderRadius: 2, borderColor: 'white', borderWidth: 3, position: 'absolute', justifyContent: 'center', top: ScreenHeight / 3, left: ScreenWidth / 4, zIndex: 100, alignContent: 'center', alignItems: 'center' }}>
+        <QRCode value={`${qr || 'das'}`} size={200} />
+      </TouchableOpacity>}
     </View>
   ));
 };

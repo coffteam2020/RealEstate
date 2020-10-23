@@ -121,8 +121,9 @@ const Account = (props) => {
                   style={{
                     alignItems: "center",
                     justifyContent: 'center',
-                    width: ScreenWidth / 2 - 10,
-                    height: ScreenWidth / 2 - 10
+                    width: ScreenWidth / 2 - 20, 
+                    height: ScreenWidth / 2 - 20, 
+                    marginLeft: 15
                   }}>
                   <Video
                     paused={true}
@@ -130,7 +131,7 @@ const Account = (props) => {
                     playInBackground={false}
                     controls={true}
                     source={{ uri: item?.images?.[0] }}
-                    style={{ width: ScreenWidth / 2 - 10, height: ScreenWidth / 2 - 10 }}
+                    style={{ width: ScreenWidth / 2 - 20, height: ScreenWidth / 2 - 20, marginLeft: 15 }}
                   />
                 </View>
               }
@@ -316,7 +317,7 @@ const Account = (props) => {
       <View style={[containerStyle.center, containerStyle.shadow]}>
         <TouchableOpacity
           onPress={() => {
-            openPicker();
+            // openPicker();
           }}>
           <FastImage
             source={{
@@ -353,7 +354,7 @@ const Account = (props) => {
               color={colors.black_clear_all}
             />,
             t('account.dob'),
-            data?.dateOfBirth || '',
+            '🌟🌟🌟',
             () => { },
           )}
           {renderItem(
@@ -363,7 +364,7 @@ const Account = (props) => {
               color={colors.black_clear_all}
             />,
             t('account.phone'),
-            data?.phoneNumber,
+            '🌟🌟🌟',
             () => { },
           )}
           {renderItem(
@@ -373,7 +374,7 @@ const Account = (props) => {
               color={colors.black_clear_all}
             />,
             t('account.email'),
-            data?.email,
+            '🌟🌟🌟',
             () => { },
           )}
           {renderItem(
@@ -383,7 +384,7 @@ const Account = (props) => {
               color={colors.black_clear_all}
             />,
             t('account.sex'),
-            data?.gender,
+            '🌟🌟🌟',
             () => { },
           )}
           {renderItem(
@@ -393,7 +394,7 @@ const Account = (props) => {
               color={colors.black_clear_all}
             />,
             t('account.address'),
-            data?.address,
+            '🌟🌟🌟',
             () => { },
           )}
           {renderItem(

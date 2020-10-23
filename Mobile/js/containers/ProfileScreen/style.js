@@ -24,9 +24,9 @@ export const styles = StyleSheet.create({
     borderRadius: 30,
   },
   postImages: {
-    width: ScreenWidth / 2 - 10,
-    height: ScreenWidth / 2 - 10,
-    marginLeft: 20
+    width: ScreenWidth / 2 - 20,
+    height: ScreenWidth / 2 - 20,
+    marginLeft: 15
   },
   search: {
     flexDirection: 'row',

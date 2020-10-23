@@ -35,9 +35,9 @@ i18n
 			['en']: {
 				translation: translationGetters['en'](),
 			},
-			['vn']: {
-				translation: translationGetters['vn'](),
-			},
+			// ['vn']: {
+			// 	translation: translationGetters['vn'](),
+			// },
 		},
 		react: {
 			useSuspense: false, 

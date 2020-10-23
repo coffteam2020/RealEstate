@@ -12,6 +12,12 @@ export const styles = StyleSheet.create({
   content: {
     alignItems: 'center',
   },
+
+  postImages:{
+    width: ScreenWidth,
+      height: ScreenWidth,
+    // margin: SPACINGS.small
+    },
   avatar: {
     width: ScreenWidth * 0.1,
     height: ScreenWidth * 0.1,

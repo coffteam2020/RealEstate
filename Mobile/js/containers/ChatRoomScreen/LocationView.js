@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { TouchableOpacity } from "react-native";
+import { Linking, Platform, TouchableOpacity } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 
 export const LocationView = ({ location, style }) => {
@@ -25,28 +25,56 @@ export const LocationView = ({ location, style }) => {
     }
     return (
         <TouchableOpacity
-            onPress={() => { }}
+            onPress={() => {
+                const scheme = Platform.select({ ios: 'maps:0,0?q=', android: 'geo:0,0?q=' });
+                const latLng = `${location.latitude},${location.longitude}`;
+                const label = 'Custom Label';
+                const url = Platform.select({
+                    ios: `${scheme}${label}@${latLng}`,
+                    android: `${scheme}${latLng}(${label})`
+                });
+                Linking.openURL(url);
+            }}
             style={[{ backgroundColor: 'gray', width: 200, height: 200, borderRadius: 20 }, style]}>
-            {location ? <MapView
+            {location ? <TouchableOpacity onPress={() => {
+                const scheme = Platform.select({ ios: 'maps:0,0?q=', android: 'geo:0,0?q=' });
+                const latLng = `${location.latitude},${location.longitude}`;
+                const label = 'Custom Label';
+                const url = Platform.select({
+                    ios: `${scheme}${label}@${latLng}`,
+                    android: `${scheme}${latLng}(${label})`
+                });
+                Linking.openURL(url);
+            }}><MapView
                 style={[{ height: 200, width: 200, borderRadius: 20 }, style]}
                 region={{
                     latitude: location.latitude,
                     longitude: location.longitude,
-                    latitudeDelta: 3,
-                    longitudeDelta: 4,
+                    latitudeDelta: 0.003,
+                    longitudeDelta: 0.004,
                 }}
-                scrollEnabled={true}
-                zoomEnabled={true}
+                scrollEnabled={false}
+                zoomEnabled={false}
             >
-                <Marker
-                    coordinate={{
-                        "latitude": location.latitude,
-                        "longitude": location.longitude
-                    }}
-                    title={t('location.me')}
-                    draggable />
+                    <Marker
+                        coordinate={{
+                            "latitude": location.latitude,
+                            "longitude": location.longitude
+                        }}
+                        title={t('location.me')}
+                        draggable
+                        onPress={() => {
+                            const scheme = Platform.select({ ios: 'maps:0,0?q=', android: 'geo:0,0?q=' });
+                            const latLng = `${location.latitude},${location.longitude}`;
+                            const label = 'Dapp Premium - 🚏';
+                            const url = Platform.select({
+                                ios: `${scheme}${label}@${latLng}`,
+                                android: `${scheme}${latLng}(${label})`
+                            });
+                            Linking.openURL(url);
+                        }} />
 
-            </MapView> : null}
+                </MapView></TouchableOpacity> : null}
         </TouchableOpacity>
     );
 };

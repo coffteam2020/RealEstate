@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
-    paddingBottom: 80,
+    // paddingBottom: 80,
   },
   avatar: {
     width: ScreenWidth * 0.1,
@@ -40,10 +40,10 @@ export const styles = StyleSheet.create({
     marginBottom: SPACINGS.small,
   },
   postContent: {
-    display: 'flex',
+    // display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-start',
-    flexWrap: 'nowrap',
+    // flexWrap: 'nowrap',
     marginBottom: SPACINGS.small,
   },
   buttonContainer: {
@@ -102,7 +102,7 @@ export const styles = StyleSheet.create({
   },
   contentTextStyle: {
     marginHorizontal: SPACINGS.avg,
-    paddingBottom: 50,
+    paddingBottom: 20,
     paddingTop: 20,
   },
   postImages: {

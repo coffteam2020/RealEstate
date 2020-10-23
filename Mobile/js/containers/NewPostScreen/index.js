@@ -46,6 +46,7 @@ import ImagePicker from 'react-native-image-picker';
 import { uploadFileToFireBase } from '../../shared/utils/firebaseStorageUtils';
 import { FirebaseService } from '../../api/FirebaseService';
 import GridList from 'react-native-grid-list';
+import { FlatList } from 'react-native';
 
 var uuid = require('uuid');
 let childTemp = '';
@@ -115,12 +116,13 @@ const NewPostScreen = (props) => {
         console.log('User tapped custom button: ', response.customButton);
       } else {
         setIsLoading(true);
-        setSelectedImages([{ uri: response.uri }]);
+        // setSelectedImages([...selectedImages, ...{ uri: response.uri }]);
         Promise.resolve(uploadFileToFireBase(response, userDetail?.id))
           .then((val) => {
             console.log('@@@@openImagePicker@@@@@');
             console.log(val);
             setImages([...images, val])
+            setSelectedImages([...selectedImages, val])
             setIsLoading(false);
           })
           .catch((error) => {
@@ -144,12 +146,13 @@ const NewPostScreen = (props) => {
         console.log('User tapped custom button: ', response.customButton);
       } else {
         setIsLoading(true);
-        setSelectedImages([{ uri: response.uri }]);
+        setSelectedImages([...selectedImages, { uri: response.uri }]);
         Promise.resolve(uploadFileToFireBase(response, userDetail?.id))
           .then((val) => {
             console.log('@@@@openCamera@@@@@');
             console.log(val);
             setImages([...images, val])
+            setSelectedImages([...selectedImages, ...val])
             setIsLoading(false);
           })
           .catch((error) => {
@@ -264,11 +267,36 @@ const NewPostScreen = (props) => {
   );
 
   const renderImageSelected = () => {
-    if (selectedImages[0].uri?.includes('PNG') || selectedImages[0].uri?.includes('JPG') || selectedImages[0].uri?.includes('JPEG')) {
+    console.log(selectedImages.length);
+    if (selectedImages[0].uri?.includes('PNG') || selectedImages[0].uri?.includes('JPG') || selectedImages[0].uri?.includes('JPEG') ||
+      selectedImages[0].uri?.includes('png') || selectedImages[0].uri?.includes('jpg') || selectedImages[0].uri?.includes('jpeg')) {
       return (
-        <TouchableOpacity onPress={() => { setSelectedImages([]) }}>
-          <FastImage style={styles.image} source={{ uri: selectedImages[0].uri }} resizeMode="cover" />
-        </TouchableOpacity>
+        <FlatList
+          numColumns={3}
+          style={{ alignSelf: 'center' }}
+          data={selectedImages}
+          renderItem={({ a, index }) => {
+            return (
+              <FastImage
+                source={{
+                  uri:
+                  selectedImages[index].uri ||
+                    Constant.MOCKING_DATA.NO_IMG_PLACE_HOLDER,
+                }}
+                resizeMode="cover"
+                style={selectedImages.length === 1 ? styles.postImages : { width: ScreenWidth * (1 / selectedImages.length), height: ScreenWidth * (1 / selectedImages.length), marginEnd: 10 }}
+              />
+            )
+          }} />
+        // <ScrollView>
+        //   {selectedImages?.map(a => {
+        //     return (
+        //       <TouchableOpacity onPress={() => { setSelectedImages(selectedImages?.filter(item => item !== a)) }}>
+        //         <FastImage style={styles.image} source={{ uri: a?.uri }} resizeMode="cover" />
+        //       </TouchableOpacity>
+        //     )
+        //   })}
+        // </ScrollView>
       );
     }
     return (
@@ -303,7 +331,7 @@ const NewPostScreen = (props) => {
         console.log('User tapped custom button: ', response.customButton);
       } else {
         setIsLoading(true);
-        setSelectedImages([{ uri: response.uri }]);
+        setSelectedImages([...selectedImages, { uri: response.uri }]);
         if ((response.uri?.includes('PNG') || response.uri?.includes('JPG') || response.uri?.includes('JPEG') ||
           response.uri?.includes('png') || response.uri?.includes('jpg') || response.uri?.includes('jpeg'))) {
           Promise.resolve(uploadFileToFireBase(response, userDetail?.id))

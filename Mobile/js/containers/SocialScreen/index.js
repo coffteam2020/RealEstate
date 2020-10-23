@@ -77,7 +77,7 @@ const SocialScreen = (props) => {
         return y.timeInMillosecond - x.timeInMillosecond;
       });
       arr = arr.filter(item => item?.disable !== true);
-      allPost.forEach(item =>{
+      allPost.forEach(item => {
         console.log("======================" + item?.disable);
       })
       setIsLoading(false);
@@ -259,7 +259,7 @@ const SocialScreen = (props) => {
           return;
         }
       })
-      ToastHelper.showSuccess(t('del.delOk'))
+      ToastHelper.showSuccess(t('chat.delOk'))
     })
   }
   const renderFirstPost = (item) => {
@@ -356,15 +356,23 @@ const SocialScreen = (props) => {
                     item?.images[0]?.includes('png') ||
                     item?.images[0]?.includes('jpg') ||
                     item?.images[0]?.includes('jpeg')) ? (
-                    <FastImage
-                      source={{
-                        uri:
-                          item?.images[0] ||
-                          Constant.MOCKING_DATA.NO_IMG_PLACE_HOLDER,
-                      }}
-                      resizeMode="cover"
-                      style={styles.postImages}
-                    />
+                    <FlatList
+                      numColumns={3}
+                      style={{justifyContent: 'center', alignContent: 'center', alignItems: 'center', alignSelf: 'center'}}
+                      data={item?.images || []}
+                      renderItem={({a, index}) => {
+                        return (
+                          <FastImage
+                            source={{
+                              uri:
+                                item?.images[index] ||
+                                Constant.MOCKING_DATA.NO_IMG_PLACE_HOLDER,
+                            }}
+                            resizeMode="cover"
+                            style={item?.images?.length === 1 ? styles.postImages : { width: ScreenWidth * (1 / item?.images.length), height: ScreenWidth * (1 / item?.images.length), marginEnd: 10}}
+                          />
+                        )
+                      }} />
                   ) : (
                     <View
                       style={{
