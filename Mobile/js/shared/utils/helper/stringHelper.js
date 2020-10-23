@@ -42,10 +42,31 @@ function generateDoccumentId(userId1, userId2) {
 	}
 	return docId;
 }
+function compare(a, b) {
+	if ((a?.id ? a?.id : a?._id) < (b?.id ? b?.id : b?._id)) {
+		return -1;
+	}
+	if (a?.id ? a?.id : a?._id > (b?.id ? b?.id : b?._id)) {
+		return 1;
+	}
+	return 0;
+}
+function generateDoccumentIds(users) {
+	let docId = '';
+	let a = users?.sort(compare);
+	console.log(JSON.stringify(a));
+	for (let i = 0; i < a?.length; i++) {
+		if (a?.[i]?.id || a?.[i]?._id) {
+			docId = docId + '_' + (a?.[i]?.id ? a?.[i]?.id : a?.[i]?._id);
+		}
+	}
+	return docId;
+}
 
 export const StringHelper = {
 	autoSplitTextBirthday,
 	isPropDifferent,
 	indexOfMessages,
 	generateDoccumentId,
+	generateDoccumentIds,
 };

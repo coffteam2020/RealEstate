@@ -12,6 +12,7 @@ const languageDetector = {
 	type: 'languageDetector',
 	async: true,
 	detect: async cb => {
+		console.log('================'+cb);
 		// // Case 1: The user chose his preferred language setting.
 		// const preferredLang = await AsyncStorage.getItem('lang');
 		// if (preferredLang) {
@@ -35,9 +36,9 @@ i18n
 			['en']: {
 				translation: translationGetters['en'](),
 			},
-			// ['vn']: {
-			// 	translation: translationGetters['vn'](),
-			// },
+			['vn']: {
+				translation: translationGetters['vn'](),
+			},
 		},
 		react: {
 			useSuspense: false, 

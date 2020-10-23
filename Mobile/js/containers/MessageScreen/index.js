@@ -83,9 +83,21 @@ const MessageScreen = (props) => {
         let dataFilter = [];
         for (let i = 0; i < data.length; i++) {
           let lastMessage = data[i]?.lastMessage;
+          let a = lastMessage?.keyRoom?.split("_") || [];
+
+          let found = false;
+          for (let i = 0; i < a?.length; i++) {
+            if (a?.[i] == user?.id) {
+              found = true;
+              break;
+            }
+          }
+          console.log(found + "_" + a?.length);
           if (
             lastMessage?.user?._id === user?.id ||
-            lastMessage?.toUserDetail?.id === user?.id
+            lastMessage?.toUserDetail?.id === user?.id ||
+            lastMessage?.toUsersDetail?.includes(user?.id) ||
+            lastMessage?.keyRoom && found
           ) {
             dataFilter.push(lastMessage);
           }
@@ -103,14 +115,14 @@ const MessageScreen = (props) => {
     setSearchText(text);
     const dataFilter = messagesList;
     if (text && text != '') {
-      userStore.messages = 
-        dataFilter.filter((item) => 
+      userStore.messages =
+        dataFilter.filter((item) =>
           item?.toUserDetail?.name?.toLowerCase().includes(text?.toLowerCase()) ||
           item?.user?.name?.toLowerCase().includes(text?.toLowerCase())
-          )
-        
+        )
+
     } else {
-      userStore.messages =  messagesTList;
+      userStore.messages = messagesTList;
     }
   };
 
@@ -139,7 +151,7 @@ const MessageScreen = (props) => {
   };
 
   const renderMessageItem = (item, index) => {
-    console.log(JSON.stringify(item));
+    // console.log(JSON.stringify(item));
     return (
       <Swipeout
         autoClose={true}
@@ -170,34 +182,31 @@ const MessageScreen = (props) => {
         ]}>
         <MessageItem
           onItemPress={async (item) => {
-            let blocked = userStore.blockList || [];
-            for (let i = 0; i < blocked.length; i++) {
-              if (
-                blocked[i]?.userId === item?.userId ||
-                blocked[i]?.userId === item?.toUserDetail?.id
-              ) {
-                alert('This user has been blocked, you can not chat anymore');
-                return;
-              }
-            }
+            console.log(JSON.stringify(item));
             // Check if name is exist
             let userInfo = await IALocalStorage.getDetailUserInfo();
-            NavigationService.navigate(ScreenNames.ChatRoomScreen, {
-              toUserData: {
-                id:
-                  userInfo?.id === item?.toUserDetail?.id
-                    ? item?.user?._id
-                    : item?.toUserDetail?.id,
-                avatar:
-                  userInfo?.id === item?.toUserDetail?.id
-                    ? item?.user?.avatar
-                    : item?.toUserDetail?.avatar,
-                name:
-                  userInfo?.id === item?.toUserDetail?.id
-                    ? item?.user?.name
-                    : item?.toUserDetail?.name,
-              },
-            });
+            if (!item?.keyRoom) {
+              NavigationService.navigate(ScreenNames.ChatRoomScreen, {
+                toUserData: {
+                  id:
+                    userInfo?.id === item?.toUserDetail?.id
+                      ? item?.user?._id
+                      : item?.toUserDetail?.id,
+                  avatar:
+                    userInfo?.id === item?.toUserDetail?.id
+                      ? item?.user?.avatar
+                      : item?.toUserDetail?.avatar,
+                  name:
+                    userInfo?.id === item?.toUserDetail?.id
+                      ? item?.user?.name
+                      : item?.toUserDetail?.name,
+                },
+              });
+            } else {
+              NavigationService.navigate(ScreenNames.ChatRoomGroupScreen, {
+                users: [...item?.toUsersDetail, item?.user]?.filter(a => (a?.id || a?._id) !== userInfo?.id)
+              });
+            }
           }}
           item={item}
           index={index}
@@ -219,8 +228,11 @@ const MessageScreen = (props) => {
         <HeaderFull
           title={t('message.title')}
           onPress={() => {
-            NavigationService.navigate(ScreenNames.LiveStream);
+            NavigationService.navigate(ScreenNames.GroupMateScreen);
           }}
+          rightIco={
+            <TextNormal text={t('chat.group')} />
+          }
         />
         <TextInputFlatLeftIconTouchable
           hideText

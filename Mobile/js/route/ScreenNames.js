@@ -21,6 +21,8 @@ export const ScreenNames = {
   PostDetailScreen: 'PostDetailScreen',
   SocialScreen : 'SocialScreen',
   PropertyScreen : 'PropertyScreen',
+  ChatRoomGroupScreen: 'ChatRoomGroupScreen',
+  GroupMateScreen: 'GroupMateScreen',
   PropertyListScreen: 'PropertyListScreen',
   PropertyDetailScreen: 'PropertyDetailScreen',
   Account: 'Account',

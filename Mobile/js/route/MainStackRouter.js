@@ -12,9 +12,11 @@ import { Transition } from 'react-native-reanimated';
 import ExploreScreen from '../containers/ExploreScreen';
 import MateScreen from '../containers/MateScreen';
 import List from '../containers/MateScreen/List';
-import MateScreenDetail from '../containers/MateScreenDetail';
+import MateScreenDetail from '../containers/GroupMateScreen';
 import MessageScreen from '../containers/MessageScreen';
+import GroupMateScreen from '../containers/GroupMateScreen';
 import ChatRoomScreen from '../containers/ChatRoomScreen';
+import ChatRoomGroupScreen from '../containers/ChatRoomGroupScreen';
 import VideoCallScreen from '../containers/VideoCallScreen';
 import VideoCall from '../containers/VideoCall';
 import Livestream from '../containers/Livestream';
@@ -205,9 +207,11 @@ const TabNavigator = createStackNavigator(
   {
     Tabs: { screen: Tabs },
     ChatRoomScreen: { screen: ChatRoomScreen },
+    ChatRoomGroupScreen: { screen: ChatRoomGroupScreen },
     Livestream: { screen: Livestream },
     InformationRoom: { screen: InformationRoom },
     VideoCallScreen: { screen: VideoCallScreen },
+    GroupMateScreen: { screen: GroupMateScreen },
     VideoCall: { screen: VideoCall },
     SocialScreen: { screen: SocialScreenNavigator },
   },

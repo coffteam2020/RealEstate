@@ -1,22 +1,27 @@
 import React from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {TimeHelper} from '../../../shared/utils/helper/timeHelper';
-import {SPACINGS} from '../../../themes';
-import {containerStyle} from '../../../themes/styles';
-import {colors} from '../../utils/colors/colors';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { TimeHelper } from '../../../shared/utils/helper/timeHelper';
+import { SPACINGS } from '../../../themes';
+import { containerStyle } from '../../../themes/styles';
+import { colors } from '../../utils/colors/colors';
 import fonts from '../../utils/fonts/fonts';
 import icons from '../../utils/icons/icons';
 import Constant from '../../utils/constant/Constant';
 import IALocalStorage from '../../utils/storage/IALocalStorage';
 import LogManager from '../../utils/logging/LogManager';
 import * as Animatable from 'react-native-animatable';
-import {Base64} from 'js-base64';
+import { Base64 } from 'js-base64';
 import FastImage from 'react-native-fast-image';
 
-const MessageItem = ({item, onItemPress, index, currentUser}) => {
+const MessageItem = ({ item, onItemPress, index, currentUser }) => {
+  let name = item?.toUsersDetail || [];
+  let nameH = '';
+  for (let i = 0; i < name?.length; i++) {
+    nameH = nameH + (i > 0 ? (i === name?.length - 1 ? ' & ' : ', ') : '') + name?.[i]?.name
+  }
   return (
     <Animatable.View animation="slideInLeft" delay={index * 200}>
-      <View style={{backgroundColor: colors.whiteTransparent, height: 100}}>
+      <View style={{ backgroundColor: colors.whiteTransparent }}>
         <TouchableOpacity
           onPress={() => onItemPress && onItemPress(item)}
           style={styles.container}
@@ -27,19 +32,19 @@ const MessageItem = ({item, onItemPress, index, currentUser}) => {
               key={item?.userId}
               source={{
                 uri:
-                  item?.user?._id !== currentUser?.id
+                !item?.keyRoom  ? (item?.user?._id !== currentUser?.id
                     ? item?.user?.avatar
                     : item?.toUserDetail?.avatar ||
-                      Constant.MOCKING_DATA.PLACE_HOLDER,
+                    Constant.MOCKING_DATA.PLACE_HOLDER ) : Constant.MOCKING_DATA.GROUP ,
               }}
               style={styles.avatar}
             />
           </View>
           <View style={styles.nameContainer}>
             <Text style={[containerStyle.textDefault, styles.name]}>
-              {item?.user?._id !== currentUser?.id
+              {!item?.keyRoom ? (item?.user?._id !== currentUser?.id
                 ? item?.user?.name
-                : item?.toUserDetail?.name}
+                : item?.toUserDetail?.name) : nameH}
             </Text>
             <Text numberOfLines={3} style={[containerStyle.textDefaultNormal]}>
               {item?.text}

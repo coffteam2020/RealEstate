@@ -1,15 +1,15 @@
 import React from 'react';
-import {useTranslation} from 'react-i18next';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {SPACINGS} from '../../../themes';
-import {containerStyle} from '../../../themes/styles';
-import {colors} from '../../utils/colors/colors';
+import { useTranslation } from 'react-i18next';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { SPACINGS } from '../../../themes';
+import { containerStyle } from '../../../themes/styles';
+import { colors } from '../../utils/colors/colors';
 import Constant from '../../utils/constant/Constant';
 import fonts from '../../utils/fonts/fonts';
 import FastImage from 'react-native-fast-image';
 
-const TopUserItem = ({item, onItemPress, index, currentUser, style, avatar, name}) => {
-	const {t} = useTranslation();
+const TopUserItem = ({ item, onItemPress, index, currentUser, style, avatar, name, isGr }) => {
+	const { t } = useTranslation();
 	return (
 		<TouchableOpacity
 			onPress={() => onItemPress && onItemPress(item)}
@@ -18,10 +18,10 @@ const TopUserItem = ({item, onItemPress, index, currentUser, style, avatar, name
 			<View style={styles.avatarContainer}>
 				<FastImage
 					cache={FastImage.cacheControl.cacheOnly}
-					source={{uri: item?.avatar || avatar || Constant.MOCKING_DATA.PLACE_HOLDER}}
+					source={{ uri: isGr ? Constant.MOCKING_DATA.GROUP : (item?.avatar || avatar || Constant.MOCKING_DATA.PLACE_HOLDER) }}
 					style={styles.avatar} />
 				<View>
-					<Text style={[containerStyle.textDefault, styles.name, {
+					<Text numberOfLines={2} style={[containerStyle.textDefault, styles.name, {
 						marginLeft: SPACINGS.small
 					}]}>
 						{item?.name || name || 'Name'}

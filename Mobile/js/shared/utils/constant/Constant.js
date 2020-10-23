@@ -68,6 +68,7 @@ export default {
     },
     PLACE_HOLDER:
       'https://media.istockphoto.com/vectors/people-icon-vector-male-person-symbol-profile-circle-avatar-sign-in-vector-id959085942?k=6&m=959085942&s=170667a&w=0&h=f3Q3lGKve2kDDzr0DnscSQMZ01Dy19r6zbWIP9zuXRk=',
+    GROUP: 'https://img.pngio.com/population-png-free-populationpng-transparent-images-10039-pngio-population-transparent-250_300.png',
     NO_IMG_PLACE_HOLDER:
       'https://www.kvplus.ch/directus/thumbnail/100/100/contain/8%D0%A106.29_3.jpg',
     ANY_AVATAR:
