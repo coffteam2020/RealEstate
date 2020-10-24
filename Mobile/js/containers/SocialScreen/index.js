@@ -78,7 +78,7 @@ const SocialScreen = (props) => {
       });
       arr = arr.filter(item => item?.disable !== true);
       allPost.forEach(item => {
-        console.log("======================" + item?.disable);
+        // console.log("======================" + item?.disable);
       })
       setIsLoading(false);
       setAllPost(arr);
@@ -453,7 +453,7 @@ const SocialScreen = (props) => {
     let isLike =
       item.likes && item.likes.indexOf(userStore?.userInfo?.id) !== -1;
     let isToDay = TimeHelper.isToday(moment(item?.timeInMillosecond));
-    console.log("===========" + JSON.stringify(item));
+    // console.log("===========" + JSON.stringify(item));
     return (
       <TouchableOpacity
         onLongPress={() => {

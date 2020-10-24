@@ -33,7 +33,7 @@ const Scanner = (props) => {
                     <QRCodeScanner
                         onRead={(a) => {
                             console.log(a.data);
-                            if (a?.data?.includes('https://meet.jit.si/')) {
+                            if (a?.data !== '' && a?.data?.split("%%")?.length === 2) {
                                 ToastHelper.showSuccess(t('explorer.join'))
                                 NavigationService.navigate(ScreenNames.VideoCall, { url: a?.data, isGroup: true })
                             } else {
@@ -54,7 +54,7 @@ const Scanner = (props) => {
                     />
                     <GradientButton text={t('common.confirm')} onPress={() => {
                         if (s !== '') {
-                            NavigationService.navigate(ScreenNames.VideoCall, { url: 'https://meet.jit.si/' + s?.replace(" ", "_") })
+                            NavigationService.navigate(ScreenNames.VideoCall, { url: s, isGroup: true })
                         }
                     }} />
                 </KeyboardAwareScrollView>

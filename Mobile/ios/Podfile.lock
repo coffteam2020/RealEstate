@@ -287,12 +287,12 @@ PODS:
     - Flipper-Folly (~> 2.2)
     - Flipper-RSocket (~> 1.1)
   - Flipper-DoubleConversion (1.1.7)
-  - Flipper-Folly (2.2.0):
+  - Flipper-Folly (2.3.0):
     - boost-for-react-native
     - CocoaLibEvent (~> 1.0)
     - Flipper-DoubleConversion
     - Flipper-Glog
-    - OpenSSL-Universal (= 1.0.2.19)
+    - OpenSSL-Universal (= 1.0.2.20)
   - Flipper-Glog (0.3.6)
   - Flipper-PeerTalk (0.0.4)
   - Flipper-RSocket (1.1.0):
@@ -418,7 +418,6 @@ PODS:
   - GTMSessionFetcher/Core (1.4.0)
   - GTMSessionFetcher/Full (1.4.0):
     - GTMSessionFetcher/Core (= 1.4.0)
-  - JitsiMeetSDK (2.4.0)
   - leveldb-library (1.22)
   - libwebp (1.1.0):
     - libwebp/demux (= 1.1.0)
@@ -438,9 +437,13 @@ PODS:
     - nanopb/encode (= 0.3.9011)
   - nanopb/decode (0.3.9011)
   - nanopb/encode (0.3.9011)
-  - OpenSSL-Universal (1.0.2.19):
-    - OpenSSL-Universal/Static (= 1.0.2.19)
-  - OpenSSL-Universal/Static (1.0.2.19)
+  - OpenSSL-Universal (1.0.2.20):
+    - OpenSSL-Universal/Static (= 1.0.2.20)
+  - OpenSSL-Universal/Static (1.0.2.20)
+  - OpenTok (2.18.1)
+  - opentok-react-native (0.14.0):
+    - OpenTok
+    - React
   - Permission-BluetoothPeripheral (2.2.1):
     - RNPermissions
   - Permission-Calendars (2.2.1):
@@ -660,9 +663,6 @@ PODS:
     - React
   - react-native-image-picker (2.3.4):
     - React-Core
-  - react-native-jitsi-meet (2.1.1):
-    - JitsiMeetSDK (= 2.4.0)
-    - React
   - react-native-maps (0.27.1):
     - React
   - react-native-netinfo (5.9.7):
@@ -752,6 +752,8 @@ PODS:
     - React
   - RNAudioRecord (0.2.2):
     - React
+  - RNCallKeep (3.1.1):
+    - React
   - RNCAsyncStorage (1.12.0):
     - React
   - RNCCheckbox (0.5.3):
@@ -830,9 +832,11 @@ PODS:
     - React
   - RNVoipCall (1.1.1):
     - React
-  - SDWebImage (5.9.2):
-    - SDWebImage/Core (= 5.9.2)
-  - SDWebImage/Core (5.9.2)
+  - RNVoipPushNotification (2.1.0):
+    - React-Core
+  - SDWebImage (5.9.3):
+    - SDWebImage/Core (= 5.9.3)
+  - SDWebImage/Core (5.9.3)
   - SDWebImageWebPCoder (0.6.1):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.7)
@@ -883,6 +887,7 @@ DEPENDENCIES:
   - GPUImage (= 0.1.7)
   - lottie-ios (from `../node_modules/lottie-ios`)
   - lottie-react-native (from `../node_modules/lottie-react-native`)
+  - opentok-react-native (from `../node_modules/opentok-react-native`)
   - Permission-BluetoothPeripheral (from `../node_modules/react-native-permissions/ios/BluetoothPeripheral.podspec`)
   - Permission-Calendars (from `../node_modules/react-native-permissions/ios/Calendars.podspec`)
   - Permission-Camera (from `../node_modules/react-native-permissions/ios/Camera.podspec`)
@@ -914,7 +919,6 @@ DEPENDENCIES:
   - react-native-document-picker (from `../node_modules/react-native-document-picker`)
   - react-native-google-maps (from `../node_modules/react-native-maps`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
-  - react-native-jitsi-meet (from `../node_modules/react-native-jitsi-meet`)
   - react-native-maps (from `../node_modules/react-native-maps`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-notifications (from `../node_modules/react-native-notifications`)
@@ -938,6 +942,7 @@ DEPENDENCIES:
   - rn-range-slider (from `../node_modules/rn-range-slider`)
   - "RNAppleAuthentication (from `../node_modules/@invertase/react-native-apple-authentication`)"
   - RNAudioRecord (from `../node_modules/react-native-audio-record`)
+  - RNCallKeep (from `../node_modules/react-native-callkeep`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
   - "RNCCheckbox (from `../node_modules/@react-native-community/checkbox`)"
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
@@ -966,6 +971,7 @@ DEPENDENCIES:
   - RNSVG (from `../node_modules/react-native-svg`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - RNVoipCall (from `../node_modules/react-native-voip-call`)
+  - RNVoipPushNotification (from `../node_modules/react-native-voip-push-notification`)
   - "toolbar-android (from `../node_modules/@react-native-community/toolbar-android`)"
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -1013,11 +1019,11 @@ SPEC REPOS:
     - gRPC-Core
     - GTMAppAuth
     - GTMSessionFetcher
-    - JitsiMeetSDK
     - leveldb-library
     - libwebp
     - nanopb
     - OpenSSL-Universal
+    - OpenTok
     - PromisesObjC
     - Protobuf
     - SDWebImage
@@ -1041,6 +1047,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/lottie-ios"
   lottie-react-native:
     :path: "../node_modules/lottie-react-native"
+  opentok-react-native:
+    :path: "../node_modules/opentok-react-native"
   Permission-BluetoothPeripheral:
     :path: "../node_modules/react-native-permissions/ios/BluetoothPeripheral.podspec"
   Permission-Calendars:
@@ -1099,8 +1107,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-maps"
   react-native-image-picker:
     :path: "../node_modules/react-native-image-picker"
-  react-native-jitsi-meet:
-    :path: "../node_modules/react-native-jitsi-meet"
   react-native-maps:
     :path: "../node_modules/react-native-maps"
   react-native-netinfo:
@@ -1147,6 +1153,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@invertase/react-native-apple-authentication"
   RNAudioRecord:
     :path: "../node_modules/react-native-audio-record"
+  RNCallKeep:
+    :path: "../node_modules/react-native-callkeep"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-community/async-storage"
   RNCCheckbox:
@@ -1203,6 +1211,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-vector-icons"
   RNVoipCall:
     :path: "../node_modules/react-native-voip-call"
+  RNVoipPushNotification:
+    :path: "../node_modules/react-native-voip-push-notification"
   toolbar-android:
     :path: "../node_modules/@react-native-community/toolbar-android"
   Yoga:
@@ -1238,7 +1248,7 @@ SPEC CHECKSUMS:
   FirebaseStorage: 93fe2f8190a01bfb2b2c4932df7d679744c4ef1d
   Flipper: 33585e2d9810fe5528346be33bcf71b37bb7ae13
   Flipper-DoubleConversion: 38631e41ef4f9b12861c67d17cb5518d06badc41
-  Flipper-Folly: c12092ea368353b58e992843a990a3225d4533c3
+  Flipper-Folly: e4493b013c02d9347d5e0cb4d128680239f6c78a
   Flipper-Glog: 1dfd6abf1e922806c52ceb8701a3599a79a200a6
   Flipper-PeerTalk: 116d8f857dc6ef55c7a5a75ea3ceaafe878aadc9
   Flipper-RSocket: 64e7431a55835eb953b0bf984ef3b90ae9fdddd7
@@ -1257,13 +1267,14 @@ SPEC CHECKSUMS:
   gRPC-Core: c9aef9a261a1247e881b18059b84d597293c9947
   GTMAppAuth: 197a8dabfea5d665224aa00d17f164fc2248dab9
   GTMSessionFetcher: 6f5c8abbab8a9bce4bb3f057e317728ec6182b10
-  JitsiMeetSDK: d4a3aeed1a75fd57e6a78e5d202b6051dfcb9320
   leveldb-library: 55d93ee664b4007aac644a782d11da33fba316f7
   libwebp: 946cb3063cea9236285f7e9a8505d806d30e07f3
   lottie-ios: 48fac6be217c76937e36e340e2d09cf7b10b7f5f
   lottie-react-native: 1fb4ce21d6ad37dab8343eaff8719df76035bd93
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
-  OpenSSL-Universal: 8b48cc0d10c1b2923617dfe5c178aa9ed2689355
+  OpenSSL-Universal: ff34003318d5e1163e9529b08470708e389ffcdd
+  OpenTok: 2a816f5d77fbf2e2ebb5aec841bd21fb7dc7737b
+  opentok-react-native: d9e006fac8245e98925cb6891c7b70b977993b91
   Permission-BluetoothPeripheral: fcaed9570265193ef4e43c8a14b4f9ebf6e94ba6
   Permission-Calendars: a0e108931f9d111ea291cf31d6b323aa55474ab3
   Permission-Camera: 357e8024a3597a5c0df529a8f87120f1f7e36895
@@ -1295,7 +1306,6 @@ SPEC CHECKSUMS:
   react-native-document-picker: 4921045c5c6c78243010f784eae0a3f4b2af7799
   react-native-google-maps: 0a989abda71059db2caa98b9dacca7a8f38a47d0
   react-native-image-picker: c6d75c4ab2cf46f9289f341242b219cb3c1180d3
-  react-native-jitsi-meet: 29ed76cdc6142d9a6c013bb14dd6205df0b5452b
   react-native-maps: f4b89da81626ad7f151a8bfcb79733295d31ce5c
   react-native-netinfo: 250dc0ca126512f618a8a2ca6a936577e1f66586
   react-native-notifications: 09086eb278cde6ccb463fe5f1dbd57e315c7f642
@@ -1319,6 +1329,7 @@ SPEC CHECKSUMS:
   rn-range-slider: f9c0e4b489c0415dfb1f8de8581bd395ba084d05
   RNAppleAuthentication: 473b2c076f1a48a537610580a168c1fb6d0a90c6
   RNAudioRecord: 162fee3b8fb628773ec704bf0333823125be2ed7
+  RNCallKeep: 6c217f472a8683012888c63c99f91879ccbb78ea
   RNCAsyncStorage: 2a692bcb9b69b76a2f1a95f33db057129700af64
   RNCCheckbox: 47d045535fbb16796df628022a7cd631c78a4d9b
   RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
@@ -1347,7 +1358,8 @@ SPEC CHECKSUMS:
   RNSVG: 8ba35cbeb385a52fd960fd28db9d7d18b4c2974f
   RNVectorIcons: 368d6d8b8301224e5ffb6254191f4f8876c2be0d
   RNVoipCall: efb581cb75327ce99cd72c0766436ab3056f6e69
-  SDWebImage: 0b42b8719ab0c5257177d5894306e8a336b21cbb
+  RNVoipPushNotification: 6b38227bbbb2359dc11cbf826044f8ed4bd8de36
+  SDWebImage: a31ee8e90a97303529e03fb0c333eae0eacb88e9
   SDWebImageWebPCoder: d0dac55073088d24b2ac1b191a71a8f8d0adac21
   toolbar-android: 85f3ef4d691469f2d304e7dee4bca013aa1ba1ff
   Yoga: 7740b94929bbacbddda59bf115b5317e9a161598
@@ -1355,4 +1367,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 2734892f3100e3633f4362db582c021c2f876c36
 
-COCOAPODS: 1.9.3
+COCOAPODS: 1.10.0

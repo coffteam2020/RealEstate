@@ -30,6 +30,7 @@ const styles = StyleSheet.create({
 		alignContent: 'center', 
 		alignItems: 'center', 
 		alignSelf: 'center', 
+		zIndex: 1000000,
 		justifyContent: 'center' 
 	},
 	container: {
@@ -44,6 +45,7 @@ const styles = StyleSheet.create({
 		backgroundColor: colors.whiteTransparent, 
 		borderColor: colors.gray_bg, 
 		borderWidth: 0.5, 
+		zIndex: 1000000,
 		borderRadius: 20, 
 		width: ScreenWidth / 5, 
 		height: ScreenWidth / 5, 

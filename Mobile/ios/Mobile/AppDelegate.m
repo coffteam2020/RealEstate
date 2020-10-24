@@ -11,7 +11,7 @@
 #import <PushKit/PushKit.h>                    /* <------ add this line */
 #import "RNVoipPushKit.h"
 #import <GoogleMaps/GoogleMaps.h>
-
+#import "RNCallKeep.h"
 #ifdef FB_SONARKIT_ENABLED
 #import <FlipperKit/FlipperClient.h>
 #import <FlipperKitLayoutPlugin/FlipperKitLayoutPlugin.h>
@@ -182,7 +182,7 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
    NSLog(@"Ajith");
   
   
-  
+//  [RNCallKeep reportNewIncomingCall:uuid handle:handle handleType:@"generic" hasVideo:false localizedCallerName:callerName fromPushKit: YES payload:extra withCompletionHandler:completion];
   [RNVoipPushKit didReceiveIncomingPushWithPayload:payload forType:(NSString *)type];
 }
 
@@ -230,5 +230,12 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
     
   }
 }
-
+- (BOOL)application:(UIApplication *)application
+ continueUserActivity:(NSUserActivity *)userActivity
+   restorationHandler:(void(^)(NSArray * __nullable restorableObjects))restorationHandler
+ {
+   return [RNCallKeep application:application
+            continueUserActivity:userActivity
+              restorationHandler:restorationHandler];
+ }
 @end

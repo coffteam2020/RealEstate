@@ -11,9 +11,10 @@ import notifee from '@notifee/react-native';
 import RNVoipCall, { RNVoipPushKit } from 'react-native-voip-call';
 import { NavigationService } from '../../../navigation';
 import { ScreenNames } from '../../../route/ScreenNames';
-
+import RNCallKeep from 'react-native-callkeep';
 let notificationId = '';
 let uid = '';
+
 export const notificationInitialize = async (store, currentScreen) => {
 	checkPermission();
 	registerNotificationInBackground();
@@ -30,6 +31,24 @@ export const requestPermission = async () => {
 	}
 };
 const iosPushKit = () => {
+
+	const options = {
+		ios: {
+			appName: 'My app name',
+		},
+		android: {
+			alertTitle: 'Permissions required',
+			alertDescription: 'This application needs to access your phone accounts',
+			cancelButton: 'Cancel',
+			okButton: 'ok',
+			imageName: 'phone_account_icon',
+			additionalPermissions: [PermissionsAndroid.PERMISSIONS.example]
+		}
+	};
+
+	RNCallKeep.setup(options).then(accepted => {
+		RNCallKeep.setAvailable(true);
+	 });
 	if (Platform.OS === 'ios') {
 		//For Push Kit
 		RNVoipPushKit.requestPermissions();  // --- optional, you can use another library to request permissions
@@ -37,13 +56,13 @@ const iosPushKit = () => {
 		//Ios PushKit device token Listner
 		RNVoipPushKit.getPushKitDeviceToken((res) => {
 			if (res.platform === 'ios') {
-				// setPushkitToken(res.deviceToken)
+				setPushkitToken(res?.deviceToken)
 			}
 		});
 
 		//On Remote Push notification Recived in Forground
 		RNVoipPushKit.RemotePushKitNotificationReceived((notification) => {
-			log(notification);
+			alert(JSON.stringify(notification));
 		});
 	}
 }
@@ -166,7 +185,7 @@ const onDisplayNotification = async (notification) => {
 		const body = notification?.notification?.body;
 		// console.log("body" + JSON.stringify(body));
 		console.log(body);
-		var a  = body?.split('#') || [];
+		var a = body?.split('#') || [];
 		console.log(a);
 		if (a[1]) {
 			if (a?.[1].includes('MESSAGE')) {
@@ -217,8 +236,8 @@ const registerHearingNotification = async (store, currentScreen) => {
 };
 
 export const backgroundNotificationHandler = async (message) => {
-	onDisplayNotification(message);
-	displayIncoming();
+	onDisplayNotification(message?.data);
+	displayIncoming(message?.data);
 	return Promise.resolve(message);
 };
 

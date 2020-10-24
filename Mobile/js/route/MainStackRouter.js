@@ -58,7 +58,6 @@ const SocialScreenNavigator = createStackNavigator(
     NewPostScreen: { screen: NewPostScreen },
     PostDetailScreen: { screen: PostDetailScreen },
     Account: { screen: Account },
-    Scanner: { screen: Scanner }
   },
   {
     mode: 'modal',
@@ -213,6 +212,7 @@ const TabNavigator = createStackNavigator(
     VideoCallScreen: { screen: VideoCallScreen },
     GroupMateScreen: { screen: GroupMateScreen },
     VideoCall: { screen: VideoCall },
+    Scanner: { screen: Scanner },
     SocialScreen: { screen: SocialScreenNavigator },
   },
   {
