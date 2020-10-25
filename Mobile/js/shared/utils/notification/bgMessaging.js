@@ -1,13 +1,14 @@
 /* eslint-disable no-unused-vars */
 import {firebase} from '@react-native-firebase/messaging';
 import notifee from '@notifee/react-native';
-import RNVoipCall, { RNVoipPushKit } from 'react-native-voip-call';
 import { NavigationService } from '../../../navigation';
 import { ScreenNames } from '../../../route/ScreenNames';
+import RNCallKeep from 'react-native-callkeep';
+var uuid = require('uuid');
 
 const displayIncoming = async (message) => {
-	console.log("displayIncoming" + JSON.stringify(message));
-
+	console.log("displayIncodsadasming=======" + JSON.stringify(message));
+	
 	if (message?.[1]?.includes('VIDEO_CALL')) {
 		let callOptions = {
 			callerId: '825f4094-a674-4765-96a7-1ac512c02a71', // Important uuid must in this format
@@ -29,39 +30,14 @@ const displayIncoming = async (message) => {
 				declineActionTitle: 'Decline',
 			}
 		}
-
-		RNVoipCall.displayIncomingCall(callOptions).then((data) => {
-			console.log("displayIncomingCall" + JSON.stringify(data));
-		}).catch(e => console.log(e))
-		//app open Automatically when Call recived
-		RNVoipCall.onCallOpenAppEvent(event => {
-			console.log("onCallOpenAppEvent" + JSON.stringify(event));
-		});
-		// on click call Notification
-		RNVoipCall.onCallNotificationOpen(event => {
-			console.log("onCallNotificationOpen" + JSON.stringify(event));
-		});
-		RNVoipCall.onCallAnswer(data => {
-			console.log("onCallAnswer" + JSON.stringify(data));
-			RNVoipCall.endCall('825f4094-a674-4765-96a7-1ac512c02a71'); // End specific Call
-			RNVoipCall.endAllCalls(); // End All Calls
-			NavigationService.navigate(ScreenNames.VideoCall, { url: message?.[2] });
-		});
-		RNVoipCall.onEndCall(data => {
-			RNVoipCall.endCall('825f4094-a674-4765-96a7-1ac512c02a71'); // End specific Call
-			RNVoipCall.endAllCalls(); // End All Calls
-			console.log(data);
-		});
-		// missed call notification taped
-		RNVoipCall.onMissedCallOpen(event => {
-			RNVoipCall.endCall('825f4094-a674-4765-96a7-1ac512c02a71'); // End specific Call
-			RNVoipCall.endAllCalls(); // End All Calls
-		});
+		const a = uuid.v4();
+		RNCallKeep.startCall(`${new Date().getTime()}`);
+		RNCallKeep.displayIncomingCall(a, 'Dapp Premium', 'You have a video call from your friend','number', true );
 	}
 }
 
 export default async (message) => {
 	// handle your message
-	displayIncoming(message);
+	displayIncoming(message?.notification?.body?.split("#") || message?.data);
 	return Promise.resolve();
 };

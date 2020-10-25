@@ -9,6 +9,7 @@ import { Provider as PaperProvider } from 'react-native-paper';
 import { ToastHelper } from './js/shared/components/ToastHelper';
 import DropdownAlert from './js/shared/components/DropDownAlert/DropdownAlert';
 import { Text, Platform } from 'react-native';
+import VoipPushNotification from 'react-native-voip-push-notification';
 import { initialMode } from 'react-native-dark-mode';
 import { Appearance } from 'react-native-appearance';
 import { CustomDarkTheme, CustomLightTheme } from './js/themes/index';
@@ -70,13 +71,59 @@ const App = () => {
     // Clear room local
     IALocalStorage.setRoom('');
     if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
+      firebase.initializeApp(firebaseConfig);
     }
     // await firebase.messaging().registerDeviceForRemoteMessages();
     // await firebase.messaging().registerForRemoteNotifications();
     notificationInitialize(userStore, currentScreen);
   };
   const configure = () => {
+    if (Platform.OS === 'ios') {
+      
+      VoipPushNotification.requestPermissions(); // --- optional, you can use another library to request permissions
+      VoipPushNotification.registerVoipToken(); // --- required
+
+      VoipPushNotification.addEventListener('register', (token) => {
+        // --- send token to your apn provider server
+      });
+
+      VoipPushNotification.addEventListener('localNotification', (notification) => {
+        // --- when user click local push
+      });
+
+      VoipPushNotification.addEventListener('notification', (notification) => {
+        // --- when receive remote voip push, register your VoIP client, show local notification ... etc
+        //this.doRegisterOrSomething();
+
+        // --- This  is a boolean constant exported by this module
+        // --- you can use this constant to distinguish the app is launched by VoIP push notification or not
+        if (VoipPushNotification.wakeupByPush) {
+          // this.doSomething()
+
+          // --- remember to set this static variable back to false
+          // --- since the constant are exported only at initialization time, and it will keep the same in the whole app
+          VoipPushNotification.wakeupByPush = false;
+        }
+
+
+        // --- optionally, if you `addCompletionHandler` from the native side, once you have done the js jobs to initiate a call, call `completion()`
+        VoipPushNotification.onVoipNotificationCompleted(notification.getData().uuid);
+
+
+        /**
+         * Local Notification Payload
+         *
+         * - `alertBody` : The message displayed in the notification alert.
+         * - `alertAction` : The "action" displayed beneath an actionable notification. Defaults to "view";
+         * - `soundName` : The sound played when the notification is fired (optional).
+         * - `category`  : The category of this notification, required for actionable notifications (optional).
+         * - `userInfo`  : An optional object containing additional notification data.
+         */
+        VoipPushNotification.presentLocalNotification({
+          alertBody: "hello! " + notification.getMessage()
+        });
+      });
+    }
     PushNotification.configure({
       // user accepted notification permission - register token
       onRegister: function (tokenData) {
@@ -110,7 +157,7 @@ const App = () => {
               }
             }
           });
-          
+
         }
       }
     });

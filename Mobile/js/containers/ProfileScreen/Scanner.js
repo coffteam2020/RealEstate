@@ -44,7 +44,7 @@ const Scanner = (props) => {
                         topContent={''}
                         bottomContent={null}
                     />
-                    <TextInputFlat
+                    {/* <TextInputFlat
                         onChangeText={(text) => {
                             setS(text);
                         }}
@@ -56,7 +56,7 @@ const Scanner = (props) => {
                         if (s !== '') {
                             NavigationService.navigate(ScreenNames.VideoCall, { url: s, isGroup: true })
                         }
-                    }} />
+                    }} /> */}
                 </KeyboardAwareScrollView>
             </SafeAreaView>
         </View>

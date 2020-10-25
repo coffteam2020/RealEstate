@@ -140,7 +140,7 @@
 // export default VideoCall;
 
 import React, { Component } from 'react';
-import { Platform, StyleSheet, View, ScrollView, Alert } from 'react-native';
+import { Platform, StyleSheet, View, ScrollView, Alert, Keyboard } from 'react-native';
 import Axios from 'axios';
 import { OTSession, OTPublisher, OTSubscriber, OT } from 'opentok-react-native';
 import { TouchableOpacity } from 'react-native';
@@ -250,8 +250,8 @@ export default class VideoCall extends Component {
     clearInterval(this.interval);
   }
   componentDidMount = async () => {
-
-    const isGroup = this.props.navigation?.state?.isGroup
+    Keyboard.dismiss();
+    const isGroup = this.props.navigation?.state?.params?.isGroup
     // if (isGroup) {
     interval = setInterval(() => {
       this.num = this.num + 1;
@@ -419,13 +419,13 @@ export default class VideoCall extends Component {
           }}>
           {<Ionicons name="close" size={30} color={'red'} />}
         </TouchableOpacity>
-        {/* <TouchableOpacity
+        {this.props.navigation?.state?.params?.isGroup && <TouchableOpacity
           style={{ position: 'absolute', padding: 3, top: Platform.OS === 'ios' ? 40 : 20, right: 60, zIndex: 10000, borderRadius: 70, backgroundColor: 'rgba(0,0,0,0.2)' }}
           onPress={() => {
             this.setState({ showQRS: true })
           }}>
           <Entypo name="share" color={'white'} size={26} />
-        </TouchableOpacity> */}
+        </TouchableOpacity>}
         <TouchableOpacity
           style={{ position: 'absolute', padding: 3, top: Platform.OS === 'ios' ? 40 : 20, right: 100, zIndex: 10000, borderRadius: 70, backgroundColor: 'rgba(0,0,0,0.2)' }}
           onPress={() => {
