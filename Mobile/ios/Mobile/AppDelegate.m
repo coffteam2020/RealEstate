@@ -193,7 +193,7 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 // --- Handle incoming pushes (for ios <= 10)
 - (void)pushRegistry:(PKPushRegistry *)registry didReceiveIncomingPushWithPayload:(PKPushPayload *)payload forType:(PKPushType)type {
    NSLog(@"Ajith");
-  
+  [RNVoipPushNotificationManager didReceiveIncomingPushWithPayload:payload forType:(NSString *)type];
 //    [RNVoipPushKit didReceiveIncomingPushWithPayload:payload forType:(NSString *)type];
 //    [RNVoipPushNotificationManager didReceiveIncomingPushWithPayload:payload forType:(NSString *)type];
 
@@ -201,17 +201,15 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
   NSString *callerName = @"Test";
   NSString *handle = @"handle";
   [RNCallKeep reportNewIncomingCall:uuid handle:handle handleType:@"generic" hasVideo:false localizedCallerName:callerName fromPushKit: YES payload:nil];
-  [RNVoipPushNotificationManager didReceiveIncomingPushWithPayload:payload forType:(NSString *)type];
 }
 - (void)pushRegistry:(PKPushRegistry *)registry didReceiveIncomingPushWithPayload:(PKPushPayload *)payload forType:(PKPushType)type withCompletionHandler:(void (^)(void))completion {
   // Process the received push
-  
+  [RNVoipPushNotificationManager didReceiveIncomingPushWithPayload:payload forType:(NSString *)type];
 
   NSString *uuid = @"44713e33-fa78-4ff5-8ec5-983e0832d1c6";
   NSString *callerName = @"Test";
   NSString *handle = @"handle";
   [RNCallKeep reportNewIncomingCall:uuid handle:handle handleType:@"generic" hasVideo:false localizedCallerName:callerName fromPushKit: YES payload:nil];
-  [RNVoipPushNotificationManager didReceiveIncomingPushWithPayload:payload forType:(NSString *)type];
 }
 - (BOOL)application:(UIApplication *)application
  continueUserActivity:(NSUserActivity *)userActivity
