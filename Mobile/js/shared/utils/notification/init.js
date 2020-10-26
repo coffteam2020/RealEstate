@@ -9,6 +9,9 @@ import { Notifications, NotificationAction, NotificationCategory } from 'react-n
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import notifee from '@notifee/react-native';
 import { NavigationService } from '../../../navigation';
+import { DeviceEventEmitter } from 'react-native';
+import IncomingCall from 'react-native-incoming-call';
+
 import { ScreenNames } from '../../../route/ScreenNames';
 import RNCallKeep from 'react-native-callkeep';
 let notificationId = '';
@@ -83,7 +86,7 @@ const onAnswerCallAction = (data) => {
 	// Called when the user answers an incoming call
 	console.log(JSON.stringify(data));
 	console.log(JSON.stringify(messages));
-	// RNCallKeep.endAllCalls();
+	RNCallKeep.endAllCalls();
 	NavigationService.navigate(ScreenNames.VideoCall, { url: messages?.[2] });
 };
 
@@ -139,9 +142,11 @@ export const registerToken = async () => {
 
 // Check permission
 export const checkPermission = async () => {
+	init();
 	const enabled = await firebase.messaging().hasPermission();
 	if (enabled && enabled) {
 		await registerToken();
+
 	} else {
 		await requestPermission();
 	}
@@ -157,7 +162,8 @@ export const checkPermission = async () => {
 	// }).catch(e => console.log(e));
 };
 
-const displayIncoming = async (message) => {
+export const displayIncoming = async (message) => {
+	RNCallKeep.backToForeground();
 	console.log("displayIncoming" + JSON.stringify(message));
 	messages = message;
 	if (message?.[1]?.includes('VIDEO_CALL')) {
@@ -181,45 +187,69 @@ const displayIncoming = async (message) => {
 				declineActionTitle: 'Decline',
 			}
 		}
-		// RNCallKeep.endAllCalls();
-		// RNCallKeep.startCall(`${new Date().getTime()}`);
-		RNCallKeep.displayIncomingCall(getCurrentCallId(), 'Dapp Premium', 'You have a video call from your friend','number', true );
-		// RNVoipCall.displayIncomingCall(callOptions).then((data) => {
-		// 	console.log("displayIncomingCall" + JSON.stringify(data));
-		// }).catch(e => console.log(e))
-		// //app open Automatically when Call recived
-		// RNVoipCall.onCallOpenAppEvent(event => {
-		// 	console.log("onCallOpenAppEvent" + JSON.stringify(event));
-		// });
-		// // on click call Notification
-		// RNVoipCall.onCallNotificationOpen(event => {
-		// 	console.log("onCallNotificationOpen" + JSON.stringify(event));
-		// });
-		// RNVoipCall.onCallAnswer(data => {
-		// 	console.log("onCallAnswer" + JSON.stringify(data));
-		// 	RNVoipCall.endCall('825f4094-a674-4765-96a7-1ac512c02a71'); // End specific Call
-		// 	RNVoipCall.endAllCalls(); // End All Calls
-		// 	NavigationService.navigate(ScreenNames.VideoCall, { url: message?.[2] });
-		// });
-		// RNVoipCall.onEndCall(data => {
-		// 	RNVoipCall.endCall('825f4094-a674-4765-96a7-1ac512c02a71'); // End specific Call
-		// 	RNVoipCall.endAllCalls(); // End All Calls
-		// 	console.log(data);
-		// });
-		// // missed call notification taped
-		// RNVoipCall.onMissedCallOpen(event => {
-		// 	RNVoipCall.endCall('825f4094-a674-4765-96a7-1ac512c02a71'); // End specific Call
-		// 	RNVoipCall.endAllCalls(); // End All Calls
-		// });
-	} else {
-		// RNCallKeep.displayIncomingCall(getCurrentCallId(), 'Dapp Premium', 'You have a video call from your friend','number', true );
-	}
-}
+		// RNCallKeep.checkIfBusy().then(val => {
+		// 	if (!val) {
+		RNCallKeep.displayIncomingCall(getCurrentCallId(), 'Dapp Premium', 'You have a video call from your friend', 'number', true);
+		// 	} 
+		// })
 
+	} else {
+		RNCallKeep.displayIncomingCall(getCurrentCallId(), 'Dapp Premium', 'You have a video call from your friend', 'number', true);
+	}
+	// else {
+	// 	RNCallKeep.displayIncomingCall(getCurrentCallId(), 'Dapp Premium', 'You have a video call from your friend','number', true );
+	// }
+}
+const init = () => {
+	PushNotification.configure({
+		// (optional) Called when Token is generated (iOS and Android)
+		onRegister: function (token) {
+			console.log("TOKEN:", token);
+
+			const deviceToken = token.token;
+		},
+
+		// (required) Called when a remote or local notification is opened or received
+		onNotification: function (notification) {
+			console.log("NOTIFICATION:", notification);
+
+			notification.finish(PushNotificationIOS.FetchResult.NoData);
+			// process the notification
+			if (notification?.alert?.body?.includes('VIDEO_CALL')) {
+				displayIncoming(notification?.alert?.body?.split("#"));
+			} else {
+				onDisplayNotification(notification?.alert);
+			}
+			// required on iOS only (see fetchCompletionHandler docs: https://github.com/react-native-community/react-native-push-notification-ios)
+
+		},
+
+		// ANDROID ONLY: GCM or FCM Sender ID (product_number) (optional - not required for local notifications, but is need to receive remote push notifications)
+		senderID: "YOUR GCM (OR FCM) SENDER ID",
+
+		// IOS ONLY (optional): default: all - Permissions to register.
+		permissions: {
+			alert: true,
+			badge: true,
+			sound: true
+		},
+
+		// Should the initial notification be popped automatically
+		// default: true
+		popInitialNotification: true,
+
+		/**
+		 * (optional) default: true
+		 * - Specified if permissions (ios) and token (android and ios) will requested or not,
+		 * - if not, you must call PushNotificationsHandler.requestPermissions() later
+		 */
+		requestPermissions: true
+	});
+}
 const registerNotificationInBackground = () => {
 	firebase.messaging().setBackgroundMessageHandler(async remoteMessage => {
 		onDisplayNotification(remoteMessage);
-		displayIncoming(remoteMessage?.notification?.body?.split("#") || remoteMessage.data );
+		displayIncoming(remoteMessage?.notification?.body?.split("#") || remoteMessage.data?.body?.split("#"));
 	});
 
 };
@@ -236,11 +266,26 @@ const registerWatchingNotificationOpened = () => {
 	});
 };
 const onDisplayNotification = async (notification) => {
-	if (notificationId != notification?.from) {
-		notificationId = notification?.from;
-	} else {
-		return;
+	if (notification?.from) {
+		if (notificationId != notification?.from) {
+			notificationId = notification?.from;
+		} else {
+			return;
+		}
+	} else if (notification?.messageId) {
+		if (notificationId != notification?.messageId) {
+			notificationId = notification?.messageId;
+		} else {
+			return;
+		}
+	} else if (notification?.data?.notificationId) {
+		if (notificationId != notification?.data?.notificationId) {
+			notificationId = notification?.data?.notificationId;
+		} else {
+			return;
+		}
 	}
+
 	// console.log(JSON.stringify(notification));
 	// Create a channel
 	const channelId = await notifee.createChannel({
@@ -282,33 +327,64 @@ const onDisplayNotification = async (notification) => {
 const registerHearingNotification = async (store, currentScreen) => {
 
 	var notificationListener = await firebase.messaging().onMessage(async (notification) => {
+		RNCallKeep.backToForeground();
 		console.log('registerHearingNotification: ' + LogManager.parseJsonObjectToJsonString(notification));
 		onDisplayNotification(notification);
 		displayIncoming(notification?.notification?.body?.split("#"));
 	});
 	firebase.messaging().setBackgroundMessageHandler(async remoteMessage => {
+		RNCallKeep.backToForeground();
 		console.log('registerHearingNotification Background: ' + LogManager.parseJsonObjectToJsonString(remoteMessage));
 		onDisplayNotification(remoteMessage);
-		displayIncoming(remoteMessage?.notification?.body?.split("#") || remoteMessage?.data);
+		displayIncoming(remoteMessage?.notification?.body?.split("#") || remoteMessage?.data?.body?.split("#"));
 	});
 
 	// Handle notification in background - automatically
 	firebase.messaging().onMessage((message) => {
+		RNCallKeep.backToForeground();
 		onDisplayNotification(message);
-		displayIncoming(message?.notification?.body?.split("#") || message?.data);
+		displayIncoming(message?.notification?.body?.split("#") || message?.data?.body?.split("#"));
 		backgroundNotificationHandler(message)
 			.then();
 	});
 	firebase.messaging().setBackgroundMessageHandler(async remoteMessage => {
 		console.log('Message handled in the background!', remoteMessage);
 		onDisplayNotification(remoteMessage);
-	displayIncoming(remoteMessage?.notification?.body?.split("#") || remoteMessage?.data);
-		});
+		displayIncoming(remoteMessage?.notification?.body?.split("#") || remoteMessage?.data?.body?.split("#"));
+		if (Platform.OS === 'android') {
+			if (remoteMessage?.notification?.body?.split[1] === 'VIDEO_CALL') {
+				// Display incoming call activity.
+				IncomingCall.display(
+					'callUUIDv4', // Call UUID v4
+					'Quocs', // Username
+					'https://avatars3.githubusercontent.com/u/16166195', // Avatar URL
+					'Incomming Call', // Info text
+					20000 // Timeout for end call after 20s
+				);
+			}
+
+			// Listen to headless action events
+			DeviceEventEmitter.addListener("endCall", payload => {
+				// End call action here
+			});
+			DeviceEventEmitter.addListener("answerCall", (payload) => {
+				console.log('answerCall', payload);
+				if (payload.isHeadless) {
+					// Called from killed state
+					IncomingCall.openAppFromHeadlessMode(payload.uuid);
+				} else {
+					// Called from background state
+					IncomingCall.backToForeground();
+				}
+			});
+		}
+	});
 };
 
 export const backgroundNotificationHandler = async (message) => {
 	onDisplayNotification(message);
-	displayIncoming(message?.notification?.body?.split("#") || message?.data);
+	RNCallKeep.backToForeground();
+	displayIncoming(message?.notification?.body?.split("#") || message?.data?.body?.split("#"));
 	return Promise.resolve(message);
 };
 

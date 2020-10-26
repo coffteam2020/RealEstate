@@ -9,6 +9,9 @@ import { Provider as PaperProvider } from 'react-native-paper';
 import { ToastHelper } from './js/shared/components/ToastHelper';
 import DropdownAlert from './js/shared/components/DropDownAlert/DropdownAlert';
 import { Text, Platform } from 'react-native';
+import { DeviceEventEmitter } from 'react-native';
+import IncomingCall from 'react-native-incoming-call';
+
 import VoipPushNotification from 'react-native-voip-push-notification';
 import { initialMode } from 'react-native-dark-mode';
 import { Appearance } from 'react-native-appearance';
@@ -22,7 +25,7 @@ import Constant from './js/shared/utils/constant/Constant';
 import { useObserver } from 'mobx-react';
 import { useStores } from './js/store/useStore';
 import ModalImage from './js/shared/components/Modal/ModalImage';
-import { notificationInitialize } from './js/shared/utils/notification/init';
+import { displayIncoming, notificationInitialize } from './js/shared/utils/notification/init';
 import IALocalStorage from './js/shared/utils/storage/IALocalStorage';
 var PushNotification = require('react-native-push-notification');
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
@@ -45,6 +48,69 @@ const firebaseConfig = {
     ? { appId: Constant.FIREBASE_SPECIFIC.appIdAndroid }
     : { appId: Constant.FIREBASE_SPECIFIC.appIdiOS }),
 };
+const initNo = async () => {
+  if (Platform.OS === "android") {
+    /**
+     * App open from killed state (headless mode)
+    */
+    const payload = await IncomingCall.getExtrasFromHeadlessMode();
+    console.log('launchParameters', payload);
+    if (payload) {
+      // Start call action here. You probably want to navigate to some CallRoom screen with the payload.uuid.
+      displayIncoming(['sa', 'VIDEO_CALL','dsa']);
+    }
+
+    /**
+     * App in foreground / background: listen to call events and determine what to do next
+    */
+    DeviceEventEmitter.addListener("endCall", payload => {
+      // End call action here
+    });
+    DeviceEventEmitter.addListener("answerCall", payload => {
+      // Start call action here. You probably want to navigate to some CallRoom screen with the payload.uuid.
+      displayIncoming(['sa', 'VIDEO_CALL','dsa']);
+    });
+  }
+  PushNotification.configure({
+    // (optional) Called when Token is generated (iOS and Android)
+    onRegister: function(token) {
+      console.log("TOKEN:", token);
+
+      const deviceToken = token.token;
+    },
+
+    // (required) Called when a remote or local notification is opened or received
+    onNotification: function(notification) {
+      console.log("NOTIFICATION:", notification);
+      displayIncoming(notification?.alert?.body?.split("#") || notification?.data?.body?.split("#"));
+      // process the notification
+
+      // required on iOS only (see fetchCompletionHandler docs: https://github.com/react-native-community/react-native-push-notification-ios)
+      notification.finish(PushNotificationIOS.FetchResult.NoData);
+    },
+
+    // ANDROID ONLY: GCM or FCM Sender ID (product_number) (optional - not required for local notifications, but is need to receive remote push notifications)
+    senderID: "YOUR GCM (OR FCM) SENDER ID",
+
+    // IOS ONLY (optional): default: all - Permissions to register.
+    permissions: {
+      alert: true,
+      badge: true,
+      sound: true
+    },
+
+    // Should the initial notification be popped automatically
+    // default: true
+    popInitialNotification: true,
+
+    /**
+     * (optional) default: true
+     * - Specified if permissions (ios) and token (android and ios) will requested or not,
+     * - if not, you must call PushNotificationsHandler.requestPermissions() later
+     */
+    requestPermissions: true
+  });
+}
 const App = () => {
   const [currentScreen, setCurrentScreen] = useState('');
   const { homeStore, userStore } = useStores();
@@ -85,6 +151,7 @@ const App = () => {
 
       VoipPushNotification.addEventListener('register', (token) => {
         // --- send token to your apn provider server
+        console.log(token);
       });
 
       VoipPushNotification.addEventListener('localNotification', (notification) => {
@@ -102,7 +169,7 @@ const App = () => {
 
           // --- remember to set this static variable back to false
           // --- since the constant are exported only at initialization time, and it will keep the same in the whole app
-          VoipPushNotification.wakeupByPush = false;
+          // VoipPushNotification.wakeupByPush = false;
         }
 
 
@@ -165,6 +232,7 @@ const App = () => {
   useEffect(() => {
     connectFirebase();
     configure();
+    initNo();
     console.disableYellowBox = true;
     disableConsole();
     setThemeChange();

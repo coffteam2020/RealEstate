@@ -43,7 +43,9 @@ static void InitializeFlipper(UIApplication *application) {
                                                    moduleName:@"Mobile"
                                             initialProperties:nil];
   [FIRApp configure];
-
+  // register for voip notifs immediately to recv. notifs when app is killed - doing this from the JS side is too slow
+  RNVoipPushNotificationManager* voipModule = [bridge moduleForClass:[RNVoipPushNotificationManager class]];
+  [voipModule voipRegistration];
   //  [RNNotifications startMonitorNotifications];
     if ([UNUserNotificationCenter class] != nil) {
     // iOS 10 or later
@@ -191,45 +193,25 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 // --- Handle incoming pushes (for ios <= 10)
 - (void)pushRegistry:(PKPushRegistry *)registry didReceiveIncomingPushWithPayload:(PKPushPayload *)payload forType:(PKPushType)type {
    NSLog(@"Ajith");
-  [RNVoipPushNotificationManager didReceiveIncomingPushWithPayload:payload forType:(NSString *)type];
   
-//  [RNCallKeep reportNewIncomingCall:uuid handle:handle handleType:@"generic" hasVideo:false localizedCallerName:callerName fromPushKit: YES payload:extra withCompletionHandler:completion];
-//  [RNVoipPushKit didReceiveIncomingPushWithPayload:payload forType:(NSString *)type];
-//  [RNVoipPushNotificationManager didReceiveIncomingPushWithPayload:payload forType:(NSString *)type];
+//    [RNVoipPushKit didReceiveIncomingPushWithPayload:payload forType:(NSString *)type];
+//    [RNVoipPushNotificationManager didReceiveIncomingPushWithPayload:payload forType:(NSString *)type];
 
-  // Retrieve information like handle and callerName here
-   NSString *uuid = /* fetch for payload or ... */ [[[NSUUID UUID] UUIDString] lowercaseString];
-   NSString *callerName = @"caller name here";
-   NSString *handle = @"caller number here";
-   NSDictionary *extra = [payload.dictionaryPayload valueForKeyPath:@"custom.path.to.data"]; /* use this to pass any special data (ie. from your notification) down to RN. Can also be `nil` */
-
-  [RNCallKeep reportNewIncomingCall:uuid handle:handle handleType:@"generic" hasVideo:false localizedCallerName:callerName fromPushKit: YES payload:extra ];
+  NSString *uuid = @"44713e33-fa78-4ff5-8ec5-983e0832d1c6";
+  NSString *callerName = @"Test";
+  NSString *handle = @"handle";
+  [RNCallKeep reportNewIncomingCall:uuid handle:handle handleType:@"generic" hasVideo:false localizedCallerName:callerName fromPushKit: YES payload:nil];
+  [RNVoipPushNotificationManager didReceiveIncomingPushWithPayload:payload forType:(NSString *)type];
 }
-
-// --- Handle incoming pushes (for ios >= 11)
 - (void)pushRegistry:(PKPushRegistry *)registry didReceiveIncomingPushWithPayload:(PKPushPayload *)payload forType:(PKPushType)type withCompletionHandler:(void (^)(void))completion {
+  // Process the received push
   
-  // --- NOTE: apple forced us to invoke callkit ASAP when we receive voip push
-  // --- see: react-native-callkeep
 
-  // --- Retrieve information from your voip push payload
-  NSString *uuid = payload.dictionaryPayload[@"uuid"];
-  NSString *callerName = [NSString stringWithFormat:@"%@ (Connecting...)", payload.dictionaryPayload[@"callerName"]];
-  NSString *handle = payload.dictionaryPayload[@"handle"];
-
-  // --- this is optional, only required if you want to call `completion()` on the js side
-  [RNVoipPushNotificationManager addCompletionHandler:uuid completionHandler:completion];
-
-  // --- Process the received push
+  NSString *uuid = @"44713e33-fa78-4ff5-8ec5-983e0832d1c6";
+  NSString *callerName = @"Test";
+  NSString *handle = @"handle";
+  [RNCallKeep reportNewIncomingCall:uuid handle:handle handleType:@"generic" hasVideo:false localizedCallerName:callerName fromPushKit: YES payload:nil];
   [RNVoipPushNotificationManager didReceiveIncomingPushWithPayload:payload forType:(NSString *)type];
-
-  NSDictionary *extra = [payload.dictionaryPayload valueForKeyPath:@"custom.path.to.data"]; /* use this to pass any special data (ie. from your notification) down to RN. Can also be `nil` */
-
-  // --- You should make sure to report to callkit BEFORE execute `completion()`
-  [RNCallKeep reportNewIncomingCall:uuid handle:handle handleType:@"generic" hasVideo:false localizedCallerName:callerName fromPushKit: YES payload:extra withCompletionHandler:completion];
-  
-  // --- You don't need to call it if you stored `completion()` and will call it on the js side.
-//  completion();
 }
 - (BOOL)application:(UIApplication *)application
  continueUserActivity:(NSUserActivity *)userActivity
@@ -239,4 +221,5 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
             continueUserActivity:userActivity
               restorationHandler:restorationHandler];
  }
+
 @end

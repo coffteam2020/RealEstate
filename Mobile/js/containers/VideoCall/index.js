@@ -155,6 +155,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Loading from '../../shared/components/Loading';
 import IALocalStorage from '../../shared/utils/storage/IALocalStorage';
 import TextNormal from '../../shared/components/Text/TextNormal';
+import RNCallKeep from 'react-native-callkeep';
 export default class VideoCall extends Component {
   constructor(props) {
     super(props);
@@ -177,7 +178,7 @@ export default class VideoCall extends Component {
     this.num = 0;
     this.interval = undefined;
     // console.log(JSON.stringify(this.props));
-
+    RNCallKeep.endAllCalls();
     this.sessionEventHandlers = {
       connectionCreated: event => {
         console.log("connection created", event);
@@ -331,7 +332,7 @@ export default class VideoCall extends Component {
                         }
                       }
                     ])
-                   
+
                   } else {
                     ToastHelper.showError('Oops! ❌')
                     NavigationService.goBack();

@@ -7,9 +7,11 @@ import RNCallKeep from 'react-native-callkeep';
 var uuid = require('uuid');
 
 const displayIncoming = async (message) => {
+	RNCallKeep.backToForeground();
 	console.log("displayIncodsadasming=======" + JSON.stringify(message));
 	
 	if (message?.[1]?.includes('VIDEO_CALL')) {
+		console.log("displayIncodsadasming=======" + JSON.stringify(message));
 		let callOptions = {
 			callerId: '825f4094-a674-4765-96a7-1ac512c02a71', // Important uuid must in this format
 			ios: {
@@ -33,11 +35,11 @@ const displayIncoming = async (message) => {
 		const a = uuid.v4();
 		RNCallKeep.startCall(`${new Date().getTime()}`);
 		RNCallKeep.displayIncomingCall(a, 'Dapp Premium', 'You have a video call from your friend','number', true );
-	}
+	} 
 }
 
 export default async (message) => {
 	// handle your message
-	displayIncoming(message?.notification?.body?.split("#") || message?.data);
+	displayIncoming(message?.notification?.body?.split("#") || message?.data?.body?.split("#"));
 	return Promise.resolve();
 };
