@@ -11,7 +11,7 @@ import notifee from '@notifee/react-native';
 import { NavigationService } from '../../../navigation';
 import { DeviceEventEmitter } from 'react-native';
 import IncomingCall from 'react-native-incoming-call';
-
+import BackgroundTimer from 'react-native-background-timer';
 import { ScreenNames } from '../../../route/ScreenNames';
 import RNCallKeep from 'react-native-callkeep';
 let notificationId = '';
@@ -20,6 +20,7 @@ var uuid = require('uuid');
 var messages = '';
 let currentCallId = null;
 export const notificationInitialize = async (store, currentScreen) => {
+	BackgroundTimer.start();
 	checkPermission();
 	registerNotificationInBackground();
 	registerWatchingNotificationOpened();
@@ -163,9 +164,38 @@ export const checkPermission = async () => {
 };
 
 export const displayIncoming = async (message) => {
-	RNCallKeep.backToForeground();
+	if (Platform.OS === 'android') {
+		if (message?.notification?.body?.split[1] === 'VIDEO_CALL' || 
+		message?.data?.body?.split[1] === 'VIDEO_CALL') {
+			// Display incoming call activity.
+			IncomingCall.display(
+				'callUUIDv4', // Call UUID v4
+				'Quocs', // Username
+				'https://avatars3.githubusercontent.com/u/16166195', // Avatar URL
+				'Incomming Call', // Info text
+				20000 // Timeout for end call after 20s
+			);
+		}
+
+		// Listen to headless action events
+		DeviceEventEmitter.addListener("endCall", payload => {
+			// End call action here
+		});
+		DeviceEventEmitter.addListener("answerCall", (payload) => {
+			console.log('answerCall', payload);
+			if (payload.isHeadless) {
+				// Called from killed state
+				IncomingCall.openAppFromHeadlessMode(payload.uuid);
+			} else {
+				// Called from background state
+				IncomingCall.backToForeground();
+			}
+		});
+	}
+	// RNCallKeep.backToForeground();
 	console.log("displayIncoming" + JSON.stringify(message));
 	messages = message;
+	console.log(message?.[1]?.includes('VIDEO_CALL'));
 	if (message?.[1]?.includes('VIDEO_CALL')) {
 		let callOptions = {
 			callerId: '825f4094-a674-4765-96a7-1ac512c02a71', // Important uuid must in this format
@@ -194,11 +224,8 @@ export const displayIncoming = async (message) => {
 		// })
 
 	} else {
-		RNCallKeep.displayIncomingCall(getCurrentCallId(), 'Dapp Premium', 'You have a video call from your friend', 'number', true);
+		// RNCallKeep.displayIncomingCall(getCurrentCallId(), 'Dapp Premium', JSON.stringify(message), 'number', true);
 	}
-	// else {
-	// 	RNCallKeep.displayIncomingCall(getCurrentCallId(), 'Dapp Premium', 'You have a video call from your friend','number', true );
-	// }
 }
 const init = () => {
 	PushNotification.configure({
@@ -215,7 +242,9 @@ const init = () => {
 
 			notification.finish(PushNotificationIOS.FetchResult.NoData);
 			// process the notification
-			if (notification?.alert?.body?.includes('VIDEO_CALL')) {
+			if (notification?.alert?.includes('VIDEO_CALL')) {
+				displayIncoming(notification?.alert?.split("#"));
+			} else if (notification?.alert?.body?.includes('VIDEO_CALL')) {
 				displayIncoming(notification?.alert?.body?.split("#"));
 			} else {
 				onDisplayNotification(notification?.alert);
@@ -248,6 +277,7 @@ const init = () => {
 }
 const registerNotificationInBackground = () => {
 	firebase.messaging().setBackgroundMessageHandler(async remoteMessage => {
+		console.log("firebase.messaging().setBackgroundMessageHandler" + JSON.stringify(remoteMessage));
 		onDisplayNotification(remoteMessage);
 		displayIncoming(remoteMessage?.notification?.body?.split("#") || remoteMessage.data?.body?.split("#"));
 	});
@@ -327,13 +357,13 @@ const onDisplayNotification = async (notification) => {
 const registerHearingNotification = async (store, currentScreen) => {
 
 	var notificationListener = await firebase.messaging().onMessage(async (notification) => {
-		RNCallKeep.backToForeground();
+		// RNCallKeep.backToForeground();
 		console.log('registerHearingNotification: ' + LogManager.parseJsonObjectToJsonString(notification));
 		onDisplayNotification(notification);
 		displayIncoming(notification?.notification?.body?.split("#"));
 	});
 	firebase.messaging().setBackgroundMessageHandler(async remoteMessage => {
-		RNCallKeep.backToForeground();
+		// RNCallKeep.backToForeground();
 		console.log('registerHearingNotification Background: ' + LogManager.parseJsonObjectToJsonString(remoteMessage));
 		onDisplayNotification(remoteMessage);
 		displayIncoming(remoteMessage?.notification?.body?.split("#") || remoteMessage?.data?.body?.split("#"));
@@ -341,7 +371,8 @@ const registerHearingNotification = async (store, currentScreen) => {
 
 	// Handle notification in background - automatically
 	firebase.messaging().onMessage((message) => {
-		RNCallKeep.backToForeground();
+		// RNCallKeep.backToForeground();
+		console.log('messaging().onMessage ' + LogManager.parseJsonObjectToJsonString(message));
 		onDisplayNotification(message);
 		displayIncoming(message?.notification?.body?.split("#") || message?.data?.body?.split("#"));
 		backgroundNotificationHandler(message)
@@ -352,7 +383,8 @@ const registerHearingNotification = async (store, currentScreen) => {
 		onDisplayNotification(remoteMessage);
 		displayIncoming(remoteMessage?.notification?.body?.split("#") || remoteMessage?.data?.body?.split("#"));
 		if (Platform.OS === 'android') {
-			if (remoteMessage?.notification?.body?.split[1] === 'VIDEO_CALL') {
+			if (remoteMessage?.notification?.body?.split[1] === 'VIDEO_CALL' || 
+			remoteMessage?.data?.body?.split[1] === 'VIDEO_CALL') {
 				// Display incoming call activity.
 				IncomingCall.display(
 					'callUUIDv4', // Call UUID v4
@@ -382,9 +414,10 @@ const registerHearingNotification = async (store, currentScreen) => {
 };
 
 export const backgroundNotificationHandler = async (message) => {
+	console.log('backgroundNotificationHandler ' + LogManager.parseJsonObjectToJsonString(message));
 	onDisplayNotification(message);
-	RNCallKeep.backToForeground();
-	displayIncoming(message?.notification?.body?.split("#") || message?.data?.body?.split("#"));
+	// RNCallKeep.backToForeground();
+	displayIncoming(message?.notification?.body?.split("#") || message?.notification?.title?.split("#") || message?.data?.body?.split("#"));
 	return Promise.resolve(message);
 };
 

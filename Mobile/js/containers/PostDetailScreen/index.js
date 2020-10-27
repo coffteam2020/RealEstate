@@ -66,14 +66,14 @@ const PostDetailScreen = (props) => {
     getPostDetail();
     getProfile();
   }, []);
-
+  const isBlog = props?.navigation?.state?.params?.isBlog; 
   const getPostDetail = async () => {
-    console.log(Constant.SCHEMA.SOCIAL + '/' + data?.userId + '_' + data?.timeInMillosecond);
+    console.log(isBlog ? Constant.SCHEMA.BLOG: Constant.SCHEMA.SOCIAL + '/' + data?.userId + '_' + data?.timeInMillosecond);
     let user = await IALocalStorage.getDetailUserInfo();
     setIsLoading(true);
     await firebase
       .database()
-      .ref(Constant.SCHEMA.SOCIAL)
+      .ref(isBlog ? Constant.SCHEMA.BLOG: Constant.SCHEMA.SOCIAL)
       .child(data?.userId + '_' + data?.timeInMillosecond)
       .on('value', (snapshot) => {
         const data = snapshot.val() ? snapshot.val() : {};
@@ -275,7 +275,7 @@ const PostDetailScreen = (props) => {
 
   const clickLike = () => {
     let userDetail = userStore?.userInfo;
-    FirebaseService.queryAllItemBySchemaWithSpecifiedChild(Constant.SCHEMA.SOCIAL, '_id', data._id, false, false).then((val) => {
+    FirebaseService.queryAllItemBySchemaWithSpecifiedChild(isBlog ? Constant.SCHEMA.BLOG: Constant.SCHEMA.SOCIAL, '_id', data._id, false, false).then((val) => {
       console.log(val);
       if (val && val.length > 0) {
         let currentLike = val[0].likes ? [...val[0].likes] : [];
@@ -286,7 +286,7 @@ const PostDetailScreen = (props) => {
         }
         const newData = { ...val[0] };
         newData.likes = currentLike;
-        FirebaseService.updateItem(Constant.SCHEMA.SOCIAL, data?.userId + '_' + data?.timeInMillosecond, newData).then(
+        FirebaseService.updateItem(isBlog ? Constant.SCHEMA.BLOG: Constant.SCHEMA.SOCIAL, data?.userId + '_' + data?.timeInMillosecond, newData).then(
           val1 => {
             setPost(newData);
           }
@@ -299,7 +299,7 @@ const PostDetailScreen = (props) => {
   const postComment = () => {
     setIsLoading(true);
     FirebaseService.queryAllItemBySchemaWithSpecifiedChild(
-      Constant.SCHEMA.SOCIAL,
+      isBlog ? Constant.SCHEMA.BLOG: Constant.SCHEMA.SOCIAL,
       '_id',
       data._id,
       false,
@@ -324,7 +324,7 @@ const PostDetailScreen = (props) => {
         newData.comments = currentComments;
 
         FirebaseService.updateItem(
-          Constant.SCHEMA.SOCIAL,
+          isBlog ? Constant.SCHEMA.BLOG: Constant.SCHEMA.SOCIAL,
           data?.userId + '_' + data?.timeInMillosecond,
           newData,
         ).then((val1) => {

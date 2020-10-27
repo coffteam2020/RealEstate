@@ -7,10 +7,11 @@ import RNCallKeep from 'react-native-callkeep';
 var uuid = require('uuid');
 
 const displayIncoming = async (message) => {
-	RNCallKeep.backToForeground();
+	
 	console.log("displayIncodsadasming=======" + JSON.stringify(message));
 	
-	if (message?.[1]?.includes('VIDEO_CALL')) {
+	if (message?.[1] === ('VIDEO_CALL')) {
+		RNCallKeep.backToForeground();
 		console.log("displayIncodsadasming=======" + JSON.stringify(message));
 		let callOptions = {
 			callerId: '825f4094-a674-4765-96a7-1ac512c02a71', // Important uuid must in this format

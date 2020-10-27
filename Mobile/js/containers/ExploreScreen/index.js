@@ -14,6 +14,7 @@ import { containerStyle } from '../../themes/styles';
 import { useTranslation } from 'react-i18next';
 import { useStores } from '../../store/useStore';
 import Swiper from 'react-native-swiper';
+import Axios from 'axios';
 import GetLocation from 'react-native-get-location';
 import { images } from '../../../assets';
 import { Linking } from 'react-native';
@@ -53,6 +54,7 @@ const ExploreScreen = (props) => {
   const { t } = useTranslation();
   const { userStore } = useStores();
   const [lo, setLo] = useState({});
+  const [marker, setMarkers] = useState([]);
 
   const BTNS = [
     {
@@ -110,6 +112,15 @@ const ExploreScreen = (props) => {
       onPress: () =>
         NavigationService.navigate(ScreenNames.LiveStream, {
           key: t('explorer.social'),
+        }),
+    },
+    {
+      title: t('explorer.admin'),
+      icon: images.home4s,
+      onPress: () =>
+        NavigationService.navigate(ScreenNames.SocialScreen, {
+          key: t('explorer.admin'),
+          isBlog: true,
         }),
     },
     {
@@ -256,11 +267,47 @@ const ExploreScreen = (props) => {
   useEffect(() => {
     getSearchTrend();
     getProfile();
+    getPropertyList();
     props?.navigation.addListener('willFocus', () => {
       getSearchTrend();
       getProfile();
+      getPropertyList();
     });
   }, []);
+  const getPropertyList = async () => {
+    AxiosFetcher({
+      method: 'GET',
+      url: '/property/findAllWithPagination/?limit=1000&offset=0&sortBy=id',
+      hasToken: true,
+    })
+      .then((val) => {
+        if (val?.content !== '') {
+          let datas = val?.content || [];
+          console.log('========' + JSON.stringify(datas));
+          for (let i = 0; i < datas?.length; i++) {
+            Axios.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + encodeURIComponent(datas[i]?.address) + '&key=AIzaSyB5vqnxvHdaTdgKY1E8AsaBxs_FS9HEiCM').then(val => {
+            // console.log(JSON.stringify("=============" + JSON.stringify(val)))  
+            let a = val?.data;
+              if (a?.results?.length > 0) {
+                console.log(a?.results?.[0]?.geometry?.location);
+                if (a.results?.[0]?.geometry?.location) {
+                  setMarkers([...marker, {
+                    latitude: a.results?.[0]?.geometry?.location?.lat,
+                    longitude: a?.results?.[0]?.geometry?.location?.lng,
+                  }])
+                }
+              }
+            })
+          }
+
+        } else {
+          // ToastHelper.showError(t('account.getInfoErr'));
+        }
+      })
+      .catch((error) => {
+        // ToastHelper.showError(t('account.getInfoErr'));
+      });
+  };
   const getUsers = async () => {
     AxiosFetcher({
       method: 'GET',
@@ -526,7 +573,6 @@ const ExploreScreen = (props) => {
       </View>
     );
   };
-
   return (
     <View style={[containerStyle.defaultBackground]}>
       <StatusBar barStyle={colorsApp.statusBar} />
@@ -562,6 +608,27 @@ const ExploreScreen = (props) => {
 
               title={t('location.me')}
               draggable />
+            {marker?.map(item => {
+              return (
+                <Marker
+                  coordinate={{
+                    latitude: item?.latitude,
+                    longitude: item?.longitude
+                  }}
+                  onPress={()=>{
+                    const scheme = Platform.select({ ios: 'maps:0,0?q=', android: 'geo:0,0?q=' });
+                    const latLng = `${item.latitude},${item.longitude}`;
+                    const label = 'Custom Label';
+                    const url = Platform.select({
+                        ios: `${scheme}${label}@${latLng}`,
+                        android: `${scheme}${latLng}(${label})`
+                    });
+                    Linking.openURL(url);
+                  }}
+                  title={'🕍'}
+                  draggable />
+              )
+            })}
           </MapView>}
         </View>
         <View style={{ width: '100%', marginLeft: 35, marginTop: 20 }}>

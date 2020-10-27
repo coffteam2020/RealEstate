@@ -140,12 +140,22 @@ static void InitializeFlipper(UIApplication *application) {
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
+  NSLog(@"============didReceiveRemoteNotification%@", userInfo);
+//  [RNVoipPushNotificationManager didReceiveIncomingPushWithPayload:userIn forType:(NSString *)type];
   if ([[FIRAuth auth] canHandleNotification:userInfo]) {
      completionHandler(UIBackgroundFetchResultNoData);
-     return;
+//     return;
    }
   [[FIRMessaging messaging] appDidReceiveMessage:userInfo];
   [RNCPushNotificationIOS didReceiveRemoteNotification:userInfo fetchCompletionHandler:completionHandler];
+  
+  NSString* body = [userInfo objectForKey:@"body"];
+  if ([body containsString: @"VIDEO_CALL"]) {
+    NSString *uuid = @"44713e33-fa78-4ff5-8ec5-983e0832d1c6";
+    NSString *callerName = @"Video calling from your friend";
+    NSString *handle = @"handle";
+    [RNCallKeep reportNewIncomingCall:uuid handle:handle handleType:@"generic" hasVideo:true localizedCallerName:callerName fromPushKit: YES payload:userInfo];
+  }
 }
 
 // Required for the registrationError event.
@@ -167,50 +177,52 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
     [[FIRMessaging messaging] appDidReceiveMessage:userInfo];
     completionHandler(UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionBadge);
   }
+
+
+
+
 // --- Handle updated push credentials
 - (void)pushRegistry:(PKPushRegistry *)registry didUpdatePushCredentials:(PKPushCredentials *)credentials forType:(PKPushType)type {
   // Register VoIP push token (a property of PKPushCredentials) with server
- [RNVoipPushNotificationManager didUpdatePushCredentials:credentials forType:(NSString *)type];
+  [RNVoipPushNotificationManager didUpdatePushCredentials:credentials forType:(NSString *)type];
 }
 
 - (void)pushRegistry:(PKPushRegistry *)registry didInvalidatePushTokenForType:(PKPushType)type
 {
   // --- The system calls this method when a previously provided push token is no longer valid for use. No action is necessary on your part to reregister the push type. Instead, use this method to notify your server not to send push notifications using the matching push token.
 }
-//
-//- (void)pushRegistry:(PKPushRegistry *)registry didReceiveIncomingPushWithPayload:(PKPushPayload *)payload forType:(PKPushType)type withCompletionHandler:(void (^)(void))completion {
-//  // Process the received push
-//  [RNVoipPushNotificationManager didReceiveIncomingPushWithPayload:payload forType:(NSString *)type];
-//
-//  // Retrieve information like handle and callerName here
-//   NSString *uuid = /* fetch for payload or ... */ [[[NSUUID UUID] UUIDString] lowercaseString];
-//   NSString *callerName = @"caller name here";
-//   NSString *handle = @"caller number here";
-//   NSDictionary *extra = [payload.dictionaryPayload valueForKeyPath:@"custom.path.to.data"]; /* use this to pass any special data (ie. from your notification) down to RN. Can also be `nil` */
-//
-//  [RNCallKeep reportNewIncomingCall:uuid handle:handle handleType:@"generic" hasVideo:false localizedCallerName:callerName fromPushKit: YES payload:extra withCompletionHandler:completion];
-//}
+
+
 // --- Handle incoming pushes (for ios <= 10)
 - (void)pushRegistry:(PKPushRegistry *)registry didReceiveIncomingPushWithPayload:(PKPushPayload *)payload forType:(PKPushType)type {
-   NSLog(@"Ajith");
   [RNVoipPushNotificationManager didReceiveIncomingPushWithPayload:payload forType:(NSString *)type];
-//    [RNVoipPushKit didReceiveIncomingPushWithPayload:payload forType:(NSString *)type];
-//    [RNVoipPushNotificationManager didReceiveIncomingPushWithPayload:payload forType:(NSString *)type];
-
-  NSString *uuid = @"44713e33-fa78-4ff5-8ec5-983e0832d1c6";
-  NSString *callerName = @"Test";
-  NSString *handle = @"handle";
-  [RNCallKeep reportNewIncomingCall:uuid handle:handle handleType:@"generic" hasVideo:false localizedCallerName:callerName fromPushKit: YES payload:nil];
 }
+
+// --- Handle incoming pushes (for ios >= 11)
 - (void)pushRegistry:(PKPushRegistry *)registry didReceiveIncomingPushWithPayload:(PKPushPayload *)payload forType:(PKPushType)type withCompletionHandler:(void (^)(void))completion {
-  // Process the received push
+  
+
+  // --- NOTE: apple forced us to invoke callkit ASAP when we receive voip push
+  // --- see: react-native-callkeep
+
+  // --- Retrieve information from your voip push payload
+  NSString *uuid = payload.dictionaryPayload[@"uuid"];
+  NSString *callerName = [NSString stringWithFormat:@"%@ (Connecting...)", payload.dictionaryPayload[@"callerName"]];
+  NSString *handle = payload.dictionaryPayload[@"handle"];
+
+  // --- this is optional, only required if you want to call `completion()` on the js side
+  [RNVoipPushNotificationManager addCompletionHandler:uuid completionHandler:completion];
+
+  // --- Process the received push
   [RNVoipPushNotificationManager didReceiveIncomingPushWithPayload:payload forType:(NSString *)type];
 
-  NSString *uuid = @"44713e33-fa78-4ff5-8ec5-983e0832d1c6";
-  NSString *callerName = @"Test";
-  NSString *handle = @"handle";
+  // --- You should make sure to report to callkit BEFORE execute `completion()`
   [RNCallKeep reportNewIncomingCall:uuid handle:handle handleType:@"generic" hasVideo:false localizedCallerName:callerName fromPushKit: YES payload:nil];
+  
+  // --- You don't need to call it if you stored `completion()` and will call it on the js side.
+  completion();
 }
+
 - (BOOL)application:(UIApplication *)application
  continueUserActivity:(NSUserActivity *)userActivity
    restorationHandler:(void(^)(NSArray * __nullable restorableObjects))restorationHandler

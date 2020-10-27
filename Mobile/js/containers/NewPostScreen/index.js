@@ -163,7 +163,7 @@ const NewPostScreen = (props) => {
       }
     });
   };
-
+  const isBlog = props?.navigation?.state?.params?.isBlog;
 
   const createNewPost = () => {
     let currentTime = new Date().getTime();
@@ -194,7 +194,7 @@ const NewPostScreen = (props) => {
     try {
       setIsLoading(true);
       FirebaseService.pushNewItemWithChildKey(
-        Constant.SCHEMA.SOCIAL,
+        isBlog ? Constant.SCHEMA.BLOG: Constant.SCHEMA.SOCIAL,
         childTemp,
         post,
         false

@@ -42,6 +42,8 @@
 		7E2C7290253B3A4700E280FA /* CallKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E2C728F253B3A4700E280FA /* CallKit.framework */; };
 		7E2C7292253B440E00E280FA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7E2C7291253B440E00E280FA /* GoogleService-Info.plist */; };
 		7E2C7294253B53CC00E280FA /* PushKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E2C7293253B53CB00E280FA /* PushKit.framework */; };
+		7EE7D49F25486E0F0096A11B /* libRNCallKeep.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EE7D49E25486E0F0096A11B /* libRNCallKeep.a */; };
+		7EE7D4A125486EAC0096A11B /* libRNVoipPushNotification.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EE7D4A025486EAC0096A11B /* libRNVoipPushNotification.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		8A641181C9F3410D885D1CAB /* Nunito-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8F8820C2A4374CDB8BF05901 /* Nunito-Italic.ttf */; };
 		8D30DAB346CF4F5EA6A64ED4 /* PlayfairDisplay-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F3A07AEE7FBF48B18559CFDC /* PlayfairDisplay-SemiBoldItalic.ttf */; };
@@ -133,6 +135,8 @@
 		7E2C7291253B440E00E280FA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../../Desktop/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		7E2C7293253B53CB00E280FA /* PushKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PushKit.framework; path = System/Library/Frameworks/PushKit.framework; sourceTree = SDKROOT; };
 		7E5FA75D87FA45E78E9FC1E3 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
+		7EE7D49E25486E0F0096A11B /* libRNCallKeep.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNCallKeep.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		7EE7D4A025486EAC0096A11B /* libRNVoipPushNotification.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNVoipPushNotification.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		7F91C4B0A34649A19122929A /* Proxima Nova Bold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Proxima Nova Bold.otf"; path = "../assets/fonts/Proxima Nova Bold.otf"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Mobile/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		825C83331951C13D6F0ACE85 /* Pods-Mobile-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mobile-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-Mobile-tvOS/Pods-Mobile-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
@@ -189,7 +193,9 @@
 			files = (
 				7E2C7290253B3A4700E280FA /* CallKit.framework in Frameworks */,
 				7E2C7294253B53CC00E280FA /* PushKit.framework in Frameworks */,
+				7EE7D4A125486EAC0096A11B /* libRNVoipPushNotification.a in Frameworks */,
 				7E2C728E253B3A4100E280FA /* Intents.framework in Frameworks */,
+				7EE7D49F25486E0F0096A11B /* libRNCallKeep.a in Frameworks */,
 				1D616EA6082A8DEA38F40122 /* libPods-Mobile.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -249,6 +255,8 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7EE7D4A025486EAC0096A11B /* libRNVoipPushNotification.a */,
+				7EE7D49E25486E0F0096A11B /* libRNCallKeep.a */,
 				7E2C7293253B53CB00E280FA /* PushKit.framework */,
 				7E2C728F253B3A4700E280FA /* CallKit.framework */,
 				7E2C728D253B3A4100E280FA /* Intents.framework */,

@@ -44,7 +44,7 @@ const Scanner = (props) => {
                         topContent={''}
                         bottomContent={null}
                     />
-                    {/* <TextInputFlat
+                    <TextInputFlat
                         onChangeText={(text) => {
                             setS(text);
                         }}
@@ -53,10 +53,10 @@ const Scanner = (props) => {
                         style={{ marginTop: 20, marginBottom: 20 }}
                     />
                     <GradientButton text={t('common.confirm')} onPress={() => {
-                        if (s !== '') {
+                        if (s !== '' && !s?.includes("%%")) {
                             NavigationService.navigate(ScreenNames.VideoCall, { url: s, isGroup: true })
                         }
-                    }} /> */}
+                    }} />
                 </KeyboardAwareScrollView>
             </SafeAreaView>
         </View>

@@ -145,8 +145,11 @@ import Axios from 'axios';
 import { OTSession, OTPublisher, OTSubscriber, OT } from 'opentok-react-native';
 import { TouchableOpacity } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+
+import Share from 'react-native-share';
 import { NavigationService } from '../../navigation';
 import AxiosFetcher from '../../api/AxiosFetch';
+import { firebase } from '@react-native-firebase/messaging';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { ScreenHeight, ScreenWidth } from '../../shared/utils/dimension/Divices';
 import QRCode from 'react-native-qrcode-svg';
@@ -177,6 +180,7 @@ export default class VideoCall extends Component {
     }
     this.num = 0;
     this.interval = undefined;
+
     // console.log(JSON.stringify(this.props));
     RNCallKeep.endAllCalls();
     this.sessionEventHandlers = {
@@ -224,6 +228,9 @@ export default class VideoCall extends Component {
     const item = this.props?.navigation?.state?.params?.item;
     if (item) {
       this.notifyToUserId(a.id, item?.id, a.name, url);
+      setTimeout(() => {
+        this.notifyToUserId(a.id, item?.id, a.name, url);
+      }, 2000)
     }
   }
 
@@ -254,10 +261,10 @@ export default class VideoCall extends Component {
     Keyboard.dismiss();
     const isGroup = this.props.navigation?.state?.params?.isGroup
     // if (isGroup) {
-    interval = setInterval(() => {
+    this.interval = setInterval(() => {
       this.num = this.num + 1;
       if (this.num > (isGroup ? 3600 : 1800)) {
-        clearInterval(interval);
+        clearInterval(this.interval);
         NavigationService.goBack();
       } else {
         this.setState({ num: this.num, numT: this.getTime(this.num) });
@@ -276,6 +283,9 @@ export default class VideoCall extends Component {
       this.setState({
         token: `${a[1]}`
       })
+    } else {
+      ToastHelper.showWarning('Oops! 🙅🏻‍♂️ ');
+      NavigationService.goBack();
     }
     this.setState({ videoSource: this.props.navigation?.state?.params?.source || 'camera' })
     if (!this.props.navigation?.state?.params?.url) {
@@ -298,40 +308,41 @@ export default class VideoCall extends Component {
               })
                 .then((val) => {
                   if (val) {
-                    Alert.alert('Thông báo', 'Bạn muốn đổi camera hay chia sẻ màn hình?', [
-                      {
-                        text: 'Camera 📷',
-                        onPress: () => {
-                          this.setState({
-                            videoSource: 'camera'
-                          }, () => {
-                            this.setState({
-                              token: val,
-                              qr: `${this.state.sessionId}%%${val}`
-                            }, () => {
-                              this.a(`${this.state.sessionId}%%${val}`);
-                              console.log("=======1" + JSON.stringify(this.state.qr));
-                            })
-                          })
-                        }
-                      },
-                      {
-                        text: 'Screen 🖥',
-                        onPress: () => {
-                          this.setState({
-                            videoSource: 'screen'
-                          }, () => {
-                            this.setState({
-                              token: val,
-                              qr: `${this.state.sessionId}%%${val}`
-                            }, () => {
-                              this.a(`${this.state.sessionId}%%${val}`);
-                              console.log("=======1" + JSON.stringify(this.state.qr));
-                            })
-                          })
-                        }
-                      }
-                    ])
+                    this.setState({
+                      token: val,
+                      qr: `${this.state.sessionId}%%${val}`
+                    }, () => {
+                      this.a(`${this.state.sessionId}%%${val}`);
+                      console.log("=======1" + JSON.stringify(this.state.qr));
+                    })
+                    // Alert.alert('Thông báo', 'Bạn muốn đổi camera hay chia sẻ màn hình?', [
+                    //   {
+                    //     text: 'Camera 📷',
+                    //     onPress: () => {
+                    //       this.setState({
+                    //         videoSource: 'camera'
+                    //       }, () => {
+
+                    //       })
+                    //     }
+                    //   },
+                    //   {
+                    //     text: 'Screen 🖥',
+                    //     onPress: () => {
+                    //       this.setState({
+                    //         videoSource: 'screen'
+                    //       }, () => {
+                    //         this.setState({
+                    //           token: val,
+                    //           qr: `${this.state.sessionId}%%${val}`
+                    //         }, () => {
+                    //           this.a(`${this.state.sessionId}%%${val}`);
+                    //           console.log("=======1" + JSON.stringify(this.state.qr));
+                    //         })
+                    //       })
+                    //     }
+                    //   }
+                    // ])
 
                   } else {
                     ToastHelper.showError('Oops! ❌')
@@ -438,8 +449,8 @@ export default class VideoCall extends Component {
           style={{ position: 'absolute', padding: 7, top: Platform.OS === 'ios' ? 40 : 20, left: 60, zIndex: 10000, borderRadius: 70, }}
           onPress={() => {
             this.setState({ videoSource: this.state.videoSource === 'screen' ? 'camera' : 'screen' }, () => {
-              this.setState(this.state);
-
+              // this.setState(this.state);
+              ToastHelper.showSuccess('Bắt đầu chia sẻ ...')
             })
           }}>
           <MaterialCommunityIcons name={'monitor-share'} color={'white'} size={20} />
@@ -473,9 +484,31 @@ export default class VideoCall extends Component {
           {/* </ScrollView> */}
         </OTSession>
         {this.state.qr && this.state.qr !== "_" && this.state.showQRS &&
-          <TouchableOpacity onPress={() => { this.setState({ showQRS: false }) }} style={{ borderRadius: 2, borderColor: 'white', borderWidth: 3, position: 'absolute', justifyContent: 'center', top: ScreenHeight / 3, left: ScreenWidth / 4, zIndex: 100, alignContent: 'center', alignItems: 'center' }}>
-            <QRCode value={`${this.state.qr || '_'}`} size={200} />
-          </TouchableOpacity>}
+          <View onPress={() => { this.setState({ showQRS: false }) }} style={{ backgroundColor: 'white', padding: 5, borderRadius: 2, borderColor: 'white', borderWidth: 3, position: 'absolute', justifyContent: 'center', top: ScreenHeight / 3, left: ScreenWidth / 4, zIndex: 10000, alignContent: 'center', alignItems: 'center' }}>
+            <TouchableOpacity onPress={() => {
+              this.setState({ showQRS: false })
+            }}>
+              <QRCode value={`${this.state.qr || '_'}`} size={200} />
+            </TouchableOpacity>
+            <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'space-between' }} onPress={async () => {
+              const shareOptions = {
+                title: '💡',
+                message: this.state.qr,
+                failOnCancel: false,
+              };
+
+              // If you want, you can use a try catch, to parse
+              // the share response. If the user cancels, etc.
+              try {
+                await Share.open(shareOptions);
+              } catch (error) {
+                console.log('Error =>', error);
+              }
+            }}>
+              <TextNormal numberOfLines={1} text={`${this.state.qr}`} style={{ width: 150 }} />
+              <Ionicons name={'share-outline'} color={'black'} size={25} />
+            </TouchableOpacity>
+          </View>}
         {this.state.loading && <Loading />}
       </View>
     );

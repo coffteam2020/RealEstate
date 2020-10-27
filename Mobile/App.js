@@ -8,10 +8,10 @@ import AppContainer from './js/route/MainStackRouter';
 import { Provider as PaperProvider } from 'react-native-paper';
 import { ToastHelper } from './js/shared/components/ToastHelper';
 import DropdownAlert from './js/shared/components/DropDownAlert/DropdownAlert';
-import { Text, Platform } from 'react-native';
+import { Text, Platform, PermissionsAndroid } from 'react-native';
 import { DeviceEventEmitter } from 'react-native';
 import IncomingCall from 'react-native-incoming-call';
-
+import RNCallKeep from 'react-native-callkeep';
 import VoipPushNotification from 'react-native-voip-push-notification';
 import { initialMode } from 'react-native-dark-mode';
 import { Appearance } from 'react-native-appearance';
@@ -29,7 +29,9 @@ import { displayIncoming, notificationInitialize } from './js/shared/utils/notif
 import IALocalStorage from './js/shared/utils/storage/IALocalStorage';
 var PushNotification = require('react-native-push-notification');
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
-
+import BackgroundTimer from 'react-native-background-timer';
+BackgroundTimer.start();
+Platform.OS === 'ios' && VoipPushNotification.wakeupByPush;
 // gets the current screen from navigation state
 function getActiveRouteName(navigationState) {
   if (!navigationState) {
@@ -49,6 +51,24 @@ const firebaseConfig = {
     : { appId: Constant.FIREBASE_SPECIFIC.appIdiOS }),
 };
 const initNo = async () => {
+  const options = {
+		ios: {
+			appName: 'Dapp Premium',
+		},
+		android: {
+			alertTitle: 'Permissions required',
+			alertDescription: 'This application needs to access your phone accounts',
+			cancelButton: 'Cancel',
+			okButton: 'ok',
+			imageName: 'phone_account_icon',
+			additionalPermissions: [PermissionsAndroid.PERMISSIONS.example]
+		}
+	};
+
+	RNCallKeep.setup(options).then(accepted => {
+		RNCallKeep.setAvailable(true);
+	});
+	RNCallKeep.setAvailable(true);
   if (Platform.OS === "android") {
     /**
      * App open from killed state (headless mode)
