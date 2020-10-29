@@ -465,6 +465,11 @@ const ProfileScreen = (props) => {
         <ScrollView nestedScrollEnabled contentContainerStyle={styles.content}>
           {renderMe()}
         </ScrollView>
+        <TouchableOpacity style={{ position: 'absolute', left: 20, top: 40 }} onPress={()=>{
+          NavigationService.navigate(ScreenNames.Account, { data: userStore?.userInfo, isOnlyImg: true }) ;
+        }}>
+          <Ionicons name="bulb-outline" size={20} color={colors.red} size={25}/>
+        </TouchableOpacity>
       </SafeAreaView>
       {isLoading && <Loading />}
       {modelSelect ? (

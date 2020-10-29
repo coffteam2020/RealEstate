@@ -61,7 +61,7 @@ const PostDetailScreen = (props) => {
   const refScrollView = useRef();
 
   let data = props.navigation.state.params.data || {};
-
+console.log(JSON.stringify(data));
   useEffect(() => {
     getPostDetail();
     getProfile();
@@ -110,14 +110,16 @@ const PostDetailScreen = (props) => {
   };
 
   const renderPostContent = (data) => {
+    console.log("============" + JSON.stringify(post?.images && (post?.images[0]?.includes('PNG') || post?.images[0]?.includes('HEIC') ||post?.images[0]?.includes('heic') || post?.images[0]?.includes('JPG') || post?.images[0]?.includes('JPEG') ||
+    post?.images[0]?.includes('png') || post?.images[0]?.includes('jpg') || post?.images[0]?.includes('jpeg'))));
     return (
       <View style={styles.postContent}>
         {post?.content ? <TextNormal
           style={styles.contentTextStyle}
           text={post?.content}
           numberOfLines={100}></TextNormal> : null}
-        <View style={{ backgroundColor: 'red', flexWrap: 'wrap' }}>
-          {post?.images && (post?.images[0]?.includes('PNG') || post?.images[0]?.includes('JPG') || post?.images[0]?.includes('JPEG') ||
+        <View style={{ flexWrap: 'wrap' }}>
+          {post?.images && (post?.images[0]?.includes('PNG') || post?.images[0]?.includes('HEIC') ||post?.images[0]?.includes('heic') || post?.images[0]?.includes('JPG') || post?.images[0]?.includes('JPEG') ||
             post?.images[0]?.includes('png') || post?.images[0]?.includes('jpg') || post?.images[0]?.includes('jpeg')) ?
             post.images.map((item, index) => {
               return (<FastImage
@@ -130,7 +132,7 @@ const PostDetailScreen = (props) => {
               />)
             })
              :
-            <Video paused={true} playWhenInactive={false} playInBackground={false} controls={true} source={{ uri: post?.images?.[0] }} style={{ width: ScreenWidth / 2 }} />
+            <Video paused={true} playWhenInactive={false} playInBackground={false} controls={true} source={{ uri: post?.images?.[0] }} style={{ width: ScreenWidth, height:  ScreenWidth}} />
           }
         </View>
         {/* {rennderButton()} */}

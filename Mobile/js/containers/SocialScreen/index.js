@@ -91,6 +91,7 @@ const SocialScreen = (props) => {
   };
 
   const getMessages = async () => {
+    console.log(isBlog);
     let user = await IALocalStorage.getDetailUserInfo();
     setIsLoading(true);
     await firebase
@@ -98,11 +99,13 @@ const SocialScreen = (props) => {
       .ref(isBlog ? Constant.SCHEMA.BLOG: Constant.SCHEMA.SOCIAL)
       .on('value', (snapshot) => {
         const data = snapshot.val() ? Object.values(snapshot.val()) : [];
-        // console.log("21321321");
+        console.log(JSON.stringify(data));
         let arr = data.sort(function (x, y) {
           return y.timeInMillosecond - x.timeInMillosecond;
         });
-        arr = arr.filter(item => item?.disable !== true);
+        if (!isBlog){ 
+           arr = arr.filter(item => item?.disable !== true);
+        }
         // console.log(arr);
         setAllPost(arr)
         setTimeout(() => {
@@ -362,6 +365,8 @@ const SocialScreen = (props) => {
                   (item?.images[0]?.includes('PNG') ||
                     item?.images[0]?.includes('JPG') ||
                     item?.images[0]?.includes('JPEG') ||
+                    item?.images[0]?.includes('HEIC') ||
+                    item?.images[0]?.includes('heic') ||
                     item?.images[0]?.includes('png') ||
                     item?.images[0]?.includes('jpg') ||
                     item?.images[0]?.includes('jpeg')) ? (
@@ -386,15 +391,17 @@ const SocialScreen = (props) => {
                     <View
                       style={{
                         alignItems: "center",
-                        width: ScreenWidth
+                        width: ScreenWidth,
+                        height: ScreenWidth
                       }}>
                       <Video
                         paused={true}
+                      
                         playWhenInactive={false}
                         playInBackground={false}
                         controls={true}
                         source={{ uri: item?.images?.[0] }}
-                        style={{ width: ScreenWidth / 2 }}
+                        style={{ width: ScreenWidth, height: ScreenWidth }}
                       />
                     </View>
                   )}
@@ -524,7 +531,7 @@ const SocialScreen = (props) => {
               numberOfLines={100}
             />
             {item?.images?.length > 0 ? <View style={styles.contentImageStyle}>
-              {item?.images && (item?.images[0]?.includes('PNG') || item?.images[0]?.includes('JPG') || item?.images[0]?.includes('JPEG') ||
+              {item?.images && (item?.images[0]?.includes('PNG') ||item?.images[0]?.includes('HEIC') ||item?.images[0]?.includes('heic') || item?.images[0]?.includes('JPG') || item?.images[0]?.includes('JPEG') ||
                 item?.images[0]?.includes('png') || item?.images[0]?.includes('jpg') || item?.images[0]?.includes('jpeg')) ?
                 <FastImage
                   source={{
@@ -545,8 +552,9 @@ const SocialScreen = (props) => {
                     playWhenInactive={false}
                     playInBackground={false}
                     controls={true}
+                    disableFocus
                     source={{ uri: item?.images?.[0] }}
-                    style={{ width: ScreenWidth / 2, height: ScreenWidth / 2 }}
+                    style={{ width: ScreenWidth, height: ScreenWidth }}
                   /> : null}
                 </View>
               }

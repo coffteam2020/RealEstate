@@ -62,7 +62,8 @@ const ExploreScreen = (props) => {
       icon: images.ten,
       onPress: () =>
         NavigationService.navigate(ScreenNames.VideoCall, {
-          isGroup: true
+          isGroup: true,
+          isNew: true
         }),
     },
     {
@@ -114,15 +115,7 @@ const ExploreScreen = (props) => {
           key: t('explorer.social'),
         }),
     },
-    {
-      title: t('explorer.admin'),
-      icon: images.home4s,
-      onPress: () =>
-        NavigationService.navigate(ScreenNames.SocialScreen, {
-          key: t('explorer.admin'),
-          isBlog: true,
-        }),
-    },
+
     {
       title: t('explorer.social'),
       icon: images.home4s,
@@ -137,17 +130,21 @@ const ExploreScreen = (props) => {
   ];
   const BTNS2 = [
     {
-      title: t('explorer.facebook'),
-      icon: images.seven,
-      link: 'https://www.facebook.com/dappdtechnology/',
-      color: colors.white,
-      iconName: 'facebook',
-      iconColor: colors.blue,
+      title: t('explorer.admin'),
+      icon: images.home4s,
+      onPress: () =>
+        NavigationService.navigate(ScreenNames.SocialScreen, {
+          key: t('explorer.admin'),
+          isBlog: true,
+        }),
     },
     {
       title: t('explorer.dMark'),
       icon: images.hurry,
-      link: 'https://dmark.shop',
+      onPress: () =>
+        NavigationService.navigate(ScreenNames.WebScreen, {
+          url: 'https://dmark.shop',
+        }),
       color: 'green',
       iconName: 'cloud-drizzle',
       iconColor: colors.whiteBackground,
@@ -155,7 +152,10 @@ const ExploreScreen = (props) => {
     {
       title: t('explorer.dShare'),
       icon: images.six,
-      link: 'https://dtechno.tech',
+      onPress: () =>
+        NavigationService.navigate(ScreenNames.WebScreen, {
+          url: 'https://dtechno.tech',
+        }),
       color: colors.blue_dodger,
       iconName: 'chrome',
       iconColor: colors.whiteBackground,
@@ -163,7 +163,10 @@ const ExploreScreen = (props) => {
     {
       title: t('explorer.dCar'),
       icon: images.nearby,
-      link: 'http://cardtechno.store',
+      onPress: () =>
+        NavigationService.navigate(ScreenNames.WebScreen, {
+          url: 'http://cardtechno.store',
+        }),
       color: colors.red_cinnabar,
       iconName: 'crosshair',
       iconColor: colors.whiteBackground,
@@ -286,8 +289,8 @@ const ExploreScreen = (props) => {
           console.log('========' + JSON.stringify(datas));
           for (let i = 0; i < datas?.length; i++) {
             Axios.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + encodeURIComponent(datas[i]?.address) + '&key=AIzaSyB5vqnxvHdaTdgKY1E8AsaBxs_FS9HEiCM').then(val => {
-            // console.log(JSON.stringify("=============" + JSON.stringify(val)))  
-            let a = val?.data;
+              // console.log(JSON.stringify("=============" + JSON.stringify(val)))  
+              let a = val?.data;
               if (a?.results?.length > 0) {
                 console.log(a?.results?.[0]?.geometry?.location);
                 if (a.results?.[0]?.geometry?.location) {
@@ -506,7 +509,7 @@ const ExploreScreen = (props) => {
           ]}>
           {BTNS2?.map((item) => {
             return (
-              <TouchableOpacity style={styles.button} onPress={() => tryOpenIAP(item?.link)}>
+              <TouchableOpacity style={styles.button} onPress={item?.onPress ? item?.onPress : () => tryOpenIAP(item?.link)}>
                 <FastImage
                   source={item?.icon}
                   style={{ width: 40, height: 40, borderRadius: 20 }}
@@ -615,13 +618,13 @@ const ExploreScreen = (props) => {
                     latitude: item?.latitude,
                     longitude: item?.longitude
                   }}
-                  onPress={()=>{
+                  onPress={() => {
                     const scheme = Platform.select({ ios: 'maps:0,0?q=', android: 'geo:0,0?q=' });
                     const latLng = `${item.latitude},${item.longitude}`;
                     const label = 'Custom Label';
                     const url = Platform.select({
-                        ios: `${scheme}${label}@${latLng}`,
-                        android: `${scheme}${latLng}(${label})`
+                      ios: `${scheme}${label}@${latLng}`,
+                      android: `${scheme}${latLng}(${label})`
                     });
                     Linking.openURL(url);
                   }}

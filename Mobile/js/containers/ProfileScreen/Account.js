@@ -121,8 +121,8 @@ const Account = (props) => {
                   style={{
                     alignItems: "center",
                     justifyContent: 'center',
-                    width: ScreenWidth / 2 - 20, 
-                    height: ScreenWidth / 2 - 20, 
+                    width: ScreenWidth / 2 - 20,
+                    height: ScreenWidth / 2 - 20,
                     marginLeft: 15
                   }}>
                   <Video
@@ -144,8 +144,7 @@ const Account = (props) => {
   const renderAllPost = () => {
     return (
       <View>
-        <TextNormal text={t('chat.attachment')} style={{ marginLeft: 10, marginTop: 20 }} />
-
+        {props?.navigation?.state?.params?.isOnlyImg ? null : <TextNormal text={t('chat.attachment')} style={{ marginLeft: 10, marginTop: 20 }} />}
         <FlatList
           data={allPost}
           scrollEnabled
@@ -416,11 +415,11 @@ const Account = (props) => {
       <StatusBar barStyle={colorsApp.statusBar} />
       <SafeAreaView>
         <HeaderFull
-          title={t('account.title')}
+          title={props?.navigation?.state?.params?.isOnlyImg ? t('chat.attachment') : t('account.title')}
           hasButton
         />
         <ScrollView nestedScrollEnabled contentContainerStyle={styles.content}>
-          {renderMe()}
+          {props?.navigation?.state?.params?.isOnlyImg ? null : renderMe()}
 
           {renderAllPost()}
         </ScrollView>

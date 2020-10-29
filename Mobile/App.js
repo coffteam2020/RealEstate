@@ -12,7 +12,7 @@ import { Text, Platform, PermissionsAndroid } from 'react-native';
 import { DeviceEventEmitter } from 'react-native';
 import IncomingCall from 'react-native-incoming-call';
 import RNCallKeep from 'react-native-callkeep';
-import VoipPushNotification from 'react-native-voip-push-notification';
+// import VoipPushNotification from 'react-native-voip-push-notification';
 import { initialMode } from 'react-native-dark-mode';
 import { Appearance } from 'react-native-appearance';
 import { CustomDarkTheme, CustomLightTheme } from './js/themes/index';
@@ -31,7 +31,7 @@ var PushNotification = require('react-native-push-notification');
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import BackgroundTimer from 'react-native-background-timer';
 BackgroundTimer.start();
-Platform.OS === 'ios' && VoipPushNotification.wakeupByPush;
+// Platform.OS === 'ios' && VoipPushNotification.wakeupByPush;
 // gets the current screen from navigation state
 function getActiveRouteName(navigationState) {
   if (!navigationState) {
@@ -61,7 +61,6 @@ const initNo = async () => {
 			cancelButton: 'Cancel',
 			okButton: 'ok',
 			imageName: 'phone_account_icon',
-			additionalPermissions: [PermissionsAndroid.PERMISSIONS.example]
 		}
 	};
 
@@ -69,28 +68,28 @@ const initNo = async () => {
 		RNCallKeep.setAvailable(true);
 	});
 	RNCallKeep.setAvailable(true);
-  if (Platform.OS === "android") {
-    /**
-     * App open from killed state (headless mode)
-    */
-    const payload = await IncomingCall.getExtrasFromHeadlessMode();
-    console.log('launchParameters', payload);
-    if (payload) {
-      // Start call action here. You probably want to navigate to some CallRoom screen with the payload.uuid.
-      displayIncoming(['sa', 'VIDEO_CALL','dsa']);
-    }
+  // if (Platform.OS === "android") {
+  //   /**
+  //    * App open from killed state (headless mode)
+  //   */
+  //   const payload = await IncomingCall.getExtrasFromHeadlessMode();
+  //   console.log('launchParameters', payload);
+  //   if (payload) {
+  //     // Start call action here. You probably want to navigate to some CallRoom screen with the payload.uuid.
+  //     displayIncoming(['sa', 'VIDEO_CALL','dsa']);
+  //   }
 
-    /**
-     * App in foreground / background: listen to call events and determine what to do next
-    */
-    DeviceEventEmitter.addListener("endCall", payload => {
-      // End call action here
-    });
-    DeviceEventEmitter.addListener("answerCall", payload => {
-      // Start call action here. You probably want to navigate to some CallRoom screen with the payload.uuid.
-      displayIncoming(['sa', 'VIDEO_CALL','dsa']);
-    });
-  }
+  //   /**
+  //    * App in foreground / background: listen to call events and determine what to do next
+  //   */
+  //   DeviceEventEmitter.addListener("endCall", payload => {
+  //     // End call action here
+  //   });
+  //   DeviceEventEmitter.addListener("answerCall", payload => {
+  //     // Start call action here. You probably want to navigate to some CallRoom screen with the payload.uuid.
+  //     displayIncoming(['sa', 'VIDEO_CALL','dsa']);
+  //   });
+  // }
   PushNotification.configure({
     // (optional) Called when Token is generated (iOS and Android)
     onRegister: function(token) {
@@ -164,53 +163,53 @@ const App = () => {
     notificationInitialize(userStore, currentScreen);
   };
   const configure = () => {
-    if (Platform.OS === 'ios') {
+    // if (Platform.OS === 'ios') {
       
-      VoipPushNotification.requestPermissions(); // --- optional, you can use another library to request permissions
-      VoipPushNotification.registerVoipToken(); // --- required
+    //   VoipPushNotification.requestPermissions(); // --- optional, you can use another library to request permissions
+    //   VoipPushNotification.registerVoipToken(); // --- required
 
-      VoipPushNotification.addEventListener('register', (token) => {
-        // --- send token to your apn provider server
-        console.log(token);
-      });
+    //   VoipPushNotification.addEventListener('register', (token) => {
+    //     // --- send token to your apn provider server
+    //     console.log(token);
+    //   });
 
-      VoipPushNotification.addEventListener('localNotification', (notification) => {
-        // --- when user click local push
-      });
+    //   VoipPushNotification.addEventListener('localNotification', (notification) => {
+    //     // --- when user click local push
+    //   });
 
-      VoipPushNotification.addEventListener('notification', (notification) => {
-        // --- when receive remote voip push, register your VoIP client, show local notification ... etc
-        //this.doRegisterOrSomething();
+    //   VoipPushNotification.addEventListener('notification', (notification) => {
+    //     // --- when receive remote voip push, register your VoIP client, show local notification ... etc
+    //     //this.doRegisterOrSomething();
 
-        // --- This  is a boolean constant exported by this module
-        // --- you can use this constant to distinguish the app is launched by VoIP push notification or not
-        if (VoipPushNotification.wakeupByPush) {
-          // this.doSomething()
+    //     // --- This  is a boolean constant exported by this module
+    //     // --- you can use this constant to distinguish the app is launched by VoIP push notification or not
+    //     if (VoipPushNotification.wakeupByPush) {
+    //       // this.doSomething()
 
-          // --- remember to set this static variable back to false
-          // --- since the constant are exported only at initialization time, and it will keep the same in the whole app
-          // VoipPushNotification.wakeupByPush = false;
-        }
-
-
-        // --- optionally, if you `addCompletionHandler` from the native side, once you have done the js jobs to initiate a call, call `completion()`
-        VoipPushNotification.onVoipNotificationCompleted(notification.getData().uuid);
+    //       // --- remember to set this static variable back to false
+    //       // --- since the constant are exported only at initialization time, and it will keep the same in the whole app
+    //       // VoipPushNotification.wakeupByPush = false;
+    //     }
 
 
-        /**
-         * Local Notification Payload
-         *
-         * - `alertBody` : The message displayed in the notification alert.
-         * - `alertAction` : The "action" displayed beneath an actionable notification. Defaults to "view";
-         * - `soundName` : The sound played when the notification is fired (optional).
-         * - `category`  : The category of this notification, required for actionable notifications (optional).
-         * - `userInfo`  : An optional object containing additional notification data.
-         */
-        VoipPushNotification.presentLocalNotification({
-          alertBody: "hello! " + notification.getMessage()
-        });
-      });
-    }
+    //     // --- optionally, if you `addCompletionHandler` from the native side, once you have done the js jobs to initiate a call, call `completion()`
+    //     VoipPushNotification.onVoipNotificationCompleted(notification.getData().uuid);
+
+
+    //     /**
+    //      * Local Notification Payload
+    //      *
+    //      * - `alertBody` : The message displayed in the notification alert.
+    //      * - `alertAction` : The "action" displayed beneath an actionable notification. Defaults to "view";
+    //      * - `soundName` : The sound played when the notification is fired (optional).
+    //      * - `category`  : The category of this notification, required for actionable notifications (optional).
+    //      * - `userInfo`  : An optional object containing additional notification data.
+    //      */
+    //     VoipPushNotification.presentLocalNotification({
+    //       alertBody: "hello! " + notification.getMessage()
+    //     });
+    //   });
+    // }
     PushNotification.configure({
       // user accepted notification permission - register token
       onRegister: function (tokenData) {

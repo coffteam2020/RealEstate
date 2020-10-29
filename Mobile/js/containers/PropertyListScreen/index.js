@@ -11,9 +11,11 @@ import {
   View,
   FlatList,
   Dimensions,
+  ActivityIndicator,
 
 } from 'react-native';
 import { List, ListItem } from 'react-native-elements';
+import Axios from 'axios';
 import { withTheme } from 'react-native-paper';
 import { images } from '../../../assets';
 import { NavigationService } from '../../navigation';
@@ -21,6 +23,7 @@ import { ScreenNames } from '../../route/ScreenNames';
 import TextNormal from '../../shared/components/Text/TextNormal';
 import { useStores } from '../../store/useStore';
 import { containerStyle } from '../../themes/styles';
+import { getDistance, getPreciseDistance } from 'geolib';
 import * as Animatable from 'react-native-animatable';
 import TrackPlayer from 'react-native-track-player';
 import { styles } from './style';
@@ -43,6 +46,7 @@ import Empty from '../../shared/components/Empty';
 import GradientButton from '../../shared/components/Buttons/GradientButton';
 import CheckBox from '@react-native-community/checkbox';
 import RangeSlider from 'rn-range-slider';
+import GetLocation from 'react-native-get-location';
 
 const PropertyListScreen = (props) => {
   const { colorsApp } = props.theme;
@@ -191,7 +195,7 @@ const PropertyListScreen = (props) => {
     setIsLoading(true);
     AxiosFetcher({
       method: 'GET',
-      url: '/property/findAllWithPagination/?limit=1000&offset=0&sortBy=id',
+      url: '/property/findAllWithPagination/?limit=10000&offset=0&sortBy=id',
       hasToken: true,
     })
       .then((val) => {
@@ -202,6 +206,12 @@ const PropertyListScreen = (props) => {
             (item) => (!item.type && type === 'PROPERTY') || item.type === type,
           );
           setProperties(datas);
+          setTimeout(() => {
+            for (let i = 0; i < datas?.length; i++) {
+              getProfile(datas[i]?.address, i, datas);
+            }
+          }, 2500);
+
           setMaxPriceInit(getMaxPrice(datas));
           setMaxPrice(getMaxPrice(datas));
         } else {
@@ -214,6 +224,49 @@ const PropertyListScreen = (props) => {
         setProperties([]);
         // ToastHelper.showError(t('account.getInfoErr'));
       });
+  };
+  const getProfile = async (address, i, data) => {
+    // calculateDistance();
+    let userInfo = await IALocalStorage.getDetailUserInfo();
+    setUserInfo(userInfo);
+    Axios.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + encodeURIComponent(address) + '&key=AIzaSyB5vqnxvHdaTdgKY1E8AsaBxs_FS9HEiCM').then(val => {
+      console.log("=========" + JSON.stringify(val?.data));
+      let a = val?.data;
+      if (a?.results?.length > 0) {
+        console.log(a?.results?.[0]?.geometry?.location);
+        if (a.results?.[0]?.geometry?.location) {
+          // setLo({
+          //   latitude: a.results?.[0]?.geometry?.location?.lat,
+          //   longitude: a?.results?.[0]?.geometry?.location?.lng,
+          // })
+          calculateDistance(a.results?.[0]?.geometry?.location?.lat, a?.results?.[0]?.geometry?.location?.lng, i, data)
+        } else {
+          console.log("dsadsad")
+        }
+      } else {
+        console.log("dsadsad1")
+      }
+    })
+  };
+  const calculateDistance = (lat, lon, i, data) => {
+    GetLocation.getCurrentPosition({
+      enableHighAccuracy: true,
+      timeout: 15000,
+    }).then(a => {
+      setIsLoading(true);
+      var dis = getDistance(
+        { latitude: a?.latitude, longitude: a?.longitude },
+        { latitude: lat, longitude: lon },
+      );
+      console.log("=========dis" + dis);
+      var a = data;
+      a[i].distance = `${dis / 1000} km`;
+      console.log("=========" + JSON.stringify(a));
+      setProperties(a);
+      setIsLoading(false);
+    }).catch(e => {
+    })
+
   };
 
 
@@ -368,6 +421,7 @@ const PropertyListScreen = (props) => {
         }}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => {
+          console.log(JSON.stringify(item))
           return (
             <TouchableOpacity
               onPress={() => {
@@ -430,6 +484,16 @@ const PropertyListScreen = (props) => {
                     <Ionicons name="ios-pricetags" size={16} color={colors.gray_new}></Ionicons>
                     <TextNormal style={{ marginLeft: SPACINGS.small, marginRight: SPACINGS.small, color: mainColor }} text={'$ ' + item.priceOrMonthlyRent}></TextNormal>
                   </View>
+                  {item?.distance ?
+                    <View style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      // justifyContent: 'space-between',
+                    }}>
+                      <Ionicons name="location" size={16} color={colors.gray_new}></Ionicons>
+                      <TextNormal style={{ marginLeft: SPACINGS.small, marginRight: SPACINGS.small, color: mainColor }} text={' ' + item?.distance}></TextNormal>
+                    </View> :
+                    <ActivityIndicator size="small" style={{alignSelf: 'flex-start'}}/>}
                 </View>
               </View>
             </TouchableOpacity>
@@ -976,7 +1040,7 @@ const PropertyListScreen = (props) => {
             }
           }>
           <TextNormal style={{ fontSize: FONTSIZES.avg }} text={getFilteredItemsList().length + " " + t('chat.result')}></TextNormal>
-          <TextNormal style={{ fontSize: FONTSIZES.avg }} text={t('chat.Sort_By') + " "+ sortBy.label}></TextNormal>
+          <TextNormal style={{ fontSize: FONTSIZES.avg }} text={t('chat.Sort_By') + " " + sortBy.label}></TextNormal>
         </View>
       </View>
     );

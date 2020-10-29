@@ -19,6 +19,7 @@ import ChatRoomScreen from '../containers/ChatRoomScreen';
 import ChatRoomGroupScreen from '../containers/ChatRoomGroupScreen';
 import VideoCallScreen from '../containers/VideoCallScreen';
 import VideoCall from '../containers/VideoCall';
+import WebScreen from '../containers/WebScreen';
 import Livestream from '../containers/Livestream';
 import InformationRoom from '../containers/Livestream/InformationRoom';
 import LocationScreen from '../containers/LocationScreen';
@@ -212,6 +213,7 @@ const TabNavigator = createStackNavigator(
     VideoCallScreen: { screen: VideoCallScreen },
     GroupMateScreen: { screen: GroupMateScreen },
     VideoCall: { screen: VideoCall },
+    WebScreen: { screen: WebScreen },
     Scanner: { screen: Scanner },
     SocialScreen: { screen: SocialScreenNavigator },
   },

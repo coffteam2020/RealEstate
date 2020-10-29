@@ -53,7 +53,7 @@ const Scanner = (props) => {
                         style={{ marginTop: 20, marginBottom: 20 }}
                     />
                     <GradientButton text={t('common.confirm')} onPress={() => {
-                        if (s !== '' && !s?.includes("%%")) {
+                        if (s !== '' && s?.includes("%%")) {
                             NavigationService.navigate(ScreenNames.VideoCall, { url: s, isGroup: true })
                         }
                     }} />

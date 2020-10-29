@@ -107,6 +107,22 @@ const PropertyDetailScreen = (props) => {
       }
     })
   };
+  const calculateDistance = (lat, lon) => {
+
+    GetLocation.getCurrentPosition({
+      enableHighAccuracy: true,
+      timeout: 15000,
+    }).then(a => {
+      var dis = getDistance(
+        { latitude: a?.latitude, longitude: a?.longitude },
+        { latitude: lat, longitude: lon },
+      );
+      setDis(`${dis/1000} km`)
+    }).catch(e => {
+      rej(e);
+    })
+
+  };
 
   const doBooking = () => {
     const data = {
@@ -138,22 +154,7 @@ const PropertyDetailScreen = (props) => {
       });
 
   };
-  const calculateDistance = (lat, lon) => {
-
-    GetLocation.getCurrentPosition({
-      enableHighAccuracy: true,
-      timeout: 15000,
-    }).then(a => {
-      var dis = getDistance(
-        { latitude: a?.latitude, longitude: a?.longitude },
-        { latitude: lat, longitude: lon },
-      );
-      setDis(`${dis/1000} km`)
-    }).catch(e => {
-      rej(e);
-    })
-
-  };
+  
   const renderDetail = () => {
     return (
       <View
