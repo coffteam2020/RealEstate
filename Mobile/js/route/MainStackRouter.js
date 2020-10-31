@@ -12,7 +12,7 @@ import { Transition } from 'react-native-reanimated';
 import ExploreScreen from '../containers/ExploreScreen';
 import MateScreen from '../containers/MateScreen';
 import List from '../containers/MateScreen/List';
-import MateScreenDetail from '../containers/GroupMateScreen';
+import MateScreenDetail from '../containers/MateScreenDetail';
 import MessageScreen from '../containers/MessageScreen';
 import GroupMateScreen from '../containers/GroupMateScreen';
 import ChatRoomScreen from '../containers/ChatRoomScreen';

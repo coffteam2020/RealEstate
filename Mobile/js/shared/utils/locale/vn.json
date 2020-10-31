@@ -49,11 +49,13 @@
     "pickATime": "Chọn thời gian",
     "gotIt": "Okay, đã hiểu",
     "done": "Xong",
+    "doneB": "Xong, chúng tôi sẽ xem xét hành vi của người dùng này.",
     "yes": "Có",
     "no": "Không",
     "call": "Gọi",
     "chat": "Chat",
     "book": "Đặt",
+    "block": "Chặn",
     "edit": "Sửa",
     "delete": "Xoá",
     "apply": "Thực thi"

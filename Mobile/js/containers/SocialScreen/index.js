@@ -68,7 +68,7 @@ const SocialScreen = (props) => {
     setIsLoading(true);
     try {
       let allPost = await FirebaseService.queryAllItemBySchemaWithOrderedByChild(
-        isBlog ? Constant.SCHEMA.BLOG: Constant.SCHEMA.SOCIAL,
+        isBlog ? Constant.SCHEMA.BLOG : Constant.SCHEMA.SOCIAL,
         'timeInMillosecond',
         false,
         false,
@@ -96,15 +96,15 @@ const SocialScreen = (props) => {
     setIsLoading(true);
     await firebase
       .database()
-      .ref(isBlog ? Constant.SCHEMA.BLOG: Constant.SCHEMA.SOCIAL)
+      .ref(isBlog ? Constant.SCHEMA.BLOG : Constant.SCHEMA.SOCIAL)
       .on('value', (snapshot) => {
         const data = snapshot.val() ? Object.values(snapshot.val()) : [];
         console.log(JSON.stringify(data));
         let arr = data.sort(function (x, y) {
           return y.timeInMillosecond - x.timeInMillosecond;
         });
-        if (!isBlog){ 
-           arr = arr.filter(item => item?.disable !== true);
+        if (!isBlog) {
+          arr = arr.filter(item => item?.disable !== true);
         }
         // console.log(arr);
         setAllPost(arr)
@@ -142,7 +142,7 @@ const SocialScreen = (props) => {
   const clickLike = (post) => {
     let userDetail = userStore?.userInfo;
     FirebaseService.queryAllItemBySchemaWithSpecifiedChild(
-      isBlog ? Constant.SCHEMA.BLOG: Constant.SCHEMA.SOCIAL,
+      isBlog ? Constant.SCHEMA.BLOG : Constant.SCHEMA.SOCIAL,
       '_id',
       post._id,
       false,
@@ -158,7 +158,7 @@ const SocialScreen = (props) => {
         const newData = { ...val[0] };
         newData.likes = currentLike;
         FirebaseService.updateItem(
-          isBlog ? Constant.SCHEMA.BLOG: Constant.SCHEMA.SOCIAL,
+          isBlog ? Constant.SCHEMA.BLOG : Constant.SCHEMA.SOCIAL,
           post?.userId + '_' + post?.timeInMillosecond,
           newData,
         ).then((val1) => {
@@ -178,7 +178,7 @@ const SocialScreen = (props) => {
         style={styles.postInput}
         onPress={() => {
           // console.log('open View Post');
-          NavigationService.navigate(ScreenNames.NewPostScreen, {isBlog: isBlog});
+          NavigationService.navigate(ScreenNames.NewPostScreen, { isBlog: isBlog });
         }}>
         <FastImage
           source={{
@@ -201,7 +201,7 @@ const SocialScreen = (props) => {
           style={styles.postInput}
           onPress={() => {
             // console.log('open View Post');
-            NavigationService.navigate(ScreenNames.NewPostScreen, {isBlog: isBlog});
+            NavigationService.navigate(ScreenNames.NewPostScreen, { isBlog: isBlog });
           }}>
           <FastImage
             source={{
@@ -252,13 +252,13 @@ const SocialScreen = (props) => {
     );
   };
   const del = (item) => {
-    FirebaseService.queryAllItemBySchema(isBlog ? Constant.SCHEMA.BLOG: Constant.SCHEMA.SOCIAL).then(val => {
+    FirebaseService.queryAllItemBySchema(isBlog ? Constant.SCHEMA.BLOG : Constant.SCHEMA.SOCIAL).then(val => {
       const data = val ? Object.values(val) : [];
       var a = [];
       data?.forEach(a => {
         if (item?._id === a?._id) {
           // a.push(item);
-          FirebaseService.updateItem(isBlog ? Constant.SCHEMA.BLOG: Constant.SCHEMA.SOCIAL, `${userStore.userInfo?.id}_${item?.timeInMillosecond}`, { ...item, disable: true })
+          FirebaseService.updateItem(isBlog ? Constant.SCHEMA.BLOG : Constant.SCHEMA.SOCIAL, `${userStore.userInfo?.id}_${item?.timeInMillosecond}`, { ...item, disable: true })
           return;
         }
       })
@@ -271,41 +271,41 @@ const SocialScreen = (props) => {
     let isToDay = TimeHelper.isToday(moment(item?.timeInMillosecond));
     const isAdmin = userStore?.userInfo?.phoneNumber?.includes('0955555555');
     const isBlog = props?.navigation?.state?.params?.isBlog;
-    if (isBlog) {
-      if (!isAdmin) {
-        return null;
-      }
-    }
+    // if (isBlog) {
+    //   if (!isAdmin) {
+    //     return null;
+    //   }
+    // }
     return (
       <>
-      
-        <TouchableOpacity
-          delayLongPress={0}
-          onLongPress={() => {
-            Alert.alert(t('chat.del'), '', [
-              {
-                text: t('common.confirm'),
-                onPress: () => { del(item) }
-              },
-              {
-                text: t('common.cancel'),
-                onPress: () => { }
-              },
-            ])
-          }}
-          style={styles.postInput}
-          onPress={() => {
-            NavigationService.navigate(ScreenNames.NewPostScreen, {isBlog: isBlog});
-          }}>
-          <FastImage
-            source={{
-              uri: avt || Constant.MOCKING_DATA.NO_IMG_PLACE_HOLDER,
+        {isBlog && !isAdmin ? null :
+          <TouchableOpacity
+            delayLongPress={0}
+            onLongPress={() => {
+              Alert.alert(t('chat.del'), '', [
+                {
+                  text: t('common.confirm'),
+                  onPress: () => { del(item) }
+                },
+                {
+                  text: t('common.cancel'),
+                  onPress: () => { }
+                },
+              ])
             }}
-            resizeMode="cover"
-            style={styles.avatar}
-          />
-          <TextNormal text={t('social.placeholder')}></TextNormal>
-        </TouchableOpacity>
+            style={styles.postInput}
+            onPress={() => {
+              NavigationService.navigate(ScreenNames.NewPostScreen, { isBlog: isBlog });
+            }}>
+            <FastImage
+              source={{
+                uri: avt || Constant.MOCKING_DATA.NO_IMG_PLACE_HOLDER,
+              }}
+              resizeMode="cover"
+              style={styles.avatar}
+            />
+            <TextNormal text={t('social.placeholder')}></TextNormal>
+          </TouchableOpacity>}
         <TouchableOpacity
           onLongPress={() => {
             if (item?.userId === userStore?.userInfo?.id) {
@@ -358,9 +358,9 @@ const SocialScreen = (props) => {
               <TextNormal
                 style={styles.contentTextStyle}
                 text={item.content}
-                numberOfLines={100}
+                numberOfLines={1000}
               />
-              <View style={styles.contentImageStyle}>
+              {item?.images  && <View style={styles.contentImageStyle}>
                 {item?.images &&
                   (item?.images[0]?.includes('PNG') ||
                     item?.images[0]?.includes('JPG') ||
@@ -372,9 +372,9 @@ const SocialScreen = (props) => {
                     item?.images[0]?.includes('jpeg')) ? (
                     <FlatList
                       numColumns={3}
-                      style={{justifyContent: 'center', alignContent: 'center', alignItems: 'center', alignSelf: 'center'}}
+                      style={{ justifyContent: 'center', alignContent: 'center', alignItems: 'center', alignSelf: 'center' }}
                       data={item?.images || []}
-                      renderItem={({a, index}) => {
+                      renderItem={({ a, index }) => {
                         return (
                           <FastImage
                             source={{
@@ -383,7 +383,7 @@ const SocialScreen = (props) => {
                                 Constant.MOCKING_DATA.NO_IMG_PLACE_HOLDER,
                             }}
                             resizeMode="cover"
-                            style={item?.images?.length === 1 ? styles.postImages : { width: ScreenWidth * (1 / item?.images.length), height: ScreenWidth * (1 / item?.images.length), marginEnd: 10}}
+                            style={item?.images?.length === 1 ? styles.postImages : { width: ScreenWidth * (1 / item?.images.length), height: ScreenWidth * (1 / item?.images.length), marginEnd: 10 }}
                           />
                         )
                       }} />
@@ -396,7 +396,7 @@ const SocialScreen = (props) => {
                       }}>
                       <Video
                         paused={true}
-                      
+
                         playWhenInactive={false}
                         playInBackground={false}
                         controls={true}
@@ -405,7 +405,7 @@ const SocialScreen = (props) => {
                       />
                     </View>
                   )}
-              </View>
+              </View>}
             </View>
             <View style={styles.postFooter}>
               <View
@@ -531,7 +531,7 @@ const SocialScreen = (props) => {
               numberOfLines={100}
             />
             {item?.images?.length > 0 ? <View style={styles.contentImageStyle}>
-              {item?.images && (item?.images[0]?.includes('PNG') ||item?.images[0]?.includes('HEIC') ||item?.images[0]?.includes('heic') || item?.images[0]?.includes('JPG') || item?.images[0]?.includes('JPEG') ||
+              {item?.images && (item?.images[0]?.includes('PNG') || item?.images[0]?.includes('HEIC') || item?.images[0]?.includes('heic') || item?.images[0]?.includes('JPG') || item?.images[0]?.includes('JPEG') ||
                 item?.images[0]?.includes('png') || item?.images[0]?.includes('jpg') || item?.images[0]?.includes('jpeg')) ?
                 <FastImage
                   source={{
@@ -620,12 +620,12 @@ const SocialScreen = (props) => {
       </TouchableOpacity>
     );
   }
-  const isBlog = props?.navigation?.state?.params?.isBlog; 
+  const isBlog = props?.navigation?.state?.params?.isBlog;
   return useObserver(() => (
     <View style={[containerStyle.default]}>
       <StatusBar barStyle={colorsApp.statusBar} />
       <SafeAreaView>
-        <HeaderFull title={t(isBlog ?  'explorer.admin' : 'social.title')} hasButton={true} />
+        <HeaderFull title={t(isBlog ? 'explorer.admin' : 'social.title')} hasButton={true} />
         <ScrollView nestedScrollEnabled contentContainerStyle={styles.content}>
           {renderAllPost()}
         </ScrollView>

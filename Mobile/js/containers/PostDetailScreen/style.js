@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
-    // paddingBottom: 80,
+    paddingBottom: 300,
   },
   avatar: {
     width: ScreenWidth * 0.1,

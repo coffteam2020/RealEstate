@@ -38,11 +38,13 @@ const HeaderFullPostDetail = ({title, hasButton = false, rightIco, onPress, avat
       <View style={{display: "flex", flexDirection: "column"}}>
       <TextNormal
         text={name}
+        numberOfLines={2}
         style={[
           {
             fontSize: FONTSIZES.large,
             fontFamily: fonts.family.nunito.bold,
             alignSelf: 'flex-start',
+            width: '85%'
           },
         ]}
       />

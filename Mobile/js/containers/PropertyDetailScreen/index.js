@@ -119,7 +119,7 @@ const PropertyDetailScreen = (props) => {
       );
       setDis(`${dis/1000} km`)
     }).catch(e => {
-      rej(e);
+      console.log(e);
     })
 
   };
@@ -592,7 +592,7 @@ const PropertyDetailScreen = (props) => {
       <SafeAreaView>
         <HeaderFull
           hasButton
-          title={'Properties Detail'}
+          title={''}
         />
         <ScrollView nestedScrollEnabled contentContainerStyle={styles.content}>
           {renderBanner()}

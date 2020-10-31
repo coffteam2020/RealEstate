@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { useEffect, useState } from 'react';
-import { StatusBar, View, SafeAreaView, FlatList } from 'react-native';
+import { StatusBar, View, SafeAreaView, FlatList, Alert } from 'react-native';
 import { styles } from './style';
 import { withTheme } from 'react-native-paper';
 import TextNormal from '../../shared/components/Text/TextNormal';
@@ -92,6 +92,24 @@ const MateScreen = (props) => {
                   data: item,
                   followed: true,
                 });
+              }}
+              onLongPress={() => {
+                Alert.alert(t('social.placeholder'), '', [
+                  {
+                    text: t('common.block'), onPress: () => {
+                      setTimeout(() => {
+                        ToastHelper.showSuccess(t('common.doneB'));
+                      }, 1000);
+                    }
+                  },
+                  {
+                    text: t('common.delete'), onPress: () => {
+                      setTimeout(() => {
+                        ToastHelper.showSuccess(t('common.doneB'));
+                      }, 1000);
+                    }
+                  }
+                ])
               }}
               style={[
                 containerStyle.defaultMarginBottom,

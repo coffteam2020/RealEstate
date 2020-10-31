@@ -160,7 +160,6 @@ const PropertyListScreen = (props) => {
   useEffect(() => {
     props?.navigation.addListener('willFocus', () => {
       initMainColor();
-      getPropertyList();
     });
     initMainColor();
     getPropertyList();
@@ -241,20 +240,24 @@ const PropertyListScreen = (props) => {
           // })
           calculateDistance(a.results?.[0]?.geometry?.location?.lat, a?.results?.[0]?.geometry?.location?.lng, i, data)
         } else {
+          setIsLoading(false);
           console.log("dsadsad")
         }
       } else {
+        setIsLoading(false);
         console.log("dsadsad1")
       }
     })
   };
-  const calculateDistance = (lat, lon, i, data) => {
+  const calculateDistance = async (lat, lon, i, data) => {
+    console.log("=============")
     GetLocation.getCurrentPosition({
       enableHighAccuracy: true,
       timeout: 15000,
-    }).then(a => {
-      setIsLoading(true);
-      var dis = getDistance(
+    }).then(async a => {
+      console.log(a);
+      setIsLoading(false);
+      var dis = await getDistance(
         { latitude: a?.latitude, longitude: a?.longitude },
         { latitude: lat, longitude: lon },
       );
@@ -482,7 +485,7 @@ const PropertyListScreen = (props) => {
                     // justifyContent: 'space-between',
                   }}>
                     <Ionicons name="ios-pricetags" size={16} color={colors.gray_new}></Ionicons>
-                    <TextNormal style={{ marginLeft: SPACINGS.small, marginRight: SPACINGS.small, color: mainColor }} text={'$ ' + item.priceOrMonthlyRent}></TextNormal>
+                    <TextNormal style={{ marginLeft: SPACINGS.small, marginRight: SPACINGS.small, color: mainColor }} text={'' + item.priceOrMonthlyRent}></TextNormal>
                   </View>
                   {item?.distance ?
                     <View style={{
