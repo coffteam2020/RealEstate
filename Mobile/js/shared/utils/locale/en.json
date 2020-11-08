@@ -52,6 +52,7 @@
     "yes": "Yes",
     "doneB": "Done, we will consider user's behaviour and get back to you soon!",
     "no": "No",
+    "logout": "Do you want to logout?",
     "call": "Call",
     "block": "Block",
     "chat": "Chat",
@@ -327,7 +328,7 @@
     "cafe": "Cafe",
     "video_call": "Meeting",
     "join": "Scanned succesfully, join room now!",
-    "admin": "Blog",
+    "admin": "Company info",
     "qr": "QRCode",
     "snack": "Snack",
     "livestream": "Livestream"

@@ -24,8 +24,8 @@ const ModalAccount = ({isVisible, onPress, title, style, onClose}) => {
 	let stringTitle, subTitle;
 	switch (title) {
 	case 'LOGOUT':
-		stringTitle = 'Confirmation';
-		subTitle = 'Do you want to logout?';
+		stringTitle = t('common.confirm');
+		subTitle = t('common.logout');
 		
 		break;
 	default:

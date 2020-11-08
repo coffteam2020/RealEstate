@@ -134,8 +134,8 @@ android {
         applicationId "com.dtechno.dapp.premium"
         minSdkVersion 24
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 16
-        versionName "1.0"
+        versionCode 20
+        versionName "1.2"
         missingDimensionStrategy 'react-native-camera', 'general'
     }
     packagingOptions {

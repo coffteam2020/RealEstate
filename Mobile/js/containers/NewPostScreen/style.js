@@ -11,6 +11,7 @@ export const styles = StyleSheet.create({
   },
   content: {
     alignItems: 'center',
+    paddingBottom: 500,
   },
 
   postImages:{

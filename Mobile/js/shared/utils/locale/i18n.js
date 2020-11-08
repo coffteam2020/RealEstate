@@ -1,5 +1,6 @@
 import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
+import I18n, { initReactI18next } from 'react-i18next';
+import { NativeModules, Platform } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 
 const translationGetters = {
@@ -12,15 +13,21 @@ const languageDetector = {
 	type: 'languageDetector',
 	async: true,
 	detect: async cb => {
-		console.log('================'+cb);
+		console.log('================' + cb);
 		// // Case 1: The user chose his preferred language setting.
-		// const preferredLang = await AsyncStorage.getItem('lang');
-		// if (preferredLang) {
-		//   return cb(preferredLang);
-		// }
-
+		const preferredLang = await AsyncStorage.getItem('lang');
+		if (preferredLang) {
+			return cb(preferredLang);
+		}
+		const deviceLanguage =
+			Platform.OS === 'ios'
+				? NativeModules.SettingsManager.settings.AppleLocale ||
+				NativeModules.SettingsManager.settings.AppleLanguages[0] // iOS 13
+				: NativeModules.I18nManager.localeIdentifier;
+		alert(deviceLanguage);
+		await AsyncStorage.setItem('lang', deviceLanguage?.split('_')?.[0]?.toLowerCase());
 		// Case 2: return the default language
-		return cb('en');
+		return cb(deviceLanguage?.split('_')?.[0]?.toLowerCase());
 	},
 	init: () => { },
 	cacheUserLanguage: () => { },
@@ -41,7 +48,7 @@ i18n
 			},
 		},
 		react: {
-			useSuspense: false, 
+			useSuspense: false,
 		},
 	});
 

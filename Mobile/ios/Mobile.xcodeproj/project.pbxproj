@@ -40,8 +40,10 @@
 		7CD4737E46BB4AACA7E67F9A /* Nunito-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 23E5D6920F0D48F2B7233998 /* Nunito-LightItalic.ttf */; };
 		7E2C728E253B3A4100E280FA /* Intents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E2C728D253B3A4100E280FA /* Intents.framework */; };
 		7E2C7290253B3A4700E280FA /* CallKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E2C728F253B3A4700E280FA /* CallKit.framework */; };
-		7E2C7292253B440E00E280FA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7E2C7291253B440E00E280FA /* GoogleService-Info.plist */; };
 		7E2C7294253B53CC00E280FA /* PushKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E2C7293253B53CB00E280FA /* PushKit.framework */; };
+		7ECE90F82557895A00ABC96F /* bridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ECE90F72557895A00ABC96F /* bridge.swift */; };
+		7ECE90F92557895A00ABC96F /* bridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ECE90F72557895A00ABC96F /* bridge.swift */; };
+		7EE39FBD2550580B00F34F64 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7EE39FBC2550580B00F34F64 /* GoogleService-Info.plist */; };
 		7EE7D49F25486E0F0096A11B /* libRNCallKeep.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EE7D49E25486E0F0096A11B /* libRNCallKeep.a */; };
 		7EE7D4A125486EAC0096A11B /* libRNVoipPushNotification.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EE7D4A025486EAC0096A11B /* libRNVoipPushNotification.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
@@ -132,9 +134,12 @@
 		78DFCDD078E04292AA8ED511 /* Proxima Nova Alt Light.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Proxima Nova Alt Light.otf"; path = "../assets/fonts/Proxima Nova Alt Light.otf"; sourceTree = "<group>"; };
 		7E2C728D253B3A4100E280FA /* Intents.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Intents.framework; path = System/Library/Frameworks/Intents.framework; sourceTree = SDKROOT; };
 		7E2C728F253B3A4700E280FA /* CallKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CallKit.framework; path = System/Library/Frameworks/CallKit.framework; sourceTree = SDKROOT; };
-		7E2C7291253B440E00E280FA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../../Desktop/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		7E2C7293253B53CB00E280FA /* PushKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PushKit.framework; path = System/Library/Frameworks/PushKit.framework; sourceTree = SDKROOT; };
 		7E5FA75D87FA45E78E9FC1E3 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
+		7ECE90F52557895900ABC96F /* Mobile-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Mobile-Bridging-Header.h"; sourceTree = "<group>"; };
+		7ECE90F62557895900ABC96F /* Mobile-tvOS-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Mobile-tvOS-Bridging-Header.h"; sourceTree = "<group>"; };
+		7ECE90F72557895A00ABC96F /* bridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = bridge.swift; sourceTree = "<group>"; };
+		7EE39FBC2550580B00F34F64 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../../Desktop/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		7EE7D49E25486E0F0096A11B /* libRNCallKeep.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNCallKeep.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		7EE7D4A025486EAC0096A11B /* libRNVoipPushNotification.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNVoipPushNotification.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		7F91C4B0A34649A19122929A /* Proxima Nova Bold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Proxima Nova Bold.otf"; path = "../assets/fonts/Proxima Nova Bold.otf"; sourceTree = "<group>"; };
@@ -239,7 +244,7 @@
 		13B07FAE1A68108700A75B9A /* Mobile */ = {
 			isa = PBXGroup;
 			children = (
-				7E2C7291253B440E00E280FA /* GoogleService-Info.plist */,
+				7EE39FBC2550580B00F34F64 /* GoogleService-Info.plist */,
 				FD6B1C0824F2C78E00DFCEE8 /* Real Estate.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -248,6 +253,9 @@
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				7ECE90F72557895A00ABC96F /* bridge.swift */,
+				7ECE90F52557895900ABC96F /* Mobile-Bridging-Header.h */,
+				7ECE90F62557895900ABC96F /* Mobile-tvOS-Bridging-Header.h */,
 			);
 			name = Mobile;
 			sourceTree = "<group>";
@@ -483,10 +491,11 @@
 					};
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = 5H3BC22TC5;
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 1220;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
+						LastSwiftMigration = 1220;
 						ProvisioningStyle = Automatic;
 					};
 					2D02E48F1E0B4A5D006451C7 = {
@@ -539,7 +548,7 @@
 				1CFEDADA05094B9FB719AF92 /* Nunito-ExtraBoldItalic.ttf in Resources */,
 				6FEA05F8E1E64974A47FC080 /* Nunito-ExtraLight.ttf in Resources */,
 				173C004DE47F4987B2A593E1 /* Nunito-ExtraLightItalic.ttf in Resources */,
-				7E2C7292253B440E00E280FA /* GoogleService-Info.plist in Resources */,
+				7EE39FBD2550580B00F34F64 /* GoogleService-Info.plist in Resources */,
 				8A641181C9F3410D885D1CAB /* Nunito-Italic.ttf in Resources */,
 				C225CA3B1D9849A0858B2E80 /* Nunito-Light.ttf in Resources */,
 				7CD4737E46BB4AACA7E67F9A /* Nunito-LightItalic.ttf in Resources */,
@@ -954,6 +963,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7ECE90F82557895A00ABC96F /* bridge.swift in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
@@ -963,6 +973,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7ECE90F92557895A00ABC96F /* bridge.swift in Sources */,
 				2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */,
 				2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */,
 			);
@@ -996,6 +1007,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = F1C55B79320F2CE3FEBA50D4 /* Pods-Mobile-MobileTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -1019,6 +1031,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = ECB279FB3C87FFA89C61761E /* Pods-Mobile-MobileTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = MobileTests/Info.plist;
@@ -1042,13 +1055,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "Mobile/Real Estate.entitlements";
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5H3BC22TC5;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Mobile/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.4;
+				MARKETING_VERSION = 1.6;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1056,6 +1069,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.dtechno.dapp.premium;
 				PRODUCT_NAME = "Dapp Premium";
+				SWIFT_OBJC_BRIDGING_HEADER = "Mobile-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -1069,13 +1083,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "Mobile/Real Estate.entitlements";
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5H3BC22TC5;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Mobile/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.4;
+				MARKETING_VERSION = 1.6;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1083,6 +1097,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.dtechno.dapp.premium;
 				PRODUCT_NAME = "Dapp Premium";
+				SWIFT_OBJC_BRIDGING_HEADER = "Mobile-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -1095,6 +1110,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -1111,6 +1127,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.Mobile-tvOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
+				SWIFT_OBJC_BRIDGING_HEADER = "Mobile-tvOS-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 10.0;
 			};
@@ -1123,6 +1142,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -1139,6 +1159,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.Mobile-tvOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
+				SWIFT_OBJC_BRIDGING_HEADER = "Mobile-tvOS-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 10.0;
 			};
@@ -1148,6 +1170,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = F54189546E4F3A954902ED9B /* Pods-Mobile-tvOSTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -1175,6 +1198,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 349BB3E75F45CBFC10C95267 /* Pods-Mobile-tvOSTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;

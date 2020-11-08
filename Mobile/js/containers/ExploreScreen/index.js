@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
   ImageBackground,
+  StyleSheet,
   Alert,
 } from 'react-native';
 import { styles } from './style';
@@ -33,6 +34,7 @@ import { firebase } from '@react-native-firebase/messaging';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import IALocalStorage from '../../shared/utils/storage/IALocalStorage';
 import { ToastHelper } from '../../shared/components/ToastHelper';
+import { useObserver } from 'mobx-react';
 
 const HOME_BANNERS = [
   { imgUrl: images.home1 },
@@ -131,7 +133,7 @@ const ExploreScreen = (props) => {
   const BTNS2 = [
     {
       title: t('explorer.admin'),
-      icon: images.home4s,
+      icon: images.app,
       onPress: () =>
         NavigationService.navigate(ScreenNames.SocialScreen, {
           key: t('explorer.admin'),
@@ -286,22 +288,29 @@ const ExploreScreen = (props) => {
       .then((val) => {
         if (val?.content !== '') {
           let datas = val?.content || [];
-          console.log('========' + JSON.stringify(datas));
+          // console.log('========' + JSON.stringify(datas));
+          var arr = [];
+
           for (let i = 0; i < datas?.length; i++) {
             Axios.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + encodeURIComponent(datas[i]?.address) + '&key=AIzaSyB5vqnxvHdaTdgKY1E8AsaBxs_FS9HEiCM').then(val => {
-              // console.log(JSON.stringify("=============" + JSON.stringify(val)))  
               let a = val?.data;
               if (a?.results?.length > 0) {
                 console.log(a?.results?.[0]?.geometry?.location);
-                if (a.results?.[0]?.geometry?.location) {
-                  setMarkers([...marker, {
-                    latitude: a.results?.[0]?.geometry?.location?.lat,
-                    longitude: a?.results?.[0]?.geometry?.location?.lng,
-                  }])
-                }
+                console.log(a.results?.[0]?.geometry?.location);
+                // if (a.results?.[0]?.geometry?.location) {
+
+                arr = [...arr, {
+                  latitude: a.results?.[0]?.geometry?.location?.lat,
+                  longitude: a?.results?.[0]?.geometry?.location?.lng,
+                }]
+                console.log("============" + arr.length);
+                setMarkers(arr?.slice());
+                // }
               }
             })
           }
+          console.log("============" + arr.length);
+          
 
         } else {
           // ToastHelper.showError(t('account.getInfoErr'));
@@ -391,7 +400,11 @@ const ExploreScreen = (props) => {
     })
       .then((location) => {
         setLo(location);
-        console.log(JSON.stringify(location));
+        console.log("=======" + JSON.stringify(location));
+        setLo({
+          latitude: location?.longitude,
+          longitude: location?.longitude
+        })
         AxiosFetcher({
           method: 'GET',
           url:
@@ -516,7 +529,7 @@ const ExploreScreen = (props) => {
                 />
                 <TextNormal
                   text={item?.title}
-                  numberOfLines={1}
+                  numberOfLines={2}
                   style={styles.buttonText}
                 />
               </TouchableOpacity>
@@ -576,7 +589,8 @@ const ExploreScreen = (props) => {
       </View>
     );
   };
-  return (
+  console.log("======" + marker.length);
+  return useObserver(() => (
     <View style={[containerStyle.defaultBackground]}>
       <StatusBar barStyle={colorsApp.statusBar} />
       <ScrollView contentContainerStyle={[styles.mainContainer]} style={{ paddingBottom: ScreenHeight / 2 }}>
@@ -590,28 +604,49 @@ const ExploreScreen = (props) => {
           imageStyle={{ borderRadius: 10 }}
           resizeMode="cover"
         ></FastImage> */}
-        <View style={{ height: ScreenHeight / 4, width: ScreenWidth, padding: 20, borderRadius: 10 }}>
-          {lo?.latitude && <MapView
+        <View style={{ height: ScreenHeight / 4, width: ScreenWidth, padding: 20, borderRadius: 10, }}>
+          {/* <View style={{
+            ...StyleSheet.absoluteFillObject,
+            height: 400,
+            width: 400,
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+          }}> */}
+          {lo?.longitude && marker?.length > 0 && <MapView
+            // showsUserLocation={true}
+            animateToRegion={true}
             provider={PROVIDER_GOOGLE} // remove if not using Google Maps
-            style={{ height: ScreenHeight / 4, borderRadius: 20 }}
+            style={{ height: ScreenHeight / 4, width: ScreenWidth - 40, borderRadius: 20, }}
             region={{
               latitude: lo?.latitude,
               longitude: lo?.longitude,
-              latitudeDelta: 3,
-              longitudeDelta: 4,
+              latitudeDelta: 0.4,
+              longitudeDelta: 0.5,
             }}
+            // onRegionChange={(region ) => {
+            //   setLo(region)
+            // }}
+            // initialRegion={{
+            //   latitude: lo?.latitude,
+            //   longitude: lo?.longitude,
+            // }}
+            // coordinate={{
+            //   latitude: lo?.latitude,
+            //   longitude: lo?.longitude
+            // }}
             scrollEnabled={true}
             zoomEnabled={true}
           >
-            <Marker
-              coordinate={{
-                latitude: lo?.latitude,
-                longitude: lo?.longitude
-              }}
+            {/* <Marker
+                coordinate={{
+                  latitude: lo?.latitude,
+                  longitude: lo?.longitude
+                }}
 
-              title={t('location.me')}
-              draggable />
-            {marker?.map(item => {
+                title={t('location.me')}
+                draggable /> */}
+            {marker?.slice()?.map(item => {
+              console.log("23232" + item);
               return (
                 <Marker
                   coordinate={{
@@ -643,7 +678,7 @@ const ExploreScreen = (props) => {
         </View>
       </ScrollView>
     </View>
-  );
+  ));
 };
 
 export default withTheme(ExploreScreen);

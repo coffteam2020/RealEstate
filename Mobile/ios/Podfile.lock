@@ -813,6 +813,8 @@ PODS:
     - React-Core
   - RNInAppBrowser (3.4.0):
     - React
+  - RNLocalize (1.4.3):
+    - React-Core
   - RNNotifee (0.7.2):
     - React
   - RNPermissions (2.2.1):
@@ -965,6 +967,7 @@ DEPENDENCIES:
   - RNI18n (from `../node_modules/react-native-i18n`)
   - RNIap (from `../node_modules/react-native-iap`)
   - RNInAppBrowser (from `../node_modules/react-native-inappbrowser-reborn`)
+  - RNLocalize (from `../node_modules/react-native-localize`)
   - "RNNotifee (from `../node_modules/@notifee/react-native`)"
   - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
@@ -1198,6 +1201,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-iap"
   RNInAppBrowser:
     :path: "../node_modules/react-native-inappbrowser-reborn"
+  RNLocalize:
+    :path: "../node_modules/react-native-localize"
   RNNotifee:
     :path: "../node_modules/@notifee/react-native"
   RNPermissions:
@@ -1355,6 +1360,7 @@ SPEC CHECKSUMS:
   RNI18n: e2f7e76389fcc6e84f2c8733ea89b92502351fd8
   RNIap: f7595967b8467dacb95f94a9eb4bbdb59f3afc67
   RNInAppBrowser: c1a0dad2734458d79bcb6c8f4297ba8658a1da9f
+  RNLocalize: 7c7aeda16c01db7a0918981c14875c0a53be9b79
   RNNotifee: e4070fe88281d2fc5403946b480a84aa7cd91066
   RNPermissions: 54f83272e3d1961fcbd6aff8fd826014c37fc578
   RNReanimated: 89f5e0a04d1dd52fbf27e7e7030d8f80a646a3fc

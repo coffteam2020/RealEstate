@@ -79,9 +79,9 @@ const Account = (props) => {
         let arr = data.sort(function (x, y) {
           return y.timeInMillosecond - x.timeInMillosecond;
         });
-        console.log(JSON.stringify(arr));
-        console.log(a?.userId);
-        arr = arr?.filter(a => a?.userId === a?.userId && a?.images?.length > 0);
+        // console.log(JSON.stringify(arr));
+        console.log("==========" +JSON.stringify(a));
+        arr = arr?.filter(ab => ab?.userId === a?.userId && ab?.images?.length > 0);
         setAllPost(arr)
         console.log(arr.length);
         setTimeout(() => {

@@ -319,6 +319,25 @@ const SocialScreen = (props) => {
                   onPress: () => { }
                 },
               ])
+            } else {
+              Alert.alert(t('chat.del'), '', [
+                {
+                  text: t('message.reportUser'),
+                  onPress: () => {
+                    setTimeout(() => {
+                      ToastHelper.showSuccess(t('common.doneB'))
+                    }, 1500)
+                  }
+                },
+                {
+                  text: t('message.blockUser'),
+                  onPress: () => {
+                    setTimeout(() => {
+                      ToastHelper.showSuccess(t('common.doneB'))
+                    }, 1500)
+                  }
+                },
+              ])
             }
           }}
           onPress={() => {
@@ -360,7 +379,7 @@ const SocialScreen = (props) => {
                 text={item.content}
                 numberOfLines={1000}
               />
-              {item?.images  && <View style={styles.contentImageStyle}>
+              {item?.images && <View style={styles.contentImageStyle}>
                 {item?.images &&
                   (item?.images[0]?.includes('PNG') ||
                     item?.images[0]?.includes('JPG') ||

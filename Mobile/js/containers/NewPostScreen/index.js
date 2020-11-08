@@ -216,11 +216,11 @@ const NewPostScreen = (props) => {
         <TextInput
           value={content || ''}
           returnKeyType="done"
-          maxLength={3000}
+          maxLength={1000}
           placeholder="Text your post here 😄"
           onChangeText={(text) => setContent(text)}
           multiline
-          numberOfLines={100}
+          numberOfLines={50}
           style={[
             containerStyle.defaultMarginTopSmall,
             containerStyle.textDefaultNormal,
@@ -228,7 +228,7 @@ const NewPostScreen = (props) => {
             {
               // height: ScreenHeight * 0.5,
               minHeight: 100,
-              maxHeight: ScreenHeight * 0.8,
+              maxHeight: ScreenHeight * 0.4,
               width: ScreenWidth * 0.9,
               backgroundColor: colors.gray_bg,
               borderRadius: RADIUS.default,
@@ -267,8 +267,8 @@ const NewPostScreen = (props) => {
   );
 
   const renderImageSelected = () => {
-    console.log(selectedImages.length);
-    if (selectedImages[0].uri?.includes('PNG') || selectedImages[0].uri?.includes('JPG') || selectedImages[0].uri?.includes('JPEG') ||
+    console.log(selectedImages);
+    if (selectedImages[0].uri?.includes('PNG') || selectedImages[0].uri?.includes('images') || selectedImages[0].uri?.includes('HEIC') ||selectedImages[0].uri?.includes('heic') || selectedImages[0].uri?.includes('JPG') || selectedImages[0].uri?.includes('JPEG') ||
       selectedImages[0].uri?.includes('png') || selectedImages[0].uri?.includes('jpg') || selectedImages[0].uri?.includes('jpeg')) {
       return (
         <FlatList
@@ -280,7 +280,7 @@ const NewPostScreen = (props) => {
               <FastImage
                 source={{
                   uri:
-                  selectedImages[index].uri ||
+                  a?.uri ||
                     Constant.MOCKING_DATA.NO_IMG_PLACE_HOLDER,
                 }}
                 resizeMode="cover"

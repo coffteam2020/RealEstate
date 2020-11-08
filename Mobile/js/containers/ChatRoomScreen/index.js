@@ -185,7 +185,26 @@ const ChatRoomScreen = (props) => {
           style={{ flexDirection: 'row' }}>
           <Back props={props} />
         </TouchableOpacity>
-        <TopUserItem onItemPress={() => { }} item={item} />
+        <TopUserItem onItemPress={() => { 
+           Alert.alert(t('message.reportUser'), '', [
+            {
+              text: t('message.reportUser'),
+              onPress: () => {
+                setTimeout(() => {
+                  ToastHelper.showSuccess(t('common.doneB'))
+                }, 1500)
+              }
+            },
+            {
+              text: t('message.blockUser'),
+              onPress: () => {
+                setTimeout(() => {
+                  ToastHelper.showSuccess(t('common.doneB'))
+                }, 1500)
+              }
+            },
+          ])
+        }} item={item} />
         <TouchableOpacity
           onPress={() => {
 

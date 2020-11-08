@@ -261,11 +261,11 @@ const PropertyListScreen = (props) => {
         { latitude: a?.latitude, longitude: a?.longitude },
         { latitude: lat, longitude: lon },
       );
-      console.log("=========dis" + dis);
+      console.log("=========dis" + dis  + ''+i);
       var a = data;
-      a[i].distance = `${dis / 1000} km`;
+      a[i]['distance'] = `${dis / 1000} km`;
       console.log("=========" + JSON.stringify(a));
-      setProperties(a);
+      setProperties(a?.slice());
       setIsLoading(false);
     }).catch(e => {
     })
@@ -485,9 +485,9 @@ const PropertyListScreen = (props) => {
                     // justifyContent: 'space-between',
                   }}>
                     <Ionicons name="ios-pricetags" size={16} color={colors.gray_new}></Ionicons>
-                    <TextNormal style={{ marginLeft: SPACINGS.small, marginRight: SPACINGS.small, color: mainColor }} text={'' + item.priceOrMonthlyRent}></TextNormal>
+                    <TextNormal style={{ marginLeft: SPACINGS.small, marginRight: SPACINGS.small, color: mainColor }} text={'' + item.priceOrMonthlyRent + ' VND'}></TextNormal>
                   </View>
-                  {item?.distance ?
+                  {item?.['distance'] ?
                     <View style={{
                       display: 'flex',
                       flexDirection: 'row',
