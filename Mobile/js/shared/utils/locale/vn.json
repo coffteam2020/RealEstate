@@ -331,7 +331,10 @@
     "join": "Quét xong, tiếp tục vào phòng!",
     "qr": "Mã QR code",
     "snack": "Ăn vặt",
-    "livestream": "Livestream"
+    "livestream": "Livestream",
+    "coffee":"Coffee VN",
+    "coffee_detail":"Chi tiết cửa hàng",
+    "restaurant_detail":"Chi tiết nhà hàng"
   },
   "location": {
     "near": "Gần bạn",

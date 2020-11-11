@@ -137,7 +137,7 @@ const getCurrentCallId = () => {
 export const registerToken = async () => {
 	const fcmToken = await firebase.messaging().getToken();
 	if (fcmToken) {
-		console.log('Token FCM: ' + fcmToken);
+		// console.log('Token FCM: ' + fcmToken);
 	}
 };
 
@@ -231,7 +231,7 @@ const init = () => {
 	PushNotification.configure({
 		// (optional) Called when Token is generated (iOS and Android)
 		onRegister: function (token) {
-			console.log("TOKEN:", token);
+			// console.log("TOKEN:", token);
 
 			const deviceToken = token.token;
 		},
@@ -277,7 +277,7 @@ const init = () => {
 }
 const registerNotificationInBackground = () => {
 	firebase.messaging().setBackgroundMessageHandler(async remoteMessage => {
-		console.log("firebase.messaging().setBackgroundMessageHandler" + JSON.stringify(remoteMessage));
+		// console.log("firebase.messaging().setBackgroundMessageHandler" + JSON.stringify(remoteMessage));
 		onDisplayNotification(remoteMessage);
 		displayIncoming(remoteMessage?.notification?.body?.split("#") || remoteMessage.data?.body?.split("#"));
 	});

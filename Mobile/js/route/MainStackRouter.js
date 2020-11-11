@@ -19,7 +19,7 @@ import ChatRoomScreen from '../containers/ChatRoomScreen';
 import ChatRoomGroupScreen from '../containers/ChatRoomGroupScreen';
 import VideoCallScreen from '../containers/VideoCallScreen';
 import VideoCall from '../containers/VideoCall';
-import WebScreen from '../containers/WebScreen';
+// import WebScreen from '../containers/WebScreen';
 import Livestream from '../containers/Livestream';
 import InformationRoom from '../containers/Livestream/InformationRoom';
 import LocationScreen from '../containers/LocationScreen';
@@ -39,6 +39,10 @@ import PostDetailScreen from '../containers/PostDetailScreen';
 import PropertyScreen from '../containers/PropertyScreen';
 import PropertyListScreen from '../containers/PropertyListScreen';
 import PropertyDetailScreen from '../containers/PropertyDetailScreen';
+import CoffeeScreen from '../containers/CoffeeScreen';
+import CoffeeDetailScreen from '../containers/CoffeeDetailScreen';
+import RestaurantScreen from '../containers/RestaurantScreen';
+import RestaurantDetailScreen from '../containers/RestaurantDetailScreen';
 
 // ScreenNavigator for separately each screen into stack one
 const MateScreenNavigator = createStackNavigator(
@@ -97,6 +101,7 @@ const ProfileNavigator = createStackNavigator(
     initialRouteName: 'ProfileScreen',
   },
 );
+
 const ExplorerNavigator = createStackNavigator(
   {
     ExploreScreen: { screen: ExploreScreen },
@@ -104,6 +109,10 @@ const ExplorerNavigator = createStackNavigator(
     PropertyListScreen: { screen: PropertyListScreen },
     PropertyScreen: { screen: PropertyScreen },
     PropertyDetailScreen: { screen: PropertyDetailScreen },
+    CoffeeScreen: { screen: CoffeeScreen },
+    CoffeeDetailScreen: { screen: CoffeeDetailScreen },
+    RestaurantScreen: { screen: RestaurantScreen},
+    RestaurantDetailScreen: { screen: RestaurantDetailScreen}
   },
   {
     mode: 'modal',
@@ -213,7 +222,7 @@ const TabNavigator = createStackNavigator(
     VideoCallScreen: { screen: VideoCallScreen },
     GroupMateScreen: { screen: GroupMateScreen },
     VideoCall: { screen: VideoCall },
-    WebScreen: { screen: WebScreen },
+    // WebScreen: { screen: WebScreen },
     Scanner: { screen: Scanner },
     SocialScreen: { screen: SocialScreenNavigator },
   },

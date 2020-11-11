@@ -27,7 +27,11 @@ export const ScreenNames = {
   PropertyListScreen: 'PropertyListScreen',
   PropertyDetailScreen: 'PropertyDetailScreen',
   Account: 'Account',
-  Scanner: 'Scanner'
+  Scanner: 'Scanner',
+  CoffeeScreen: 'CoffeeScreen',
+  CoffeeDetailScreen: 'CoffeeDetailScreen',
+  RestaurantScreen: 'RestaurantScreen',
+  RestaurantDetailScreen: 'RestaurantDetailScreen'
 };
 
 export default {

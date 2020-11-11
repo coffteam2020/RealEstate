@@ -99,7 +99,9 @@ export default {
     AUDIO: 'Audio',
     MESSAGESFLOATING: 'Floating',
     SOCIAL: 'Social',
-    BLOG: 'Blog'
+    BLOG: 'Blog',
+    COFFEE: 'Coffee',
+    RESTAURANT:'Restaurant'
   },
   SECRET_ROOM: 'AIzaSyByxV0mwTmpcf',
   PAYMENT_ACCOUNT: {

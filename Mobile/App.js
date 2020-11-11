@@ -93,7 +93,7 @@ const initNo = async () => {
   PushNotification.configure({
     // (optional) Called when Token is generated (iOS and Android)
     onRegister: function(token) {
-      console.log("TOKEN:", token);
+      // console.log("TOKEN:", token);
 
       const deviceToken = token.token;
     },
@@ -138,7 +138,7 @@ const App = () => {
   // userStore?.setCurrentChatRoom('');
   const setThemeChange = () => { };
   const disableConsole = () => {
-    console.log('App started in', initialMode, 'mode', colorScheme);
+    // console.log('App started in', initialMode, 'mode', colorScheme);
     console.disableYellowBox = true;
   };
   const removeScalingText = () => {
@@ -270,7 +270,7 @@ const App = () => {
         onNavigationStateChange={async (prevState, currentState) => {
           const currentScreen = getActiveRouteName(currentState);
           setCurrentScreen(currentScreen);
-          console.log(`CurrentScreen ${currentScreen}`);
+          // console.log(`CurrentScreen ${currentScreen}`);
           await IALocalStorage.setScreen(currentScreen);
         }}
       />

@@ -62,15 +62,15 @@ export async function AxiosFetcher({
     AxiosInstance.defaults.baseURL =
       (customBaseUrl && customBaseUrl) || APP_URL;
   }
-  console.log(
-    '========> DATA: ' + LogManager.parseJsonObjectToJsonString(data),
-  );
-  console.log('========> METHOD: ' + method);
+  // console.log(
+  //   // '========> DATA: ' + LogManager.parseJsonObjectToJsonString(data),
+  // );
+  // console.log('========> METHOD: ' + method);
   // Get axios function by method
   let tokenUser = await IALocalStorage.getTokenUserInfo();
-  console.log(
-    '========> Token: ' + LogManager.parseJsonObjectToJsonString(tokenUser),
-  );
+  // console.log(
+  //   // '========> Token: ' + LogManager.parseJsonObjectToJsonString(tokenUser),
+  // );
   try {
     const res = await methodFunctions[method]({
       url,
@@ -88,10 +88,10 @@ export async function AxiosFetcher({
           'Origin, X-Requested-With, Content-Type, Accept',
       },
     });
-    console.log(
-      ('========> RES: ' + customBaseUrl && customBaseUrl) ||
-        url + '_' + LogManager.parseJsonObjectToJsonString(res?.data),
-    );
+    // console.log(
+    //   // ('========> RES: ' + customBaseUrl && customBaseUrl) ||
+    //   //   url + '_' + LogManager.parseJsonObjectToJsonString(res?.data),
+    // );
     if (res?.data?.status === 401) {
       Alert.alert(
         'Session expired',
@@ -119,12 +119,12 @@ export async function AxiosFetcher({
       return res?.data;
     }
   } catch (error) {
-    console.log(
-      '========> ERROR: ' +
-        url +
-        '_' +
-        LogManager.parseJsonObjectToJsonString(error ? error : error?.message),
-    );
+    // console.log(
+    //   '========> ERROR: ' +
+    //     url +
+    //     '_' +
+    //     LogManager.parseJsonObjectToJsonString(error ? error : error?.message),
+    // );
     return error?.response ? error?.response : error;
   }
 }
