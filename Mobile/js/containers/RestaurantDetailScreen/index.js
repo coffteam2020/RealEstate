@@ -42,7 +42,6 @@ export default function RestaurantDetailScreen(props) {
                 <Image
                     source={{ uri: dataStore.url }}
                     style={styles.imageBanner}
-                    resizeMode="stretch"
                 />
                 <View style={styles.contentInfo}>
                     <View style={styles.rows}>
@@ -76,7 +75,7 @@ export default function RestaurantDetailScreen(props) {
                                         <Image source={{ uri: item?.item?.urlFood }} style={styles.imageFood} />
                                         <View style={{ paddingVertical: 5 }}>
                                             <Text style={styles.txtItemMenu}>{item?.item?.nameFood}</Text>
-                                            <Text style={styles.txtPrice}>{`${item.item?.priceFood}VNĐ`}</Text>
+                                            <Text style={styles.txtPrice}>{`${item?.item?.priceFood}VNĐ`}</Text>
                                             <Text style={styles.txtDescript}>{item?.item?.descriptionFood}</Text>
                                         </View>
                                     </View>

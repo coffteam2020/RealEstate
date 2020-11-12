@@ -43,7 +43,6 @@ export default function CoffeeDetailScreen(props) {
                 <Image
                     source={{ uri: dataStore?.url }}
                     style={styles.imageBanner}
-                    resizeMode="stretch"
                 />
                 <View style={styles.contentInfo}>
                     <View style={styles.rows}>
