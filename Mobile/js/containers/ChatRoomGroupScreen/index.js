@@ -134,7 +134,7 @@ const ChatRoomGroupScreen = (props) => {
 
       let child = StringHelper.generateDoccumentIds([...toUserDetail, ownerTemp]);
       // await IALocalStorage.setRoom(toUserDetail?.name || '');
-      console.log("========" + child + "" + Platform.OS);
+      // console.log("========" + child + "" + Platform.OS);
       setChild(child);
       childTemp = child;
       getMessages(child);

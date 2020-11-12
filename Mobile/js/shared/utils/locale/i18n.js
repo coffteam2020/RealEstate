@@ -13,7 +13,7 @@ const languageDetector = {
 	type: 'languageDetector',
 	async: true,
 	detect: async cb => {
-		console.log('================' + cb);
+		// console.log('================' + cb);
 		// // Case 1: The user chose his preferred language setting.
 		const preferredLang = await AsyncStorage.getItem('lang');
 		if (preferredLang) {

@@ -331,7 +331,22 @@
     "admin": "Company info",
     "qr": "QRCode",
     "snack": "Snack",
-    "livestream": "Livestream"
+    "livestream": "Livestream",
+    "coffee":"Coffee",
+    "coffee_detail":"Coffee Store Detail",
+    "restaurant_detail":"Restaurant Detail",
+    "upload_image":"Upload image",
+    "upload_avatar":"Upload avatar",
+    "name_store":"Name store",
+    "address_store":"Address store",
+    "owner":"Owner",
+    "phone_number":"Phone number",
+    "add_menu":"Add menu",
+    "name_food":"Name Food",
+    "price":"Price",
+    "description":"Description",
+    "add":"Add",
+    "cancel":"Cancel"
   }, 
   "location":{
     "near": "Find near you",

@@ -229,7 +229,7 @@ const PropertyListScreen = (props) => {
     let userInfo = await IALocalStorage.getDetailUserInfo();
     setUserInfo(userInfo);
     Axios.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + encodeURIComponent(address) + '&key=AIzaSyB5vqnxvHdaTdgKY1E8AsaBxs_FS9HEiCM').then(val => {
-      console.log("=========" + JSON.stringify(val?.data));
+      // console.log("=========" + JSON.stringify(val?.data));
       let a = val?.data;
       if (a?.results?.length > 0) {
         console.log(a?.results?.[0]?.geometry?.location);
@@ -241,30 +241,30 @@ const PropertyListScreen = (props) => {
           calculateDistance(a.results?.[0]?.geometry?.location?.lat, a?.results?.[0]?.geometry?.location?.lng, i, data)
         } else {
           setIsLoading(false);
-          console.log("dsadsad")
+          // console.log("dsadsad")
         }
       } else {
         setIsLoading(false);
-        console.log("dsadsad1")
+        // console.log("dsadsad1")
       }
     })
   };
   const calculateDistance = async (lat, lon, i, data) => {
-    console.log("=============")
+    // console.log("=============")
     GetLocation.getCurrentPosition({
       enableHighAccuracy: true,
       timeout: 15000,
     }).then(async a => {
-      console.log(a);
+      // console.log(a);
       setIsLoading(false);
       var dis = await getDistance(
         { latitude: a?.latitude, longitude: a?.longitude },
         { latitude: lat, longitude: lon },
       );
-      console.log("=========dis" + dis  + ''+i);
+      // console.log("=========dis" + dis  + ''+i);
       var a = data;
       a[i]['distance'] = `${dis / 1000} km`;
-      console.log("=========" + JSON.stringify(a));
+      // console.log("=========" + JSON.stringify(a));
       setProperties(a?.slice());
       setIsLoading(false);
     }).catch(e => {
@@ -424,7 +424,7 @@ const PropertyListScreen = (props) => {
         }}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => {
-          console.log(JSON.stringify(item))
+          // console.log(JSON.stringify(item))
           return (
             <TouchableOpacity
               onPress={() => {

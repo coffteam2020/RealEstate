@@ -128,7 +128,24 @@ const ExploreScreen = (props) => {
     },
   ];
   const BTNS4 = [
-
+    {
+      title: t('explorer.coffee'),
+      icon: images.cafe,
+      onPress: () =>
+        NavigationService.navigate(ScreenNames.CoffeeScreen, {
+          key: t('explorer.coffee'),
+          type: "COFFEE"
+        }),
+    },
+    {
+      title: t('explorer.restaurant'),
+      icon: images.cafe,
+      onPress: () =>
+        NavigationService.navigate(ScreenNames.RestaurantScreen, {
+          key: t('explorer.restaurant'),
+          type: "RESTAURANT"
+        }),
+    },{},{}
   ];
   const BTNS2 = [
     {
@@ -303,13 +320,13 @@ const ExploreScreen = (props) => {
                   latitude: a.results?.[0]?.geometry?.location?.lat,
                   longitude: a?.results?.[0]?.geometry?.location?.lng,
                 }]
-                console.log("============" + arr.length);
+                // console.log("============" + arr.length);
                 setMarkers(arr?.slice());
                 // }
               }
             })
           }
-          console.log("============" + arr.length);
+          // console.log("============" + arr.length);
           
 
         } else {
@@ -341,7 +358,7 @@ const ExploreScreen = (props) => {
 
     const fcmToken = await firebase.messaging().getToken();
     if (fcmToken) {
-      console.log('Token FCM: ' + fcmToken);
+      // console.log('Token FCM: ' + fcmToken);
       AxiosFetcher({
         method: 'POST',
         url: 'user/' + userStore?.userInfo?.id + '/fcmtoken',

@@ -197,7 +197,7 @@ const ProfileScreen = (props) => {
   const logout = async () => {
     const fcmToken = await firebase.messaging().getToken();
     if (fcmToken) {
-      console.log('Token FCM: ' + fcmToken);
+      // console.log('Token FCM: ' + fcmToken);
       AxiosFetcher({
         method: 'POST',
         url: 'user/' + userStore?.userInfo?.id + '/fcmtoken',
