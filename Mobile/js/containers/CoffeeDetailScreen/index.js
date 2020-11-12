@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, Image, FlatList } from 'react-native';
+import { Text, View, Image, FlatList, ScrollView } from 'react-native';
 import { styles } from './styles';
 import HeaderFull from '../../shared/components/Header/HeaderFull';
 import { useTranslation } from 'react-i18next';
@@ -66,12 +66,14 @@ export default function CoffeeDetailScreen(props) {
                         source={{ uri: dataStore?.avatar }}
                         style={styles.avatarStyle}
                     />
-                    <View style={{ width: '100%', height: 'auto' }}>
+                    <ScrollView style={{ width: '100%', height: 'auto' }}>
                         <FlatList
                             data={dataStore?.menu}
                             showsVerticalScrollIndicator={false}
                             scrollEnabled={true}
                             renderItem={(item, index) => {
+                                console.log('check item coffee',item);
+                                
                                 return (
                                     <View style={styles.itemMenu}>
                                         <Image source={{ uri: item?.item?.urlFood }} style={styles.imageFood} />
@@ -83,7 +85,7 @@ export default function CoffeeDetailScreen(props) {
                                 );
                             }}
                         />
-                    </View>
+                    </ScrollView>
                 </View>
             </View>
         </View>

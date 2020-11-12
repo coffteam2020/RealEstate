@@ -108,9 +108,9 @@ const List = (props) => {
           ) {
             return null;
           }
-          console.log(
-            userStore?.follows?.slice().findIndex((a) => a.id === item?.id),
-          );
+          // console.log(
+          //   userStore?.follows?.slice().findIndex((a) => a.id === item?.id),
+          // );
           return (
             <TouchableOpacity
               onPress={() => {

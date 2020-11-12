@@ -312,8 +312,8 @@ const ExploreScreen = (props) => {
             Axios.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + encodeURIComponent(datas[i]?.address) + '&key=AIzaSyB5vqnxvHdaTdgKY1E8AsaBxs_FS9HEiCM').then(val => {
               let a = val?.data;
               if (a?.results?.length > 0) {
-                console.log(a?.results?.[0]?.geometry?.location);
-                console.log(a.results?.[0]?.geometry?.location);
+                // console.log(a?.results?.[0]?.geometry?.location);
+                // console.log(a.results?.[0]?.geometry?.location);
                 // if (a.results?.[0]?.geometry?.location) {
 
                 arr = [...arr, {
@@ -417,7 +417,7 @@ const ExploreScreen = (props) => {
     })
       .then((location) => {
         setLo(location);
-        console.log("=======" + JSON.stringify(location));
+        // console.log("=======" + JSON.stringify(location));
         setLo({
           latitude: location?.longitude,
           longitude: location?.longitude
@@ -430,7 +430,7 @@ const ExploreScreen = (props) => {
             '&longtitude=' +
             location.longitude,
         }).then((val) => {
-          console.log(JSON.stringify(val));
+          // console.log(JSON.stringify(val));
         });
       })
       .catch((error) => {

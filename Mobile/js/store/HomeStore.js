@@ -19,9 +19,9 @@ export class HomeStore {
     }
     @action.bound
     setChangeDarkMode(isDarkMode) {
-        console.log(isDarkMode);
+        // console.log(isDarkMode);
         this.darkMode = isDarkMode;
-        console.log(this.darkMode);
+        // console.log(this.darkMode);
         this.theme = isDarkMode ? CustomDarkTheme : CustomLightTheme;
     }
 
@@ -39,7 +39,7 @@ export class HomeStore {
     setShowImageZoom(shouldShow, uri) {
         this.shouldShowImageZoom = shouldShow;
         if (uri) {
-            console.log(uri);
+            // console.log(uri);
             this.imageHasToShown = uri;
         }
     }

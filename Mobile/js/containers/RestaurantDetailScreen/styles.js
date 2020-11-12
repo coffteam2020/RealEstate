@@ -39,18 +39,18 @@ export const styles = StyleSheet.create({
   txtItemMenu:{
     fontWeight: 'bold',
     color: '#9c9eb9',
-    fontSize: 12
+    fontSize: 14
   },
   txtDescript:{
     fontWeight: 'bold',
     color: '#9c9eb9',
-    fontSize: 8,
+    fontSize: 10,
     width: '60%'
   },
   txtPrice:{
     fontWeight: 'bold',
     color: '#9c9eb9',
-    fontSize: 10,
+    fontSize: 12,
     width: '60%'
   },
   rows:{
@@ -68,6 +68,7 @@ export const styles = StyleSheet.create({
   },
   imageFood:{
       width: '28%',
+      height: 100,
       marginRight: 10
   }
 });

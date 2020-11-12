@@ -38,7 +38,7 @@ AudioRecord.init(options);
 
 AudioRecord.on('data', data => {
 	const chunk = Buffer.from(data, 'base64');
-	console.log('chunk size', chunk.byteLength);
+	// console.log('chunk size', chunk.byteLength);
 });
 
 const ModalItem = ({isVisible, onPress, title, style, onUse, onRecord, onClose}) => {
@@ -73,7 +73,7 @@ const ModalItem = ({isVisible, onPress, title, style, onUse, onRecord, onClose})
 			token: token
 		})
 			.then(async val => {
-				console.log(LogManager.parseJsonObjectToJsonString(val));
+				// console.log(LogManager.parseJsonObjectToJsonString(val));
 				setIsLoading(false);
 				userStore.setItemsBag(val || []);
 			})

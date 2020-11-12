@@ -54,7 +54,7 @@ function compare(a, b) {
 function generateDoccumentIds(users) {
 	let docId = '';
 	let a = users?.sort(compare);
-	console.log(JSON.stringify(a));
+	// console.log(JSON.stringify(a));
 	for (let i = 0; i < a?.length; i++) {
 		if (a?.[i]?.id || a?.[i]?._id) {
 			docId = docId + '_' + (a?.[i]?.id ? a?.[i]?.id : a?.[i]?._id);

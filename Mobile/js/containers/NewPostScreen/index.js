@@ -178,7 +178,7 @@ const NewPostScreen = (props) => {
       modifiedOn: moment().format("YYYY-MM-DD'T'HH:mm:ssZ"),
       content: content,
     };
-    console.log(images)
+    // console.log(images)
     if (images.length > 0) {
       post.images = images;
     }

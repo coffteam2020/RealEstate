@@ -187,14 +187,14 @@ export default class VideoCall extends Component {
     RNCallKeep.endAllCalls();
     this.sessionEventHandlers = {
       connectionCreated: event => {
-        console.log("connection created", event);
+        // console.log("connection created", event);
         this.setState({ connected: [...this.state.connected, event?.connectionId] }, () => {
-          console.log(this.state.connected.length);
+          // console.log(this.state.connected.length);
         })
       },
       connectionDestroyed: event => {
-        console.log("connection destroyed", event);
-        console.log(this.state.connected.length);
+        // console.log("connection destroyed", event);
+        // console.log(this.state.connected.length);
         this.setState({ connected: this.state.connected?.filter(a => a !== event?.connectionId) }, () => {
           if (this.state.connected.length <= 0) {
             NavigationService.goBack();
@@ -276,10 +276,10 @@ export default class VideoCall extends Component {
     const url = this.props.navigation?.state?.params?.url;
     const isNew = this.props.navigation?.state?.params?.isNew;
     if (url && url?.split('%%')?.length === 2) {
-      console.log("=======dasdasdasdas" + JSON.stringify(url?.split("%%")));
+      // console.log("=======dasdasdasdas" + JSON.stringify(url?.split("%%")));
       let a = url?.split("%%");
-      console.log("=======dasdasdasdas" + a[0]);
-      console.log("=======dasdasdasdas" + a[1]);
+      // console.log("=======dasdasdasdas" + a[0]);
+      // console.log("=======dasdasdasdas" + a[1]);
       this.setState({
         sessionId: `${a[0]}`,
       })

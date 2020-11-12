@@ -91,7 +91,7 @@ const SocialScreen = (props) => {
   };
 
   const getMessages = async () => {
-    console.log(isBlog);
+    // console.log(isBlog);
     let user = await IALocalStorage.getDetailUserInfo();
     setIsLoading(true);
     await firebase
