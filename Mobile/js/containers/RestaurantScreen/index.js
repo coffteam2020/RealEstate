@@ -63,6 +63,7 @@ export default function RestaurantScreen(props) {
                     phone: phone,
                     owner: owner,
                     avatar: urlState,
+                    title: "",
                     menu: [
                         {
                             id: 1,
