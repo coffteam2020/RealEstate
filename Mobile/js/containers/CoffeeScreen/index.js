@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, FlatList, Image, TextInput, TouchableOpacity } from 'react-native';
+import { Text, View, FlatList, Image, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { styles } from './styles';
 import HeaderFull from '../../shared/components/Header/HeaderFull';
 import { useTranslation } from 'react-i18next';
@@ -33,6 +33,12 @@ export default function CoffeeScreen(props) {
     const [showModal, setShowModal] = useState(false);
     const { userStore } = useStores();
     const [urlState, setUrlState] = useState('');
+    const [isAddMenu, setIsAddMenu] = useState(false);
+    const [listMenu, setListMenu] = useState([]);
+    const [avatarOwner, setAvatarOwner] = useState('');
+    const [nameFood, setNameFood] = useState('');
+    const [priceFood, setPriceFood] = useState(0);
+    const [urlFood, setUrlFood] = useState('');
 
     useEffect(() => {
         getDataCoffee();
@@ -56,33 +62,18 @@ export default function CoffeeScreen(props) {
             Constant.SCHEMA.COFFEE,
             JSON.parse(
                 JSON.stringify({
-                    url: 'https://highlandscoffee.com.vn/vnt_upload/news/11_2018/5.jpg',
-                    createdAt: currentTime,
+                    url: urlState,
                     id: id,
                     address: address,
                     name: nameStore,
+                    phone: phone,
                     owner: owner,
-                    avatar: urlState,
-                    menu: [
-                        {
-                            id: 1,
-                            nameFood: 'Coffee',
-                            price: '10 000'
-                        },
-                        {
-                            id: 2,
-                            nameFood: 'Coffee Milk',
-                            price: '15 000'
-                        },
-                        {
-                            id: 3,
-                            nameFood: 'Milk Tea',
-                            price: '15 000'
-                        }
-                    ]
+                    avatar: avatarOwner,
+                    menu: listMenu
                 }),
             ),
         );
+        setListMenu([]);
     };
 
     const openPicker = async () => {
@@ -111,30 +102,57 @@ export default function CoffeeScreen(props) {
         });
     };
 
-    // const openCamera = () => {
-    //     ImagePicker.launchCamera(IMAGE_CONFIG, (response) => {
-    //       // console.log('Response = ', response);
-    //       if (response.didCancel) {
-    //         console.log('User cancelled image picker');
-    //       } else if (response.error) {
-    //         console.log('ImagePicker Error: ', response.error);
-    //       } else if (response.customButton) {
-    //         console.log('User tapped custom button: ', response.customButton);
-    //       } else {
-    //         setIsLoading(true);
-    //         Promise.resolve(uploadFileToFireBase(response, user?.id))
-    //           .then(async (val) => {
-    //             await setUrlState(val)
-    //             setIsLoading(false);
-    //           })
-    //           .catch((error) => {
-    //             console.log(error.message);
-    //             ToastHelper.showError(t('error.common'));
-    //             setIsLoading(false);
-    //           });
-    //       }
-    //     });
-    //   };
+    const openPickerAvatar = async () => {
+        ImagePicker.showImagePicker(IMAGE_CONFIG, (response) => {
+            // console.log('Response = ', response);
+            if (response.didCancel) {
+                console.log('User cancelled image picker');
+            } else if (response.error) {
+                console.log('ImagePicker Error: ', response.error);
+            } else if (response.customButton) {
+                console.log('User tapped custom button: ', response.customButton);
+            } else {
+                const source = { uri: response.uri };
+                userStore.userInfo = { ...userStore?.userInfo, avatar: source?.uri };
+                setIsLoading(true);
+                Promise.resolve(uploadFileToFireBase(response, userStore?.userInfo?.id))
+                    .then(async (val) => {
+                        await setAvatarOwner(val)
+                        setIsLoading(false);
+                    })
+                    .catch((error) => {
+                        ToastHelper.showError(t('error.common'));
+                        setIsLoading(false);
+                    });
+            }
+        });
+    };
+
+    const openPickerFood = async () => {
+        ImagePicker.showImagePicker(IMAGE_CONFIG, (response) => {
+            // console.log('Response = ', response);
+            if (response.didCancel) {
+                console.log('User cancelled image picker');
+            } else if (response.error) {
+                console.log('ImagePicker Error: ', response.error);
+            } else if (response.customButton) {
+                console.log('User tapped custom button: ', response.customButton);
+            } else {
+                const source = { uri: response.uri };
+                userStore.userInfo = { ...userStore?.userInfo, avatar: source?.uri };
+                setIsLoading(true);
+                Promise.resolve(uploadFileToFireBase(response, userStore?.userInfo?.id))
+                    .then(async (val) => {
+                        await setUrlFood(val)
+                        setIsLoading(false);
+                    })
+                    .catch((error) => {
+                        ToastHelper.showError(t('error.common'));
+                        setIsLoading(false);
+                    });
+            }
+        });
+    };
 
     const getDataCoffee = async () => {
         setIsLoading(true);
@@ -149,8 +167,6 @@ export default function CoffeeScreen(props) {
                 result.forEach((item, i) => {
                     item.key = keys[i];
                 });
-                console.log('result ===', result);
-
                 await setCoffees(result);
             });
         setIsLoading(false);
@@ -161,57 +177,122 @@ export default function CoffeeScreen(props) {
         addDataCoffee();
     };
 
+    const onPressAddMenu = () => {
+        setIsAddMenu(isAddMenu => !isAddMenu)
+    };
+
+    const handleAddMenu = async () => {
+        setIsAddMenu(isAddMenu => !isAddMenu);
+        await listMenu.push({ nameFood, urlFood, priceFood });
+        await setNameFood('');
+        await setPriceFood('');
+        await setUrlFood('');
+    };
+
     const renderAddItem = () => {
         return (
-            <View style={{ flex: 1 }}>
-                <TextInput
-                    value={nameStore}
-                    style={styles.textInputStyle}
-                    onChangeText={text => setNameStore(text)}
-                    placeholder={t('Name Store')}
-                    textInputStyle={styles.fieldEmailPhone}
-                />
-                <TextInput
-                    value={address}
-                    style={styles.textInputStyle}
-                    onChangeText={text => setAddress(text)}
-                    placeholder={t('Address Store')}
-                    textInputStyle={styles.fieldEmailPhone}
-                />
-                <TextInput
-                    value={phone}
-                    keyboardType="number-pad"
-                    style={styles.textInputStyle}
-                    onChangeText={text => setPhone(text)}
-                    placeholder={t('Phone number')}
-                    textInputStyle={styles.fieldEmailPhone}
-                />
-                <TextInput
-                    value={owner}
-                    style={styles.textInputStyle}
-                    onChangeText={text => setOwner(text)}
-                    placeholder={t('Owner')}
-                    textInputStyle={styles.fieldEmailPhone}
-                />
-                {urlState === '' ?
-                    <TouchableOpacity style={[styles.viewUploadImage, styles.center]} onPress={openPicker}>
-                        <IC_UPLOAD name={"upload"} size={27} color={'#f68a20'} />
-                        <Text style={styles.txtUploadImage}>{'Upload Image'}</Text>
-                    </TouchableOpacity>
-                    :
-                    <TouchableOpacity style={styles.viewUploadImage} onPress={openPicker}>
-                        <Image source={{ uri: urlState }} style={{ width: 146, height: 117, alignSelf: 'center' }} />
-                    </TouchableOpacity>
+            <ScrollView style={{ flex: 1, marginBottom: 20 }}>
+                {isAddMenu === false &&
+                    <>
+                        {urlState === '' ?
+                            <TouchableOpacity style={[styles.viewUploadImage, styles.center]} onPress={openPicker}>
+                                <IC_UPLOAD name={"upload"} size={27} color={'#f68a20'} />
+                                <Text style={styles.txtUploadImage}>{t('explorer.upload_image')}</Text>
+                            </TouchableOpacity>
+                            :
+                            <TouchableOpacity style={styles.viewUploadImage} onPress={openPicker}>
+                                <Image source={{ uri: urlState }} style={{ width: 146, height: 117, alignSelf: 'center' }} />
+                            </TouchableOpacity>
+                        }
+                        <TextInput
+                            value={nameStore}
+                            style={styles.textInputStyle}
+                            onChangeText={text => setNameStore(text)}
+                            placeholder={t('explorer.name_store')}
+                            textInputStyle={styles.fieldEmailPhone}
+                        />
+                        <TextInput
+                            value={address}
+                            style={styles.textInputStyle}
+                            onChangeText={text => setAddress(text)}
+                            placeholder={t('explorer.address_store')}
+                            textInputStyle={styles.fieldEmailPhone}
+                        />
+                        <TextInput
+                            value={phone}
+                            keyboardType="number-pad"
+                            style={styles.textInputStyle}
+                            onChangeText={text => setPhone(text)}
+                            placeholder={t('explorer.phone_number')}
+                            textInputStyle={styles.fieldEmailPhone}
+                        />
+                        <TextInput
+                            value={owner}
+                            style={styles.textInputStyle}
+                            onChangeText={text => setOwner(text)}
+                            placeholder={t('explorer.owner')}
+                            textInputStyle={styles.fieldEmailPhone}
+                        />
+                        {avatarOwner === '' ?
+                            <TouchableOpacity style={[styles.uploadAvatar, styles.center]} onPress={openPickerAvatar}>
+                                <IC_UPLOAD name={"upload"} size={25} color={'#f68a20'} />
+                                <Text style={[styles.txtUploadImage, { fontSize: 10 }]}>{t('explorer.upload_avatar')}</Text>
+                            </TouchableOpacity>
+                            :
+                            <TouchableOpacity style={styles.uploadAvatar} onPress={openPickerAvatar}>
+                                <Image source={{ uri: avatarOwner }} style={{ width: 118, height: 118, borderRadius: 120, alignSelf: 'center' }} />
+                            </TouchableOpacity>
+                        }
+                    </>
                 }
-                <View style={styles.groupButton}>
-                    <TouchableOpacity style={styles.btnCancel} onPress={() => { setIsOpenAdd(false) }}>
-                        <Text style={styles.txtBtnCancel}>{t('Cancel')}</Text>
+                <View style={styles.viewAddmenu}>
+                    <TouchableOpacity onPress={onPressAddMenu}>
+                        <Text style={styles.txtAddMenu}>{t('explorer.add_menu')}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.btnAdd} onPress={onAddNewStore}>
-                        <Text style={styles.txtBtnAdd}>{t('Add')}</Text>
-                    </TouchableOpacity>
+                    {isAddMenu === true &&
+                        <>
+                            {urlFood === '' ?
+                                <TouchableOpacity style={[styles.viewUploadImage, styles.center]} onPress={openPickerFood}>
+                                    <IC_UPLOAD name={"upload"} size={27} color={'#f68a20'} />
+                                    <Text style={styles.txtUploadImage}>{t('explorer.upload_image')}</Text>
+                                </TouchableOpacity>
+                                :
+                                <TouchableOpacity style={styles.viewUploadImage} onPress={openPickerFood}>
+                                    <Image source={{ uri: urlFood }} style={{ width: 146, height: 117, alignSelf: 'center' }} />
+                                </TouchableOpacity>
+                            }
+                            <TextInput
+                                value={nameFood}
+                                style={styles.textInputStyle}
+                                onChangeText={text => setNameFood(text)}
+                                placeholder={t('explorer.name_food')}
+                                textInputStyle={styles.fieldEmailPhone}
+                            />
+                            <TextInput
+                                value={priceFood}
+                                style={styles.textInputStyle}
+                                onChangeText={text => setPriceFood(text)}
+                                placeholder={t('explorer.price')}
+                                keyboardType="number-pad"
+                                textInputStyle={styles.fieldEmailPhone}
+                            />
+                            <TouchableOpacity onPress={handleAddMenu} style={styles.btnAddMenu}>
+                                <Text style={styles.txtBtnAddMenu}>{t('explorer.add')}</Text>
+                            </TouchableOpacity>
+                        </>
+                    }
                 </View>
-            </View>
+                {isAddMenu === false &&
+                    <View style={styles.groupButton}>
+                        <TouchableOpacity style={styles.btnCancel} onPress={() => { setIsOpenAdd(false) }}>
+                            <Text style={styles.txtBtnCancel}>{t('explorer.cancel')}</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.btnAdd} onPress={onAddNewStore}>
+                            <Text style={styles.txtBtnAdd}>{t('explorer.add')}</Text>
+                        </TouchableOpacity>
+                    </View>
+                }
+            </ScrollView>
         );
     };
 

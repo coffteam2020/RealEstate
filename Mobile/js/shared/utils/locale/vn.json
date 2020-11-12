@@ -334,7 +334,19 @@
     "livestream": "Livestream",
     "coffee":"Coffee VN",
     "coffee_detail":"Chi tiết cửa hàng",
-    "restaurant_detail":"Chi tiết nhà hàng"
+    "restaurant_detail":"Chi tiết nhà hàng",
+    "upload_image":"Tải lên ảnh",
+    "upload_avatar":"Tải lên ảnh",
+    "name_store":"Tên nhà hàng",
+    "address_store":"Địa chỉ nhà hàng",
+    "owner":"Chủ sở hữu",
+    "phone_number":"Số điện thoại",
+    "add_menu":"Thêm thực đơn",
+    "name_food":"Tên món ăn",
+    "price":"Giá",
+    "description":"Mô tả",
+    "add":"Thêm",
+    "cancel":"Huỷ"
   },
   "location": {
     "near": "Gần bạn",

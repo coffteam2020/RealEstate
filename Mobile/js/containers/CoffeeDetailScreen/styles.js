@@ -33,16 +33,13 @@ export const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderColor: '#e5e5e5',
     marginBottom: 10,
-    width: 180,
-    borderRadius: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#9c9eb9',
-    paddingVertical: 5
+    backgroundColor: '#e7e7e7',
+    width: '100%'
   },
   txtItemMenu:{
-    fontWeight: '600',
-    color: '#fff'
+    fontWeight: 'bold',
+    color: '#9c9eb9',
+    fontSize: 12
   },
   rows:{
     flexDirection: 'row',
@@ -55,6 +52,23 @@ export const styles = StyleSheet.create({
   },
   marginRight:{
     marginRight: 10
+  },
+  rows:{
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  avatarStyle:{
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    marginBottom: 20
+  },
+  marginRight:{
+      marginRight: 10
+  },
+  imageFood:{
+      width: '28%',
+      marginRight: 10
   }
 });
 

@@ -1,16 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, FlatList, Image, TextInput, TouchableOpacity } from 'react-native';
+import { Text, View, Image, FlatList } from 'react-native';
 import { styles } from './styles';
 import HeaderFull from '../../shared/components/Header/HeaderFull';
 import { useTranslation } from 'react-i18next';
-import Empty from '../../shared/components/Empty';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { colors } from '../../shared/utils/colors/colors';
-import { FirebaseService } from '../../api/FirebaseService';
 import { firebase } from '@react-native-firebase/database';
 import Constant from '../../shared/utils/constant/Constant';
-import { NavigationService } from '../../navigation';
-import { ScreenNames } from '../../route/ScreenNames';
 import IC_HOME from 'react-native-vector-icons/MaterialIcons';
 import IC_ADDRESS from 'react-native-vector-icons/Entypo';
 import IC_PHONE from 'react-native-vector-icons/Entypo';
@@ -60,24 +54,36 @@ export default function CoffeeDetailScreen(props) {
                         <IC_ADDRESS size={20} name="location" style={styles.marginRight} color={'grey'} />
                         <Text style={styles.txtAddressStore}>{dataStore?.address}</Text>
                     </View>
+                    <View style={styles.rows}>
+                        <IC_PHONE size={20} name="old-phone" style={styles.marginRight} color={'grey'} />
+                        <Text style={styles.txtAddressStore}>{dataStore?.phone}</Text>
+                    </View>
 
                     <View style={styles.rows}>
                         <IC_OWNER size={20} name="reddit" style={styles.marginRight} color={'grey'} />
-                        <Text style={styles.txtAddressStore}> {'Exploer'}</Text>
+                        <Text style={styles.txtAddressStore}> {dataStore?.owner}</Text>
                     </View>
                     <Image
                         source={{ uri: dataStore?.avatar }}
                         style={styles.avatarStyle}
                     />
-                    <View style={{ width: '100%', marginTop: 20 }}>
-                        {dataStore?.menu?.map(item => {
-                            return (
-                                <View style={styles.itemMenu}>
-                                    <Text style={styles.txtItemMenu}>{item.nameFood}</Text>
-                                    <Text style={styles.txtItemMenu}>{`  ${item.price}VNĐ`}</Text>
-                                </View>
-                            );
-                        })}
+                    <View style={{ width: '100%', height: 'auto' }}>
+                        <FlatList
+                            data={dataStore?.menu}
+                            showsVerticalScrollIndicator={false}
+                            scrollEnabled={true}
+                            renderItem={(item, index) => {
+                                return (
+                                    <View style={styles.itemMenu}>
+                                        <Image source={{ uri: item?.item?.urlFood }} style={styles.imageFood} />
+                                        <View style={{ paddingVertical: 5 }}>
+                                            <Text style={styles.txtItemMenu}>{item?.item?.nameFood}</Text>
+                                            <Text style={styles.txtPrice}>{`${item?.item?.priceFood}VNĐ`}</Text>
+                                        </View>
+                                    </View>
+                                );
+                            }}
+                        />
                     </View>
                 </View>
             </View>

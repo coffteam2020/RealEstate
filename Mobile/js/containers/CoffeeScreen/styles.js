@@ -134,6 +134,41 @@ export const styles = StyleSheet.create({
     fontSize: 12,
     color: '#f68a20',
     marginTop: 5
+  },
+  btnAddMenu:{
+    width: 120,
+    height: 46,
+    borderRadius: 25,
+    backgroundColor: '#f68a20',
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20
+  },
+  txtBtnAddMenu:{
+    color: '#fff',
+    fontWeight: '600',
+    fontSize: 16
+  },
+  viewAddmenu:{
+
+  },
+  txtAddMenu:{
+    alignSelf: 'center',
+    marginTop: 20,
+    color: '#f68a20',
+    fontSize: 14,
+    textDecorationLine: 'underline'
+  },
+  uploadAvatar:{
+    width: 120,
+    height: 120,
+    borderRadius: 120,
+    borderWidth: 1,
+    borderColor: '#e5e5e5',
+    borderStyle: 'dashed',
+    marginVertical: 10,
+    alignSelf: 'center',
   }
 });
 

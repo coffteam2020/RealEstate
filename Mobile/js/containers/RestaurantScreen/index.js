@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, FlatList, Image, TextInput, TouchableOpacity } from 'react-native';
+import { Text, View, FlatList, Image, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { styles } from './styles';
 import HeaderFull from '../../shared/components/Header/HeaderFull';
 import { useTranslation } from 'react-i18next';
@@ -15,7 +15,6 @@ import ImagePicker from 'react-native-image-picker';
 import { uploadFileToFireBase } from '../../shared/utils/firebaseStorageUtils/index';
 import IC_UPLOAD from 'react-native-vector-icons/Feather';
 import { useStores } from '../../store/useStore';
-import { ScrollView } from 'react-native-gesture-handler';
 
 var uuid = require('uuid');
 var moment = require('moment');
@@ -197,7 +196,7 @@ export default function RestaurantScreen(props) {
                         {urlState === '' ?
                             <TouchableOpacity style={[styles.viewUploadImage, styles.center]} onPress={openPicker}>
                                 <IC_UPLOAD name={"upload"} size={27} color={'#f68a20'} />
-                                <Text style={styles.txtUploadImage}>{'Upload Image'}</Text>
+                                <Text style={styles.txtUploadImage}>{t('explorer.upload_image')}</Text>
                             </TouchableOpacity>
                             :
                             <TouchableOpacity style={styles.viewUploadImage} onPress={openPicker}>
@@ -208,21 +207,21 @@ export default function RestaurantScreen(props) {
                             value={nameStore}
                             style={styles.textInputStyle}
                             onChangeText={text => setNameStore(text)}
-                            placeholder={t('Name Store')}
+                            placeholder={t('explorer.name_store')}
                             textInputStyle={styles.fieldEmailPhone}
                         />
                         <TextInput
                             value={address}
                             style={styles.textInputStyle}
                             onChangeText={text => setAddress(text)}
-                            placeholder={t('Address Store')}
+                            placeholder={t('explorer.address_store')}
                             textInputStyle={styles.fieldEmailPhone}
                         />
                         <TextInput
                             value={owner}
                             style={styles.textInputStyle}
                             onChangeText={text => setOwner(text)}
-                            placeholder={t('Owner')}
+                            placeholder={t('explorer.owner')}
                             textInputStyle={styles.fieldEmailPhone}
                         />
                         <TextInput
@@ -230,13 +229,13 @@ export default function RestaurantScreen(props) {
                             keyboardType="number-pad"
                             style={styles.textInputStyle}
                             onChangeText={text => setPhone(text)}
-                            placeholder={t('Phone number')}
+                            placeholder={t('explorer.phone_number')}
                             textInputStyle={styles.fieldEmailPhone}
                         />
                         {avatarOwner === '' ?
                             <TouchableOpacity style={[styles.uploadAvatar, styles.center]} onPress={openPickerAvatar}>
                                 <IC_UPLOAD name={"upload"} size={25} color={'#f68a20'} />
-                                <Text style={[styles.txtUploadImage,{fontSize: 10}]}>{'Upload Avatar'}</Text>
+                                <Text style={[styles.txtUploadImage, { fontSize: 10 }]}>{'explorer.upload_avatar'}</Text>
                             </TouchableOpacity>
                             :
                             <TouchableOpacity style={styles.uploadAvatar} onPress={openPickerAvatar}>
@@ -247,14 +246,14 @@ export default function RestaurantScreen(props) {
                 }
                 <View style={styles.viewAddmenu}>
                     <TouchableOpacity onPress={onPressAddMenu}>
-                        <Text style={styles.txtAddMenu}>{t('Add menu')}</Text>
+                        <Text style={styles.txtAddMenu}>{t('explorer.add_menu')}</Text>
                     </TouchableOpacity>
                     {isAddMenu === true &&
                         <>
                             {urlFood === '' ?
                                 <TouchableOpacity style={[styles.viewUploadImage, styles.center]} onPress={openPickerFood}>
                                     <IC_UPLOAD name={"upload"} size={27} color={'#f68a20'} />
-                                    <Text style={styles.txtUploadImage}>{'Upload Image'}</Text>
+                                    <Text style={styles.txtUploadImage}>{'explorer.upload_image'}</Text>
                                 </TouchableOpacity>
                                 :
                                 <TouchableOpacity style={styles.viewUploadImage} onPress={openPickerFood}>
@@ -265,14 +264,14 @@ export default function RestaurantScreen(props) {
                                 value={nameFood}
                                 style={styles.textInputStyle}
                                 onChangeText={text => setNameFood(text)}
-                                placeholder={t('Name Food')}
+                                placeholder={t('explorer.name_food')}
                                 textInputStyle={styles.fieldEmailPhone}
                             />
                             <TextInput
                                 value={priceFood}
                                 style={styles.textInputStyle}
                                 onChangeText={text => setPriceFood(text)}
-                                placeholder={t('Price')}
+                                placeholder={t('explorer.price')}
                                 keyboardType="number-pad"
                                 textInputStyle={styles.fieldEmailPhone}
                             />
@@ -280,11 +279,11 @@ export default function RestaurantScreen(props) {
                                 value={descriptionFood}
                                 style={styles.textInputStyle}
                                 onChangeText={text => setDescriptionFood(text)}
-                                placeholder={t('Description')}
+                                placeholder={t('explorer.description')}
                                 textInputStyle={styles.fieldEmailPhone}
                             />
                             <TouchableOpacity onPress={handleAddMenu} style={styles.btnAddMenu}>
-                                <Text style={styles.txtBtnAddMenu}>{t('Add')}</Text>
+                                <Text style={styles.txtBtnAddMenu}>{t('explorer.add')}</Text>
                             </TouchableOpacity>
                         </>
                     }
@@ -292,10 +291,10 @@ export default function RestaurantScreen(props) {
                 {isAddMenu === false &&
                     <View style={styles.groupButton}>
                         <TouchableOpacity style={styles.btnCancel} onPress={() => { setIsOpenAdd(false) }}>
-                            <Text style={styles.txtBtnCancel}>{t('Cancel')}</Text>
+                            <Text style={styles.txtBtnCancel}>{t('explorer.cancel')}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.btnAdd} onPress={onAddNewStore}>
-                            <Text style={styles.txtBtnAdd}>{t('Add')}</Text>
+                            <Text style={styles.txtBtnAdd}>{t('explorer.add')}</Text>
                         </TouchableOpacity>
                     </View>
                 }
@@ -353,7 +352,7 @@ export default function RestaurantScreen(props) {
     };
 
     return (
-        <View style={{ flex: 1, backgroundColor: '#fff' }}>
+        <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1, backgroundColor: '#fff' }}>
             <HeaderFull
                 hasButton={true}
                 title={t('explorer.restaurant')}
@@ -371,6 +370,6 @@ export default function RestaurantScreen(props) {
                     </>
                 }
             </View>
-        </View>
+        </ScrollView>
     );
 };

@@ -1,16 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, FlatList, Image, TextInput, TouchableOpacity } from 'react-native';
+import { Text, View, FlatList, Image } from 'react-native';
 import { styles } from './styles';
 import HeaderFull from '../../shared/components/Header/HeaderFull';
 import { useTranslation } from 'react-i18next';
-import Empty from '../../shared/components/Empty';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { colors } from '../../shared/utils/colors/colors';
-import { FirebaseService } from '../../api/FirebaseService';
 import { firebase } from '@react-native-firebase/database';
 import Constant from '../../shared/utils/constant/Constant';
-import { NavigationService } from '../../navigation';
-import { ScreenNames } from '../../route/ScreenNames';
 import IC_HOME from 'react-native-vector-icons/MaterialIcons';
 import IC_ADDRESS from 'react-native-vector-icons/Entypo';
 import IC_PHONE from 'react-native-vector-icons/Entypo';
@@ -20,8 +14,6 @@ export default function RestaurantDetailScreen(props) {
     const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
     const [dataStore, setdataStore] = useState({});
-    console.log('dataStore',dataStore);
-    
     const key = props.navigation.state.params.key;
     useEffect(() => {
         getDetailCoffee();
@@ -67,27 +59,25 @@ export default function RestaurantDetailScreen(props) {
                     </View>
                     <View style={styles.rows}>
                         <IC_OWNER size={20} name="reddit" style={styles.marginRight} color={'grey'} />
-                        <Text style={styles.txtAddressStore}> {'Exploer'}</Text>
+                        <Text style={styles.txtAddressStore}> {dataStore?.owner}</Text>
                     </View>
                     <Image
                         source={{ uri: dataStore?.avatar }}
                         style={styles.avatarStyle}
                     />
-                    <View style={{ width: '100%', height: 'auto'}}>
+                    <View style={{ width: '100%', height: 'auto' }}>
                         <FlatList
                             data={dataStore?.menu}
                             showsVerticalScrollIndicator={false}
                             scrollEnabled={true}
                             renderItem={(item, index) => {
-                                console.log('check item',item);
-                                
                                 return (
                                     <View style={styles.itemMenu}>
-                                        <Image source={{ uri: 'https://d1uz88p17r663j.cloudfront.net/original/e1894cc842da12b03b2cdf223250799d_Thumb_-crop083_G%C3%A0_lu%E1%BB%99c_l%C3%A1_chanh.jpg' }} style={styles.imageFood} />
-                                        <View style={{paddingVertical: 5}}>
-                                            <Text style={styles.txtItemMenu}>{item.item?.nameFood}</Text>
+                                        <Image source={{ uri: item?.item?.urlFood }} style={styles.imageFood} />
+                                        <View style={{ paddingVertical: 5 }}>
+                                            <Text style={styles.txtItemMenu}>{item?.item?.nameFood}</Text>
                                             <Text style={styles.txtPrice}>{`${item.item?.priceFood}VNĐ`}</Text>
-                                            <Text style={styles.txtDescript}>{item.item?.descriptionFood}</Text>
+                                            <Text style={styles.txtDescript}>{item?.item?.descriptionFood}</Text>
                                         </View>
                                     </View>
                                 );
