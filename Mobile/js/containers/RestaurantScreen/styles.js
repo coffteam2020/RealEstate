@@ -126,6 +126,16 @@ export const styles = StyleSheet.create({
     alignSelf: 'center',
     borderRadius: 1
   },
+  uploadAvatar:{
+    width: 120,
+    height: 120,
+    borderRadius: 120,
+    borderWidth: 1,
+    borderColor: '#e5e5e5',
+    borderStyle: 'dashed',
+    marginVertical: 10,
+    alignSelf: 'center',
+  },
   center:{
     alignItems: 'center',
     justifyContent: 'center'
@@ -134,6 +144,31 @@ export const styles = StyleSheet.create({
     fontSize: 12,
     color: '#f68a20',
     marginTop: 5
+  },
+  viewAddmenu:{
+
+  },
+  txtAddMenu:{
+    alignSelf: 'center',
+    marginTop: 20,
+    color: '#f68a20',
+    fontSize: 14,
+    textDecorationLine: 'underline'
+  },
+  btnAddMenu:{
+    width: 120,
+    height: 46,
+    borderRadius: 25,
+    backgroundColor: '#f68a20',
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20
+  },
+  txtBtnAddMenu:{
+    color: '#fff',
+    fontWeight: '600',
+    fontSize: 16
   }
 });
 

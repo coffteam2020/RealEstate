@@ -20,6 +20,8 @@ export default function RestaurantDetailScreen(props) {
     const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
     const [dataStore, setdataStore] = useState({});
+    console.log('dataStore',dataStore);
+    
     const key = props.navigation.state.params.key;
     useEffect(() => {
         getDetailCoffee();
@@ -77,13 +79,15 @@ export default function RestaurantDetailScreen(props) {
                             showsVerticalScrollIndicator={false}
                             scrollEnabled={true}
                             renderItem={(item, index) => {
+                                console.log('check item',item);
+                                
                                 return (
                                     <View style={styles.itemMenu}>
                                         <Image source={{ uri: 'https://d1uz88p17r663j.cloudfront.net/original/e1894cc842da12b03b2cdf223250799d_Thumb_-crop083_G%C3%A0_lu%E1%BB%99c_l%C3%A1_chanh.jpg' }} style={styles.imageFood} />
                                         <View style={{paddingVertical: 5}}>
                                             <Text style={styles.txtItemMenu}>{item.item?.nameFood}</Text>
-                                            <Text style={styles.txtPrice}>{`${item.item?.price}VNĐ`}</Text>
-                                            <Text style={styles.txtDescript}>{'Gà luộc ngon, thịt không bị nát do quá chín khiến ai ai cũng nao lòng bởi hương thơm thoảng rất nhẹ, ...'}</Text>
+                                            <Text style={styles.txtPrice}>{`${item.item?.priceFood}VNĐ`}</Text>
+                                            <Text style={styles.txtDescript}>{item.item?.descriptionFood}</Text>
                                         </View>
                                     </View>
                                 );
