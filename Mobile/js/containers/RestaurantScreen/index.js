@@ -235,7 +235,7 @@ export default function RestaurantScreen(props) {
                         {avatarOwner === '' ?
                             <TouchableOpacity style={[styles.uploadAvatar, styles.center]} onPress={openPickerAvatar}>
                                 <IC_UPLOAD name={"upload"} size={25} color={'#f68a20'} />
-                                <Text style={[styles.txtUploadImage, { fontSize: 10 }]}>{'explorer.upload_avatar'}</Text>
+                                <Text style={[styles.txtUploadImage, { fontSize: 10 }]}>{t('explorer.upload_avatar')}</Text>
                             </TouchableOpacity>
                             :
                             <TouchableOpacity style={styles.uploadAvatar} onPress={openPickerAvatar}>
@@ -253,7 +253,7 @@ export default function RestaurantScreen(props) {
                             {urlFood === '' ?
                                 <TouchableOpacity style={[styles.viewUploadImage, styles.center]} onPress={openPickerFood}>
                                     <IC_UPLOAD name={"upload"} size={27} color={'#f68a20'} />
-                                    <Text style={styles.txtUploadImage}>{'explorer.upload_image'}</Text>
+                                    <Text style={styles.txtUploadImage}>{t('explorer.upload_image')}</Text>
                                 </TouchableOpacity>
                                 :
                                 <TouchableOpacity style={styles.viewUploadImage} onPress={openPickerFood}>
@@ -308,6 +308,8 @@ export default function RestaurantScreen(props) {
     };
 
     const renderItemRestaurant = ({ item, index }) => {
+        console.log('check item',item);
+        
         return (
             <TouchableOpacity style={styles.itemCoffee} onPress={() => { onPressItem(item) }}>
                 <Image source={{ uri: item?.url }} style={styles.avatarCoffee} />
@@ -322,7 +324,7 @@ export default function RestaurantScreen(props) {
                             renderItem={({ item, index }) => (
                                 <View style={styles.itemMenu}>
                                     <Text style={styles.txtMenuItem}>{item?.nameFood}</Text>
-                                    <Text style={styles.txtMenuItemPrice}>{`  ${item?.priceFood}VNĐ`}</Text>
+                                    <Text style={styles.txtMenuItemPrice}>{`  ${item.priceFood}VNĐ`}</Text>
                                 </View>
                             )}
                         />
@@ -352,7 +354,7 @@ export default function RestaurantScreen(props) {
     };
 
     return (
-        <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1, backgroundColor: '#fff' }}>
+        <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1, backgroundColor: '#fff', paddingBottom: 20 }}>
             <HeaderFull
                 hasButton={true}
                 title={t('explorer.restaurant')}

@@ -84,7 +84,7 @@ export default class CountryPicker extends Component {
         transparent
         visible={this.state.modalVisible}
         onRequestClose={() => {
-          console.log('Country picker has been closed.');
+          // console.log('Country picker has been closed.');
         }}
       >
         <View style={styles.basicContainer}>

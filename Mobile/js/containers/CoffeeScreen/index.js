@@ -302,6 +302,8 @@ export default function CoffeeScreen(props) {
     };
 
     const renderItemCoffee = ({ item, index }) => {
+        console.log('cehk check ',item);
+        
         return (
             <TouchableOpacity style={styles.itemCoffee} onPress={() => { onPressItem(item) }}>
                 <Image source={{ uri: item?.url }} style={styles.avatarCoffee} />
@@ -316,7 +318,7 @@ export default function CoffeeScreen(props) {
                             renderItem={({ item, index }) => (
                                 <View style={styles.itemMenu}>
                                     <Text style={styles.txtMenuItem}>{item?.nameFood}</Text>
-                                    <Text style={styles.txtMenuItemPrice}>{`  ${item?.price}VNĐ`}</Text>
+                                    <Text style={styles.txtMenuItemPrice}>{`  ${item?.priceFood}VNĐ`}</Text>
                                 </View>
                             )}
                         />
@@ -346,7 +348,7 @@ export default function CoffeeScreen(props) {
     };
 
     return (
-        <View style={{ flex: 1, backgroundColor: '#fff' }}>
+        <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1, backgroundColor: '#fff', paddingBottom: 20 }}>
             <HeaderFull
                 hasButton={true}
                 title={t('explorer.coffee')}
@@ -364,6 +366,6 @@ export default function CoffeeScreen(props) {
                     </>
                 }
             </View>
-        </View>
+        </ScrollView>
     );
 };

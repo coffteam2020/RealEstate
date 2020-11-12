@@ -38,7 +38,7 @@ AudioRecord.init(options);
 
 AudioRecord.on('data', data => {
 	const chunk = Buffer.from(data, 'base64');
-	console.log('chunk size', chunk.byteLength);
+	// console.log('chunk size', chunk.byteLength);
 });
 
 const ModalWave = ({isVisible, title, subTitle, style, onUse, onRecord, onSuccess, onClose, used = 1, time}) => {

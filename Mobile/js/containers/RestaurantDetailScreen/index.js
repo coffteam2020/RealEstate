@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, FlatList, Image } from 'react-native';
+import { Text, View, FlatList, Image, ScrollView } from 'react-native';
 import { styles } from './styles';
 import HeaderFull from '../../shared/components/Header/HeaderFull';
 import { useTranslation } from 'react-i18next';
@@ -33,7 +33,7 @@ export default function RestaurantDetailScreen(props) {
 
 
     return (
-        <View style={{ flex: 1, backgroundColor: '#fff' }}>
+        <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
             <HeaderFull
                 hasButton={true}
                 title={t('explorer.restaurant_detail')}
@@ -73,7 +73,7 @@ export default function RestaurantDetailScreen(props) {
                                 return (
                                     <View style={styles.itemMenu}>
                                         <Image source={{ uri: item?.item?.urlFood }} style={styles.imageFood} />
-                                        <View style={{ paddingVertical: 5 }}>
+                                        <View style={{ paddingVertical: 5, width: '100%' }}>
                                             <Text style={styles.txtItemMenu}>{item?.item?.nameFood}</Text>
                                             <Text style={styles.txtPrice}>{`${item?.item?.priceFood}VNĐ`}</Text>
                                             <Text style={styles.txtDescript}>{item?.item?.descriptionFood}</Text>
@@ -85,6 +85,6 @@ export default function RestaurantDetailScreen(props) {
                     </View>
                 </View>
             </View>
-        </View>
-    )
-}
+        </ScrollView>
+    );
+};

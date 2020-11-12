@@ -68,7 +68,7 @@ console.log(JSON.stringify(data));
   }, []);
   const isBlog = props?.navigation?.state?.params?.isBlog; 
   const getPostDetail = async () => {
-    console.log(isBlog ? Constant.SCHEMA.BLOG: Constant.SCHEMA.SOCIAL + '/' + data?.userId + '_' + data?.timeInMillosecond);
+    // console.log(isBlog ? Constant.SCHEMA.BLOG: Constant.SCHEMA.SOCIAL + '/' + data?.userId + '_' + data?.timeInMillosecond);
     let user = await IALocalStorage.getDetailUserInfo();
     setIsLoading(true);
     await firebase

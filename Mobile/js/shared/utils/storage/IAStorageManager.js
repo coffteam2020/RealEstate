@@ -5,7 +5,7 @@ class IAStorageManager {
     	try {
     		await AsyncStorage.setItem(key, JSON.stringify(value));
     	} catch (error) {
-    		console.log(error.message);
+    		// console.log(error.message);
     	}
     };
 
@@ -14,7 +14,7 @@ class IAStorageManager {
     		const retrievedItem = await AsyncStorage.getItem(key);
     		return JSON.parse(retrievedItem);
     	} catch (error) {
-    		console.log("Get item error catch" + error.message);
+    		// console.log("Get item error catch" + error.message);
     	}
     };
 
@@ -22,7 +22,7 @@ class IAStorageManager {
     	try {
     		await AsyncStorage.removeItem(key);
     	} catch(error) {
-    		console.log("Remove item error" + error.message);
+    		// console.log("Remove item error" + error.message);
     	}
     }
 

@@ -39,7 +39,7 @@ export const styles = StyleSheet.create({
   txtItemMenu:{
     fontWeight: 'bold',
     color: '#9c9eb9',
-    fontSize: 12
+    fontSize: 14
   },
   rows:{
     flexDirection: 'row',
@@ -68,7 +68,13 @@ export const styles = StyleSheet.create({
   },
   imageFood:{
       width: '28%',
+      height: 100,
       marginRight: 10
+  },
+  txtPrice: {
+    color: '#bdabeb',
+    fontWeight: 'bold',
+    fontSize: 12
   }
 });
 

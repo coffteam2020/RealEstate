@@ -102,7 +102,7 @@ export default class LogManager {
 
 	static log(msg) {
 		if (__DEV__ && msg) {
-			console.log(msg);
+			// console.log(msg);
 		}
 	}
 

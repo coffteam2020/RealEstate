@@ -32,7 +32,7 @@ export const requestPermission = async () => {
 	try {
 		await firebase.messaging().requestPermission();
 	} catch (error) {
-		console.log('Err while trying to request permission: ' + error.message || '');
+		// console.log('Err while trying to request permission: ' + error.message || '');
 	}
 };
 const iosPushKit = () => {
@@ -85,8 +85,8 @@ const didReceiveStartCallAction = (data) => {
 const onAnswerCallAction = (data) => {
 	let { callUUID } = data;
 	// Called when the user answers an incoming call
-	console.log(JSON.stringify(data));
-	console.log(JSON.stringify(messages));
+	// console.log(JSON.stringify(data));
+	// console.log(JSON.stringify(messages));
 	RNCallKeep.endAllCalls();
 	NavigationService.navigate(ScreenNames.VideoCall, { url: messages?.[2] });
 };
@@ -193,9 +193,9 @@ export const displayIncoming = async (message) => {
 		});
 	}
 	// RNCallKeep.backToForeground();
-	console.log("displayIncoming" + JSON.stringify(message));
+	// console.log("displayIncoming" + JSON.stringify(message));
 	messages = message;
-	console.log(message?.[1]?.includes('VIDEO_CALL'));
+	// console.log(message?.[1]?.includes('VIDEO_CALL'));
 	if (message?.[1]?.includes('VIDEO_CALL')) {
 		let callOptions = {
 			callerId: '825f4094-a674-4765-96a7-1ac512c02a71', // Important uuid must in this format
@@ -238,7 +238,7 @@ const init = () => {
 
 		// (required) Called when a remote or local notification is opened or received
 		onNotification: function (notification) {
-			console.log("NOTIFICATION:", notification);
+			// console.log("NOTIFICATION:", notification);
 
 			notification.finish(PushNotificationIOS.FetchResult.NoData);
 			// process the notification
@@ -325,9 +325,9 @@ const onDisplayNotification = async (notification) => {
 	try {
 		const body = notification?.notification?.body;
 		// console.log("body" + JSON.stringify(body));
-		console.log(body);
+		// console.log(body);
 		var a = body?.split('#') || [];
-		console.log(a);
+		// console.log(a);
 		if (a[1]) {
 			if (a?.[1].includes('MESSAGE')) {
 				// Display a notification
@@ -358,13 +358,13 @@ const registerHearingNotification = async (store, currentScreen) => {
 
 	var notificationListener = await firebase.messaging().onMessage(async (notification) => {
 		// RNCallKeep.backToForeground();
-		console.log('registerHearingNotification: ' + LogManager.parseJsonObjectToJsonString(notification));
+		// console.log('registerHearingNotification: ' + LogManager.parseJsonObjectToJsonString(notification));
 		onDisplayNotification(notification);
 		displayIncoming(notification?.notification?.body?.split("#"));
 	});
 	firebase.messaging().setBackgroundMessageHandler(async remoteMessage => {
 		// RNCallKeep.backToForeground();
-		console.log('registerHearingNotification Background: ' + LogManager.parseJsonObjectToJsonString(remoteMessage));
+		// console.log('registerHearingNotification Background: ' + LogManager.parseJsonObjectToJsonString(remoteMessage));
 		onDisplayNotification(remoteMessage);
 		displayIncoming(remoteMessage?.notification?.body?.split("#") || remoteMessage?.data?.body?.split("#"));
 	});
@@ -372,14 +372,14 @@ const registerHearingNotification = async (store, currentScreen) => {
 	// Handle notification in background - automatically
 	firebase.messaging().onMessage((message) => {
 		// RNCallKeep.backToForeground();
-		console.log('messaging().onMessage ' + LogManager.parseJsonObjectToJsonString(message));
+		// console.log('messaging().onMessage ' + LogManager.parseJsonObjectToJsonString(message));
 		onDisplayNotification(message);
 		displayIncoming(message?.notification?.body?.split("#") || message?.data?.body?.split("#"));
 		backgroundNotificationHandler(message)
 			.then();
 	});
 	firebase.messaging().setBackgroundMessageHandler(async remoteMessage => {
-		console.log('Message handled in the background!', remoteMessage);
+		// console.log('Message handled in the background!', remoteMessage);
 		onDisplayNotification(remoteMessage);
 		displayIncoming(remoteMessage?.notification?.body?.split("#") || remoteMessage?.data?.body?.split("#"));
 		if (Platform.OS === 'android') {
@@ -400,7 +400,7 @@ const registerHearingNotification = async (store, currentScreen) => {
 				// End call action here
 			});
 			DeviceEventEmitter.addListener("answerCall", (payload) => {
-				console.log('answerCall', payload);
+				// console.log('answerCall', payload);
 				if (payload.isHeadless) {
 					// Called from killed state
 					IncomingCall.openAppFromHeadlessMode(payload.uuid);
@@ -414,7 +414,7 @@ const registerHearingNotification = async (store, currentScreen) => {
 };
 
 export const backgroundNotificationHandler = async (message) => {
-	console.log('backgroundNotificationHandler ' + LogManager.parseJsonObjectToJsonString(message));
+	// console.log('backgroundNotificationHandler ' + LogManager.parseJsonObjectToJsonString(message));
 	onDisplayNotification(message);
 	// RNCallKeep.backToForeground();
 	displayIncoming(message?.notification?.body?.split("#") || message?.notification?.title?.split("#") || message?.data?.body?.split("#"));

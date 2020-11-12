@@ -124,7 +124,7 @@ class VideoCallScreen extends Component {
   listenRoomChange = async (id) => {
 
     let userInfo = await IALocalStorage.getDetailUserInfo();
-    console.log("=================" + JSON.stringify(userInfo));
+    // console.log("=================" + JSON.stringify(userInfo));
     firebase.database().ref(Constant.SCHEMA.LIVESTREAM).child(id).on('value', snapshot => {
 
       if (snapshot.val() != undefined) {
