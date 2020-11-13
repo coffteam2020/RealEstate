@@ -225,30 +225,32 @@ const SocialScreen = (props) => {
 
   const renderAllPost = () => {
     return (
-      <FlatList
-        data={allPost}
-        scrollEnabled
-        style={{
-          width: ScreenWidth,
-          height: '100%',
-          marginTop: 10,
-        }}
-        onRefresh={() => {
-          setIsFetching(true);
-          getAllPost();
-        }}
-        ListEmptyComponent={() => noDataMessage()}
-        refreshing={isFetching}
-        keyExtractor={(item) => item._id}
-        renderItem={({ item, index }) => {
-          // console.log(item)
-          if (0 === index) {
-            return renderFirstPost(item);
-          } else {
-            return renderPost(item);
-          }
-        }}
-      />
+      <ScrollView>
+        <FlatList
+          data={allPost}
+          scrollEnabled
+          style={{
+            width: ScreenWidth,
+            height: '100%',
+            marginTop: 10,
+          }}
+          onRefresh={() => {
+            setIsFetching(true);
+            getAllPost();
+          }}
+          ListEmptyComponent={() => noDataMessage()}
+          refreshing={isFetching}
+          keyExtractor={(item) => item._id}
+          renderItem={({ item, index }) => {
+            // console.log(item)
+            if (0 === index) {
+              return renderFirstPost(item);
+            } else {
+              return renderPost(item);
+            }
+          }}
+        />
+      </ScrollView>
     );
   };
   const del = (item) => {
@@ -266,8 +268,8 @@ const SocialScreen = (props) => {
     })
   }
   const renderFirstPost = (item) => {
-    let isLike =
-      item.likes && item.likes.indexOf(userStore?.userInfo?.id) !== -1;
+    console.log('item',item)
+    let isLike = item.likes && item.likes.indexOf(userStore?.userInfo?.id) !== -1;
     let isToDay = TimeHelper.isToday(moment(item?.timeInMillosecond));
     const isAdmin = userStore?.userInfo?.phoneNumber?.includes('0955555555');
     const isBlog = props?.navigation?.state?.params?.isBlog;
@@ -277,9 +279,9 @@ const SocialScreen = (props) => {
     //   }
     // }
     return (
-      <>
+      <View key={item?.key}>
         {isBlog && !isAdmin ? null :
-          <TouchableOpacity
+          <TouchableOpacity 
             delayLongPress={0}
             onLongPress={() => {
               Alert.alert(t('chat.del'), '', [
@@ -481,16 +483,14 @@ const SocialScreen = (props) => {
             </View>
           </View>
         </TouchableOpacity>
-      </>
+      </View>
     );
   }
   const renderPost = (item) => {
-    let isLike =
-      item.likes && item.likes.indexOf(userStore?.userInfo?.id) !== -1;
+    let isLike = item.likes && item.likes.indexOf(userStore?.userInfo?.id) !== -1;
     let isToDay = TimeHelper.isToday(moment(item?.timeInMillosecond));
-    // console.log("===========" + JSON.stringify(item));
     return (
-      <TouchableOpacity
+      <TouchableOpacity key={item?.key}
         onLongPress={() => {
           if (item?.userId === userStore?.userInfo?.id) {
             Alert.alert(t('chat.del'), '', [

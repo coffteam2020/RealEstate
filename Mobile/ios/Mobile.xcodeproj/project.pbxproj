@@ -43,10 +43,10 @@
 		7E2C7294253B53CC00E280FA /* PushKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E2C7293253B53CB00E280FA /* PushKit.framework */; };
 		7ECE90F82557895A00ABC96F /* bridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ECE90F72557895A00ABC96F /* bridge.swift */; };
 		7ECE90F92557895A00ABC96F /* bridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ECE90F72557895A00ABC96F /* bridge.swift */; };
-		7EE39FBD2550580B00F34F64 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7EE39FBC2550580B00F34F64 /* GoogleService-Info.plist */; };
 		7EE7D49F25486E0F0096A11B /* libRNCallKeep.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EE7D49E25486E0F0096A11B /* libRNCallKeep.a */; };
 		7EE7D4A125486EAC0096A11B /* libRNVoipPushNotification.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EE7D4A025486EAC0096A11B /* libRNVoipPushNotification.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		8489B41D255ECA9F00193AC4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8489B41C255ECA9F00193AC4 /* GoogleService-Info.plist */; };
 		8A641181C9F3410D885D1CAB /* Nunito-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8F8820C2A4374CDB8BF05901 /* Nunito-Italic.ttf */; };
 		8D30DAB346CF4F5EA6A64ED4 /* PlayfairDisplay-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F3A07AEE7FBF48B18559CFDC /* PlayfairDisplay-SemiBoldItalic.ttf */; };
 		8D32F963E222467AB19E57A6 /* Proxima Nova Alt Condensed Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = A6FBCA745AB9422084CE9F98 /* Proxima Nova Alt Condensed Light.otf */; };
@@ -139,12 +139,12 @@
 		7ECE90F52557895900ABC96F /* Mobile-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Mobile-Bridging-Header.h"; sourceTree = "<group>"; };
 		7ECE90F62557895900ABC96F /* Mobile-tvOS-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Mobile-tvOS-Bridging-Header.h"; sourceTree = "<group>"; };
 		7ECE90F72557895A00ABC96F /* bridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = bridge.swift; sourceTree = "<group>"; };
-		7EE39FBC2550580B00F34F64 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../../Desktop/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		7EE7D49E25486E0F0096A11B /* libRNCallKeep.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNCallKeep.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		7EE7D4A025486EAC0096A11B /* libRNVoipPushNotification.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNVoipPushNotification.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		7F91C4B0A34649A19122929A /* Proxima Nova Bold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Proxima Nova Bold.otf"; path = "../assets/fonts/Proxima Nova Bold.otf"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Mobile/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		825C83331951C13D6F0ACE85 /* Pods-Mobile-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mobile-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-Mobile-tvOS/Pods-Mobile-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
+		8489B41C255ECA9F00193AC4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		85A2058A2825E31FA88D8FB3 /* libPods-Mobile-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Mobile-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B17CB7A259C4D51BBCDB3BA /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		8F8820C2A4374CDB8BF05901 /* Nunito-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Nunito-Italic.ttf"; path = "../assets/fonts/Nunito-Italic.ttf"; sourceTree = "<group>"; };
@@ -244,7 +244,6 @@
 		13B07FAE1A68108700A75B9A /* Mobile */ = {
 			isa = PBXGroup;
 			children = (
-				7EE39FBC2550580B00F34F64 /* GoogleService-Info.plist */,
 				FD6B1C0824F2C78E00DFCEE8 /* Real Estate.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -351,6 +350,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				8489B41C255ECA9F00193AC4 /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* Mobile */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* MobileTests */,
@@ -548,7 +548,7 @@
 				1CFEDADA05094B9FB719AF92 /* Nunito-ExtraBoldItalic.ttf in Resources */,
 				6FEA05F8E1E64974A47FC080 /* Nunito-ExtraLight.ttf in Resources */,
 				173C004DE47F4987B2A593E1 /* Nunito-ExtraLightItalic.ttf in Resources */,
-				7EE39FBD2550580B00F34F64 /* GoogleService-Info.plist in Resources */,
+				8489B41D255ECA9F00193AC4 /* GoogleService-Info.plist in Resources */,
 				8A641181C9F3410D885D1CAB /* Nunito-Italic.ttf in Resources */,
 				C225CA3B1D9849A0858B2E80 /* Nunito-Light.ttf in Resources */,
 				7CD4737E46BB4AACA7E67F9A /* Nunito-LightItalic.ttf in Resources */,

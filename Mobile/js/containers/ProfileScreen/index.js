@@ -451,7 +451,7 @@ const ProfileScreen = (props) => {
     );
   };
   return useObserver(() => (
-    <View style={[containerStyle.default, containerStyle.defaultBackground]}>
+    <View style={[containerStyle.default, containerStyle.defaultBackground, {paddingBottom: 30}]}>
       <StatusBar barStyle={colorsApp.statusBar} />
       <SafeAreaView>
         <HeaderFull

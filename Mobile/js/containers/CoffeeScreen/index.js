@@ -209,6 +209,7 @@ export default function CoffeeScreen(props) {
                             style={styles.textInputStyle}
                             onChangeText={text => setNameStore(text)}
                             placeholder={t('explorer.name_store')}
+                            placeholderTextColor={'#816ca0'}
                             textInputStyle={styles.fieldEmailPhone}
                         />
                         <TextInput
@@ -216,6 +217,7 @@ export default function CoffeeScreen(props) {
                             style={styles.textInputStyle}
                             onChangeText={text => setAddress(text)}
                             placeholder={t('explorer.address_store')}
+                            placeholderTextColor={'#816ca0'}
                             textInputStyle={styles.fieldEmailPhone}
                         />
                         <TextInput
@@ -224,6 +226,7 @@ export default function CoffeeScreen(props) {
                             style={styles.textInputStyle}
                             onChangeText={text => setPhone(text)}
                             placeholder={t('explorer.phone_number')}
+                            placeholderTextColor={'#816ca0'}
                             textInputStyle={styles.fieldEmailPhone}
                         />
                         <TextInput
@@ -231,6 +234,7 @@ export default function CoffeeScreen(props) {
                             style={styles.textInputStyle}
                             onChangeText={text => setOwner(text)}
                             placeholder={t('explorer.owner')}
+                            placeholderTextColor={'#816ca0'}
                             textInputStyle={styles.fieldEmailPhone}
                         />
                         {avatarOwner === '' ?
@@ -266,6 +270,7 @@ export default function CoffeeScreen(props) {
                                 style={styles.textInputStyle}
                                 onChangeText={text => setNameFood(text)}
                                 placeholder={t('explorer.name_food')}
+                                placeholderTextColor={'#816ca0'}
                                 textInputStyle={styles.fieldEmailPhone}
                             />
                             <TextInput
@@ -274,6 +279,7 @@ export default function CoffeeScreen(props) {
                                 onChangeText={text => setPriceFood(text)}
                                 placeholder={t('explorer.price')}
                                 keyboardType="number-pad"
+                                placeholderTextColor={'#816ca0'}
                                 textInputStyle={styles.fieldEmailPhone}
                             />
                             <TouchableOpacity onPress={handleAddMenu} style={styles.btnAddMenu}>
@@ -302,8 +308,6 @@ export default function CoffeeScreen(props) {
     };
 
     const renderItemCoffee = ({ item, index }) => {
-        console.log('cehk check ',item);
-        
         return (
             <TouchableOpacity style={styles.itemCoffee} onPress={() => { onPressItem(item) }}>
                 <Image source={{ uri: item?.url }} style={styles.avatarCoffee} />
