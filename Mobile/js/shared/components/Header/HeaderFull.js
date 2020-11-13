@@ -16,7 +16,7 @@ import { withNavigation } from 'react-navigation';
 
 const HeaderFull = ({ title, hasButton = false, rightIco, onPress }) => {
   return (
-    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: Platform.OS === 'ios' ? 30 : 10 }}>
       <TouchableOpacity
         style={{ width: ScreenWidth / 6 }}
         onPress={() => {

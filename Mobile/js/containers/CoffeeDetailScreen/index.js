@@ -34,7 +34,7 @@ export default function CoffeeDetailScreen(props) {
 
 
     return (
-        <View style={{ flex: 1, backgroundColor: '#fff' }}>
+        <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
             <HeaderFull
                 hasButton={true}
                 title={t('explorer.coffee_detail')}
@@ -68,12 +68,11 @@ export default function CoffeeDetailScreen(props) {
                     />
                     <ScrollView style={{ width: '100%', height: 'auto' }}>
                         <FlatList
+                            scrollEnabled={true}
                             data={dataStore?.menu}
                             showsVerticalScrollIndicator={false}
                             scrollEnabled={true}
                             renderItem={(item, index) => {
-                                console.log('check item coffee',item);
-                                
                                 return (
                                     <View style={styles.itemMenu}>
                                         <Image source={{ uri: item?.item?.urlFood }} style={styles.imageFood} />
@@ -88,6 +87,6 @@ export default function CoffeeDetailScreen(props) {
                     </ScrollView>
                 </View>
             </View>
-        </View>
+        </ScrollView>
     )
 }

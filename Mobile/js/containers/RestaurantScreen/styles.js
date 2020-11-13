@@ -58,7 +58,8 @@ export const styles = StyleSheet.create({
     width: '86%',
     alignSelf: 'center',
     borderColor: '#e1ddeb',
-    marginTop: 10
+    marginTop: 10,
+    height: 46
   },
   groupButton: {
     flexDirection: 'row',

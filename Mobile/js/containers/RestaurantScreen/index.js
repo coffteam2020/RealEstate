@@ -208,6 +208,7 @@ export default function RestaurantScreen(props) {
                             style={styles.textInputStyle}
                             onChangeText={text => setNameStore(text)}
                             placeholder={t('explorer.name_store')}
+                            placeholderTextColor={'#816ca0'}
                             textInputStyle={styles.fieldEmailPhone}
                         />
                         <TextInput
@@ -215,6 +216,7 @@ export default function RestaurantScreen(props) {
                             style={styles.textInputStyle}
                             onChangeText={text => setAddress(text)}
                             placeholder={t('explorer.address_store')}
+                            placeholderTextColor={'#816ca0'}
                             textInputStyle={styles.fieldEmailPhone}
                         />
                         <TextInput
@@ -222,6 +224,7 @@ export default function RestaurantScreen(props) {
                             style={styles.textInputStyle}
                             onChangeText={text => setOwner(text)}
                             placeholder={t('explorer.owner')}
+                            placeholderTextColor={'#816ca0'}
                             textInputStyle={styles.fieldEmailPhone}
                         />
                         <TextInput
@@ -230,6 +233,7 @@ export default function RestaurantScreen(props) {
                             style={styles.textInputStyle}
                             onChangeText={text => setPhone(text)}
                             placeholder={t('explorer.phone_number')}
+                            placeholderTextColor={'#816ca0'}
                             textInputStyle={styles.fieldEmailPhone}
                         />
                         {avatarOwner === '' ?
@@ -265,6 +269,7 @@ export default function RestaurantScreen(props) {
                                 style={styles.textInputStyle}
                                 onChangeText={text => setNameFood(text)}
                                 placeholder={t('explorer.name_food')}
+                                placeholderTextColor={'#816ca0'}
                                 textInputStyle={styles.fieldEmailPhone}
                             />
                             <TextInput
@@ -273,6 +278,7 @@ export default function RestaurantScreen(props) {
                                 onChangeText={text => setPriceFood(text)}
                                 placeholder={t('explorer.price')}
                                 keyboardType="number-pad"
+                                placeholderTextColor={'#816ca0'}
                                 textInputStyle={styles.fieldEmailPhone}
                             />
                             <TextInput
@@ -280,6 +286,7 @@ export default function RestaurantScreen(props) {
                                 style={styles.textInputStyle}
                                 onChangeText={text => setDescriptionFood(text)}
                                 placeholder={t('explorer.description')}
+                                placeholderTextColor={'#816ca0'}
                                 textInputStyle={styles.fieldEmailPhone}
                             />
                             <TouchableOpacity onPress={handleAddMenu} style={styles.btnAddMenu}>
