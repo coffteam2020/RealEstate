@@ -129,8 +129,8 @@ class VideoCallScreen extends Component {
 
       if (snapshot.val() != undefined) {
         let data = snapshot.val() || [];
-        console.log(Platform.OS + '_' + JSON.stringify(data.ownerUserId));
-        console.log(JSON.stringify(userInfo));
+        // console.log(Platform.OS + '_' + JSON.stringify(data.ownerUserId));
+        // console.log("userInfo,userInfo",JSON.stringify(userInfo));
         if (userInfo?.userId === data?.ownerUserId?.id && userInfo?.name === data?.ownerUserId?.name) {
           this.setState({
             isOwner: true
@@ -151,8 +151,8 @@ class VideoCallScreen extends Component {
           uid: data?.uid,
 
         }, () => {
-          console.log(this.state.like);
-          console.log(data.like);
+          // console.log('this.state.like',this.state.like);
+          // console.log('data.like',data.like);
           if ((data?.like || 0) !== this.state.like) {
             this.setState({
               like: data?.like,
@@ -202,7 +202,9 @@ class VideoCallScreen extends Component {
 
     // Create new room
     let userInfo = await IALocalStorage.getDetailUserInfo();
+    // console.log('userInfo',userInfo)
     let data = this.props.navigation.state.params.data;
+    // console.log('check data a:===',data)
     if (data && data?.channelName) {
       let convertChannelName = `${data?.channelName}_${userInfo?.userId}_${new Date().getTime()}`;
       this.setState({
@@ -665,7 +667,7 @@ class VideoCallScreen extends Component {
             }
           });
         }).catch(error => {
-          console.log(error.message);
+          console.log('error.message',error.message);
           this.setState({ isLoading: false });
           ToastHelper.showError('Could not change background image for channel');
         });
@@ -792,7 +794,7 @@ class VideoCallScreen extends Component {
     this.setState({ keyboardShow: false });
   }
   render() {
-    console.log(Platform.OS + '' + parseInt(uudddd) + '__' + this.state.showHeart);
+    // console.log(Platform.OS + '' + parseInt(uudddd) + '__' + this.state.showHeart);
     return (
       <View style={styles.max}>
         <KeyboardAwareScrollView keyboardShouldPersistTaps='handled' extraHeight={10} extraScrollHeight={20} contentContainerStyle={styles.max} scrollEnabled nestedScrollEnabled>

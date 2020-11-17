@@ -3,26 +3,19 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   FlatList,
-  Image,
   ScrollView,
   StatusBar,
   TouchableOpacity,
   SafeAreaView,
   View,
-  RefreshControl,
-  Dimensions,
   Alert,
 } from 'react-native';
-import { List, ListItem } from 'react-native-elements';
 import { withTheme } from 'react-native-paper';
-import { images } from '../../../assets';
 import { NavigationService } from '../../navigation';
 import { ScreenNames } from '../../route/ScreenNames';
 import TextNormal from '../../shared/components/Text/TextNormal';
 import { useStores } from '../../store/useStore';
 import { containerStyle } from '../../themes/styles';
-import * as Animatable from 'react-native-animatable';
-import TrackPlayer from 'react-native-track-player';
 import { styles } from './style';
 import { firebase } from '@react-native-firebase/messaging';
 import AxiosFetcher from '../../api/AxiosFetch';
@@ -31,8 +24,6 @@ import IALocalStorage from '../../shared/utils/storage/IALocalStorage';
 import Loading from '../../shared/components/Loading';
 import { ToastHelper } from '../../shared/components/ToastHelper';
 import Constant from '../../shared/utils/constant/Constant';
-import Speaker from '../../shared/components/Speaker';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import HeaderFull from '../../shared/components/Header/HeaderFull';
 import { colors } from '../../shared/utils/colors/colors';
 import FastImage from 'react-native-fast-image';
@@ -58,7 +49,8 @@ const SocialScreen = (props) => {
     props?.navigation.addListener('willFocus', () => {
       getProfile();
       // getAllPost();
-
+    }, () => {
+      removeEventListener('willFocus');
     });
     getProfile();
     // getAllPost();
@@ -78,7 +70,6 @@ const SocialScreen = (props) => {
       });
       arr = arr.filter(item => item?.disable !== true);
       allPost.forEach(item => {
-        // console.log("======================" + item?.disable);
       })
       setIsLoading(false);
       setAllPost(arr);
@@ -99,7 +90,7 @@ const SocialScreen = (props) => {
       .ref(isBlog ? Constant.SCHEMA.BLOG : Constant.SCHEMA.SOCIAL)
       .on('value', (snapshot) => {
         const data = snapshot.val() ? Object.values(snapshot.val()) : [];
-        console.log(JSON.stringify(data));
+        // console.log(JSON.stringify(data));
         let arr = data.sort(function (x, y) {
           return y.timeInMillosecond - x.timeInMillosecond;
         });
@@ -177,7 +168,6 @@ const SocialScreen = (props) => {
       <TouchableOpacity
         style={styles.postInput}
         onPress={() => {
-          // console.log('open View Post');
           NavigationService.navigate(ScreenNames.NewPostScreen, { isBlog: isBlog });
         }}>
         <FastImage
@@ -200,7 +190,6 @@ const SocialScreen = (props) => {
         <TouchableOpacity
           style={styles.postInput}
           onPress={() => {
-            // console.log('open View Post');
             NavigationService.navigate(ScreenNames.NewPostScreen, { isBlog: isBlog });
           }}>
           <FastImage
@@ -234,15 +223,11 @@ const SocialScreen = (props) => {
             height: '100%',
             marginTop: 10,
           }}
-          onRefresh={() => {
-            setIsFetching(true);
-            getAllPost();
-          }}
+          onRefresh={() => { setIsFetching(true); getAllPost() }}
           ListEmptyComponent={() => noDataMessage()}
           refreshing={isFetching}
           keyExtractor={(item) => item._id}
           renderItem={({ item, index }) => {
-            // console.log(item)
             if (0 === index) {
               return renderFirstPost(item);
             } else {
@@ -268,7 +253,6 @@ const SocialScreen = (props) => {
     })
   }
   const renderFirstPost = (item) => {
-    console.log('item',item)
     let isLike = item.likes && item.likes.indexOf(userStore?.userInfo?.id) !== -1;
     let isToDay = TimeHelper.isToday(moment(item?.timeInMillosecond));
     const isAdmin = userStore?.userInfo?.phoneNumber?.includes('0955555555');
@@ -281,7 +265,7 @@ const SocialScreen = (props) => {
     return (
       <View key={item?.key}>
         {isBlog && !isAdmin ? null :
-          <TouchableOpacity 
+          <TouchableOpacity
             delayLongPress={0}
             onLongPress={() => {
               Alert.alert(t('chat.del'), '', [
@@ -404,7 +388,7 @@ const SocialScreen = (props) => {
                                 Constant.MOCKING_DATA.NO_IMG_PLACE_HOLDER,
                             }}
                             resizeMode="cover"
-                            style={item?.images?.length === 1 ? styles.postImages : { width: ScreenWidth * (1 / item?.images.length), height: ScreenWidth * (1 / item?.images.length), marginEnd: 10 }}
+                            style={[item?.images?.length === 1 ? styles.postImages : { width: ScreenWidth * (1 / item?.images.length), height: ScreenWidth * (1 / item?.images.length), marginEnd: 10 },{marginTop: 10}]}
                           />
                         )
                       }} />
@@ -417,7 +401,6 @@ const SocialScreen = (props) => {
                       }}>
                       <Video
                         paused={true}
-
                         playWhenInactive={false}
                         playInBackground={false}
                         controls={true}

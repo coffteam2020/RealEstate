@@ -210,7 +210,7 @@ const PropertyScreen = (props) => {
             attachments.push({ attactmentType: 'PHOTO', urlMedia: val });
           })
           .catch((error) => {
-            console.log(error.message);
+            // console.log(error.message);
           });
       });
       //Edit case

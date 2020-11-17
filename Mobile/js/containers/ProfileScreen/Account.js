@@ -80,7 +80,7 @@ const Account = (props) => {
           return y.timeInMillosecond - x.timeInMillosecond;
         });
         // console.log(JSON.stringify(arr));
-        console.log("==========" +JSON.stringify(a));
+        // console.log("==========" +JSON.stringify(a));
         arr = arr?.filter(ab => ab?.userId === a?.userId && ab?.images?.length > 0);
         setAllPost(arr)
         console.log(arr.length);

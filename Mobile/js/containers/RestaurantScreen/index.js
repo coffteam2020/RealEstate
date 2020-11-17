@@ -315,8 +315,6 @@ export default function RestaurantScreen(props) {
     };
 
     const renderItemRestaurant = ({ item, index }) => {
-        console.log('check item',item);
-        
         return (
             <TouchableOpacity style={styles.itemCoffee} onPress={() => { onPressItem(item) }}>
                 <Image source={{ uri: item?.url }} style={styles.avatarCoffee} />

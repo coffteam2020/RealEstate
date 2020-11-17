@@ -391,7 +391,7 @@ const ChatRoomScreen = (props) => {
             setIsLoading(false);
           })
           .catch((error) => {
-            console.log(error.message);
+            // console.log(error.message);
             ToastHelper.showError(t('error.common'));
             setIsLoading(false);
           });
@@ -442,7 +442,7 @@ const ChatRoomScreen = (props) => {
             setIsLoading(false);
           })
           .catch((error) => {
-            console.log(error.message);
+            // console.log(error.message);
             ToastHelper.showError(t('error.common'));
             setIsLoading(false);
           });

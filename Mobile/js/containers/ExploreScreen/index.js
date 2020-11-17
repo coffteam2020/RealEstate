@@ -606,7 +606,7 @@ const ExploreScreen = (props) => {
       </View>
     );
   };
-  console.log("======" + marker.length);
+  // console.log("======" + marker.length);
   return useObserver(() => (
     <View style={[containerStyle.defaultBackground]}>
       <StatusBar barStyle={colorsApp.statusBar} />
@@ -663,7 +663,7 @@ const ExploreScreen = (props) => {
                 title={t('location.me')}
                 draggable /> */}
             {marker?.slice()?.map(item => {
-              console.log("23232" + item);
+              // console.log("23232" + item);
               return (
                 <Marker
                   coordinate={{

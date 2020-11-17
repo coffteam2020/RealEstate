@@ -17,7 +17,7 @@ export const ScreenNames = {
   VideoCallScreen: 'VideoCallScreen',
   VideoCall: 'VideoCall',
   List: 'List',
-  WebScreen:'WebScreen',
+  // WebScreen:'WebScreen',
   NewPostScreen: 'NewPostScreen',
   PostDetailScreen: 'PostDetailScreen',
   SocialScreen : 'SocialScreen',

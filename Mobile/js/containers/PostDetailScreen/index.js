@@ -110,8 +110,8 @@ console.log(JSON.stringify(data));
   };
 
   const renderPostContent = (data) => {
-    console.log("============" + JSON.stringify(post?.images && (post?.images[0]?.includes('PNG') || post?.images[0]?.includes('HEIC') ||post?.images[0]?.includes('heic') || post?.images[0]?.includes('JPG') || post?.images[0]?.includes('JPEG') ||
-    post?.images[0]?.includes('png') || post?.images[0]?.includes('jpg') || post?.images[0]?.includes('jpeg'))));
+    // console.log("============" + JSON.stringify(post?.images && (post?.images[0]?.includes('PNG') || post?.images[0]?.includes('HEIC') ||post?.images[0]?.includes('heic') || post?.images[0]?.includes('JPG') || post?.images[0]?.includes('JPEG') ||
+    // post?.images[0]?.includes('png') || post?.images[0]?.includes('jpg') || post?.images[0]?.includes('jpeg'))));
     return (
       <View style={styles.postContent}>
         {post?.content ? <TextNormal

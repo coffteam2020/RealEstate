@@ -10,9 +10,7 @@ import {
   SafeAreaView,
   View,
   Image,
-  RefreshControl,
-  Dimensions,
-  KeyboardAvoidingView
+  FlatList
 } from 'react-native';
 import { List, ListItem } from 'react-native-elements';
 import { withTheme } from 'react-native-paper';
@@ -45,8 +43,6 @@ import { SPACINGS, FONTSIZES, RADIUS } from '../../themes';
 import ImagePicker from 'react-native-image-picker';
 import { uploadFileToFireBase } from '../../shared/utils/firebaseStorageUtils';
 import { FirebaseService } from '../../api/FirebaseService';
-import GridList from 'react-native-grid-list';
-import { FlatList } from 'react-native';
 
 var uuid = require('uuid');
 let childTemp = '';
@@ -77,6 +73,8 @@ const NewPostScreen = (props) => {
   useEffect(() => {
     props?.navigation.addListener('willFocus', () => {
       getProfile();
+    }, () => {
+      removeEventListener('willFocus');
     });
     getProfile();
   }, []);
@@ -89,7 +87,7 @@ const NewPostScreen = (props) => {
       hasToken: true,
     })
       .then((val) => {
-        console.log(val)
+        // console.log(val)
         if (val?.data !== '') {
           setIsLoading(false);
           userStore.userInfo = val;
@@ -119,14 +117,14 @@ const NewPostScreen = (props) => {
         // setSelectedImages([...selectedImages, ...{ uri: response.uri }]);
         Promise.resolve(uploadFileToFireBase(response, userDetail?.id))
           .then((val) => {
-            console.log('@@@@openImagePicker@@@@@');
-            console.log(val);
+            // console.log('@@@@openImagePicker@@@@@');
+            // console.log(val);
             setImages([...images, val])
             setSelectedImages([...selectedImages, val])
             setIsLoading(false);
           })
           .catch((error) => {
-            console.log(error.message);
+            console.log('error.message', error.message);
             ToastHelper.showError(t('error.common'));
             setIsLoading(false);
           });
@@ -156,7 +154,7 @@ const NewPostScreen = (props) => {
             setIsLoading(false);
           })
           .catch((error) => {
-            console.log(error.message);
+            console.log('error.message camera', error.message);
             ToastHelper.showError(t('error.common'));
             setIsLoading(false);
           });
@@ -178,23 +176,20 @@ const NewPostScreen = (props) => {
       modifiedOn: moment().format("YYYY-MM-DD'T'HH:mm:ssZ"),
       content: content,
     };
-    // console.log(images)
     if (images.length > 0) {
       post.images = images;
     }
-    console.log('createNewPost');
     if (
       post?.content &&
       post?.content.replace(' ', '') === ''
     ) {
       return;
     }
-    console.log(post);
     childTemp = userDetail?.id + '_' + currentTime;
     try {
       setIsLoading(true);
       FirebaseService.pushNewItemWithChildKey(
-        isBlog ? Constant.SCHEMA.BLOG: Constant.SCHEMA.SOCIAL,
+        isBlog ? Constant.SCHEMA.BLOG : Constant.SCHEMA.SOCIAL,
         childTemp,
         post,
         false
@@ -226,7 +221,6 @@ const NewPostScreen = (props) => {
             containerStyle.textDefaultNormal,
             containerStyle.paddingDefault,
             {
-              // height: ScreenHeight * 0.5,
               minHeight: 100,
               maxHeight: ScreenHeight * 0.4,
               width: ScreenWidth * 0.9,
@@ -267,8 +261,8 @@ const NewPostScreen = (props) => {
   );
 
   const renderImageSelected = () => {
-    console.log(selectedImages);
-    if (selectedImages[0].uri?.includes('PNG') || selectedImages[0].uri?.includes('images') || selectedImages[0].uri?.includes('HEIC') ||selectedImages[0].uri?.includes('heic') || selectedImages[0].uri?.includes('JPG') || selectedImages[0].uri?.includes('JPEG') ||
+    // console.log('selectedImages', selectedImages);
+    if (selectedImages[0].uri?.includes('PNG') || selectedImages[0].uri?.includes('images') || selectedImages[0].uri?.includes('HEIC') || selectedImages[0].uri?.includes('heic') || selectedImages[0].uri?.includes('JPG') || selectedImages[0].uri?.includes('JPEG') ||
       selectedImages[0].uri?.includes('png') || selectedImages[0].uri?.includes('jpg') || selectedImages[0].uri?.includes('jpeg')) {
       return (
         <FlatList
@@ -277,12 +271,8 @@ const NewPostScreen = (props) => {
           data={selectedImages}
           renderItem={({ a, index }) => {
             return (
-              <FastImage
-                source={{
-                  uri:
-                  a?.uri ||
-                    Constant.MOCKING_DATA.NO_IMG_PLACE_HOLDER,
-                }}
+              <Image
+                source={{ uri: a?.uri || Constant.MOCKING_DATA.NO_IMG_PLACE_HOLDER }}
                 resizeMode="cover"
                 style={selectedImages.length === 1 ? styles.postImages : { width: ScreenWidth * (1 / selectedImages.length), height: ScreenWidth * (1 / selectedImages.length), marginEnd: 10 }}
               />
@@ -321,8 +311,7 @@ const NewPostScreen = (props) => {
       path: 'video',
       quality: 1
     }, (response) => {
-      console.log('Response = ', response);
-
+      // console.log('Response = ', response);
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.error) {
@@ -336,13 +325,13 @@ const NewPostScreen = (props) => {
           response.uri?.includes('png') || response.uri?.includes('jpg') || response.uri?.includes('jpeg'))) {
           Promise.resolve(uploadFileToFireBase(response, userDetail?.id))
             .then((val) => {
-              console.log('@@@@openCamera@@@@@');
-              console.log(val);
+              // console.log('@@@@openCamera@@@@@');
+              console.log('checl val', val);
               setImages([...images, val])
               setIsLoading(false);
             })
             .catch((error) => {
-              console.log(error.message);
+              console.log('error.message take:==', error.message);
               ToastHelper.showError(t('error.common'));
               setIsLoading(false);
             });
@@ -350,13 +339,13 @@ const NewPostScreen = (props) => {
         } else {
           Promise.resolve(uploadFileToFireBase(response, userDetail?.id, '.mov'))
             .then((val) => {
-              console.log('@@@@openCamera@@@@@');
-              console.log(val);
+              // console.log('@@@@openCamera@@@@@');
+              console.log('checl val', val);
               setImages([...images, val])
               setIsLoading(false);
             })
             .catch((error) => {
-              console.log(error.message);
+              console.log('error.message take:==', error.message);
               ToastHelper.showError(t('error.common'));
               setIsLoading(false);
             });
@@ -381,7 +370,7 @@ const NewPostScreen = (props) => {
           {renderPostInput()}
           {/* {renderImagePicker()} */}
           {selectedImages.length > 0 && renderImageSelected()}
-          <GradientButton text="Post" onPress={() => createNewPost()} />
+          <GradientButton text="Post" onPress={() => createNewPost()} style={{marginTop: 20}}/>
         </ScrollView>
       </SafeAreaView>
       {isLoading && <Loading />}
