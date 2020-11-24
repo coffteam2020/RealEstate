@@ -144,19 +144,7 @@ const ChatRoomScreen = (props) => {
     });
   }, []);
 
-  const getInfoItem = async () => {
-    // const userInfoId = await IALocalStorage.getUserInfo();
-    // AxiosFetcher({
-    //   method: 'GET',
-    //   data: undefined,
-    //   url: `/api/person/${userInfoId?.id}/itemsuser`,
-    //   hasToken: true,
-    // })
-    //   .then(async (val) => {
-    //     userStore.setItemsBag(val || []);
-    //   })
-    //   .catch(() => { });
-  };
+  const getInfoItem = async () => { };
 
   const getMessages = async (child) => {
     if (!child) {

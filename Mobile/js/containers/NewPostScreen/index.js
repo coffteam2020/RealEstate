@@ -56,7 +56,6 @@ const NewPostScreen = (props) => {
   const [content, setContent] = useState('');
   const [selectedImages, setSelectedImages] = useState([]);
   const [images, setImages] = useState([]);
-
   const [newPost, setNewPost] = useState({});
 
   const IMAGE_CONFIG = {
@@ -71,13 +70,13 @@ const NewPostScreen = (props) => {
   };
 
   useEffect(() => {
-    props?.navigation.addListener('willFocus', () => {
-      getProfile();
-    }, () => {
-      removeEventListener('willFocus');
-    });
+    // const unsubscribe = props?.navigation.addListener('willFocus', async () => {
+    //   await getProfile();
+    // });
+    // return unsubscribe
     getProfile();
   }, []);
+
   const getProfile = async () => {
     let userInfo = await IALocalStorage.getDetailUserInfo();
     setIsLoading(true);
@@ -87,7 +86,6 @@ const NewPostScreen = (props) => {
       hasToken: true,
     })
       .then((val) => {
-        // console.log(val)
         if (val?.data !== '') {
           setIsLoading(false);
           userStore.userInfo = val;
@@ -105,7 +103,6 @@ const NewPostScreen = (props) => {
 
   const openImagePicker = () => {
     ImagePicker.launchImageLibrary(IMAGE_CONFIG, (response) => {
-      // console.log('Response = ', response);
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.error) {
@@ -117,8 +114,6 @@ const NewPostScreen = (props) => {
         // setSelectedImages([...selectedImages, ...{ uri: response.uri }]);
         Promise.resolve(uploadFileToFireBase(response, userDetail?.id))
           .then((val) => {
-            // console.log('@@@@openImagePicker@@@@@');
-            // console.log(val);
             setImages([...images, val])
             setSelectedImages([...selectedImages, val])
             setIsLoading(false);
@@ -135,7 +130,6 @@ const NewPostScreen = (props) => {
 
   const openCamera = () => {
     ImagePicker.launchCamera(IMAGE_CONFIG, (response) => {
-      // console.log('Response = ', response);
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.error) {
@@ -147,14 +141,11 @@ const NewPostScreen = (props) => {
         setSelectedImages([...selectedImages, { uri: response.uri }]);
         Promise.resolve(uploadFileToFireBase(response, userDetail?.id))
           .then((val) => {
-            console.log('@@@@openCamera@@@@@');
-            console.log(val);
             setImages([...images, val])
             setSelectedImages([...selectedImages, ...val])
             setIsLoading(false);
           })
           .catch((error) => {
-            console.log('error.message camera', error.message);
             ToastHelper.showError(t('error.common'));
             setIsLoading(false);
           });
@@ -211,20 +202,20 @@ const NewPostScreen = (props) => {
         <TextInput
           value={content || ''}
           returnKeyType="done"
-          maxLength={1000}
+          maxLength={2000}
           placeholder="Text your post here 😄"
           onChangeText={(text) => setContent(text)}
           multiline
-          numberOfLines={50}
+          numberOfLines={100}
           style={[
             containerStyle.defaultMarginTopSmall,
             containerStyle.textDefaultNormal,
             containerStyle.paddingDefault,
             {
               minHeight: 100,
-              maxHeight: ScreenHeight * 0.4,
+              maxHeight: ScreenHeight * 0.3,
               width: ScreenWidth * 0.9,
-              backgroundColor: colors.gray_bg,
+              backgroundColor: '#d0d0d0',
               borderRadius: RADIUS.default,
               marginBottom: 20,
             },
@@ -261,7 +252,6 @@ const NewPostScreen = (props) => {
   );
 
   const renderImageSelected = () => {
-    // console.log('selectedImages', selectedImages);
     if (selectedImages[0].uri?.includes('PNG') || selectedImages[0].uri?.includes('images') || selectedImages[0].uri?.includes('HEIC') || selectedImages[0].uri?.includes('heic') || selectedImages[0].uri?.includes('JPG') || selectedImages[0].uri?.includes('JPEG') ||
       selectedImages[0].uri?.includes('png') || selectedImages[0].uri?.includes('jpg') || selectedImages[0].uri?.includes('jpeg')) {
       return (
@@ -269,30 +259,20 @@ const NewPostScreen = (props) => {
           numColumns={3}
           style={{ alignSelf: 'center' }}
           data={selectedImages}
-          renderItem={({ a, index }) => {
+          renderItem={(a, index ) => {
             return (
               <Image
-                source={{ uri: a?.uri || Constant.MOCKING_DATA.NO_IMG_PLACE_HOLDER }}
+                source={{ uri: selectedImages.length > 0 ? a?.item?.uri : Constant.MOCKING_DATA.NO_IMG_PLACE_HOLDER }}
                 resizeMode="cover"
                 style={selectedImages.length === 1 ? styles.postImages : { width: ScreenWidth * (1 / selectedImages.length), height: ScreenWidth * (1 / selectedImages.length), marginEnd: 10 }}
               />
             )
           }} />
-        // <ScrollView>
-        //   {selectedImages?.map(a => {
-        //     return (
-        //       <TouchableOpacity onPress={() => { setSelectedImages(selectedImages?.filter(item => item !== a)) }}>
-        //         <FastImage style={styles.image} source={{ uri: a?.uri }} resizeMode="cover" />
-        //       </TouchableOpacity>
-        //     )
-        //   })}
-        // </ScrollView>
       );
     }
     return (
       <TouchableOpacity style={{ marginBottom: 20 }} onPress={() => { setSelectedImages([]) }}>
         <Video source={{ uri: selectedImages[0].uri }} style={{ width: ScreenWidth / 2, height: ScreenWidth / 2 }} />
-        {/* <FastImage style={styles.image} source={{ uri: selectedImages[0].uri }} resizeMode="cover" /> */}
       </TouchableOpacity>
     )
 
@@ -311,7 +291,6 @@ const NewPostScreen = (props) => {
       path: 'video',
       quality: 1
     }, (response) => {
-      // console.log('Response = ', response);
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.error) {
@@ -325,13 +304,10 @@ const NewPostScreen = (props) => {
           response.uri?.includes('png') || response.uri?.includes('jpg') || response.uri?.includes('jpeg'))) {
           Promise.resolve(uploadFileToFireBase(response, userDetail?.id))
             .then((val) => {
-              // console.log('@@@@openCamera@@@@@');
-              console.log('checl val', val);
               setImages([...images, val])
               setIsLoading(false);
             })
             .catch((error) => {
-              console.log('error.message take:==', error.message);
               ToastHelper.showError(t('error.common'));
               setIsLoading(false);
             });
@@ -339,23 +315,16 @@ const NewPostScreen = (props) => {
         } else {
           Promise.resolve(uploadFileToFireBase(response, userDetail?.id, '.mov'))
             .then((val) => {
-              // console.log('@@@@openCamera@@@@@');
-              console.log('checl val', val);
               setImages([...images, val])
               setIsLoading(false);
             })
             .catch((error) => {
-              console.log('error.message take:==', error.message);
               ToastHelper.showError(t('error.common'));
               setIsLoading(false);
             });
-
         }
-
       }
     });
-
-
   }
 
 
@@ -370,7 +339,7 @@ const NewPostScreen = (props) => {
           {renderPostInput()}
           {/* {renderImagePicker()} */}
           {selectedImages.length > 0 && renderImageSelected()}
-          <GradientButton text="Post" onPress={() => createNewPost()} style={{marginTop: 20}}/>
+          <GradientButton text="Post" onPress={() => createNewPost()} style={{ marginTop: 20 }} />
         </ScrollView>
       </SafeAreaView>
       {isLoading && <Loading />}

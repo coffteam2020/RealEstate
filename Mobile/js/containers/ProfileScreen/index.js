@@ -58,9 +58,9 @@ const ProfileScreen = (props) => {
   };
 
   useEffect(() => {
-    props?.navigation.addListener('willFocus', () => {
-      getProfile();
-    });
+    // props?.navigation.addListener('willFocus', () => {
+    //   getProfile();
+    // });
     getProfile();
   }, []);
   const getProfile = async () => {

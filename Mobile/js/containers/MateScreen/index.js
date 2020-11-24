@@ -29,9 +29,9 @@ const MateScreen = (props) => {
   const { userStore } = useStores();
   const [liv, setLiv] = useState([]);
   useEffect(() => {
-    props.navigation.addListener('willFocus', () => {
-      getUsers();
-    })
+    // props.navigation.addListener('willFocus', () => {
+    //   getUsers();
+    // })
     getUsers();
     getLiv();
   }, []);

@@ -125,7 +125,6 @@ const ChatRoomGroupScreen = (props) => {
         avatar: me?.avatar,
       };
       toUserTemp = toUserDetail;
-      // console.log(JSON.stringify(toUserTemp));
       for (let i = 0; i < toUserDetail.lengtj; i++) {
         participants[i] = toUserDetail?.[i].id;
       }
@@ -133,8 +132,6 @@ const ChatRoomGroupScreen = (props) => {
 
 
       let child = StringHelper.generateDoccumentIds([...toUserDetail, ownerTemp]);
-      // await IALocalStorage.setRoom(toUserDetail?.name || '');
-      // console.log("========" + child + "" + Platform.OS);
       setChild(child);
       childTemp = child;
       getMessages(child);
@@ -150,19 +147,7 @@ const ChatRoomGroupScreen = (props) => {
     });
   }, []);
 
-  const getInfoItem = async () => {
-    // const userInfoId = await IALocalStorage.getUserInfo();
-    // AxiosFetcher({
-    //   method: 'GET',
-    //   data: undefined,
-    //   url: `/api/person/${userInfoId?.id}/itemsuser`,
-    //   hasToken: true,
-    // })
-    //   .then(async (val) => {
-    //     userStore.setItemsBag(val || []);
-    //   })
-    //   .catch(() => { });
-  };
+  const getInfoItem = async () => { };
 
   const getMessages = async (child) => {
     if (!child) {
@@ -197,35 +182,7 @@ const ChatRoomGroupScreen = (props) => {
         </TouchableOpacity>
         <TopUserItem onItemPress={() => { }} isGr item={name} name={name} />
         <TouchableOpacity
-          onPress={() => {
-
-            // AxiosFetcher({
-            //   method: 'POST',
-            //   url: 'user/' + userDetail?.id + '/sendNotification',
-            //   data: {
-            //     "fromUserAvatar": "",
-            //     "fromUserId": userDetail?.id,
-            //     "fromUserName": userDetail?.name,
-            //     "message": JSON.stringify({
-            //       messageType: 'VIDEO_CALL',
-            //       message: `You have a new video calling ${userDetail?.name}`,
-            //       receiverUserId: toUserTemp?.id,
-
-            //     }),
-            //     "receiverUserId": toUserTemp?.id
-            //   },
-            //   hasToken: true,
-            // })
-            //   .then((val) => {
-
-            //   })
-            //   .catch(() => {
-            //     ToastHelper.showError(
-            //       'Opps, error while trying to touch your recipient wake up but failed. Dont worry, video call request still has been sent successful',
-            //     );
-            //   });
-             
-          }}
+          onPress={() => { }}
           style={{
             width: 50,
             justifyContent: 'flex-end',
@@ -239,16 +196,6 @@ const ChatRoomGroupScreen = (props) => {
   };
 
   const onSend = (messages = [], image) => {
-    
-    // if (
-    //   !image &&
-    //   messages.length > 0
-    // ) {
-    //   console.log("====");
-    //   return;
-    // }
-    // console.log(JSON.stringify(participants));
-    // console.log(JSON.stringify(participants?.filter(a => a?.id !== userDetail?.id)));
     messages[0] = {
       _id: uuid.v4(),
       ...messages[0],

@@ -124,21 +124,13 @@ class VideoCallScreen extends Component {
   listenRoomChange = async (id) => {
 
     let userInfo = await IALocalStorage.getDetailUserInfo();
-    // console.log("=================" + JSON.stringify(userInfo));
     firebase.database().ref(Constant.SCHEMA.LIVESTREAM).child(id).on('value', snapshot => {
-
       if (snapshot.val() != undefined) {
         let data = snapshot.val() || [];
-        // console.log(Platform.OS + '_' + JSON.stringify(data.ownerUserId));
-        // console.log("userInfo,userInfo",JSON.stringify(userInfo));
-        if (userInfo?.userId === data?.ownerUserId?.id && userInfo?.name === data?.ownerUserId?.name) {
-          this.setState({
-            isOwner: true
-          });
+        if (userInfo?.userId === data?.ownerUserId?.id) {
+          this.setState({ isOwner: true });
         } else {
-          this.setState({
-            isOwner: false
-          });
+          this.setState({ isOwner: false });
         }
         this.setState({
           participiantsCount: data?.participiants?.length,
@@ -151,8 +143,6 @@ class VideoCallScreen extends Component {
           uid: data?.uid,
 
         }, () => {
-          // console.log('this.state.like',this.state.like);
-          // console.log('data.like',data.like);
           if ((data?.like || 0) !== this.state.like) {
             this.setState({
               like: data?.like,
@@ -168,15 +158,6 @@ class VideoCallScreen extends Component {
           if (this.state.isOwner && this.state.messages[this.state.messages.length - 1]?.data?.includes('has taken a screenshot')) {
             ToastHelper.showWarning(this.state.messages[this.state.messages.length - 1]?.data || 'Someone has taken a screenshot');
           }
-          // if (!this.state.isOwner && this.state.messages[this.state.messages.length - 1]?.data?.includes('Hey everyone, Im leave now. Good bye!')) {
-          // 	Alert.alert('Opps', 'Owner has cancelled livestreaming channel', [
-          // 		{
-          // 			text: 'Leave me',
-          // 			onPress: () => { this.endCall(); }
-          // 		}
-          // 	]);
-          // 	return;
-          // }
         });
 
       }
@@ -202,18 +183,16 @@ class VideoCallScreen extends Component {
 
     // Create new room
     let userInfo = await IALocalStorage.getDetailUserInfo();
-    // console.log('userInfo',userInfo)
-    let data = this.props.navigation.state.params.data;
-    // console.log('check data a:===',data)
+    let data = this.props.navigation?.state?.params?.data;
     if (data && data?.channelName) {
-      let convertChannelName = `${data?.channelName}_${userInfo?.userId}_${new Date().getTime()}`;
+      // let convertChannelName = `${data?.channelName}_${userInfo?.userId}_${new Date().getTime()}`;
       this.setState({
         vidMute: true,
         audMute: false,
         tags: data?.tags || [],
         uid: userInfo?.userId,
         password: data?.password,
-        channelName: convertChannelName,
+        channelName: data?.channelName,
         note: data?.note || 'Hello, nice to meet ya all',
         imgBackground: userInfo?.avatar,
         owner: {
@@ -321,21 +300,20 @@ class VideoCallScreen extends Component {
         participiants.push(newJoiner);
         FirebaseService.updateItem(Constant.SCHEMA.LIVESTREAM, key, { ...data, participiants: participiants });
       }
-      this.onSendMessage(`Hi everyone! Im ${userInfo?.name || 'new user'}. Nice to meet ya all!`);
+      this.onSendMessage(`Hi everyone! Im ${userInfo?.name != null ? userInfo?.name : 'new_user'}. Nice to meet ya all!`);
     });
 
   };
 
   // Update data for livestreaming channel
   updateOwnerForLivestream = async () => {
-    console.log('updateOwnerForLivestream');
     let userInfo = await IALocalStorage.getDetailUserInfo();
     let keyUser = `${userInfo?.userId}_${new Date().getTime()}`;
     keyRoom = keyUser;
     let tempObjRoom = {
       id: keyUser,
       uid: this.state.uid,
-      channelName: this.state.channelName || userInfo?.name,
+      channelName: this.state.channelName || (userInfo?.name !== null ? userInfo?.name : 'new_user'),
       backgroundImg: userInfo?.avatar,
       ownerUserId: {
         id: userInfo?.userId,
@@ -363,7 +341,7 @@ class VideoCallScreen extends Component {
     FirebaseService.pushNewItemWithChildKey(Constant.SCHEMA.LIVESTREAM, keyUser, tempObjRoom);
     // RtcEngine.muteLocalVideoStream(true);
     this.listenRoomChange(keyUser);
-    this.onSendMessage(`Hi everyone! Im ${userInfo?.name || 'new user'}. Nice to meet ya all!`);
+    this.onSendMessage(`Hi everyone! Im ${userInfo?.name !== null ? userInfo?.name : 'new_user'}. Nice to meet ya all!`);
   };
 
   /**
@@ -373,10 +351,6 @@ class VideoCallScreen extends Component {
   startCall = async () => {
     try {
       await RtcEngine.enableVideo();
-      // await RtcEngine.addVideoWatermark('https://upload.wikimedia.org/wikipedia/commons/6/62/Paracas_National_Reserve%2C_Ica%2C_Peru-3April2011.jpg', { x: 20, y: 20, height: 20, width: 20 }).then(a => {
-      // 	console.log(a);
-      // })
-      // RtcEngine.setLiveTranscoding()
 
       if (this.state.isOwner) {
         RtcEngine.joinChannel(this.state.channelName, this.state.uid);  //Join Channel	
@@ -386,7 +360,7 @@ class VideoCallScreen extends Component {
       }
       RtcEngine.enableAudio();                                        //Enable the audio
     } catch (err) {
-      console.log(LogManager.parseJsonObjectToJsonString(err));
+      // console.log('error create Room:===', LogManager.parseJsonObjectToJsonString(err));
     }
   }
   /**
@@ -401,7 +375,7 @@ class VideoCallScreen extends Component {
         //Owner => update status
         let participiants = data?.participiants || [];
         participiants = participiants?.filter(item => item?.id != userInfo?.userId);
-        FirebaseService.updateItem(Constant.SCHEMA.LIVESTREAM, keyRoom, { ...data, participiants: participiants, status: 'END' });
+        FirebaseService.updateItem(Constant.SCHEMA.LIVESTREAM, keyRoom, { ...data, participiants: participiants, status: "END" });
       } else {
         // Not Owner => remove participiants
         let participiants = data?.participiants || [];
@@ -466,13 +440,13 @@ class VideoCallScreen extends Component {
     );
   }
   renderHeader() {
-    let channelName = this.state.channelName?.split('_')[0];
+    let channelName = this.state.channelName?.toString()?.split('_')[0];
     return (
       <View style={{ zIndex: 100 }}>
         <View style={styles.header}>
           <FastImage style={styles.avatar} resizeMode="cover" resizeMethod="resize" source={{ uri: this.state.owner?.avatar || Constant.MOCKING_DATA.PLACE_HOLDER }} />
           <View style={{ marginLeft: 10 }}>
-            <TextNormal numberOfLines={1} ellipsizeMode="tail" text={channelName?.trim() || ''} style={[containerStyle.textDefault, { color: colors.whiteBackground, marginTop: 10 }]} />
+            <TextNormal numberOfLines={3} ellipsizeMode="tail" text={channelName?.trim() || ''} style={[containerStyle.textDefault, { color: colors.whiteBackground, width: '70%' }]} />
           </View>
         </View>
       </View>
@@ -496,7 +470,7 @@ class VideoCallScreen extends Component {
             this.onSendMessage('Hey everyone, Im leave now. Good bye!');
             setTimeout(() => {
               this.endCall();
-            }, 1000);
+            }, 2000);
           }
         },
         {
@@ -647,7 +621,6 @@ class VideoCallScreen extends Component {
   openImagePicker = async () => {
     let userInfo = await IALocalStorage.getDetailUserInfo();
     ImagePicker.showImagePicker(IMAGE_CONFIG, (response) => {
-      // console.log('Response = ', response);
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.error) {
@@ -667,7 +640,6 @@ class VideoCallScreen extends Component {
             }
           });
         }).catch(error => {
-          console.log('error.message',error.message);
           this.setState({ isLoading: false });
           ToastHelper.showError('Could not change background image for channel');
         });
@@ -696,7 +668,7 @@ class VideoCallScreen extends Component {
         id: uuid.v4(),
         user: {
           id: userInfo?.userId,
-          name: userInfo?.name,
+          name: userInfo?.name !== null ? userInfo?.name : 'new_user',
           avatar: userInfo?.avatar,
         },
         data: text ? text : this.state.textChat,
@@ -710,22 +682,6 @@ class VideoCallScreen extends Component {
   renderInput = () => {
     return (
       <View style={styles.input}>
-        {/* {!this.state.isOwner &&
-          <TouchableOpacity style={{
-            backgroundColor: colors.textPuple,
-            borderColor: colors.textPuple,
-            height: ScreenHeight * 0.06,
-            width: ScreenHeight * 0.06,
-            borderRadius: ScreenHeight * 0.03,
-            alignItems: 'center',
-            alignContent: 'center',
-            justifyContent: 'center',
-            marginRight: 10
-          }} onPress={() => {
-            this.setState({ modalItem: true });
-          }}>
-            {icons.IC_GIFT_ITEM}
-          </TouchableOpacity>} */}
         <TextInput
           value={this.state.textChat}
           onChangeText={(text) => {
@@ -763,22 +719,6 @@ class VideoCallScreen extends Component {
       'messageType': 'GIFT',
       'receiverUserId': this.state.owner?.id,
     };
-    // AxiosFetcher({
-    // 	method: 'POST',
-    // 	url: '/api/useraction/' + userInfoId?.userId + '/sendFloatingMessage',
-    // 	data: body,
-    // 	hasToken: true,
-    // }).then(val => {
-    // 	this.setState({ isLoading: false });
-    // 	if (val) {
-    // 		this.onSendMessage(`Ohh ohh, ${userInfoId?.name} just send to ${this.state.owner?.name} a gift 📦🔓🗃. Have fun!`);
-    // 	} else {
-    // 		ToastHelper.showError('You reach exceed items sendable today. Buy more item to send gift to host in our store');
-    // 	}
-    // }).catch((err) => {
-    // 	this.setState({ isLoading: false });
-    // 	ToastHelper.showError('You reach exceed items sendable today. Buy more item to send gift to host in our store');
-    // });
   }
 
   componentWillUnmount() {
@@ -794,7 +734,6 @@ class VideoCallScreen extends Component {
     this.setState({ keyboardShow: false });
   }
   render() {
-    // console.log(Platform.OS + '' + parseInt(uudddd) + '__' + this.state.showHeart);
     return (
       <View style={styles.max}>
         <KeyboardAwareScrollView keyboardShouldPersistTaps='handled' extraHeight={10} extraScrollHeight={20} contentContainerStyle={styles.max} scrollEnabled nestedScrollEnabled>
@@ -804,7 +743,7 @@ class VideoCallScreen extends Component {
           {this.renderMute()}
           {/* {this.renderBackground()} */}
           {this.renderParticipiants()}
-          <TouchableOpacity delayPressIn={0} style={{ zIndex: 1001, position: 'absolute', bottom: 50, right: 0, width: 80, height: 100,}} onPress={async () => {
+          <TouchableOpacity delayPressIn={0} style={{ zIndex: 1001, position: 'absolute', bottom: 50, right: 0, width: 80, height: 100 }} onPress={async () => {
             this.setState({ showHeart: true });
             await firebase.database().ref(Constant.SCHEMA.LIVESTREAM).child(keyRoom).once('value', snapshot => {
               const data = snapshot.val() || [];
@@ -843,7 +782,7 @@ class VideoCallScreen extends Component {
                 source={require('../../../assets/imgs/center-heart.json')}
               />
             </TouchableOpacity> : null}
-            {this.state.showGift ?
+          {this.state.showGift ?
             <TouchableOpacity style={{ zIndex: 1000, position: 'absolute', top: ScreenHeight / 4, alignContent: 'center', alignItems: 'center', alignSelf: 'center', width: 400, height: 400, borderRadius: 200 }}>
               <LottieView
                 autoPlay

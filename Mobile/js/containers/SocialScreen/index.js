@@ -41,21 +41,21 @@ const SocialScreen = (props) => {
   const { userStore } = useStores();
   const [userInfo, setUserInfo] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [avt, setAvt] = useState('');
+  const [avt, setAvt] = useState(`${userStore.userInfo.avatar}`);
   const [allPost, setAllPost] = useState([]);
   const [isFetching, setIsFetching] = useState(false);
 
   useEffect(() => {
-    props?.navigation.addListener('willFocus', () => {
-      getProfile();
-      // getAllPost();
-    }, () => {
-      removeEventListener('willFocus');
-    });
-    getProfile();
-    // getAllPost();
+    // const unsubscribe = props?.navigation.addListener('willFocus', async () => {
+    //   await getProfile();
+    // });
+    // return unsubscribe;
+
     getMessages();
+    getAllPost();
+    getProfile();
   }, []);
+
   const getAllPost = async () => {
     setIsLoading(true);
     try {
@@ -82,7 +82,6 @@ const SocialScreen = (props) => {
   };
 
   const getMessages = async () => {
-    // console.log(isBlog);
     let user = await IALocalStorage.getDetailUserInfo();
     setIsLoading(true);
     await firebase
@@ -90,14 +89,12 @@ const SocialScreen = (props) => {
       .ref(isBlog ? Constant.SCHEMA.BLOG : Constant.SCHEMA.SOCIAL)
       .on('value', (snapshot) => {
         const data = snapshot.val() ? Object.values(snapshot.val()) : [];
-        // console.log(JSON.stringify(data));
         let arr = data.sort(function (x, y) {
           return y.timeInMillosecond - x.timeInMillosecond;
         });
         if (!isBlog) {
           arr = arr.filter(item => item?.disable !== true);
         }
-        // console.log(arr);
         setAllPost(arr)
         setTimeout(() => {
           setIsLoading(false);
@@ -114,7 +111,6 @@ const SocialScreen = (props) => {
       hasToken: true,
     })
       .then((val) => {
-        console
         if (val?.data !== '') {
           setIsLoading(false);
           userStore.userInfo = val;
@@ -388,7 +384,7 @@ const SocialScreen = (props) => {
                                 Constant.MOCKING_DATA.NO_IMG_PLACE_HOLDER,
                             }}
                             resizeMode="cover"
-                            style={[item?.images?.length === 1 ? styles.postImages : { width: ScreenWidth * (1 / item?.images.length), height: ScreenWidth * (1 / item?.images.length), marginEnd: 10 },{marginTop: 10}]}
+                            style={[item?.images?.length === 1 ? styles.postImages : { width: ScreenWidth * (1 / item?.images.length), height: ScreenWidth * (1 / item?.images.length), marginEnd: 10 }, { marginTop: 10 }]}
                           />
                         )
                       }} />
@@ -454,10 +450,7 @@ const SocialScreen = (props) => {
                   <TextNormal text="Like"></TextNormal>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  onPress={() => {
-                    // console.log('comment');
-                    // navigate to Post Detail
-                  }}
+                  onPress={() => { }}
                   style={{ display: 'flex', flexDirection: 'row' }}>
                   <EvilIcons name="comment" size={20} />
                   <TextNormal text="Comment"></TextNormal>

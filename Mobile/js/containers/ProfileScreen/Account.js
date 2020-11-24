@@ -61,10 +61,10 @@ const Account = (props) => {
   };
 
   useEffect(() => {
-    props?.navigation.addListener('willFocus', () => {
-      getProfile();
-      getMessages();
-    });
+    // props?.navigation.addListener('willFocus', () => {
+    //   getProfile();
+    //   getMessages();
+    // });
     getProfile();
     getMessages();
   }, []);
