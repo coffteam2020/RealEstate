@@ -29,9 +29,9 @@ const List = (props) => {
   const [followed, setIsFollowed] = useState(false);
   const {userStore} = useStores();
   useEffect(() => {
-    props.navigation.addListener('willFocus', () => {
-      getUsers();
-    });
+    // props.navigation.addListener('willFocus', () => {
+    //   getUsers();
+    // });
     getUsers();
   }, []);
   const getUsers = async () => {

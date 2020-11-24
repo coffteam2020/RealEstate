@@ -318,6 +318,7 @@ export default function CoffeeScreen(props) {
                         <FlatList
                             data={item?.menu}
                             numColumns={2}
+                            contentContainerStyle={{width: '60%'}}
                             keyExtractor={(item) => item.id}
                             renderItem={({ item, index }) => (
                                 <View style={styles.itemMenu}>

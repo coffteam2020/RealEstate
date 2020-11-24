@@ -37,11 +37,13 @@ export const styles = StyleSheet.create({
   },
   itemName: {
     fontSize: 20,
-    color: 'black'
+    color: 'black',
+    width: '60%'
   },
   itemAddress: {
     color: 'gray',
-    marginVertical: 5
+    marginVertical: 5,
+    width: '60%'
   },
   itemPrice: {
     color: '#6436c7',

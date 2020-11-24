@@ -82,9 +82,9 @@ const PropertyDetailScreen = (props) => {
 
   console.log(property)
   useEffect(() => {
-    props?.navigation.addListener('willFocus', () => {
-      getProfile();
-    });
+    // props?.navigation.addListener('willFocus', () => {
+    //   getProfile();
+    // });
     getProfile();
   }, []);
 

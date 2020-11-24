@@ -137,6 +137,12 @@ android {
         versionCode 21
         versionName "1.2"
         missingDimensionStrategy 'react-native-camera', 'general'
+        multiDexEnabled true
+    }
+    lintOptions {
+        disable 'InvalidPackage'
+        checkReleaseBuilds false
+        abortOnError false
     }
     packagingOptions {
         pickFirst 'lib/x86/libc++_shared.so'

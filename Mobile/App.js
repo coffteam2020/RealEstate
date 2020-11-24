@@ -100,7 +100,7 @@ const initNo = async () => {
 
     // (required) Called when a remote or local notification is opened or received
     onNotification: function(notification) {
-      console.log("NOTIFICATION:", notification);
+      // console.log("NOTIFICATION:", notification);
       displayIncoming(notification?.alert?.body?.split("#") || notification?.data?.body?.split("#"));
       // process the notification
 

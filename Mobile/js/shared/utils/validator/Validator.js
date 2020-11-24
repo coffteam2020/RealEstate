@@ -9,11 +9,11 @@ const emailConstraints = {
 	foo: {
 		presence: {
 			presence: true,
-			message: I18n.t("validFieldEmpty")
+			// message: I18n.t("validFieldEmpty")
 		},
 		email: {
 			email: true,
-			message: I18n.t("validEmailIncorrect")
+			// message: I18n.t("validEmailIncorrect")
 		}
 	}
 };
@@ -22,12 +22,12 @@ const phoneConstraints = {
 	foo: {
 		presence: {
 			presence: true,
-			message: I18n.t("validFieldEmpty")
+			// message: I18n.t("validFieldEmpty")
 		},
 		format: {
 			pattern: "^[0-9]{9,12}$",
 			flags: "i",
-			message: I18n.t("validPhoneIncorrect")
+			// message: I18n.t("validPhoneIncorrect")
 		}
 	}
 };
@@ -36,11 +36,11 @@ const passwordConstraints = {
 	foo: {
 		presence: {
 			presence: true,
-			message: I18n.t("validFieldEmpty")
+			// message: I18n.t("validFieldEmpty")
 		},
 		length: {
 			minimum: 6,
-			message: I18n.t("validPasswordIncorrect")
+			// message: I18n.t("validPasswordIncorrect")
 		}
 	}
 };

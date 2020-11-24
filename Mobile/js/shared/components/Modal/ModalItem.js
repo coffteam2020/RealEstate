@@ -143,7 +143,7 @@ const ModalItem = ({isVisible, onPress, title, style, onUse, onRecord, onClose})
 			setTime(0);
 			onRecord(val, audioFile);
 		}).catch(error => {
-			console.log(error.message);
+			// console.log(error.message);
 			ToastHelper.showError(t('error.common'));
 		});
 

@@ -1,7 +1,7 @@
-import {StyleSheet} from 'react-native';
-import {colors} from '../../shared/utils/colors/colors';
-import {ScreenHeight, ScreenWidth} from '../../shared/utils/dimension/Divices';
-import {SPACINGS} from '../../themes';
+import { StyleSheet } from 'react-native';
+import { colors } from '../../shared/utils/colors/colors';
+import { ScreenHeight, ScreenWidth } from '../../shared/utils/dimension/Divices';
+import { SPACINGS } from '../../themes';
 import { red } from 'react-native-redash';
 import { color } from 'react-native-reanimated';
 
@@ -14,16 +14,16 @@ export const styles = StyleSheet.create({
     paddingBottom: 500,
   },
 
-  postImages:{
+  postImages: {
     width: ScreenWidth,
-      height: ScreenWidth,
+    height: ScreenWidth,
     // margin: SPACINGS.small
-    },
+  },
   avatar: {
     width: ScreenWidth * 0.1,
     height: ScreenWidth * 0.1,
-	borderRadius: ScreenWidth * 0.6,
-	marginRight: SPACINGS.avg
+    borderRadius: ScreenWidth * 0.6,
+    marginRight: SPACINGS.avg
   },
   image: {
     width: ScreenWidth / 3,
@@ -36,7 +36,7 @@ export const styles = StyleSheet.create({
   parentContainer: {
     height: ScreenHeight,
     position: 'relative'
-},
+  },
 });
 
 export default {

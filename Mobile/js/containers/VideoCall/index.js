@@ -314,7 +314,7 @@ export default class VideoCall extends Component {
                       qr: `${this.state.sessionId}%%${val}`
                     }, () => {
                       this.a(`${this.state.sessionId}%%${val}`);
-                      console.log("=======1" + JSON.stringify(this.state.qr));
+                      // console.log("=======1" + JSON.stringify(this.state.qr));
                     })
                     // Alert.alert('Thông báo', 'Bạn muốn đổi camera hay chia sẻ màn hình?', [
                     //   {

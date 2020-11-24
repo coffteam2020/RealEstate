@@ -4,7 +4,7 @@ import {
   View,
   SafeAreaView,
   TouchableOpacity,
-  Alert,
+  Dimensions,
 } from 'react-native';
 import { styles as style, styles } from './style';
 import { withTheme } from 'react-native-paper';
@@ -33,6 +33,7 @@ import { useStores } from '../../store/useStore';
 import { ToastHelper } from '../../shared/components/ToastHelper';
 import LogManager from '../../shared/utils/logging/LogManager';
 import { containerStyle } from '../../themes/styles';
+const { width } = Dimensions.get('window');
 const IMG =
   'https://firebasestorage.googleapis.com/v0/b/stayalone-prod.appspot.com/o/blur.jpg?alt=media&token=23d5379e-8c8f-4f0b-8926-59811eeb9ce4';
 const Livestream = (props) => {
@@ -50,24 +51,7 @@ const Livestream = (props) => {
   useEffect(() => {
     TrackPlayer.stop();
     getLivestreamingChannel();
-    props?.navigation.addListener('willFocus', () => {
-      // getInfoItem();
-    });
   }, []);
-
-  const getInfoItem = async () => {
-    const userInfoId = await IALocalStorage.getUserInfo();
-    AxiosFetcher({
-      method: 'GET',
-      data: undefined,
-      url: `/api/person/${userInfoId?.id}/itemsuser`,
-      hasToken: true,
-    })
-      .then(async (val) => {
-        userStore.setItemsBag(val || []);
-      })
-      .catch(() => { });
-  };
 
   const getLivestreamingChannel = async () => {
     firebase
@@ -75,8 +59,8 @@ const Livestream = (props) => {
       .ref(Constant.SCHEMA.LIVESTREAM)
       .on('value', (snapshot) => {
         const data = snapshot.val() || [];
-        setLivestreamRooms(Object.values(data));
-        setLivestreamRoomsT(Object.values(data));
+        setLivestreamRooms(Object.values(data)?.filter(i => i.status == "LIVESTREAMING"));
+        setLivestreamRoomsT(Object.values(data)?.filter(i => i.status == "LIVESTREAMING"));
       });
   };
 
@@ -146,7 +130,7 @@ const Livestream = (props) => {
   };
 
   const renderItem = (item, index) => {
-    let channelName = item?.channelName?.split('_')[0];
+    let channelName = item.channelName?.toString()?.split('_')[0];
     let tags = '';
     (item?.tags || []).forEach((element) => {
       tags = tags + element + '\n';
@@ -186,12 +170,8 @@ const Livestream = (props) => {
         <View style={styles.count}>
           <Ionicons name="ios-eye" size={20} color={'white'} />
           <TextNormal
-            text={` ${item?.status === 'END' ? 0 : item?.participiants?.length || 0
-              }`}
-            style={[
-              containerStyle.textDefault,
-              { color: colors.whiteBackground },
-            ]}
+            text={` ${item?.status === 'END' ? 0 : item?.participiants?.length || 0}`}
+            style={[containerStyle.textDefault, { color: colors.whiteBackground }]}
           />
         </View>
         <View style={styles.rate}>
@@ -252,18 +232,11 @@ const Livestream = (props) => {
   };
 
   return (
-    <View style={[{ backgroundColor: colors.pinkBackground }]}>
+    <View style={[{ backgroundColor: colors.pinkBackground, flex: 1 }]}>
       <StatusBar barStyle={colorsApp.statusBar} />
       <SafeAreaView>
         {renderHeader()}
-        <KeyboardAwareScrollView
-          nestedScrollEnabled
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            marginTop: 10,
-            height: '100%',
-            paddingBottom: 150,
-          }}>
+        <View>
           {
             <TextInputFlat
               onChangeText={(text) => {
@@ -298,18 +271,20 @@ const Livestream = (props) => {
               placeholder={t('chat.motto')}
             />
           }
-          {livestream?.filter((item) => item?.status != 'END')?.length === 0 ? (
-            <Empty />
-          ) : (
-              <FlatList
-                numColumns={2}
-                showsVerticalScrollIndicator={false}
-                data={livestream?.filter((item) => item?.status != 'END')}
-                renderItem={({ item, index }) => renderItem(item, index)}
-                keyExtractor={(item, index) => index + ''}
-              />
-            )}
-        </KeyboardAwareScrollView>
+        </View>
+        {livestream?.filter((item) => item?.status != 'END')?.length === 0 ? (
+          <Empty />
+        ) : (
+            <FlatList
+              numColumns={2}
+              contentContainerStyle={{paddingBottom: width * 0.35}}
+              showsVerticalScrollIndicator={false}
+              data={livestream?.filter((item) => item?.status !== 'END')}
+              renderItem={({ item, index }) => renderItem(item, index)}
+              keyExtractor={(item, index) => index.toString()}
+              ListFooterComponent={() => <View style={{ height: 16 }} />}
+            />
+          )}
         <DialogInput
           isDialogVisible={dialog}
           title={'This room is private.'}
