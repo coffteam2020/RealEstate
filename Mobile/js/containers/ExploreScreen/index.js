@@ -290,11 +290,11 @@ const ExploreScreen = (props) => {
     getSearchTrend();
     getProfile();
     getPropertyList();
-    props?.navigation.addListener('willFocus', () => {
-      getSearchTrend();
-      getProfile();
-      getPropertyList();
-    });
+    // props?.navigation.addListener('willFocus', () => {
+    //   getSearchTrend();
+    //   getProfile();
+    //   getPropertyList();
+    // });
   }, []);
   const getPropertyList = async () => {
     AxiosFetcher({

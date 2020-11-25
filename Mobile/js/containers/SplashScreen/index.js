@@ -34,9 +34,10 @@ const SplashScreen = (props) => {
   };
   useEffect(() => {
     loadLocalLanguage();
-    props?.navigation.addListener('willFocus', () => {
-      checkLocation();
-    });
+    // props?.navigation.addListener('willFocus', () => {
+    //   checkLocation();
+    // });
+    checkLocation();
   }, []);
 
   const checkLocation = async () => {

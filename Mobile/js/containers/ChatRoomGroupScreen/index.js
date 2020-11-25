@@ -142,9 +142,10 @@ const ChatRoomGroupScreen = (props) => {
 
   useEffect(() => {
     standardlizeParticipiants();
-    props?.navigation.addListener('willFocus', () => {
-      getInfoItem();
-    });
+    // props?.navigation.addListener('willFocus', () => {
+    //   getInfoItem();
+    // });
+    getInfoItem();
   }, []);
 
   const getInfoItem = async () => { };

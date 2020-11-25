@@ -164,10 +164,10 @@ const PropertyScreen = (props) => {
 
 
   useEffect(() => {
-    props?.navigation.addListener('willFocus', () => {
-      // getProfile();
-      initPropertFromParam();
-    });
+    // props?.navigation.addListener('willFocus', () => {
+    //   // getProfile();
+    //   initPropertFromParam();
+    // });
     // getProfile();
     initPropertFromParam();
   }, []);
