@@ -70,10 +70,6 @@ const NewPostScreen = (props) => {
   };
 
   useEffect(() => {
-    // const unsubscribe = props?.navigation.addListener('willFocus', async () => {
-    //   await getProfile();
-    // });
-    // return unsubscribe
     getProfile();
   }, []);
 

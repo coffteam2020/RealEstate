@@ -32,10 +32,11 @@ const GroupMateScreen = (props) => {
   const [liv, setLiv] = useState([]);
   const [fr, setFr] = useState([]);
   useEffect(() => {
-    props.navigation.addListener('willFocus', () => {
-      setFr([]);
-      getUsers();
-    })
+    // props.navigation.addListener('willFocus', () => {
+    //   setFr([]);
+    //   getUsers();
+    // })
+    setFr([]);
     getUsers();
   }, []);
 

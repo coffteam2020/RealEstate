@@ -84,7 +84,7 @@ const InformationRoom = (props) => {
         channelName: removeVietnameseTones(roomName),
         category: removeVietnameseTones(category),
         note: removeVietnameseTones(note),
-        password: password,
+        // password: password,
         tags: tagSplited,
       },
     });
@@ -177,6 +177,7 @@ const InformationRoom = (props) => {
               text={t('common.confirm')}
               onPress={() => onCreateLivestream()}
               style={{marginTop: 20}}
+              disable={roomName == '' && category == '' && note == ''}
             />
           </View>
         </KeyboardAwareScrollView>

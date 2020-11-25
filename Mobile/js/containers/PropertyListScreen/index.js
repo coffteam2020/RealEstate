@@ -158,9 +158,9 @@ const PropertyListScreen = (props) => {
   const type = props.navigation.state.params.type || "PROPERTY";
 
   useEffect(() => {
-    props?.navigation.addListener('willFocus', () => {
-      initMainColor();
-    });
+    // props?.navigation.addListener('willFocus', () => {
+    //   initMainColor();
+    // });
     initMainColor();
     getPropertyList();
   }, []);

@@ -27,11 +27,11 @@ import Constant from '../../shared/utils/constant/Constant';
 import HeaderFull from '../../shared/components/Header/HeaderFull';
 import { colors } from '../../shared/utils/colors/colors';
 import FastImage from 'react-native-fast-image';
-import { ScreenWidth, ScreenHeight } from '../../shared/utils/dimension/Divices';
+import { ScreenWidth } from '../../shared/utils/dimension/Divices';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import moment from 'moment'
-import { SPACINGS, FONTSIZES } from '../../themes';
+import { SPACINGS } from '../../themes';
 import { FirebaseService } from '../../api/FirebaseService';
 import { TimeHelper, ENUM_TIME_FORMAT } from '../../shared/utils/helper/timeHelper';
 
@@ -46,11 +46,6 @@ const SocialScreen = (props) => {
   const [isFetching, setIsFetching] = useState(false);
 
   useEffect(() => {
-    // const unsubscribe = props?.navigation.addListener('willFocus', async () => {
-    //   await getProfile();
-    // });
-    // return unsubscribe;
-
     getMessages();
     getAllPost();
     getProfile();

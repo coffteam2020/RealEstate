@@ -442,11 +442,11 @@ class VideoCallScreen extends Component {
   renderHeader() {
     let channelName = this.state.channelName?.toString()?.split('_')[0];
     return (
-      <View style={{ zIndex: 100 }}>
+      <View style={{ zIndex: 100, width: '100%' }}>
         <View style={styles.header}>
           <FastImage style={styles.avatar} resizeMode="cover" resizeMethod="resize" source={{ uri: this.state.owner?.avatar || Constant.MOCKING_DATA.PLACE_HOLDER }} />
           <View style={{ marginLeft: 10 }}>
-            <TextNormal numberOfLines={3} ellipsizeMode="tail" text={channelName?.trim() || ''} style={[containerStyle.textDefault, { color: colors.whiteBackground, width: '70%' }]} />
+            <TextNormal numberOfLines={3} ellipsizeMode="tail" text={channelName?.trim() || ''} style={[containerStyle.textDefault, { color: colors.whiteBackground, width: '100%' }]} />
           </View>
         </View>
       </View>
