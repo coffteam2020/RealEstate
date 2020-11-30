@@ -360,7 +360,6 @@ class VideoCallScreen extends Component {
       }
       RtcEngine.enableAudio();                                        //Enable the audio
     } catch (err) {
-      // console.log('error create Room:===', LogManager.parseJsonObjectToJsonString(err));
     }
   }
   /**
@@ -444,7 +443,7 @@ class VideoCallScreen extends Component {
     return (
       <View style={{ zIndex: 100, width: '100%' }}>
         <View style={styles.header}>
-          <FastImage style={styles.avatar} resizeMode="cover" resizeMethod="resize" source={{ uri: this.state.owner?.avatar || Constant.MOCKING_DATA.PLACE_HOLDER }} />
+          <FastImage style={styles.avatar} resizeMode="cover" resizeMethod="resize" source={{ uri: this.state?.owner?.avatar || Constant.MOCKING_DATA.PLACE_HOLDER }} />
           <View style={{ marginLeft: 10 }}>
             <TextNormal numberOfLines={3} ellipsizeMode="tail" text={channelName?.trim() || ''} style={[containerStyle.textDefault, { color: colors.whiteBackground, width: '100%' }]} />
           </View>
@@ -470,7 +469,7 @@ class VideoCallScreen extends Component {
             this.onSendMessage('Hey everyone, Im leave now. Good bye!');
             setTimeout(() => {
               this.endCall();
-            }, 2000);
+            }, 4000);
           }
         },
         {

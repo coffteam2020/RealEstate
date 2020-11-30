@@ -192,7 +192,7 @@ export default class VideoCall extends Component {
       //THIS IS FIRING
     },
     connected: (event) => {
-      console.log(JSON.stringify(event));
+      // console.log(JSON.stringify(event));
       //THIS IS FIRING
       this.setState({
         connected: [...this.state.connected, event]
@@ -202,6 +202,7 @@ export default class VideoCall extends Component {
       //THIS IS NOT FIRING
     },
     error: (error) => {
+      // console.log('error video call',error)
     },
   };
 

@@ -24,7 +24,7 @@ const languageDetector = {
 				? NativeModules.SettingsManager.settings.AppleLocale ||
 				NativeModules.SettingsManager.settings.AppleLanguages[0] // iOS 13
 				: NativeModules.I18nManager.localeIdentifier;
-		alert(deviceLanguage);
+		// alert(deviceLanguage);
 		await AsyncStorage.setItem('lang', deviceLanguage?.split('_')?.[0]?.toLowerCase());
 		// Case 2: return the default language
 		return cb(deviceLanguage?.split('_')?.[0]?.toLowerCase());

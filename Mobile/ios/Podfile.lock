@@ -413,11 +413,11 @@ PODS:
   - GTMAppAuth (1.1.0):
     - AppAuth/Core (~> 1.4)
     - GTMSessionFetcher (~> 1.4)
-  - GTMSessionFetcher (1.4.0):
-    - GTMSessionFetcher/Full (= 1.4.0)
-  - GTMSessionFetcher/Core (1.4.0)
-  - GTMSessionFetcher/Full (1.4.0):
-    - GTMSessionFetcher/Core (= 1.4.0)
+  - GTMSessionFetcher (1.5.0):
+    - GTMSessionFetcher/Full (= 1.5.0)
+  - GTMSessionFetcher/Core (1.5.0)
+  - GTMSessionFetcher/Full (1.5.0):
+    - GTMSessionFetcher/Core (= 1.5.0)
   - leveldb-library (1.22)
   - libwebp (1.1.0):
     - libwebp/demux (= 1.1.0)
@@ -768,7 +768,7 @@ PODS:
     - React
   - RNDeviceInfo (5.6.5):
     - React
-  - RNFastImage (8.3.3):
+  - RNFastImage (8.3.4):
     - React-Core
     - SDWebImage (~> 5.8)
     - SDWebImageWebPCoder (~> 0.6.1)
@@ -838,9 +838,9 @@ PODS:
     - React
   - RNVoipPushNotification (2.1.0):
     - React-Core
-  - SDWebImage (5.9.3):
-    - SDWebImage/Core (= 5.9.3)
-  - SDWebImage/Core (5.9.3)
+  - SDWebImage (5.9.4):
+    - SDWebImage/Core (= 5.9.4)
+  - SDWebImage/Core (5.9.4)
   - SDWebImageWebPCoder (0.6.1):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.7)
@@ -1276,7 +1276,7 @@ SPEC CHECKSUMS:
   "gRPC-C++": 9dfe7b44821e7b3e44aacad2af29d2c21f7cde83
   gRPC-Core: c9aef9a261a1247e881b18059b84d597293c9947
   GTMAppAuth: 197a8dabfea5d665224aa00d17f164fc2248dab9
-  GTMSessionFetcher: 6f5c8abbab8a9bce4bb3f057e317728ec6182b10
+  GTMSessionFetcher: b3503b20a988c4e20cc189aa798fd18220133f52
   leveldb-library: 55d93ee664b4007aac644a782d11da33fba316f7
   libwebp: 946cb3063cea9236285f7e9a8505d806d30e07f3
   lottie-ios: 3a3758ef5a008e762faec9c9d50a39842f26d124
@@ -1347,7 +1347,7 @@ SPEC CHECKSUMS:
   RNCPushNotificationIOS: 6c5b8b5d2b36ee1f38af031b3d735a5b675e1b03
   RNDateTimePicker: dc9dab744823a2c734dbc7362cdf57a3adba3c43
   RNDeviceInfo: e841619c3dac5495a095c5455473579ff04908d4
-  RNFastImage: ff7e055d085abe465b358ce5aa51e3c6d64b1efd
+  RNFastImage: d4870d58f5936111c56218dbd7fcfc18e65b58ff
   RNFBApp: 7b539bb25520fa73d6a240f5c6ea569e27683645
   RNFBAuth: c292603069a09065a1b4d3336148beff83e4c897
   RNFBDatabase: 2737d8e87c20246cd91e95743c514e08c791ebe1
@@ -1371,7 +1371,7 @@ SPEC CHECKSUMS:
   RNSVG: 8ba35cbeb385a52fd960fd28db9d7d18b4c2974f
   RNVectorIcons: 368d6d8b8301224e5ffb6254191f4f8876c2be0d
   RNVoipPushNotification: be6f70cac9d1fd73e020063093f635f64d97c9c6
-  SDWebImage: a31ee8e90a97303529e03fb0c333eae0eacb88e9
+  SDWebImage: b69257f4ab14e9b6a2ef53e910fdf914d8f757c1
   SDWebImageWebPCoder: d0dac55073088d24b2ac1b191a71a8f8d0adac21
   toolbar-android: 404f4450b203597e7b417f714ff417bed562a1be
   Yoga: 7740b94929bbacbddda59bf115b5317e9a161598

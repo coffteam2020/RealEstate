@@ -325,6 +325,7 @@
     "social": "Social",
     "hotel": "Hotel",
     "restaurant": "Restaurant",
+    "service":"Service",
     "cafe": "Cafe",
     "video_call": "Meeting",
     "join": "Scanned succesfully, join room now!",
@@ -332,7 +333,7 @@
     "qr": "QRCode",
     "snack": "Snack",
     "livestream": "Livestream",
-    "coffee":"Coffee",
+    "coffee":"Coffees",
     "coffee_detail":"Coffee Store Detail",
     "restaurant_detail":"Restaurant Detail",
     "upload_image":"Upload image",
@@ -346,7 +347,8 @@
     "price":"Price",
     "description":"Description",
     "add":"Add",
-    "cancel":"Cancel"
+    "cancel":"Cancel",
+    "new_service":"Services"
   }, 
   "location":{
     "near": "Find near you",
@@ -372,7 +374,8 @@
     "looking": "Looking for",
     "searchLocation": "Searching location",
     "chat": "Chat",
-    "err": "Opps, we tried to get your followers but failed. Try again later!"
+    "err": "Opps, we tried to get your followers but failed. Try again later!",
+    "search":"Search..."
   },
   "account": {
     "title": "Account",

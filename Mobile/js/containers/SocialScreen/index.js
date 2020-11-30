@@ -9,6 +9,7 @@ import {
   SafeAreaView,
   View,
   Alert,
+  Image
 } from 'react-native';
 import { withTheme } from 'react-native-paper';
 import { NavigationService } from '../../navigation';
@@ -41,13 +42,18 @@ const SocialScreen = (props) => {
   const { userStore } = useStores();
   const [userInfo, setUserInfo] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [avt, setAvt] = useState(`${userStore.userInfo.avatar}`);
+  const [avt, setAvt] = useState(`${userStore?.userInfo?.avatar}`);
   const [allPost, setAllPost] = useState([]);
   const [isFetching, setIsFetching] = useState(false);
+  const [lastItem, setLastItem] = useState(null);
+  const [empty, setEmpty] = useState(null);
+
 
   useEffect(() => {
-    getMessages();
-    getAllPost();
+    receiverData();
+    props?.navigation.addListener('willFocus', () => {
+      receiverData();
+    });
     getProfile();
   }, []);
 
@@ -59,6 +65,7 @@ const SocialScreen = (props) => {
         'timeInMillosecond',
         false,
         false,
+        20
       );
       let arr = allPost.sort(function (x, y) {
         return y.timeInMillosecond - x.timeInMillosecond;
@@ -76,25 +83,51 @@ const SocialScreen = (props) => {
     }
   };
 
-  const getMessages = async () => {
-    let user = await IALocalStorage.getDetailUserInfo();
+  const receiverData = async () => {
     setIsLoading(true);
     await firebase
       .database()
       .ref(isBlog ? Constant.SCHEMA.BLOG : Constant.SCHEMA.SOCIAL)
-      .on('value', (snapshot) => {
+      .orderByChild('timeInMillosecond')
+      .limitToLast(10)
+      .once('value', (snapshot) => {
         const data = snapshot.val() ? Object.values(snapshot.val()) : [];
         let arr = data.sort(function (x, y) {
           return y.timeInMillosecond - x.timeInMillosecond;
         });
         if (!isBlog) {
           arr = arr.filter(item => item?.disable !== true);
-        }
-        setAllPost(arr)
-        setTimeout(() => {
-          setIsLoading(false);
-        }, 500);
+        };
+        setIsLoading(false);
+        setLastItem(arr[arr.length - 1]?.timeInMillosecond);
+        setEmpty(data.length < 10);
+        setAllPost(arr);
       });
+  };
+
+  const handleLoadmore = async () => {
+    if (!isLoading && allPost.length > 0 && !empty) {
+      setIsLoading(true);
+      await firebase
+        .database()
+        .ref(isBlog ? Constant.SCHEMA.BLOG : Constant.SCHEMA.SOCIAL)
+        .orderByChild('timeInMillosecond')
+        .limitToLast(10)
+        .endAt(lastItem)
+        .once('value', (snapshot) => {
+          const data = snapshot.val() ? Object.values(snapshot.val()) : [];
+          let arr = data.sort(function (x, y) {
+            return y.timeInMillosecond - x.timeInMillosecond;
+          });
+          if (!isBlog) {
+            arr = arr.filter((item, index) => item?.disable !== true && index != 0);
+          };
+          setIsLoading(false);
+          setLastItem(arr[arr.length - 1]?.timeInMillosecond);
+          setEmpty(data.length < 10);
+          setAllPost(allPost.concat(arr));
+        });
+    }
   };
 
   const getProfile = async () => {
@@ -154,27 +187,6 @@ const SocialScreen = (props) => {
     });
   };
 
-  const renderPostButton = () => {
-    return (
-      <TouchableOpacity
-        style={styles.postInput}
-        onPress={() => {
-          NavigationService.navigate(ScreenNames.NewPostScreen, { isBlog: isBlog });
-        }}>
-        <FastImage
-          source={{
-            uri:
-              avt ||
-              Constant.MOCKING_DATA.NO_IMG_PLACE_HOLDER,
-          }}
-          resizeMode="cover"
-          style={styles.avatar}
-        />
-        <TextNormal text={t('social.placeholder')}></TextNormal>
-      </TouchableOpacity>
-    );
-  };
-
   const noDataMessage = () => {
     return (
       <View style={{ display: "flex", justifyContent: "center", alignContent: "center" }}>
@@ -205,28 +217,28 @@ const SocialScreen = (props) => {
 
   const renderAllPost = () => {
     return (
-      <ScrollView>
-        <FlatList
-          data={allPost}
-          scrollEnabled
-          style={{
-            width: ScreenWidth,
-            height: '100%',
-            marginTop: 10,
-          }}
-          onRefresh={() => { setIsFetching(true); getAllPost() }}
-          ListEmptyComponent={() => noDataMessage()}
-          refreshing={isFetching}
-          keyExtractor={(item) => item._id}
-          renderItem={({ item, index }) => {
-            if (0 === index) {
-              return renderFirstPost(item);
-            } else {
-              return renderPost(item);
-            }
-          }}
-        />
-      </ScrollView>
+      <FlatList
+        data={allPost}
+        scrollEnabled
+        contentContainerStyle={{
+          width: ScreenWidth,
+          marginTop: 10,
+          paddingBottom: 100
+        }}
+        onRefresh={() => { setIsFetching(true); getAllPost() }}
+        ListEmptyComponent={() => noDataMessage()}
+        refreshing={isFetching}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item, index }) => {
+          if (0 === index) {
+            return renderFirstPost(item);
+          } else {
+            return renderPost(item);
+          }
+        }}
+        onEndReached={handleLoadmore}
+        onEndReachedThreshold={0.1}
+      />
     );
   };
   const del = (item) => {
@@ -616,9 +628,7 @@ const SocialScreen = (props) => {
       <StatusBar barStyle={colorsApp.statusBar} />
       <SafeAreaView>
         <HeaderFull title={t(isBlog ? 'explorer.admin' : 'social.title')} hasButton={true} />
-        <ScrollView nestedScrollEnabled contentContainerStyle={styles.content}>
           {renderAllPost()}
-        </ScrollView>
       </SafeAreaView>
       {isLoading && <Loading />}
     </View>

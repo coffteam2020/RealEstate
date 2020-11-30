@@ -346,7 +346,8 @@
     "price":"Giá",
     "description":"Mô tả",
     "add":"Thêm",
-    "cancel":"Huỷ"
+    "cancel":"Huỷ",
+    "new_service":"Dịch vụ"
   },
   "location": {
     "near": "Gần bạn",
@@ -371,7 +372,8 @@
     "looking": "Tìm kiếm cho",
     "searchLocation": "Tìm kiếm ví trí",
     "chat": "Trò chuyện",
-    "err": "Không thể lấy danh sách bạn bè"
+    "err": "Không thể lấy danh sách bạn bè",
+    "search":"Tìm kiếm..."
   },
   "account": {
     "title": "Tài khoản",
@@ -420,7 +422,7 @@
     "capacity": "Khả năng",
     "areaUnit": "Diện tích",
     "size": "Kích cỡ",
-    "rentalPrice": "Cho thuê",
+    "rentalPrice": "Giá",
     "deposit": "Đặt cọc",
     "electricityCost": "Phí điện",
     "waterCost": "Phí nước",

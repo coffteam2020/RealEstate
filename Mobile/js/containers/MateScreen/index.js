@@ -7,7 +7,7 @@ import TextNormal from '../../shared/components/Text/TextNormal';
 import { containerStyle } from '../../themes/styles';
 import { useTranslation } from 'react-i18next';
 import { useStores } from '../../store/useStore';
-import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
+import { ScrollView, TouchableOpacity, TextInput } from 'react-native-gesture-handler';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FastImage from 'react-native-fast-image';
 import { ScreenWidth, ScreenHeight } from '../../shared/utils/dimension/Divices';
@@ -28,13 +28,18 @@ const MateScreen = (props) => {
   const { t } = useTranslation();
   const { userStore } = useStores();
   const [liv, setLiv] = useState([]);
+  const [data, setData] = useState(userStore?.follows || []);
+  const [searchtext, setSearchText] = useState('');
   useEffect(() => {
-    // props.navigation.addListener('willFocus', () => {
-    //   getUsers();
-    // })
     getUsers();
     getLiv();
   }, []);
+
+  const onChangeText = (text) => {
+    setSearchText(text);
+    setData(userStore?.follows.filter(i => i.name.includes(text)));
+  };
+
   const getLiv = async () => {
     firebase.database().ref(Constant.SCHEMA.LIVESTREAM).on('value', async snapshot => {
       if (snapshot.val() != undefined) {
@@ -69,19 +74,18 @@ const MateScreen = (props) => {
         ToastHelper.showError(t('account.getInfoErr'));
       });
   };
-  const filterFollowing = async () => { };
   const renderMates = () => {
-    if (userStore?.follows?.slice().length === 0) {
+    if (data?.length === 0) {
       return <Empty />;
     }
     return (
       <FlatList
-        data={userStore?.follows?.slice()}
+        data={data}
         scrollEnabled
-        style={{
+        contentContainerStyle={{
           width: ScreenWidth,
-          height: ScreenHeight,
           marginTop: 10,
+          paddingBottom: 50
         }}
         keyExtractor={(item) => item?.id}
         renderItem={({ item }) => {
@@ -189,9 +193,15 @@ const MateScreen = (props) => {
           }}
           rightIco={<Ionicons name="add" size={20} color={colors.blackInput} />}
         />
-        <ScrollView nestedScrollEnabled contentContainerStyle={styles.content}>
-          {renderMates()}
-        </ScrollView>
+        <TextInput
+          value={searchtext}
+          onChangeText={onChangeText}
+          style={styles.inputSearchView}
+          placeholder={t('mate.search')}
+        >
+
+        </TextInput>
+        {renderMates()}
       </SafeAreaView>
     </View>
   ));

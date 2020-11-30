@@ -26,11 +26,12 @@ export const FirebaseService = {
 			resolve(isUnBound && isUnBound ? result : (isGetKey && isGetKey ? Object.keys(result.val()) : Object.values(result.val())));
 		});
 	},
-	async queryAllItemBySchemaWithOrderedByChild(schema, orderByChild, isUnBound, isGetKey) {
+	async queryAllItemBySchemaWithOrderedByChild(schema, orderByChild, isUnBound, isGetKey, limitToLast) {
 		return new Promise(async (resolve, reject) => {
 			let result = await firebase.database().ref(schema)
 				.orderByChild(orderByChild)
-				.once('value');
+				.once('value')
+				.limitToLast(limitToLast)
 			resolve(isUnBound && isUnBound ? result : (isGetKey && isGetKey ? Object.keys(result.val()) : Object.values(result.val())));
 		});
 	},
