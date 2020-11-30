@@ -36,4 +36,6 @@ export const images = {
   restaurent: require('./imgs/location.png'),
   snack: require('./imgs/location.png'),
   app: require('./imgs/ic_launcher.png'),
+  new_service: require('./imgs/home/button_explorer/new_services.png'),
+  coffee: require('./imgs/home/button_explorer/coffee.png')
 }

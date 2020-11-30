@@ -101,12 +101,12 @@ const ExploreScreen = (props) => {
         }),
     },
     {
-      title: t('explorer.restaurant'),
-      icon: images.home3s,
+      title: t('explorer.new_service'),
+      icon: images.new_service,
       onPress: () =>
         NavigationService.navigate(ScreenNames.PropertyListScreen, {
-          key: t('explorer.restaurant'),
-          type: "RESTAURANT"
+          key: t('explorer.new_service'),
+          type: "SERVICES"
         }),
     },
     {
@@ -130,7 +130,7 @@ const ExploreScreen = (props) => {
   const BTNS4 = [
     {
       title: t('explorer.coffee'),
-      icon: images.cafe,
+      icon: images.coffee,
       onPress: () =>
         NavigationService.navigate(ScreenNames.CoffeeScreen, {
           key: t('explorer.coffee'),
@@ -139,13 +139,13 @@ const ExploreScreen = (props) => {
     },
     {
       title: t('explorer.restaurant'),
-      icon: images.cafe,
+      icon: images.home3s,
       onPress: () =>
         NavigationService.navigate(ScreenNames.RestaurantScreen, {
           key: t('explorer.restaurant'),
           type: "RESTAURANT"
         }),
-    },{},{}
+    }, {}, {}
   ];
   const BTNS2 = [
     {
@@ -290,11 +290,6 @@ const ExploreScreen = (props) => {
     getSearchTrend();
     getProfile();
     getPropertyList();
-    // props?.navigation.addListener('willFocus', () => {
-    //   getSearchTrend();
-    //   getProfile();
-    //   getPropertyList();
-    // });
   }, []);
   const getPropertyList = async () => {
     AxiosFetcher({
@@ -305,36 +300,23 @@ const ExploreScreen = (props) => {
       .then((val) => {
         if (val?.content !== '') {
           let datas = val?.content || [];
-          // console.log('========' + JSON.stringify(datas));
           var arr = [];
-
           for (let i = 0; i < datas?.length; i++) {
             Axios.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + encodeURIComponent(datas[i]?.address) + '&key=AIzaSyB5vqnxvHdaTdgKY1E8AsaBxs_FS9HEiCM').then(val => {
               let a = val?.data;
               if (a?.results?.length > 0) {
-                // console.log(a?.results?.[0]?.geometry?.location);
-                // console.log(a.results?.[0]?.geometry?.location);
-                // if (a.results?.[0]?.geometry?.location) {
-
                 arr = [...arr, {
                   latitude: a.results?.[0]?.geometry?.location?.lat,
                   longitude: a?.results?.[0]?.geometry?.location?.lng,
                 }]
-                // console.log("============" + arr.length);
                 setMarkers(arr?.slice());
-                // }
               }
             })
           }
-          // console.log("============" + arr.length);
-          
-
         } else {
-          // ToastHelper.showError(t('account.getInfoErr'));
         }
       })
       .catch((error) => {
-        // ToastHelper.showError(t('account.getInfoErr'));
       });
   };
   const getUsers = async () => {
@@ -417,7 +399,6 @@ const ExploreScreen = (props) => {
     })
       .then((location) => {
         setLo(location);
-        // console.log("=======" + JSON.stringify(location));
         setLo({
           latitude: location?.longitude,
           longitude: location?.longitude
@@ -430,7 +411,6 @@ const ExploreScreen = (props) => {
             '&longtitude=' +
             location.longitude,
         }).then((val) => {
-          // console.log(JSON.stringify(val));
         });
       })
       .catch((error) => {
@@ -464,15 +444,7 @@ const ExploreScreen = (props) => {
   const renderBannerClient = () => {
     return (
       <View style={{ height: ScreenHeight * 0.12, width: '92%' }}>
-        <ScrollView
-          // autoplay
-          // autoplayTimeout={5}
-          // showsPagination={false}
-          // scrollEnabled
-          // loop
-          // paginationStyle={containerStyle.paginationStyle}
-          horizontal
-        >
+        <ScrollView horizontal >
           {HOME_BANNERS_CLIENTS.map((item, index) => {
             return (
               <View style={{ margin: 5, }}>
@@ -483,7 +455,6 @@ const ExploreScreen = (props) => {
                   resizeMode="cover"
                 >
                   <View style={[{ backgroundColor: 'rgba(0,0,0,0.2)', borderRadius: 6, padding: 5 }, containerStyle.shadow]}>
-                    {/* <TextNormal text={item?.text} style={{ color: 'white', zIndex: 100, marginTop: 20, alignSelf: 'center' }} /> */}
                   </View>
                 </FastImage>
               </View>
@@ -554,10 +525,7 @@ const ExploreScreen = (props) => {
           })}
         </View>
         <View
-          style={[
-            styles.banner,
-            // { borderBottomLeftRadius: 20, borderBottomRightRadius: 20 },
-          ]}>
+          style={styles.banner}>
           {BTNS3?.map((item) => {
             return (
               <TouchableOpacity
@@ -578,11 +546,7 @@ const ExploreScreen = (props) => {
             );
           })}
         </View>
-        <View
-          style={[
-            styles.banner,
-            { borderBottomLeftRadius: 20, borderBottomRightRadius: 20 },
-          ]}>
+        <View style={[styles.banner, { borderBottomLeftRadius: 20, borderBottomRightRadius: 20 }]}>
           {BTNS4?.map((item) => {
             return (
               <TouchableOpacity
@@ -606,7 +570,6 @@ const ExploreScreen = (props) => {
       </View>
     );
   };
-  // console.log("======" + marker.length);
   return useObserver(() => (
     <View style={[containerStyle.defaultBackground]}>
       <StatusBar barStyle={colorsApp.statusBar} />
@@ -615,22 +578,9 @@ const ExploreScreen = (props) => {
         {renderSearch()}
         {renderBtns()}
         {renderBannerClient()}
-        {/* <FastImage
-          source={images.map}
-          style={[styles.slide1, { height: ScreenHeight * 0.3, width: '90%', margin: 20, borderRadius: 10 }]}
-          imageStyle={{ borderRadius: 10 }}
-          resizeMode="cover"
-        ></FastImage> */}
         <View style={{ height: ScreenHeight / 4, width: ScreenWidth, padding: 20, borderRadius: 10, }}>
-          {/* <View style={{
-            ...StyleSheet.absoluteFillObject,
-            height: 400,
-            width: 400,
-            justifyContent: 'flex-end',
-            alignItems: 'center',
-          }}> */}
+
           {lo?.longitude && marker?.length > 0 && <MapView
-            // showsUserLocation={true}
             animateToRegion={true}
             provider={PROVIDER_GOOGLE} // remove if not using Google Maps
             style={{ height: ScreenHeight / 4, width: ScreenWidth - 40, borderRadius: 20, }}
@@ -640,30 +590,10 @@ const ExploreScreen = (props) => {
               latitudeDelta: 0.4,
               longitudeDelta: 0.5,
             }}
-            // onRegionChange={(region ) => {
-            //   setLo(region)
-            // }}
-            // initialRegion={{
-            //   latitude: lo?.latitude,
-            //   longitude: lo?.longitude,
-            // }}
-            // coordinate={{
-            //   latitude: lo?.latitude,
-            //   longitude: lo?.longitude
-            // }}
             scrollEnabled={true}
             zoomEnabled={true}
           >
-            {/* <Marker
-                coordinate={{
-                  latitude: lo?.latitude,
-                  longitude: lo?.longitude
-                }}
-
-                title={t('location.me')}
-                draggable /> */}
             {marker?.slice()?.map(item => {
-              // console.log("23232" + item);
               return (
                 <Marker
                   coordinate={{
@@ -687,10 +617,6 @@ const ExploreScreen = (props) => {
           </MapView>}
         </View>
         <View style={{ width: '100%', marginLeft: 35, marginTop: 20 }}>
-          {/* <TextNormal
-            text={t('explorer.trend')}
-            style={containerStyle.textHeaderSmall}
-          /> */}
           {/* {renderSearchTrend()} */}
         </View>
       </ScrollView>

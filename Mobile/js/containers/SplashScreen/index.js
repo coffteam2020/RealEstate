@@ -55,7 +55,6 @@ const SplashScreen = (props) => {
         }
       });
     } catch (error) {
-      console.log('location set error:', error);
       navigate();
     }
   };

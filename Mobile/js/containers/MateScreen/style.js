@@ -46,6 +46,15 @@ export const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: colors.gray_bg,
   },
+  inputSearchView:{
+    width: '86%',
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#e5e5e5',
+    alignSelf: 'center',
+    paddingLeft: 20,
+    marginBottom: 20
+  }
 });
 
 export default {

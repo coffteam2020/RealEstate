@@ -47,6 +47,7 @@
 		7EE7D4A125486EAC0096A11B /* libRNVoipPushNotification.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EE7D4A025486EAC0096A11B /* libRNVoipPushNotification.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		8489B41D255ECA9F00193AC4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8489B41C255ECA9F00193AC4 /* GoogleService-Info.plist */; };
+		84C83E2D257145B8000FEAC3 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84C83E2C257145B8000FEAC3 /* File.swift */; };
 		8A641181C9F3410D885D1CAB /* Nunito-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8F8820C2A4374CDB8BF05901 /* Nunito-Italic.ttf */; };
 		8D30DAB346CF4F5EA6A64ED4 /* PlayfairDisplay-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F3A07AEE7FBF48B18559CFDC /* PlayfairDisplay-SemiBoldItalic.ttf */; };
 		8D32F963E222467AB19E57A6 /* Proxima Nova Alt Condensed Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = A6FBCA745AB9422084CE9F98 /* Proxima Nova Alt Condensed Light.otf */; };
@@ -145,6 +146,7 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Mobile/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		825C83331951C13D6F0ACE85 /* Pods-Mobile-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mobile-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-Mobile-tvOS/Pods-Mobile-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		8489B41C255ECA9F00193AC4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		84C83E2C257145B8000FEAC3 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		85A2058A2825E31FA88D8FB3 /* libPods-Mobile-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Mobile-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B17CB7A259C4D51BBCDB3BA /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		8F8820C2A4374CDB8BF05901 /* Nunito-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Nunito-Italic.ttf"; path = "../assets/fonts/Nunito-Italic.ttf"; sourceTree = "<group>"; };
@@ -350,6 +352,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				84C83E2C257145B8000FEAC3 /* File.swift */,
 				8489B41C255ECA9F00193AC4 /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* Mobile */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -964,6 +967,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7ECE90F82557895A00ABC96F /* bridge.swift in Sources */,
+				84C83E2D257145B8000FEAC3 /* File.swift in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
@@ -1061,7 +1065,7 @@
 				INFOPLIST_FILE = Mobile/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.10;
+				MARKETING_VERSION = 1.11;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1071,6 +1075,7 @@
 				PRODUCT_NAME = "Dapp Premium";
 				SWIFT_OBJC_BRIDGING_HEADER = "Mobile-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_REFLECTION_METADATA_LEVEL = none;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -1089,7 +1094,7 @@
 				INFOPLIST_FILE = Mobile/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.10;
+				MARKETING_VERSION = 1.11;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1098,6 +1103,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.dtechno.dapp.premium;
 				PRODUCT_NAME = "Dapp Premium";
 				SWIFT_OBJC_BRIDGING_HEADER = "Mobile-Bridging-Header.h";
+				SWIFT_REFLECTION_METADATA_LEVEL = none;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

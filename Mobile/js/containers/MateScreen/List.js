@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
-import {StatusBar, View, SafeAreaView, FlatList, Alert} from 'react-native';
+import {StatusBar, View, SafeAreaView, FlatList, Alert, TextInput} from 'react-native';
 import {styles} from './style';
 import {withTheme} from 'react-native-paper';
 import TextNormal from '../../shared/components/Text/TextNormal';
@@ -28,12 +28,16 @@ const List = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [followed, setIsFollowed] = useState(false);
   const {userStore} = useStores();
+  const [data, setData] = useState([]);
+  
   useEffect(() => {
-    // props.navigation.addListener('willFocus', () => {
-    //   getUsers();
-    // });
     getUsers();
   }, []);
+
+  const onChangeText = (text) => {
+    setData(userStore?.users?.filter(i => i.name?.includes(text)));
+  };
+
   const getUsers = async () => {
     setIsLoading(true);
     AxiosFetcher({
@@ -43,6 +47,8 @@ const List = (props) => {
     })
       .then((data) => {
         setIsLoading(false);
+        setData(data?.content || []);
+        
         userStore.users = data?.content || [];
       })
       .catch(() => {
@@ -90,27 +96,28 @@ const List = (props) => {
   };
   const filterFollowing = async () => {};
   const renderMates = () => {
+    
     return (
       <FlatList
-        data={userStore?.users?.slice()}
+        data={data}
         scrollEnabled
         style={{
           width: ScreenWidth,
-          height: '100%',
           paddingBottom: 100,
           marginTop: 10,
         }}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item, index) => index.toString()}
         renderItem={({item}) => {
-          if (
-            item?.id === userStore?.userInfo?.id ||
-            userStore?.follows?.slice().findIndex((a) => a.id === item?.id) >= 0
-          ) {
-            return null;
-          }
-          console.log(
-            userStore?.follows?.slice().findIndex((a) => a.id === item?.id),
-          );
+          if(item?.id === userStore?.userInfo?.id) return null;
+          // if (
+          //   item?.id === userStore?.userInfo?.id ||
+          //   userStore?.follows?.slice().findIndex((a) => a.id === item?.id) >= 0
+          // ) {
+          //   return null;
+          // }
+          // console.log(
+          //   userStore?.follows?.slice().findIndex((a) => a.id === item?.id),
+          // );
           return (
             <TouchableOpacity
               onPress={() => {
@@ -232,9 +239,14 @@ const List = (props) => {
       <StatusBar barStyle={colorsApp.statusBar} />
       <SafeAreaView>
         <HeaderFull title={t('mate.follow')} hasButton />
-        <ScrollView nestedScrollEnabled contentContainerStyle={styles.content}>
+        <TextInput
+          onChangeText={onChangeText}
+          style={styles.inputSearchView}
+          placeholder={t('mate.search')}
+        >
+
+        </TextInput>
           {renderMates()}
-        </ScrollView>
       </SafeAreaView>
       {isLoading && <Loading />}
     </View>

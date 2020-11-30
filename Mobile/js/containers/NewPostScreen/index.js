@@ -10,7 +10,8 @@ import {
   SafeAreaView,
   View,
   Image,
-  FlatList
+  FlatList,
+  Text
 } from 'react-native';
 import { List, ListItem } from 'react-native-elements';
 import { withTheme } from 'react-native-paper';
@@ -43,6 +44,7 @@ import { SPACINGS, FONTSIZES, RADIUS } from '../../themes';
 import ImagePicker from 'react-native-image-picker';
 import { uploadFileToFireBase } from '../../shared/utils/firebaseStorageUtils';
 import { FirebaseService } from '../../api/FirebaseService';
+import IconAntDesign from 'react-native-vector-icons/AntDesign';
 
 var uuid = require('uuid');
 let childTemp = '';
@@ -97,57 +99,6 @@ const NewPostScreen = (props) => {
       });
   };
 
-  const openImagePicker = () => {
-    ImagePicker.launchImageLibrary(IMAGE_CONFIG, (response) => {
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
-      } else {
-        setIsLoading(true);
-        // setSelectedImages([...selectedImages, ...{ uri: response.uri }]);
-        Promise.resolve(uploadFileToFireBase(response, userDetail?.id))
-          .then((val) => {
-            setImages([...images, val])
-            setSelectedImages([...selectedImages, val])
-            setIsLoading(false);
-          })
-          .catch((error) => {
-            console.log('error.message', error.message);
-            ToastHelper.showError(t('error.common'));
-            setIsLoading(false);
-          });
-      }
-    });
-  };
-
-
-  const openCamera = () => {
-    ImagePicker.launchCamera(IMAGE_CONFIG, (response) => {
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
-      } else {
-        setIsLoading(true);
-        setSelectedImages([...selectedImages, { uri: response.uri }]);
-        Promise.resolve(uploadFileToFireBase(response, userDetail?.id))
-          .then((val) => {
-            setImages([...images, val])
-            setSelectedImages([...selectedImages, ...val])
-            setIsLoading(false);
-          })
-          .catch((error) => {
-            ToastHelper.showError(t('error.common'));
-            setIsLoading(false);
-          });
-      }
-    });
-  };
   const isBlog = props?.navigation?.state?.params?.isBlog;
 
   const createNewPost = () => {
@@ -182,7 +133,6 @@ const NewPostScreen = (props) => {
         false
       ).then(val => {
         setIsLoading(false);
-        console.log(val);
         ToastHelper.showSuccess('Success create new post, enjoy! 🚲')
         NavigationService.goBack();
       });
@@ -217,35 +167,13 @@ const NewPostScreen = (props) => {
             },
           ]}
         />
-      </View>
-    );
-  };
-
-  const renderImagePicker = () => {
-    return (
-      <View style={{
-        display: "flex", flexDirection: "row",
-        width: ScreenWidth * 0.9
-      }}>
-        <TouchableOpacity
-          onPress={() => {
-            openImagePicker();
-          }}>
-          <MaterialIcons name="photo-library" size={40} color={'grey'}></MaterialIcons>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            openCamera();
-          }}>
-          <MaterialIcons name="camera-alt" size={40} color={'grey'}></MaterialIcons>
+        <TouchableOpacity onPress={() => pickVideo()} style={styles.btnAttach}>
+          <IconAntDesign name="pluscircleo" color="#fff" size={20} style={styles.iconPlus}/>
+          <Text style={styles.txtBtnAttach}>{t('social.image')}</Text>
         </TouchableOpacity>
       </View>
     );
   };
-
-  const renderItems = ({ item, index }) => (
-    <Image style={styles.image} source={{ uri: item.uri }} resizeMode="cover" />
-  );
 
   const renderImageSelected = () => {
     if (selectedImages[0].uri?.includes('PNG') || selectedImages[0].uri?.includes('images') || selectedImages[0].uri?.includes('HEIC') || selectedImages[0].uri?.includes('heic') || selectedImages[0].uri?.includes('JPG') || selectedImages[0].uri?.includes('JPEG') ||
@@ -255,7 +183,7 @@ const NewPostScreen = (props) => {
           numColumns={3}
           style={{ alignSelf: 'center' }}
           data={selectedImages}
-          renderItem={(a, index ) => {
+          renderItem={(a, index) => {
             return (
               <Image
                 source={{ uri: selectedImages.length > 0 ? a?.item?.uri : Constant.MOCKING_DATA.NO_IMG_PLACE_HOLDER }}
@@ -273,13 +201,7 @@ const NewPostScreen = (props) => {
     )
 
   };
-  const renderVideo = () => {
-    return (
-      <TouchableOpacity onPress={() => { setSelectedImages([]) }}>
-        <FastImage style={styles.image} source={{ uri: selectedImages[0].uri }} resizeMode="cover" />
-      </TouchableOpacity>
-    );
-  };
+
   const pickVideo = () => {
     ImagePicker.showImagePicker({
       title: 'Select video',
@@ -319,6 +241,7 @@ const NewPostScreen = (props) => {
               setIsLoading(false);
             });
         }
+        setIsLoading(false);
       }
     });
   }
@@ -330,7 +253,7 @@ const NewPostScreen = (props) => {
     <View style={[containerStyle.default]}>
       <StatusBar barStyle={colorsApp.statusBar} />
       <SafeAreaView>
-        <HeaderFull title={t('social.createpost')} hasButton rightIco={rightIco} onPress={() => pickVideo()} />
+        <HeaderFull title={t('social.createpost')} hasButton={true}/>
         <ScrollView contentContainerStyle={styles.content}>
           {renderPostInput()}
           {/* {renderImagePicker()} */}
