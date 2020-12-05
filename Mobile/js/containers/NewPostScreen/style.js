@@ -86,6 +86,23 @@ export const styles = StyleSheet.create({
   },
   iconPlus:{
     marginRight: 5
+  },
+  btnChooseVideo:{
+    width: 150,
+    height: 40,
+    borderRadius: 8,
+    backgroundColor: '#413960',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  txtBtnChooseVideo:{
+    color: '#fff',
+    fontWeight: '600'
+  },
+  groupButtonChoose: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 20
   }
 });
 

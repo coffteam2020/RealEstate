@@ -1,8 +1,6 @@
-import { useObserver } from 'mobx-react';
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  Platform,
   TextInput,
   ScrollView,
   StatusBar,
@@ -13,34 +11,22 @@ import {
   FlatList,
   Text
 } from 'react-native';
-import { List, ListItem } from 'react-native-elements';
 import { withTheme } from 'react-native-paper';
-import { images } from '../../../assets';
 import { NavigationService } from '../../navigation';
-import { ScreenNames } from '../../route/ScreenNames';
-import TextNormal from '../../shared/components/Text/TextNormal';
 import { useStores } from '../../store/useStore';
 import { containerStyle } from '../../themes/styles';
-import * as Animatable from 'react-native-animatable';
-import TrackPlayer from 'react-native-track-player';
 import GradientButton from '../../shared/components/Buttons/GradientButton'
 import { styles } from './style';
-import { firebase } from '@react-native-firebase/messaging';
 import AxiosFetcher from '../../api/AxiosFetch';
 import IALocalStorage from '../../shared/utils/storage/IALocalStorage';
 import Loading from '../../shared/components/Loading';
 import { ToastHelper } from '../../shared/components/ToastHelper';
 import Constant from '../../shared/utils/constant/Constant';
-import Speaker from '../../shared/components/Speaker';
 import Video from 'react-native-video';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import HeaderFull from '../../shared/components/Header/HeaderFull';
-import { colors } from '../../shared/utils/colors/colors';
-import FastImage from 'react-native-fast-image';
 import { ScreenWidth, ScreenHeight } from '../../shared/utils/dimension/Divices';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import moment from 'moment'
-import { SPACINGS, FONTSIZES, RADIUS } from '../../themes';
+import { RADIUS } from '../../themes';
 import ImagePicker from 'react-native-image-picker';
 import { uploadFileToFireBase } from '../../shared/utils/firebaseStorageUtils';
 import { FirebaseService } from '../../api/FirebaseService';
@@ -54,22 +40,11 @@ const NewPostScreen = (props) => {
   const { userStore } = useStores();
   const [userDetail, setUserDetail] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [avt, setAvt] = useState('');
   const [content, setContent] = useState('');
   const [selectedImages, setSelectedImages] = useState([]);
   const [images, setImages] = useState([]);
-  const [newPost, setNewPost] = useState({});
-
-  const IMAGE_CONFIG = {
-    title: t('imagePicker.name'),
-    cancelButtonTitle: t('common.cancel'),
-    takePhotoButtonTitle: t('imagePicker.camera'),
-    chooseFromLibraryButtonTitle: t('imagePicker.name'),
-    storageOptions: {
-      skipBackup: true,
-      path: 'images',
-    },
-  };
+  const [isVisible, setIsvisible] = useState(false);
+  console.log('selectedImages', selectedImages)
 
   useEffect(() => {
     getProfile();
@@ -114,15 +89,8 @@ const NewPostScreen = (props) => {
       modifiedOn: moment().format("YYYY-MM-DD'T'HH:mm:ssZ"),
       content: content,
     };
-    if (images.length > 0) {
-      post.images = images;
-    }
-    if (
-      post?.content &&
-      post?.content.replace(' ', '') === ''
-    ) {
-      return;
-    }
+    if (images.length > 0) { post.images = images }
+    if (post?.content && post?.content.replace(' ', '') === '') { return }
     childTemp = userDetail?.id + '_' + currentTime;
     try {
       setIsLoading(true);
@@ -164,16 +132,29 @@ const NewPostScreen = (props) => {
               backgroundColor: '#d0d0d0',
               borderRadius: RADIUS.default,
               marginBottom: 20,
+              textAlignVertical: 'top'
             },
           ]}
         />
-        <TouchableOpacity onPress={() => pickVideo()} style={styles.btnAttach}>
+        <TouchableOpacity onPress={() => setIsvisible(true)} style={styles.btnAttach}>
           <IconAntDesign name="pluscircleo" color="#fff" size={20} style={styles.iconPlus}/>
           <Text style={styles.txtBtnAttach}>{t('social.image')}</Text>
         </TouchableOpacity>
+        {isVisible && <View style={styles.groupButtonChoose}>
+          <TouchableOpacity onPress={() => onPhotoMediaType()} style={styles.btnChooseVideo}>
+            <Text style={styles.txtBtnChooseVideo}>Choose a photo...</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => onVideoMediaType()} style={styles.btnChooseVideo}>
+            <Text style={styles.txtBtnChooseVideo}>Choose a video...</Text>
+          </TouchableOpacity>
+        </View>}
       </View>
     );
   };
+
+  const onVideoMediaType = () => { pickVideo('video') };
+
+  const onPhotoMediaType = () => { pickVideo('image') };
 
   const renderImageSelected = () => {
     if (selectedImages[0].uri?.includes('PNG') || selectedImages[0].uri?.includes('images') || selectedImages[0].uri?.includes('HEIC') || selectedImages[0].uri?.includes('heic') || selectedImages[0].uri?.includes('JPG') || selectedImages[0].uri?.includes('JPEG') ||
@@ -200,15 +181,36 @@ const NewPostScreen = (props) => {
       </TouchableOpacity>
     )
 
+    // <>
+    //   {selectedImages[0].uri?.includes('video') &&
+    //     <Video source={{ uri: selectedImages[0].uri }} style={{ width: ScreenWidth / 2, height: ScreenWidth / 2, marginVertical: 20 }} />
+    //   }
+    //   {selectedImages[0].uri?.includes('images') &&
+    //     <FlatList
+    //       numColumns={3}
+    //       contentContainerStyle={{ alignSelf: 'center' }}
+    //       data={selectedImages}
+    //       renderItem={(a, index) => {
+    //         return (
+    //           <Image
+    //             source={{ uri: a?.item?.uri }}
+    //             resizeMode="cover"
+    //             style={selectedImages.length === 1 ? styles.postImages : { width: ScreenWidth * (1 / selectedImages.length), height: ScreenWidth * (1 / selectedImages.length), marginEnd: 10 }}
+    //           />
+    //         )
+    //       }}
+    //     />
+    //   }
+    // </>
   };
 
-  const pickVideo = () => {
+  const pickVideo = (mediaType) => {
     ImagePicker.showImagePicker({
       title: 'Select video',
-      mediaType: 'mixed',
-      path: 'video',
+      mediaType: mediaType,
       quality: 1
     }, (response) => {
+      console.log('response: =====', response)
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.error) {
@@ -222,7 +224,10 @@ const NewPostScreen = (props) => {
           response.uri?.includes('png') || response.uri?.includes('jpg') || response.uri?.includes('jpeg'))) {
           Promise.resolve(uploadFileToFireBase(response, userDetail?.id))
             .then((val) => {
-              setImages([...images, val])
+              console.log('check val 1', val)
+               setTimeout(async() => {
+                await setImages([...images, val])
+              }, 3000)
               setIsLoading(false);
             })
             .catch((error) => {
@@ -233,7 +238,10 @@ const NewPostScreen = (props) => {
         } else {
           Promise.resolve(uploadFileToFireBase(response, userDetail?.id, '.mov'))
             .then((val) => {
-              setImages([...images, val])
+              console.log('check val 2', val)
+              setTimeout(async() => {
+                await setImages([...images, val])
+              }, 5000)
               setIsLoading(false);
             })
             .catch((error) => {
@@ -246,9 +254,6 @@ const NewPostScreen = (props) => {
     });
   }
 
-
-  const rightIco = isLoading ? null : (<TextNormal text={t('social.image')}></TextNormal>);
-
   return (
     <View style={[containerStyle.default]}>
       <StatusBar barStyle={colorsApp.statusBar} />
@@ -256,9 +261,8 @@ const NewPostScreen = (props) => {
         <HeaderFull title={t('social.createpost')} hasButton={true}/>
         <ScrollView contentContainerStyle={styles.content}>
           {renderPostInput()}
-          {/* {renderImagePicker()} */}
           {selectedImages.length > 0 && renderImageSelected()}
-          <GradientButton text="Post" onPress={() => createNewPost()} style={{ marginTop: 20 }} />
+          <GradientButton text="Post" onPress={() => createNewPost()} style={{ marginTop: 20 }} disable={(content == '' && selectedImages.length == 0) || isLoading == true} />
         </ScrollView>
       </SafeAreaView>
       {isLoading && <Loading />}

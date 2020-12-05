@@ -380,6 +380,7 @@ const SocialScreen = (props) => {
                     item?.images[0]?.includes('jpeg')) ? (
                     <FlatList
                       numColumns={3}
+                      keyExtractor={(item, index) => index.toString()}
                       style={{ justifyContent: 'center', alignContent: 'center', alignItems: 'center', alignSelf: 'center' }}
                       data={item?.images || []}
                       renderItem={({ a, index }) => {

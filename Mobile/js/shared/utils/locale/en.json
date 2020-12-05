@@ -403,6 +403,8 @@
     "district": "District"
   },
   "social" : {
+    "choose_video":"Choose a video...",
+    "choose_photo":"Choose a photo...",
     "title" : "Social",
     "placeholder": "What's on your mind?",
     "createpost": "Create Post",

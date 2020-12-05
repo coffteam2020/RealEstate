@@ -401,6 +401,8 @@
     "district": "Quận"
   },
   "social": {
+    "choose_video":"Chọn video...",
+    "choose_photo":"chọn một ảnh...",
     "title": "Xã hội",
     "placeholder": "Bạn nghĩ gì?...",
     "createpost": "Tạo bài",
