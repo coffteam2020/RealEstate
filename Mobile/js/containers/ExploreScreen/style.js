@@ -110,6 +110,12 @@ export const styles = StyleSheet.create({
     alignItems: 'flex-start',
     borderRadius: 20,
   },
+  mapStyle:{
+    ...StyleSheet.absoluteFillObject,
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
 });
 
 export default {

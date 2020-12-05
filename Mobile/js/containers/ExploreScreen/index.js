@@ -5,8 +5,7 @@ import {
   View,
   ScrollView,
   TouchableOpacity,
-  ImageBackground,
-  StyleSheet,
+  Platform,
   Alert,
 } from 'react-native';
 import { styles } from './style';
@@ -145,7 +144,13 @@ const ExploreScreen = (props) => {
           key: t('explorer.restaurant'),
           type: "RESTAURANT"
         }),
-    }, {}, {}
+    },
+    {
+      onPress: () => { }
+    },
+    {
+      onPress: () => { }
+    }
   ];
   const BTNS2 = [
     {
@@ -286,11 +291,13 @@ const ExploreScreen = (props) => {
       youAre: 'string',
     },
   ];
+
   useEffect(() => {
     getSearchTrend();
     getProfile();
     getPropertyList();
   }, []);
+
   const getPropertyList = async () => {
     AxiosFetcher({
       method: 'GET',
@@ -398,7 +405,7 @@ const ExploreScreen = (props) => {
       timeout: 15000,
     })
       .then((location) => {
-        setLo(location);
+        // setLo(location);
         setLo({
           latitude: location?.longitude,
           longitude: location?.longitude
@@ -415,7 +422,7 @@ const ExploreScreen = (props) => {
       })
       .catch((error) => {
         const { code, message } = error;
-        console.warn(code, message);
+        // console.warn(code, message);
       });
   };
   const renderBanner = () => {
@@ -573,51 +580,47 @@ const ExploreScreen = (props) => {
   return useObserver(() => (
     <View style={[containerStyle.defaultBackground]}>
       <StatusBar barStyle={colorsApp.statusBar} />
-      <ScrollView contentContainerStyle={[styles.mainContainer]} style={{ paddingBottom: ScreenHeight / 2 }}>
+      <ScrollView contentContainerStyle={[styles.mainContainer]} style={{ marginBottom: 25 }} showsVerticalScrollIndicator={false}>
         {renderBanner()}
         {renderSearch()}
         {renderBtns()}
         {renderBannerClient()}
-        <View style={{ height: ScreenHeight / 4, width: ScreenWidth, padding: 20, borderRadius: 10, }}>
-
-          {lo?.longitude && marker?.length > 0 && <MapView
-            animateToRegion={true}
-            provider={PROVIDER_GOOGLE} // remove if not using Google Maps
-            style={{ height: ScreenHeight / 4, width: ScreenWidth - 40, borderRadius: 20, }}
-            region={{
-              latitude: lo?.latitude,
-              longitude: lo?.longitude,
-              latitudeDelta: 0.4,
-              longitudeDelta: 0.5,
-            }}
-            scrollEnabled={true}
-            zoomEnabled={true}
-          >
-            {marker?.slice()?.map(item => {
-              return (
-                <Marker
-                  coordinate={{
-                    latitude: item?.latitude,
-                    longitude: item?.longitude
-                  }}
-                  onPress={() => {
-                    const scheme = Platform.select({ ios: 'maps:0,0?q=', android: 'geo:0,0?q=' });
-                    const latLng = `${item.latitude},${item.longitude}`;
-                    const label = 'Custom Label';
-                    const url = Platform.select({
-                      ios: `${scheme}${label}@${latLng}`,
-                      android: `${scheme}${latLng}(${label})`
-                    });
-                    Linking.openURL(url);
-                  }}
-                  title={'🕍'}
-                  draggable />
-              )
-            })}
-          </MapView>}
-        </View>
-        <View style={{ width: '100%', marginLeft: 35, marginTop: 20 }}>
-          {/* {renderSearchTrend()} */}
+        <View style={{ height: ScreenHeight / 4, width: '90%', borderRadius: 10, overflow: 'hidden', alignSelf: 'center' }}>
+          {lo?.longitude && lo?.latitude && marker?.length > 0 &&
+            <MapView
+              animateToRegion={true}
+              provider={PROVIDER_GOOGLE} // remove if not using Google Maps
+              style={[{ height: ScreenHeight / 4, width: ScreenWidth - 40, borderRadius: 20 }, styles.mapStyle]}
+              region={{
+                latitude: 	10.762622,
+                longitude: 106.660172,
+                latitudeDelta: 2.1,
+                longitudeDelta: 2.1
+              }}
+              showsCompass={false}
+              toolbarEnabled={false}
+            >
+              {marker && marker?.map((item, index) => {
+                return (
+                  <Marker
+                    tracksViewChanges={false}
+                    key={index.toString()}
+                    coordinate={{ "latitude": item?.latitude, "longitude": item?.longitude }}
+                    onPress={() => {
+                      const scheme = Platform.select({ ios: 'maps:0,0?q=', android: 'geo:0,0?q=' });
+                      const latLng = `${item.latitude},${item.longitude}`;
+                      const label = 'Custom Label';
+                      const url = Platform.select({
+                        ios: `${scheme}${label}@${latLng}`,
+                        android: `${scheme}${latLng}(${label})`
+                      });
+                      Linking.openURL(url);
+                    }}
+                    title={'🕍'}
+                    draggable />
+                )
+              })}
+            </MapView>}
         </View>
       </ScrollView>
     </View>

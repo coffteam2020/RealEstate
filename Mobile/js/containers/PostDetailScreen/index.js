@@ -61,7 +61,7 @@ const PostDetailScreen = (props) => {
   const refScrollView = useRef();
 
   let data = props.navigation.state.params.data || {};
-console.log(JSON.stringify(data));
+// console.log(JSON.stringify(data));
   useEffect(() => {
     getPostDetail();
     getProfile();
@@ -93,7 +93,7 @@ console.log(JSON.stringify(data));
       hasToken: true,
     })
       .then((val) => {
-        console.log(val)
+        // console.log(val)
         if (val?.data !== '') {
           setIsLoading(false);
           userStore.userInfo = val;
@@ -276,7 +276,7 @@ console.log(JSON.stringify(data));
   const clickLike = () => {
     let userDetail = userStore?.userInfo;
     FirebaseService.queryAllItemBySchemaWithSpecifiedChild(isBlog ? Constant.SCHEMA.BLOG: Constant.SCHEMA.SOCIAL, '_id', data._id, false, false).then((val) => {
-      console.log(val);
+      // console.log(val);
       if (val && val.length > 0) {
         let currentLike = val[0].likes ? [...val[0].likes] : [];
         if (currentLike.indexOf(userDetail?.id) !== -1) {
@@ -305,8 +305,7 @@ console.log(JSON.stringify(data));
       false,
       false,
     ).then((val) => {
-      console.log(val);
-
+      // console.log(val);
       if (val && val.length > 0) {
         let currentComments = val[0].comments ? [...val[0].comments] : [];
         let newCommentData = {
