@@ -24,7 +24,6 @@ import TextInputFlatLeftIconTouchable from '../../shared/components/TextInput/Te
 import { ScreenHeight, ScreenWidth } from '../../shared/utils/dimension/Divices';
 import TextNormal from '../../shared/components/Text/TextNormal';
 import icons from '../../shared/utils/icons/icons';
-import Feather from 'react-native-vector-icons/Feather';
 import { colors } from '../../shared/utils/colors/colors';
 import AxiosFetcher from '../../api/AxiosFetch';
 import { NavigationService } from '../../navigation';
@@ -196,101 +195,6 @@ const ExploreScreen = (props) => {
       iconColor: colors.whiteBackground,
     },
   ];
-  const MOCK = [
-    {
-      address: 'Go Vap',
-      amenities: 'string',
-      areaUnit: 'string',
-      availability: 0,
-      availabilityDate: '2020-08-22T13:29:39.522Z',
-      bathRoom: 0,
-      bedRoom: 0,
-      bookingAmount: 0,
-      createdOn: 0,
-      description: 'string',
-      id: 0,
-      leaseDuration: true,
-      leaseDurationMonth: 0,
-      modifiedOn: 0,
-      phoneContact: 0,
-      photo: [
-        'https://media1.reatimes.vn/media/uploaded/37/2017/12/10/dichvuchuyenphatnhanhtuquan1.jpg',
-      ],
-      priceOrMonthlyRent: 0,
-      projectName: 'string',
-      propertyArea: 0,
-      propertyFor: 'string',
-      propertyOnFloor: 0,
-      propertyType: 'string',
-      rating: 0,
-      reservedParking: 0,
-      totalFloor: 0,
-      videos: ['string'],
-      youAre: 'string',
-    },
-    {
-      address: 'Binh Thanh',
-      amenities: 'string',
-      areaUnit: 'string',
-      availability: 0,
-      availabilityDate: '2020-08-22T13:29:39.522Z',
-      bathRoom: 0,
-      bedRoom: 0,
-      bookingAmount: 0,
-      createdOn: 0,
-      description: 'string',
-      id: 0,
-      leaseDuration: true,
-      leaseDurationMonth: 0,
-      modifiedOn: 0,
-      phoneContact: 0,
-      photo: [
-        'https://media1.reatimes.vn/media/uploaded/37/2017/12/10/dichvuchuyenphatnhanhtuquan1.jpg',
-      ],
-      priceOrMonthlyRent: 0,
-      projectName: 'string',
-      propertyArea: 0,
-      propertyFor: 'string',
-      propertyOnFloor: 0,
-      propertyType: 'string',
-      rating: 0,
-      reservedParking: 0,
-      totalFloor: 0,
-      videos: ['string'],
-      youAre: 'string',
-    },
-    {
-      address: 'Quan 1',
-      amenities: 'string',
-      areaUnit: 'string',
-      availability: 0,
-      availabilityDate: '2020-08-22T13:29:39.522Z',
-      bathRoom: 0,
-      bedRoom: 0,
-      bookingAmount: 0,
-      createdOn: 0,
-      description: 'string',
-      id: 0,
-      leaseDuration: true,
-      leaseDurationMonth: 0,
-      modifiedOn: 0,
-      phoneContact: 0,
-      photo: [
-        'https://media1.reatimes.vn/media/uploaded/37/2017/12/10/dichvuchuyenphatnhanhtuquan1.jpg',
-      ],
-      priceOrMonthlyRent: 0,
-      projectName: 'string',
-      propertyArea: 0,
-      propertyFor: 'string',
-      propertyOnFloor: 0,
-      propertyType: 'string',
-      rating: 0,
-      reservedParking: 0,
-      totalFloor: 0,
-      videos: ['string'],
-      youAre: 'string',
-    },
-  ];
 
   useEffect(() => {
     getSearchTrend();
@@ -323,7 +227,7 @@ const ExploreScreen = (props) => {
         } else {
         }
       })
-      .catch((error) => {
+      .catch(() => {
       });
   };
   const getUsers = async () => {
@@ -417,11 +321,10 @@ const ExploreScreen = (props) => {
             location.latitude +
             '&longtitude=' +
             location.longitude,
-        }).then((val) => {
+        }).then(() => {
         });
       })
       .catch((error) => {
-        const { code, message } = error;
         // console.warn(code, message);
       });
   };

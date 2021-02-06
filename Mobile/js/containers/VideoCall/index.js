@@ -20,7 +20,7 @@ import RNCallKeep from 'react-native-callkeep';
 export default class VideoCall extends Component {
   constructor(props) {
     super(props);
-    this.apiKey = '46964724';
+    this.apiKey = '47078064';
     this.state = {
       sessionId: undefined,
       token: undefined,

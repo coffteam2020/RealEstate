@@ -46,7 +46,7 @@ import TextInputFlatWithRightCheckbox from '../../shared/components/TextInput/Te
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import GradientButton from '../../shared/components/Buttons/GradientButton';
 import GridList from 'react-native-grid-list';
-import ImagePicker from 'react-native-image-picker';
+import ImagePicker, {launchImageLibrary} from 'react-native-image-picker';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import TextInputFlatNew from '../../shared/components/TextInput/TextInputFlatNew';
 import { uploadFileToFireBase } from '../../shared/utils/firebaseStorageUtils';
@@ -309,7 +309,7 @@ const PropertyScreen = (props) => {
   }
 
   const openCamera = () => {
-    ImagePicker.launchCamera(IMAGE_CONFIG, (response) => {
+    launchImageLibrary(IMAGE_CONFIG, (response) => {
       // console.log('Response = ', response);
       if (response.didCancel) {
         console.log('User cancelled image picker');
@@ -324,7 +324,7 @@ const PropertyScreen = (props) => {
     });
   };
   const openImagePicker = () => {
-    ImagePicker.launchImageLibrary(IMAGE_CONFIG, (response) => {
+    launchImageLibrary(IMAGE_CONFIG, (response) => {
       // console.log('Response = ', response);
       if (response.didCancel) {
         console.log('User cancelled image picker');
@@ -803,7 +803,7 @@ const PropertyScreen = (props) => {
             data={ListUltilities}
             keyExtractor={(item, index) => item.value}
             renderItem={({ item }) => {
-              isSelected = selectedUltilities.indexOf(item.value) !== -1;
+              var isSelected = selectedUltilities.indexOf(item.value) !== -1;
               return (
                 <TouchableOpacity onPress={() => doSelectUltilities(item)}>
                   <View
@@ -1047,6 +1047,7 @@ const PropertyScreen = (props) => {
       data: propertyDTO
     })
       .then((val) => {
+        console.log(val);
         if (val !== '') {
           setIsLoading(false);
           NavigationService.navigate(ScreenNames.PropertyListScreen);
@@ -1057,6 +1058,7 @@ const PropertyScreen = (props) => {
         //TODO
       })
       .catch((error) => {
+        console.log(error);
         setIsLoading(false);
         ToastHelper.showError(t('account.getInfoErr'));
       });

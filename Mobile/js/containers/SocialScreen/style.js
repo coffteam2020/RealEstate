@@ -60,7 +60,7 @@ export const styles = StyleSheet.create({
   },
   postImages:{
 	width: ScreenWidth,
-    height: ScreenWidth,
+    height: ScreenWidth * 1.5,
 	// margin: SPACINGS.small
   },
   postFooter:{

@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import com.vnpay.merchant.VnpayMerchantPackage;
 
 import org.reactnative.camera.RNCameraPackage;
 

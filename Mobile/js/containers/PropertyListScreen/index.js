@@ -183,6 +183,10 @@ const PropertyListScreen = (props) => {
         setMainColor(colors.green_new);
         setTitle(t('property.snacksTitle'));
         break;
+      case 'SERVICES':
+        setMainColor(colors.purpleMain);
+        setTitle(t('explorer.new_service'));
+        break;
       default:
         setMainColor(colors.purpleMain);
         setTitle(t('property.propertyTitle'));
@@ -496,7 +500,7 @@ const PropertyListScreen = (props) => {
                       <Ionicons name="location" size={16} color={colors.gray_new}></Ionicons>
                       <TextNormal style={{ marginLeft: SPACINGS.small, marginRight: SPACINGS.small, color: mainColor }} text={' ' + item?.distance}></TextNormal>
                     </View> :
-                    <ActivityIndicator size="small" style={{alignSelf: 'flex-start'}}/>}
+                    <ActivityIndicator size="small" style={{ alignSelf: 'flex-start' }} />}
                 </View>
               </View>
             </TouchableOpacity>
@@ -1063,7 +1067,7 @@ const PropertyListScreen = (props) => {
               mainColor: mainColor
             });
           }}
-          rightIco={<Ionicons name="add" size={20} color={colors.blackInput} />}
+          rightIco={<TextNormal text="Đăng" />}
         />
         {renderFilter()}
         <ScrollView nestedScrollEnabled contentContainerStyle={styles.content}>

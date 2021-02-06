@@ -27,7 +27,7 @@ import HeaderFull from '../../shared/components/Header/HeaderFull';
 import { ScreenWidth, ScreenHeight } from '../../shared/utils/dimension/Divices';
 import moment from 'moment'
 import { RADIUS } from '../../themes';
-import ImagePicker from 'react-native-image-picker';
+import ImagePicker, { launchImageLibrary } from 'react-native-image-picker';
 import { uploadFileToFireBase } from '../../shared/utils/firebaseStorageUtils';
 import { FirebaseService } from '../../api/FirebaseService';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
@@ -137,7 +137,7 @@ const NewPostScreen = (props) => {
           ]}
         />
         <TouchableOpacity onPress={() => setIsvisible(true)} style={styles.btnAttach}>
-          <IconAntDesign name="pluscircleo" color="#fff" size={20} style={styles.iconPlus}/>
+          <IconAntDesign name="pluscircleo" color="#fff" size={20} style={styles.iconPlus} />
           <Text style={styles.txtBtnAttach}>{t('social.image')}</Text>
         </TouchableOpacity>
         {isVisible && <View style={styles.groupButtonChoose}>
@@ -205,7 +205,8 @@ const NewPostScreen = (props) => {
   };
 
   const pickVideo = (mediaType) => {
-    ImagePicker.showImagePicker({
+    // if (mediaType === 'image') {
+    launchImageLibrary({
       title: 'Select video',
       mediaType: mediaType,
       quality: 1
@@ -225,7 +226,7 @@ const NewPostScreen = (props) => {
           Promise.resolve(uploadFileToFireBase(response, userDetail?.id))
             .then((val) => {
               console.log('check val 1', val)
-               setTimeout(async() => {
+              setTimeout(async () => {
                 await setImages([...images, val])
               }, 3000)
               setIsLoading(false);
@@ -239,7 +240,7 @@ const NewPostScreen = (props) => {
           Promise.resolve(uploadFileToFireBase(response, userDetail?.id, '.mov'))
             .then((val) => {
               console.log('check val 2', val)
-              setTimeout(async() => {
+              setTimeout(async () => {
                 await setImages([...images, val])
               }, 5000)
               setIsLoading(false);
@@ -251,14 +252,18 @@ const NewPostScreen = (props) => {
         }
         setIsLoading(false);
       }
-    });
+    })
+    // }
+    // else {
+
+    // }
   }
 
   return (
     <View style={[containerStyle.default]}>
       <StatusBar barStyle={colorsApp.statusBar} />
       <SafeAreaView>
-        <HeaderFull title={t('social.createpost')} hasButton={true}/>
+        <HeaderFull title={t('social.createpost')} hasButton={true} />
         <ScrollView contentContainerStyle={styles.content}>
           {renderPostInput()}
           {selectedImages.length > 0 && renderImageSelected()}

@@ -19,7 +19,7 @@ import ChatRoomScreen from '../containers/ChatRoomScreen';
 import ChatRoomGroupScreen from '../containers/ChatRoomGroupScreen';
 import VideoCallScreen from '../containers/VideoCallScreen';
 import VideoCall from '../containers/VideoCall';
-// import WebScreen from '../containers/WebScreen';
+import WebScreen from '../containers/WebScreen';
 import Livestream from '../containers/Livestream';
 import InformationRoom from '../containers/Livestream/InformationRoom';
 import LocationScreen from '../containers/LocationScreen';
@@ -111,8 +111,9 @@ const ExplorerNavigator = createStackNavigator(
     PropertyDetailScreen: { screen: PropertyDetailScreen },
     CoffeeScreen: { screen: CoffeeScreen },
     CoffeeDetailScreen: { screen: CoffeeDetailScreen },
-    RestaurantScreen: { screen: RestaurantScreen},
-    RestaurantDetailScreen: { screen: RestaurantDetailScreen}
+    RestaurantScreen: { screen: RestaurantScreen },
+    RestaurantDetailScreen: { screen: RestaurantDetailScreen },
+    WebScreen: { screen: WebScreen }
   },
   {
     mode: 'modal',

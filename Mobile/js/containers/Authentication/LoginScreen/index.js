@@ -58,6 +58,7 @@ const LoginScreen = (props) => {
       },
     })
       .then(async (data) => {
+        console.log(data);
         if (data?.accessToken) {
           ToastHelper.showSuccess(t('login.signInSuccess'));
           await IALocalStorage.setTokenUserInfo(data?.accessToken);
@@ -123,7 +124,7 @@ const LoginScreen = (props) => {
                 style={styles.fieldForget}
                 clickable
                 onPress={() =>
-                  NavigationService.navigate(Route.ScreenNames.ResetScreen)
+                  NavigationService.navigate(ScreenNames.ResetScreen)
                 }
               />
               <GradientButton

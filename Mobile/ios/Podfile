@@ -59,6 +59,8 @@ target 'Mobile' do
 
   pod 'react-native-netinfo', :path => '../node_modules/@react-native-community/netinfo'
 
+  pod 'react-native-vnpay-merchant', :path => '../node_modules/react-native-vnpay-merchant'
+
   target 'MobileTests' do
     inherit! :complete
     # Pods for testing

@@ -12,7 +12,7 @@ import {Alert} from 'react-native';
 import {NavigationService} from '../navigation';
 import {ScreenNames} from '../route/ScreenNames';
 
-export const APP_URL = 'http://128.199.127.184:8080/api/';
+export const APP_URL = 'http://api.dappadmin.co/api/';
 // export const APP_URL = 'http://localhost:8080/api/';
 const AxiosInstance = Axios.create({
   timeout: 200000,
@@ -62,15 +62,15 @@ export async function AxiosFetcher({
     AxiosInstance.defaults.baseURL =
       (customBaseUrl && customBaseUrl) || APP_URL;
   }
-  // console.log(
-  //   // '========> DATA: ' + LogManager.parseJsonObjectToJsonString(data),
-  // );
-  // console.log('========> METHOD: ' + method);
+  console.log(
+    '========> DATA: ' + LogManager.parseJsonObjectToJsonString(data),
+  );
+  console.log('========> METHOD: ' + method);
   // Get axios function by method
   let tokenUser = await IALocalStorage.getTokenUserInfo();
-  // console.log(
-  //   // '========> Token: ' + LogManager.parseJsonObjectToJsonString(tokenUser),
-  // );
+  console.log(
+    '========> Token: ' + LogManager.parseJsonObjectToJsonString(tokenUser),
+  );
   try {
     const res = await methodFunctions[method]({
       url,
@@ -79,7 +79,7 @@ export async function AxiosFetcher({
       headers: {
         Accept: 'application/json, text/plain, */*',
         'Content-Type': contentType ? contentType : 'application/json',
-        Authorization: hasToken ? `${tokenUser}` : null,
+        Authorization: hasToken ? `Bearer ${tokenUser}` : null,
         'Cache-Control': 'no-cache',
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods':

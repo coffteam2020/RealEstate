@@ -11,7 +11,7 @@ import { firebase } from '@react-native-firebase/database';
 import Constant from '../../shared/utils/constant/Constant';
 import { NavigationService } from '../../navigation';
 import { ScreenNames } from '../../route/ScreenNames';
-import ImagePicker from 'react-native-image-picker';
+import ImagePicker, {launchImageLibrary} from 'react-native-image-picker';
 import { uploadFileToFireBase } from '../../shared/utils/firebaseStorageUtils/index';
 import IC_UPLOAD from 'react-native-vector-icons/Feather';
 import { useStores } from '../../store/useStore';
@@ -75,7 +75,7 @@ export default function RestaurantScreen(props) {
     };
 
     const openPicker = async () => {
-        ImagePicker.showImagePicker(IMAGE_CONFIG, (response) => {
+        launchImageLibrary(IMAGE_CONFIG, (response) => {
             // console.log('Response = ', response);
             if (response.didCancel) {
                 console.log('User cancelled image picker');
@@ -101,7 +101,7 @@ export default function RestaurantScreen(props) {
     };
 
     const openPickerAvatar = async () => {
-        ImagePicker.showImagePicker(IMAGE_CONFIG, (response) => {
+        launchImageLibrary(IMAGE_CONFIG, (response) => {
             // console.log('Response = ', response);
             if (response.didCancel) {
                 console.log('User cancelled image picker');
@@ -127,7 +127,7 @@ export default function RestaurantScreen(props) {
     };
 
     const openPickerFood = async () => {
-        ImagePicker.showImagePicker(IMAGE_CONFIG, (response) => {
+        launchImageLibrary(IMAGE_CONFIG, (response) => {
             // console.log('Response = ', response);
             if (response.didCancel) {
                 console.log('User cancelled image picker');

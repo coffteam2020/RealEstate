@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { useEffect, useState } from 'react';
-import { StatusBar, View, SafeAreaView, TouchableOpacity } from 'react-native';
+import { StatusBar, View, SafeAreaView, TouchableOpacity, NativeEventEmitter } from 'react-native';
 import { styles } from './style';
 import { images } from '../../../assets/index';
 import { withTheme } from 'react-native-paper';
@@ -15,7 +15,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import QRCode from 'react-native-qrcode-svg';
 import Fontisto from 'react-native-vector-icons/Fontisto';
-import ImagePicker from 'react-native-image-picker';
+import ImagePicker, { launchImageLibrary } from 'react-native-image-picker';
 import { uploadFileToFireBase } from '../../shared/utils/firebaseStorageUtils/index';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -34,6 +34,9 @@ import Constant from '../../shared/utils/constant/Constant';
 import { useObserver } from 'mobx-react';
 import Loading from '../../shared/components/Loading';
 import ModalAccount from '../../shared/components/Modal/ModalAccount';
+import VnpayMerchant, { VnpayMerchantModule } from '../../../lib';
+const eventEmitter = new NativeEventEmitter(VnpayMerchantModule);
+
 
 const ProfileScreen = (props) => {
   const { colorsApp } = props.theme;
@@ -56,14 +59,44 @@ const ProfileScreen = (props) => {
       path: 'images',
     },
   };
+  aaa = () => {
+    VnpayMerchant.show({
+      iconBackName: 'ic_back',
+      paymentUrl: 'http://sandbox.vnpayment.vn/paymentv2/vpcpay.html',
+      scheme: 'MZHBDLBEWPRSZRGVXUARCLVYBUYAOOIV',
+      tmn_code: 'DELIGHT1',
+    })
+    eventEmitter.addListener('PaymentBack', (e) => {
+      console.log('Sdk back!')
 
+      // Đã available trên cả ios, android
+      if (e) {
+        console.log(e);
+        switch (e.resultCode) {
+          case 0:
+            console.log('Sdk closed')
+            break;
+          case -1:
+            console.log('Người dùng nhấn back từ sdk để quay lại')
+            break;
+          case 10: //ios
+            console.log('Người dùng nhấn chọn thanh toán qua app thanh toán (Mobile Banking, Ví...)')
+            break;
+          case 99:
+            console.log('Người dùng nhấn back từ trang thanh toán thành công khi thanh toán qua thẻ khi gọi đến http://sdk.merchantbackapp')
+        }
+      }
+    })
+  }
   useEffect(() => {
-    // props?.navigation.addListener('willFocus', () => {
-    //   getProfile();
-    // });
+    props?.navigation.addListener('willFocus', () => {
+      getProfile();
+    });
+
     getProfile();
   }, []);
   const getProfile = async () => {
+    console.log("====")
     let userInfo = await IALocalStorage.getDetailUserInfo();
     setIsLoading(true);
     AxiosFetcher({
@@ -72,6 +105,7 @@ const ProfileScreen = (props) => {
       hasToken: true,
     })
       .then((val) => {
+        console.log(val);
         if (val?.data !== '') {
           setIsLoading(false);
           userStore.userInfo = val;
@@ -170,7 +204,7 @@ const ProfileScreen = (props) => {
       });
   };
   const openPicker = async () => {
-    ImagePicker.showImagePicker(IMAGE_CONFIG, (response) => {
+    launchImageLibrary(IMAGE_CONFIG, (response) => {
       // console.log('Response = ', response);
       if (response.didCancel) {
         console.log('User cancelled image picker');
@@ -451,24 +485,25 @@ const ProfileScreen = (props) => {
     );
   };
   return useObserver(() => (
-    <View style={[containerStyle.default, containerStyle.defaultBackground, {paddingBottom: 30}]}>
+    <View style={[containerStyle.default, containerStyle.defaultBackground, { paddingBottom: 30 }]}>
       <StatusBar barStyle={colorsApp.statusBar} />
       <SafeAreaView>
         <HeaderFull
           title={t('account.title')}
           onPress={() => NavigationService.navigate(ScreenNames.Update)}
           rightIco={
-            <Ionicons name="pencil" size={20} color={colors.blackInput} />
+            <TextNormal text="Sửa" />
           }
 
         />
         <ScrollView nestedScrollEnabled contentContainerStyle={styles.content}>
           {renderMe()}
         </ScrollView>
-        <TouchableOpacity style={{ position: 'absolute', left: 20, top: 40 }} onPress={()=>{
-          NavigationService.navigate(ScreenNames.Account, { data: userStore?.userInfo, isOnlyImg: true }) ;
+        <TouchableOpacity style={{ position: 'absolute', left: 20, top: 75 }} onPress={() => {
+          // NavigationService.navigate(ScreenNames.Account, { data: userStore?.userInfo, isOnlyImg: true }) ;
+          aaa();
         }}>
-          <Ionicons name="bulb-outline" size={20} color={colors.red} size={25}/>
+          <Ionicons name="bulb-outline" size={20} color={colors.red} size={25} />
         </TouchableOpacity>
       </SafeAreaView>
       {isLoading && <Loading />}

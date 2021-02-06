@@ -14,8 +14,8 @@ export const imagePickerOptions = {
 
 const getFileLocalPath = (response) => {
   const {path, uri} = response;
-  // console.log({path, uri});
-  return Platform.OS === 'android' ? path : uri;
+  console.log({path, uri});
+  return Platform.OS === 'android' ? (path ? path : uri) : uri;
 };
 
 export const createStorageReferenceToFile = (response, fileType) => {
@@ -32,7 +32,7 @@ export const uploadFileToFireBase = async (
 ) => {
   try {
     const fileSource = getFileLocalPath(response);
-    // console.log('fileSource' + fileSource);
+    console.log('fileSource' + fileSource);
     const storageRef = createStorageReferenceToFile(response, fileType);
     // console.log('storageRef' + storageRef);
     await storageRef.putFile(fileSource);

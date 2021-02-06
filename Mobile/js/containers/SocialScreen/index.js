@@ -543,6 +543,7 @@ const SocialScreen = (props) => {
                       Constant.MOCKING_DATA.NO_IMG_PLACE_HOLDER,
                   }}
                   resizeMode="cover"
+                  resizeMethod="resize"
                   style={styles.postImages}
                 /> :
                 <View

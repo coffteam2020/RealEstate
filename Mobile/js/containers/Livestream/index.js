@@ -59,8 +59,8 @@ const Livestream = (props) => {
       .ref(Constant.SCHEMA.LIVESTREAM)
       .on('value', (snapshot) => {
         const data = snapshot.val() || [];
-        setLivestreamRooms(Object.values(data)?.filter(i => i.status == "LIVESTREAMING"));
-        setLivestreamRoomsT(Object.values(data)?.filter(i => i.status == "LIVESTREAMING"));
+        setLivestreamRooms(Object.values(data)?.filter(i => i.status == "LIVESTREAMING" && i?.channelName && i?.uid && i?.participiants?.length > 0));
+        setLivestreamRoomsT(Object.values(data)?.filter(i => i.status == "LIVESTREAMING"&& i?.channelName && i?.uid && i?.participiants?.length > 0));
       });
   };
 

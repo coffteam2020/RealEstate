@@ -19,7 +19,7 @@ import icons from '../../shared/utils/icons/icons';
 import { containerStyle } from '../../themes/styles';
 import { BackHandler } from 'react-native';
 import { colors } from '../../shared/utils/colors/colors';
-import ImagePicker from 'react-native-image-picker';
+import ImagePicker, {launchImageLibrary} from 'react-native-image-picker';
 import LinearGradient from 'react-native-linear-gradient';
 import { ScreenHeight, ScreenWidth } from '../../shared/utils/dimension/Divices';
 import TextInputFlat from '../../shared/components/TextInput/TextInputFlat';
@@ -619,7 +619,7 @@ class VideoCallScreen extends Component {
   }
   openImagePicker = async () => {
     let userInfo = await IALocalStorage.getDetailUserInfo();
-    ImagePicker.showImagePicker(IMAGE_CONFIG, (response) => {
+    launchImageLibrary(IMAGE_CONFIG, (response) => {
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.error) {

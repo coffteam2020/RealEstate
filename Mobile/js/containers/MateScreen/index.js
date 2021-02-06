@@ -191,7 +191,7 @@ const MateScreen = (props) => {
           onPress={() => {
             NavigationService.navigate(ScreenNames.List);
           }}
-          rightIco={<Ionicons name="add" size={20} color={colors.blackInput} />}
+          rightIco={<TextNormal text="Tìm bạn"/>}
         />
         <TextInput
           value={searchtext}

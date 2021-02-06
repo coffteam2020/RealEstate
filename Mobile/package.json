@@ -77,7 +77,7 @@
     "react-native-i18n": "^2.0.15",
     "react-native-iap": "^4.4.9",
     "react-native-image-pan-zoom": "^2.1.11",
-    "react-native-image-picker": "^2.3.1",
+    "react-native-image-picker": "^3.1.4",
     "react-native-inappbrowser-reborn": "^3.4.0",
     "react-native-incoming-call": "^2.0.3",
     "react-native-indicators": "^0.13.0",
@@ -119,6 +119,7 @@
     "react-native-track-player": "^1.2.3",
     "react-native-vector-icons": "^6.6.0",
     "react-native-video": "^5.1.0-alpha8",
+    "react-native-vnpay-merchant": "file:./lib",
     "react-native-voip-push-notification": "https://github.com/Andriiklymiuk/react-native-voip-push-notification#master",
     "react-native-webview": "^9.4.0",
     "react-navigation": "4.0.10",
@@ -131,6 +132,7 @@
     "rxjs": "^6.5.2",
     "uuid": "3.3.3",
     "validate.js": "^0.13.1",
+    "vn-payments": "^1.1.0",
     "yarn": "^1.22.4"
   },
   "devDependencies": {

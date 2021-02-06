@@ -34,7 +34,7 @@ const displayIncoming = async (message) => {
 			}
 		}
 		const a = uuid.v4();
-		RNCallKeep.startCall(`${new Date().getTime()}`);
+		// RNCallKeep.startCall(`${new Date().getTime()}`);
 		RNCallKeep.displayIncomingCall(a, 'Dapp Premium', 'You have a video call from your friend','number', true );
 	} 
 }

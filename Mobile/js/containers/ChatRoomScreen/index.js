@@ -20,7 +20,7 @@ import TopUserItem from '../../shared/components/TopUserItem';
 import Constant from '../../shared/utils/constant/Constant';
 import { StringHelper } from '../../shared/utils/helper/stringHelper';
 import icons from '../../shared/utils/icons/icons';
-import ImagePicker from 'react-native-image-picker';
+import ImagePicker, { launchImageLibrary } from 'react-native-image-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import GetLocation from 'react-native-get-location';
 import { SPACINGS } from '../../themes';
@@ -174,8 +174,8 @@ const ChatRoomScreen = (props) => {
           style={{ flexDirection: 'row' }}>
           <Back props={props} />
         </TouchableOpacity>
-        <TopUserItem onItemPress={() => { 
-           Alert.alert(t('message.reportUser'), '', [
+        <TopUserItem onItemPress={() => {
+          Alert.alert(t('message.reportUser'), '', [
             {
               text: t('message.reportUser'),
               onPress: () => {
@@ -337,7 +337,7 @@ const ChatRoomScreen = (props) => {
     );
   };
   const openImagePicker = () => {
-    ImagePicker.launchImageLibrary(IMAGE_CONFIG, (response) => {
+    launchImageLibrary(IMAGE_CONFIG, (response) => {
       // console.log('Response = ', response);
       if (response.didCancel) {
         console.log('User cancelled image picker');
@@ -388,7 +388,7 @@ const ChatRoomScreen = (props) => {
     });
   };
   const openCamera = () => {
-    ImagePicker.launchCamera(IMAGE_CONFIG, (response) => {
+    launchImageLibrary(IMAGE_CONFIG, (response) => {
       // console.log('Response = ', response);
       if (response.didCancel) {
         console.log('User cancelled image picker');
@@ -504,7 +504,7 @@ const ChatRoomScreen = (props) => {
           style={{ marginLeft: SPACINGS.default, zIndex: 10 }}
           onPress={() => setEmoji(true)}>
           <Ionicons name="aperture-sharp" color={colors.black_rect} size={30} />
-          
+
         </TouchableOpacity>
       </View>
     );
@@ -563,12 +563,12 @@ const ChatRoomScreen = (props) => {
         </KeyboardAwareScrollView>
       </View>
       {isLoading ? <Loading /> : null}
-      {emoji && <View style={{height: ScreenHeight / 2, backgroundColor: 'white', position: 'absolute', bottom: 0, left: 0}}><EmojiSelector
-            category={Categories.all}
-            onEmojiSelected={emoji => {
-              setMsg(emoji);
-              setEmoji(false);
-            }} /></View>}
+      {emoji && <View style={{ height: ScreenHeight / 2, backgroundColor: 'white', position: 'absolute', bottom: 0, left: 0 }}><EmojiSelector
+        category={Categories.all}
+        onEmojiSelected={emoji => {
+          setMsg(emoji);
+          setEmoji(false);
+        }} /></View>}
     </View>
   ));
 };

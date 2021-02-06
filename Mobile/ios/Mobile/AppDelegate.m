@@ -18,6 +18,7 @@
 #import <FlipperKitNetworkPlugin/FlipperKitNetworkPlugin.h>
 #import <SKIOSNetworkPlugin/SKIOSNetworkAdapter.h>
 #import <FlipperKitReactPlugin/FlipperKitReactPlugin.h>
+#import <CallAppSDK/CallAppInterface.h>
 
 static void InitializeFlipper(UIApplication *application) {
   FlipperClient *client = [FlipperClient sharedClient];
@@ -43,6 +44,7 @@ static void InitializeFlipper(UIApplication *application) {
                                                    moduleName:@"Mobile"
                                             initialProperties:nil];
   [FIRApp configure];
+  
   // register for voip notifs immediately to recv. notifs when app is killed - doing this from the JS side is too slow
   RNVoipPushNotificationManager* voipModule = [bridge moduleForClass:[RNVoipPushNotificationManager class]];
   [voipModule voipRegistration];
@@ -75,6 +77,7 @@ static void InitializeFlipper(UIApplication *application) {
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
+//  [CallAppInterface setHomeViewController:rootViewController];
   [FIRMessaging messaging].delegate = self;
        
        [[FIRInstanceID instanceID] instanceIDWithHandler:^(FIRInstanceIDResult * _Nullable result,
@@ -154,7 +157,7 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
     NSString *uuid = @"44713e33-fa78-4ff5-8ec5-983e0832d1c6";
     NSString *callerName = @"Video calling from your friend";
     NSString *handle = @"handle";
-    [RNCallKeep reportNewIncomingCall:uuid handle:handle handleType:@"generic" hasVideo:true localizedCallerName:callerName fromPushKit: YES payload:userInfo];
+//    [RNCallKeep reportNewIncomingCall:uuid handle:handle handleType:@"generic" hasVideo:true localizedCallerName:callerName fromPushKit: YES payload:userInfo];
   }
 }
 
@@ -217,7 +220,7 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
   [RNVoipPushNotificationManager didReceiveIncomingPushWithPayload:payload forType:(NSString *)type];
 
   // --- You should make sure to report to callkit BEFORE execute `completion()`
-  [RNCallKeep reportNewIncomingCall:uuid handle:handle handleType:@"generic" hasVideo:false localizedCallerName:callerName fromPushKit: YES payload:nil];
+//  [RNCallKeep reportNewIncomingCall:uuid handle:handle handleType:@"generic" hasVideo:false localizedCallerName:callerName fromPushKit: YES payload:nil];
   
   // --- You don't need to call it if you stored `completion()` and will call it on the js side.
   completion();
